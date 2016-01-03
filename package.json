@@ -2,7 +2,7 @@
   "name": "buttercup-chrome",
   "version": "0.1.1",
   "description": "Buttercup extension for Chrome.",
-  "main": "source/background.js",
+  "main": "source/background/index.js",
   "scripts": {
     "test": "npm test"
   },

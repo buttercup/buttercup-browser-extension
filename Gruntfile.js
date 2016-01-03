@@ -19,6 +19,14 @@ module.exports = function(grunt) {
                     "source/misc/footer.js"
                 ],
                 dest: "dist/background.js"
+            },
+            dist_tab: {
+                src: [
+                    "source/misc/header.js",
+                    "source/tab/**/*.js",
+                    "source/misc/footer.js"
+                ],
+                dest: "dist/tab.js"
             }
         }
 
