@@ -1,0 +1,34 @@
+{
+  "name": "buttercup-chrome",
+  "version": "0.1.1",
+  "description": "Buttercup extension for Chrome.",
+  "main": "source/background.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perry-mitchell/buttercup-chrome.git"
+  },
+  "keywords": [
+    "buttercup",
+    "password",
+    "vault",
+    "login",
+    "secure"
+  ],
+  "author": "Perry Mitchell <perry@perrymitchell.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/perry-mitchell/buttercup-chrome/issues"
+  },
+  "homepage": "https://github.com/perry-mitchell/buttercup-chrome#readme",
+  "dependencies": {
+    "buttercup-web": "^0.2.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "lamd": "^0.5.1",
+    "load-grunt-tasks": "^3.4.0"
+  }
+}

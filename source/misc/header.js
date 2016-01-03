@@ -1,0 +1,2 @@
+// Buttercup Chrome extension
+(function() {
