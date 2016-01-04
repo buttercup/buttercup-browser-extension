@@ -29,6 +29,7 @@
     "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-concat": "^0.5.1",
     "lamd": "^0.5.1",
-    "load-grunt-tasks": "^3.4.0"
+    "load-grunt-tasks": "^3.4.0",
+    "lockr": "^0.8.4"
   }
 }

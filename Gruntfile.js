@@ -14,6 +14,8 @@ module.exports = function(grunt) {
             },
             dist_background: {
                 src: [
+                    "node_modules/lockr/lockr.js",
+                    "node_modules/lamd/source/lamd.js",
                     "source/misc/header.js",
                     "source/background/**/*.js",
                     "source/misc/footer.js"
@@ -22,6 +24,7 @@ module.exports = function(grunt) {
             },
             dist_tab: {
                 src: [
+                    "node_modules/lamd/source/lamd.js",
                     "source/misc/header.js",
                     "source/tab/**/*.js",
                     "source/misc/footer.js"
