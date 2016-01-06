@@ -1,8 +1,10 @@
 doctype html
 html(lang="en")
+
 	head
 		title="Buttercup"
 		link(rel="stylesheet",href="popup.css")
+
 	body
 		div#main
 			div#title
@@ -12,5 +14,8 @@ html(lang="en")
 				div#archives(style="visibility: visible")
 					span.heading Archives
 					div#archivesList
+					button#addArchiveButton
 				div#archiveContents(style="visibility: hidden")
 					span.heading#archiveName Archive-name
+
+	script(type="text/javascript", src="popup.js")

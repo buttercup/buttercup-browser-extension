@@ -1,110 +1,121 @@
 module.exports = function(grunt) {
 
-    "use strict";
+	"use strict";
 
-    grunt.initConfig({
+	grunt.initConfig({
 
-        clean: {
-            dist: ["dist/*", "!dist/.gitignore"]
-        },
+		clean: {
+			dist: ["dist/*", "!dist/.gitignore"]
+		},
 
-        concat: {
-            options: {
-                separator: ";"
-            },
-            dist_background: {
-                src: [
-                    "node_modules/lockr/lockr.js",
-                    "node_modules/lamd/source/lamd.js",
-                    "source/misc/header.js",
-                    "source/background/**/*.js",
-                    "source/misc/footer.js"
-                ],
-                dest: "dist/background.js"
-            },
-            dist_tab: {
-                src: [
-                    "node_modules/lamd/source/lamd.js",
-                    "source/misc/header.js",
-                    "source/tab/**/*.js",
-                    "source/misc/footer.js"
-                ],
-                dest: "dist/tab.js"
-            }
-        },
+		concat: {
+			options: {
+				separator: ";"
+			},
+			dist_background: {
+				src: [
+					"node_modules/lockr/lockr.js",
+					"node_modules/lamd/source/lamd.js",
+					"source/misc/header.js",
+					"source/background/**/*.js",
+					"source/misc/footer.js"
+				],
+				dest: "dist/background.js"
+			},
+			dist_tab: {
+				src: [
+					"node_modules/lamd/source/lamd.js",
+					"source/misc/header.js",
+					"source/tab/**/*.js",
+					"source/misc/footer.js"
+				],
+				dest: "dist/tab.js"
+			}
+		},
 
-        copy: {
-            fonts: {
+		copy: {
+			fonts: {
+				files: [
+					{
+						expand: true,
+						src: ["resources/*.ttf"],
+						dest: "dist/",
+						flatten: true
+					}
+				]
+			},
+			images: {
+				files: [
+					{
+						expand: true,
+						src: ["resources/*.svg"],
+						dest: "dist/",
+						flatten: true
+					}
+				]
+			},
+			popup_js: {
                 files: [
                     {
                         expand: true,
-                        src: ["resources/*.ttf"],
+                        src: ["source/popup/*.js"],
                         dest: "dist/",
                         flatten: true
                     }
                 ]
-            },
-            images: {
-                files: [
-                    {
-                        expand: true,
-                        src: ["resources/*.svg"],
-                        dest: "dist/",
-                        flatten: true
-                    }
-                ]
             }
-        },
+		},
 
-        jade: {
-            popup: {
-                files: {
-                    "dist/": ["source/popup/popup.jade"]
-                },
-                options: {
-                    client: false,
-                    wrap: false
-                }
-            }
-        },
+		jade: {
+			popup: {
+				files: {
+					"dist/": ["source/popup/popup.jade"]
+				},
+				options: {
+					client: false,
+					wrap: false
+				}
+			}
+		},
 
-        sass: {
-            options: {
-                sourceMap: false
-            },
-            popup: {
-                files: {
-                    "dist/popup.css": "source/popup/popup.scss"
-                }
-            }
-        },
+		sass: {
+			options: {
+				sourceMap: false
+			},
+			popup: {
+				files: {
+					"dist/popup.css": "source/popup/popup.scss"
+				}
+			}
+		},
 
-        watch: {
-            all: {
-                files: [
-                    "source/**/*",
-                    "resources/**/*"
-                ],
-                tasks: ["build"],
-                options: {
-                    spawn: false
-                }
-            }
-        }
+		watch: {
+			all: {
+				files: [
+					"source/**/*",
+					"resources/**/*"
+				],
+				tasks: ["build"],
+				options: {
+					spawn: false
+				}
+			}
+		}
 
-    });
+	});
 
-    require('load-grunt-tasks')(grunt);
+	require('load-grunt-tasks')(grunt);
 
-    grunt.registerTask("default", ["build"]);
+	grunt.registerTask("default", ["build"]);
 
-    grunt.registerTask("build", [
-        "clean",
-        "concat",
-        "jade",
-        "sass:popup",
-        "copy:fonts",
-        "copy:images"
-    ]);
+	grunt.registerTask("build", [
+		"clean",
+		"concat",
+		"jade",
+		"sass:popup",
+		"copy:fonts",
+		"copy:images",
+		"copy:popup_js"
+	]);
 
 };
