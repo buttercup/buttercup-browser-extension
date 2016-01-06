@@ -31,6 +31,65 @@ module.exports = function(grunt) {
                 ],
                 dest: "dist/tab.js"
             }
+        },
+
+        copy: {
+            fonts: {
+                files: [
+                    {
+                        expand: true,
+                        src: ["resources/*.ttf"],
+                        dest: "dist/",
+                        flatten: true
+                    }
+                ]
+            },
+            images: {
+                files: [
+                    {
+                        expand: true,
+                        src: ["resources/*.svg"],
+                        dest: "dist/",
+                        flatten: true
+                    }
+                ]
+            }
+        },
+
+        jade: {
+            popup: {
+                files: {
+                    "dist/": ["source/popup/popup.jade"]
+                },
+                options: {
+                    client: false,
+                    wrap: false
+                }
+            }
+        },
+
+        sass: {
+            options: {
+                sourceMap: false
+            },
+            popup: {
+                files: {
+                    "dist/popup.css": "source/popup/popup.scss"
+                }
+            }
+        },
+
+        watch: {
+            all: {
+                files: [
+                    "source/**/*",
+                    "resources/**/*"
+                ],
+                tasks: ["build"],
+                options: {
+                    spawn: false
+                }
+            }
         }
 
     });
@@ -41,7 +100,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask("build", [
         "clean",
-        "concat"
+        "concat",
+        "jade",
+        "sass:popup",
+        "copy:fonts",
+        "copy:images"
     ]);
 
 };
