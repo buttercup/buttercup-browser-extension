@@ -1,4 +1,3 @@
-//(function() {
 require(["jadeRuntime"], function(JadeRuntime) {
 
 	"use strict";
@@ -11,9 +10,7 @@ require(["jadeRuntime"], function(JadeRuntime) {
 		var container = document.querySelector("#addArchive div.addMenu");
 		return (new Promise(function(resolve, reject) {
 			require(["templates/add-archive"], function(addArchive) {
-				(resolve)(addArchive({
-					bob: "INSERTEDDDD"
-				}));
+				(resolve)(addArchive({}));
 			});
 		})).then(function(content) {
 			container.innerHTML = content;

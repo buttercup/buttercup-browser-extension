@@ -1,2 +1,21 @@
-div.addArchiveDynamic
-	span This is dymnamic !{bob} :)
+div
+	h2.subheading Source type
+	ul
+		li
+			input(id="sourceOwnCloud", name="source", type="radio")
+			label(for="sourceOwnCloud") ownCloud
+		li
+			input(id="sourceWebDAV", name="source", type="radio")
+			label(for="sourceWebDAV") WebDAV
+	h2.subheading Location
+	div.source.sourceOwnCloud
+		label(for="ownCloudUsername") Username
+		input(type="text", name="ownCloudUsername")
+		label(for="ownCloudPassword") Password
+		input(type="text", name="ownCloudPassword")
+	div.source.sourceWebDAV
+	h2.subheading Source login (if required)
+	div.source.loginOwnCloud
+	div.source.loginWebDAV
+	hr
+	button(disabled) Add

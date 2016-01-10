@@ -7,11 +7,21 @@
 
 $headingColour:				#666669;
 
+// --- Usability
+
+* {
+	cursor: default;
+}
+
+button, a {
+	cursor: pointer;
+}
+
 // --- Container
 
 html, body {
 	width: 380px;
-	height: 300px;
+	height: auto;
 }
 
 #main {
@@ -38,9 +48,30 @@ span.title {
 	margin-left: 10px;
 }
 
-// --- Views
+// --- Headings
 
-.heading {
+h1 {
 	font-size: 16px;
 	color: $headingColour;
 }
+
+h2 {
+	color: $headingColour;
+	font-size: 14px;
+	font-style: italic;
+}
+
+// --- Structure
+
+#addArchive {
+
+	div.addMenu {
+		//padding-top: 10px;
+	}
+
+	div.source {
+		display: none;
+	}
+
+}
+
