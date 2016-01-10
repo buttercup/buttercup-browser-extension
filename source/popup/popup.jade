@@ -3,7 +3,8 @@ html(lang="en")
 
 	head
 		title="Buttercup"
-		link(rel="stylesheet",href="popup.css")
+		link(rel="stylesheet", href="popup.css")
+		script(type="text/javascript", src="require.js")
 
 	body
 		div#main
@@ -11,11 +12,15 @@ html(lang="en")
 				img.title(src="ButtercupLogo.svg")
 				span.title Buttercup
 			div#content
-				div#archives(style="visibility: visible")
+				div#archives(style="display: block")
 					span.heading Archives
 					div#archivesList
-					button#addArchiveButton
-				div#archiveContents(style="visibility: hidden")
+					button#addArchiveButton Add archive
+				div#archiveContents(style="display: none")
 					span.heading#archiveName Archive-name
+				div#addArchive(style="display: none")
+					span.heading Add new archive
+					div.addMenu 
+						span should not be here
 
 	script(type="text/javascript", src="popup.js")

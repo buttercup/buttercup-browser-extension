@@ -6,16 +6,6 @@ define("ArchiveHandler", function() {
 		this._state = state;
 	};
 
-	ArchiveHandler.prototype.promptForFileArchive = function() {
-		chrome.fileSystem.chooseEntry(
-			{
-				type: "openWritableFile"
-			},
-			function() {
-				console.log(arguments);
-			}
-		);
-	};
 
 	return ArchiveHandler;
 

@@ -32,6 +32,8 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jade": "^0.5.1",
     "grunt-sass": "^1.1.0",
+    "jade": "^1.11.0",
+    "jade-amd": "^0.2.3",
     "lamd": "^0.5.1",
     "load-grunt-tasks": "^3.4.0",
     "lockr": "^0.8.4"

@@ -2,6 +2,15 @@ module.exports = function(grunt) {
 
 	"use strict";
 
+	var exec = require('child_process').execSync,
+		jadeAmdExec = __dirname + "/node_modules/jade-amd/bin/jade-amd";
+
+	function setupJadeForClient() {
+		var distDir = __dirname + "/dist";
+		exec(jadeAmdExec + " --runtime > " + distDir + "/jadeRuntime.js");
+		exec(jadeAmdExec + " --from source/popup/templates/ --to " + distDir + "/templates");
+	}
+
 	grunt.initConfig({
 
 		clean: {
@@ -58,12 +67,15 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        src: ["source/popup/*.js"],
+                        src: [
+                        	"source/popup/*.js",
+                        	"resources/require.js"
+                        ],
                         dest: "dist/",
                         flatten: true
                     }
                 ]
-            }
+            },
 		},
 
 		jade: {
@@ -111,11 +123,18 @@ module.exports = function(grunt) {
 	grunt.registerTask("build", [
 		"clean",
 		"concat",
-		"jade",
 		"sass:popup",
 		"copy:fonts",
 		"copy:images",
-		"copy:popup_js"
+		"build-popup"
 	]);
+
+	grunt.registerTask("build-popup", function() {
+		setupJadeForClient();
+		grunt.task.run([
+			"jade:popup",
+			"copy:popup_js"
+		]);
+	});
 
 };
