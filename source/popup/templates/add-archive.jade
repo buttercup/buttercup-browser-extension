@@ -1,11 +1,11 @@
-div
+div#addArchiveView
 	h2.subheading Source type
 	ul
 		li
-			input(id="sourceOwnCloud", name="source", type="radio")
+			input(id="sourceOwnCloud", name="source", type="radio", data-uiname="OwnCloud")
 			label(for="sourceOwnCloud") ownCloud
 		li
-			input(id="sourceWebDAV", name="source", type="radio")
+			input(id="sourceWebDAV", name="source", type="radio", data-uiname="WebDAV")
 			label(for="sourceWebDAV") WebDAV
 	h2.subheading Location
 	div.source.sourceOwnCloud
@@ -19,3 +19,22 @@ div
 	div.source.loginWebDAV
 	hr
 	button(disabled) Add
+
+	script(type="text/javascript").
+		(function() {
+
+			function radioTouched(evt) {
+				console.log("EVN", evt);
+				var uiName = evt.target.dataset.uiname,
+					addArchiveView = document.getElementById("addArchiveView"),
+					elements = Array.prototype.slice.call(addArchiveView.getElementsByClassName("source"));
+					elements.forEach(function(el) {
+						el.style.display = (el.className.indexOf("login" + uiName) >= 0 ||
+							el.className.indexOf("source" + uiName) >= 0) ?
+								"block" : "none";
+					});
+			}
+			document.getElementById("sourceOwnCloud").addEventListener("click", radioTouched);
+			document.getElementById("sourceWebDAV").addEventListener("click", radioTouched);
+
+		})();
