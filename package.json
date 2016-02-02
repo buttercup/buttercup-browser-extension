@@ -30,12 +30,15 @@
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-jade": "^0.5.1",
+    "grunt-exec": "^0.4.6",
     "grunt-sass": "^1.1.0",
-    "jade": "^1.11.0",
-    "jade-amd": "^0.2.3",
+    "jsx-loader": "^0.13.2",
     "lamd": "^0.5.1",
     "load-grunt-tasks": "^3.4.0",
-    "lockr": "^0.8.4"
+    "lockr": "^0.8.4",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "webpack": "^1.12.12",
+    "webpack-dev-server": "^1.14.1"
   }
 }
