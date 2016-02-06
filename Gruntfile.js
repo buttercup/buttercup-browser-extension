@@ -78,7 +78,16 @@ module.exports = function(grunt) {
 
 		exec: {
 			pack_popup: {
-				cmd: `webpack -p --progress --colors --config ${__dirname}/source/popup/webpack.config.js`
+				cmd: `webpack -p --colors --config ${__dirname}/source/popup/webpack.config.js`
+			}
+		},
+
+		notify: {
+			built: {
+				options: {
+					title: "Build complete",
+					message: "Full extension build has completed",
+				}
 			}
 		},
 
@@ -117,7 +126,8 @@ module.exports = function(grunt) {
 		"concat",
 		"copy:fonts",
 		"copy:images",
-		"build-popup"
+		"build-popup",
+		"notify:built"
 	]);
 
 	grunt.registerTask("build-popup", function() {
