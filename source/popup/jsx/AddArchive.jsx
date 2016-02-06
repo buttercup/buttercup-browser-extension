@@ -7,7 +7,6 @@ module.exports = React.createClass({
     render: function(){
         return <div>
             <h3>Add archive</h3>
-
         </div>
     }
 });

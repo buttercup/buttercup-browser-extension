@@ -7,7 +7,7 @@ module.exports = React.createClass({
     render: function(){
         return <div>
             <h2>Buttercup</h2>
-            <Link to="/addArchive" activeClassName="link-active">Add archive</Link>
+            <Link to="/addArchive">Add archive</Link>
         </div>
     }
 });
