@@ -6,7 +6,8 @@ var React = require("react"),
 module.exports = React.createClass({
     render: function(){
         return <div>
-            <Link to="/addArchive">Add archive</Link>
+            <h2>Buttercup</h2>
+            {this.props.children}
         </div>
     }
 });

@@ -7,16 +7,19 @@ var React = require("react"),
 var Router = require("react-router").Router,
     Route = require("react-router").Route,
     Link = require("react-router").Link,
+    IndexRoute = require("react-router").IndexRoute,
     browserHistory = require("react-router").browserHistory;
 
-var Intro = require("./Intro"),
+var App = require("./App"),
+    Intro = require("./Intro"),
     AddArchive = require("./AddArchive");
 
 //ReactDOM.render(<Intro />, document.getElementById("app"));
 
 ReactDOM.render((
     <Router history={browserHistory}>
-        <Route path="/" component={Intro}>
+        <Route path="/" component={App}>
+            <IndexRoute component={Intro} />
             <Route path="addArchive" component={AddArchive}/>
         </Route>
     </Router>
