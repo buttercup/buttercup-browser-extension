@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
-'use strict'
-var React = require("react"),
+'use strict';
+
+const React = require("react"),
     Link = require("react-router").Link;
 
 module.exports = React.createClass({

@@ -16,9 +16,12 @@
         module: {
             loaders: [
                 {
-                    //tell webpack to use jsx-loader for all *.jsx files
                     test: /\.jsx$/,
-                    loader: 'jsx-loader?insertPragma=React.DOM&harmony'
+                    exclude: /(node_modules|bower_components)/,
+                    loader: 'babel',
+                    query: {
+                        presets: ['react', 'es2015']
+                    }
                 }
             ]
         },
