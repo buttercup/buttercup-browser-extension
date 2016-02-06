@@ -17,7 +17,7 @@ var Intro = require("./Intro"),
 ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={Intro}>
-            <Route path="/addArchive" component={AddArchive}/>
+            <Route path="addArchive" component={AddArchive}/>
             {/*<Route path="users" component={Users}>
                 <Route path="/user/:userId" component={User}/>
             </Route>*/}
