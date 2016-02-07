@@ -2,10 +2,18 @@ define("ArchiveHandler", function() {
 
 	"use strict";
 
-	var ArchiveHandler = function(state) {
-		this._state = state;
-	};
+	class ArchiveHandler {
 
+		constructor(state) {
+			this._state = state;
+		}
+
+		processArchive(details) {
+			console.log(details);
+			return Promise.resolve(true);
+		}
+
+	}
 
 	return ArchiveHandler;
 

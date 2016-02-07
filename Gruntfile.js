@@ -34,6 +34,16 @@ module.exports = function(grunt) {
 		},
 
 		copy: {
+			buttercup: {
+				files: [
+					{
+						expand: true,
+						src: ["node_modules/buttercup-web/build/buttercup.min.js"],
+						dest: "dist/",
+						flatten: true
+					}
+				]
+			},
 			fonts: {
 				files: [
 					{
@@ -126,6 +136,7 @@ module.exports = function(grunt) {
 		"concat",
 		"copy:fonts",
 		"copy:images",
+		"copy:buttercup",
 		"build-popup",
 		"notify:built"
 	]);
