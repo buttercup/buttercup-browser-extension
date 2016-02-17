@@ -15,6 +15,7 @@ module.exports = function(grunt) {
 			dist_background: {
 				src: [
 					"node_modules/lockr/lockr.js",
+					"node_modules/buttercup-web/build/buttercup.js",
 					"node_modules/lamd/source/lamd.js",
 					"source/misc/header.js",
 					"source/background/**/*.js",
