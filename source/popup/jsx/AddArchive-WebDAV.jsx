@@ -5,9 +5,24 @@ const React = require("react"),
 
 module.exports = React.createClass({
 
+    getInitialState: function() {
+        return {
+            webdav_address: "",
+            webdav_username: "",
+            webdav_password: "",
+            archive_password: ""
+        };
+    },
+
+    handleChange: function(event) {
+        let state = this.state;
+        state[event.target.name] = event.target.value;
+        this.setState(state);
+    },
+
     handleSubmit: function(event) {
         event.preventDefault();
-        console.log("submit", event);
+        console.log("submit", this.state);
         window.BC.archives.add.webDAV({test:true});
     },
 
@@ -15,13 +30,38 @@ module.exports = React.createClass({
         return <div>
             <h3>Add webDAV archive</h3>
             <form onSubmit={this.handleSubmit}>
-                <input type="text" name="address" placeholder="WebDAV address" /><br />
-                <input type="text" name="webdav_username" placeholder="WebDAV username" /><br />
-                <input type="password" name="webdav_password" placeholder="WebDAV password" /><br />
+                <input
+                    type="text"
+                    name="webdav_address"
+                    placeholder="WebDAV address"
+                    value={this.state.webdav_address}
+                    onChange={this.handleChange}
+                />
                 <br />
-                <input type="text" name="username" placeholder="Archive username" /><br />
-                <input type="password" name="password" placeholder="Archive username" /><br />
+                <input
+                    type="text"
+                    name="webdav_username"
+                    placeholder="WebDAV username"
+                    value={this.state.webdav_username}
+                    onChange={this.handleChange}
+                />
                 <br />
+                <input
+                    type="password"
+                    name="webdav_password"
+                    placeholder="WebDAV password"
+                    value={this.state.webdav_password}
+                    onChange={this.handleChange}
+                />
+                <br /><br />
+                <input
+                    type="password"
+                    name="archive_password"
+                    placeholder="Archive username"
+                    value={this.state.archive_password}
+                    onChange={this.handleChange}
+                />
+                <br /><br />
                 <input type="submit" value="Fetch" />
             </form>
         </div>
