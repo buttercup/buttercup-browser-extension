@@ -10,6 +10,7 @@ module.exports = React.createClass({
             webdav_address: "",
             webdav_username: "",
             webdav_password: "",
+            webdav_path: "/test/webdav-test.bcup",
             archive_password: ""
         };
     },
@@ -27,6 +28,7 @@ module.exports = React.createClass({
             remote_address: state.webdav_address,
             remote_username: state.webdav_username,
             remote_password: state.webdav_password,
+            remote_path: state.webdav_path,
             password: state.archive_password
         });
     },
@@ -58,11 +60,19 @@ module.exports = React.createClass({
                     value={this.state.webdav_password}
                     onChange={this.handleChange}
                 />
+                <br />
+                <input
+                    type="text"
+                    name="webdav_path"
+                    placeholder="Archive path"
+                    value={this.state.webdav_path}
+                    onChange={this.handleChange}
+                />
                 <br /><br />
                 <input
                     type="password"
                     name="archive_password"
-                    placeholder="Archive username"
+                    placeholder="Archive password"
                     value={this.state.archive_password}
                     onChange={this.handleChange}
                 />

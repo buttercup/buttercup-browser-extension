@@ -12,6 +12,9 @@ define("MessageRouter", ["ArchiveHandler"], function(ArchiveHandler) {
 			if (request.command === "addArchive") {
 				this._archiveHandler
 					.processArchive(request)
+					.then(function(archive) {
+						return true;
+					})
 					.then(function(success) {
 						sendResponse({
 							success: success
