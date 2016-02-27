@@ -12,6 +12,16 @@ define("ArchiveHandler", function() {
 			this._archives = {};
 		}
 
+        getNames() {
+            let names = [];
+            for (var name in this._archives) {
+                if (this._archives.hasOwnProperty(name)) {
+                    names.push(name);
+                }
+            }
+            return names;
+        }
+
 		openArchive(name) {
 			let credentialDetails = archiveManager.unlock(name/*, password */),
 				credentials = credentialDetails.credentials,
@@ -28,9 +38,9 @@ define("ArchiveHandler", function() {
 						credentials.model.get("password")
 					),
 					workspace = new Buttercup.Workspace();
-				credentials.model.get("path"),
-				credentials.model.get("username"),
-				credentials.model.get("password"), masterPassword);
+				// credentials.model.get("path"),
+				// credentials.model.get("username"),
+				// credentials.model.get("password"), masterPassword);
 				return datasource.load(masterPassword)
 					.then(function(archive) {
 						workspace

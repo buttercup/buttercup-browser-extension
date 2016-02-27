@@ -24,7 +24,7 @@ module.exports = React.createClass({
     handleSubmit: function(event) {
         event.preventDefault();
         let state = this.state;
-        window.BC.archives.add.webDAV({
+        window.BC.addArchive.webDAV({
             remote_address: state.webdav_address,
             remote_username: state.webdav_username,
             remote_password: state.webdav_password,

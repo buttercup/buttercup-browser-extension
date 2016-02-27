@@ -20,7 +20,11 @@ define("MessageRouter", ["ArchiveHandler"], function(ArchiveHandler) {
 							success: success
 						});
 					});
-			}
+			} else if (request.command === "getArchiveNames") {
+                sendResponse({
+                    names: this._archiveHandler.getNames()
+                });
+            }
 		}
 	};
 
