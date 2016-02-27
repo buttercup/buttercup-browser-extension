@@ -2,15 +2,6 @@ module.exports = function(grunt) {
 
 	"use strict";
 
-	var exec = require('child_process').execSync,
-		jadeAmdExec = __dirname + "/node_modules/jade-amd/bin/jade-amd";
-
-	function setupJadeForClient() {
-		var distDir = __dirname + "/dist";
-		exec(jadeAmdExec + " --runtime > " + distDir + "/jadeRuntime.js");
-		exec(jadeAmdExec + " --from source/popup/templates/ --to " + distDir + "/templates");
-	}
-
 	grunt.initConfig({
 
 		clean: {
@@ -24,6 +15,7 @@ module.exports = function(grunt) {
 			dist_background: {
 				src: [
 					"node_modules/lockr/lockr.js",
+					"node_modules/buttercup-web/build/buttercup.js",
 					"node_modules/lamd/source/lamd.js",
 					"source/misc/header.js",
 					"source/background/**/*.js",
@@ -43,6 +35,16 @@ module.exports = function(grunt) {
 		},
 
 		copy: {
+			buttercup: {
+				files: [
+					{
+						expand: true,
+						src: ["node_modules/buttercup-web/build/buttercup.min.js"],
+						dest: "dist/",
+						flatten: true
+					}
+				]
+			},
 			fonts: {
 				files: [
 					{
@@ -63,29 +65,39 @@ module.exports = function(grunt) {
 					}
 				]
 			},
-			popup_js: {
-                files: [
-                    {
-                        expand: true,
-                        src: [
-                        	"source/popup/*.js",
-                        	"resources/require.js"
-                        ],
-                        dest: "dist/",
-                        flatten: true
-                    }
-                ]
-            },
+			popup_static: {
+				files: [
+					{
+						expand: true,
+						src: ["source/popup/index.html"],
+						dest: "dist/popup/",
+						flatten: true
+					}
+				]
+			},
+			popup_react: {
+				files: [
+					{
+						expand: true,
+						src: ["node_modules/react/dist/react-with-addons*"],
+						dest: "dist/popup/",
+						flatten: true
+					}
+				]
+			}
 		},
 
-		jade: {
-			popup: {
-				files: {
-					"dist/": ["source/popup/popup.jade"]
-				},
+		exec: {
+			pack_popup: {
+				cmd: `webpack -p --colors --config ${__dirname}/source/popup/webpack.config.js`
+			}
+		},
+
+		notify: {
+			built: {
 				options: {
-					client: false,
-					wrap: false
+					title: "Build complete",
+					message: "Full extension build has completed",
 				}
 			}
 		},
@@ -96,7 +108,7 @@ module.exports = function(grunt) {
 			},
 			popup: {
 				files: {
-					"dist/popup.css": "source/popup/popup.scss"
+					"dist/popup/styles.css": "source/popup/styles/index.scss"
 				}
 			}
 		},
@@ -123,17 +135,22 @@ module.exports = function(grunt) {
 	grunt.registerTask("build", [
 		"clean",
 		"concat",
-		"sass:popup",
 		"copy:fonts",
 		"copy:images",
-		"build-popup"
+		"copy:buttercup",
+		"build-popup",
+		"notify:built"
 	]);
 
 	grunt.registerTask("build-popup", function() {
-		setupJadeForClient();
+		// setupJadeForClient();
 		grunt.task.run([
-			"jade:popup",
-			"copy:popup_js"
+			"sass:popup",
+			"exec:pack_popup",
+			"copy:popup_react",
+			"copy:popup_static"
+			// "jade:popup",
+			// "copy:popup_js"
 		]);
 	});
 

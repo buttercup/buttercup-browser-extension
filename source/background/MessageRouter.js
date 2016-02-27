@@ -9,9 +9,17 @@ define("MessageRouter", ["ArchiveHandler"], function(ArchiveHandler) {
 
 	MessageRouter.prototype.handle = function(request, sender, sendResponse) {
 		if (request && request.command) {
-			if (request.command === "addArchiveFile") {
-				console.log("ADDD"),
-				this._archiveHandler.promptForFileArchive();
+			if (request.command === "addArchive") {
+				this._archiveHandler
+					.processArchive(request)
+					.then(function(archive) {
+						return true;
+					})
+					.then(function(success) {
+						sendResponse({
+							success: success
+						});
+					});
 			}
 		}
 	};
