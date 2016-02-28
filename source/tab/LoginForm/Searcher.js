@@ -13,27 +13,50 @@ define("LoginForm/Searcher", ["LoginForm/SearchPatterns"], function(SearchPatter
         return Array.prototype.slice.call(form.getElementsByTagName("input"));
     }
 
-    return {
+    const lib = {
 
         getLoginData: function(form) {
-            let data = {};
-            getInputs(form)
-                .forEach(function(input) {
-                    __inputPatterns.some(function(inputPattern) {
-                        return inputPattern.properties.some(function(prop) {
-                            //console.log("Test", input, prop, inputPattern.expression.test(input.getAttribute(prop) || ""));
-                            if (inputPattern.expression.test(input.getAttribute(prop) || "")) {
-                                let type = inputPattern.buttercup,
-                                    value = input.getAttribute("value") || "";
-                                if (!data[type]) {
-                                    data[type] = value;
-                                }
-                                return true;
+            let inputs = Array.prototype.slice.call(form.elements),
+                data = {
+                    title: lib.getLoginTitle()
+                },
+                inputInfo = [],
+                types = [];
+            inputs.forEach(function(input) {
+                let info = {
+                    matchedTypes: {},
+                    input: input
+                };
+                __inputPatterns.forEach(function(inputPattern) {
+                    inputPattern.properties.forEach(function(prop) {
+                        if (inputPattern.expression.test(input.getAttribute(prop) || "")) {
+                            info.matchedTypes[inputPattern.buttercup] = info.matchedTypes[inputPattern.buttercup] ?
+                                info.matchedTypes[inputPattern.buttercup] + 1 : 1;
+                            if (types.indexOf(inputPattern.buttercup) < 0) {
+                                types.push(inputPattern.buttercup);
                             }
-                            return false;
-                        });
+                        }
                     });
                 });
+                inputInfo.push(info);
+            });
+            types.forEach(function(buttercupType) {
+                let inputCandidates = inputInfo
+                    .filter(info => Object.keys(info.matchedTypes).indexOf(buttercupType) >= 0);
+                inputCandidates.sort(function(a, b) {
+                    let aVal = a.matchedTypes[buttercupType],
+                        bVal = b.matchedTypes[buttercupType];
+                    if (aVal < bVal) {
+                        return -1;
+                    } else if (aVal > bVal) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                if (inputCandidates.length > 0) {
+                    data[buttercupType] = inputCandidates[0].input.value;
+                }
+            });
             return data;
         },
 
@@ -46,8 +69,14 @@ define("LoginForm/Searcher", ["LoginForm/SearchPatterns"], function(SearchPatter
                         });
                     });
                 });
+        },
+
+        getLoginTitle: function() {
+            return document.title || document.location.host || "";
         }
 
     };
+
+    return lib;
 
 });

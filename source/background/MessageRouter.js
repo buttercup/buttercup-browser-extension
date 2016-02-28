@@ -24,6 +24,8 @@ define("MessageRouter", ["ArchiveHandler"], function(ArchiveHandler) {
                 sendResponse({
                     names: this._archiveHandler.getNames()
                 });
+            } else if (request.command === "stashLogin") {
+                console.log("req", request, sender);
             }
 		}
 	};

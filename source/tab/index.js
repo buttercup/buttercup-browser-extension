@@ -4,11 +4,22 @@ require(["LoginForm/Searcher"], function(LoginFormSearcher) {
 
     console.log("Buttercup");
 
-    console.log("Searching for login forms...");
+    function loginFormSubmitted(event) {
+        let form = event.target,
+            data = LoginFormSearcher.getLoginData(form);
+        console.log("Send", data);
+        chrome.runtime.sendMessage(
+            {
+                command: "stashLogin",
+                data: data
+            },
+            function() {}
+        );
+    }
+
     LoginFormSearcher.getLoginForms().forEach(function(form) {
-        console.log("Login form:", form);
-        let data = LoginFormSearcher.getLoginData(form);
-        console.log(" -- Data:", data);
+        console.log("Attached Buttercup login watcher:", form);
+        form.addEventListener("submit", loginFormSubmitted);
     });
 
 });

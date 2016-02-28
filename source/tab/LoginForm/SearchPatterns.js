@@ -21,7 +21,7 @@ define("LoginForm/SearchPatterns", function() {
         inputs: [
 
             {
-                expression: /(username|userid)/i,
+                expression: /user/i,
                 properties: ["name", "id"],
                 buttercup: "username"
             },
