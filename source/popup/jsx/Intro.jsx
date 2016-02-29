@@ -20,9 +20,15 @@ module.exports = class Intro extends React.Component {
             });
     }
 
+    addArchiveClicked(event) {
+        event.preventDefault();
+        chrome.tabs.create({'url': chrome.extension.getURL('dist/admin/index.html#/addArchive')}, function(tab) { });
+    }
+
     render() {
         return <div>
-            <Link to="/addArchive">Add archive</Link>
+            {/*<Link to="/addArchive">Add archive</Link>*/}
+            <a href="#" onClick={this.addArchiveClicked}>Add archive</a><br />
             <ul>
                 {this.state.archiveNames.map(name => {
                     return <li>{name}</li>
