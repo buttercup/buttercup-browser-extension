@@ -13,6 +13,7 @@ module.exports = class AddArchive extends React.Component {
     render() {
         return <div>
             <h2>Add archive</h2>
+            <Link to="/addArchive/webdav">WebDAV</Link>
         </div>
     }
 

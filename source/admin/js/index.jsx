@@ -12,12 +12,14 @@ const {
 } = require("react-router");
 
 let App = require("./App"),
-    AddArchive = require("./AddArchive");
+    AddArchive = require("./AddArchive"),
+    AddWebDAV = require("./AddWebDAV");
 
 ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={App}>
             <Route path="addArchive" component={AddArchive}/>
+            <Route path="addArchive/webdav" component={AddWebDAV}/>
             {/*<Route path="addArchive" component={AddArchive}/>
             <Route path="addArchive/webdav" component={AddWebDAV}/>*/}
         </Route>
