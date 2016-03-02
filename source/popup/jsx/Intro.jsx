@@ -27,7 +27,6 @@ module.exports = class Intro extends React.Component {
 
     render() {
         return <div>
-            {/*<Link to="/addArchive">Add archive</Link>*/}
             <a href="#" onClick={this.addArchiveClicked}>Add archive</a><br />
             <ul>
                 {this.state.archiveNames.map(name => {
