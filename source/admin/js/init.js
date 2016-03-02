@@ -1,9 +1,10 @@
-(function(module) {
+(function() {
+
     "use strict";
 
-    module.exports = {
+    window.BC = {
 
-        webDAV: function(details) {
+        addWebDAV: function(details) {
             details.type = "webdav";
             details.command = "addArchive";
             chrome.runtime.sendMessage(details, function(response) {
@@ -13,4 +14,4 @@
 
     };
 
-})(module);
+})();

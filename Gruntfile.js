@@ -35,6 +35,26 @@ module.exports = function(grunt) {
 		},
 
 		copy: {
+            admin_static: {
+                files: [
+					{
+						expand: true,
+						src: ["source/admin/index.html"],
+						dest: "dist/admin/",
+						flatten: true
+					}
+				]
+            },
+            admin_react: {
+				files: [
+					{
+						expand: true,
+						src: ["node_modules/react/dist/react-with-addons*"],
+						dest: "dist/admin/",
+						flatten: true
+					}
+				]
+			},
 			buttercup: {
 				files: [
 					{
@@ -88,6 +108,9 @@ module.exports = function(grunt) {
 		},
 
 		exec: {
+            pack_admin: {
+                cmd: `webpack -p --colors --config ${__dirname}/source/admin/webpack.config.js`
+            },
 			pack_popup: {
 				cmd: `webpack -p --colors --config ${__dirname}/source/popup/webpack.config.js`
 			}
@@ -106,9 +129,14 @@ module.exports = function(grunt) {
 			options: {
 				sourceMap: false
 			},
+            admin: {
+                files: {
+                    "dist/admin/styles.css": "source/admin/styles/index.scss"
+                }
+            },
 			popup: {
 				files: {
-					"dist/popup/styles.css": "source/popup/styles/index.scss"
+                    "dist/popup/styles.css": "source/popup/styles/index.scss"
 				}
 			}
 		},
@@ -138,6 +166,10 @@ module.exports = function(grunt) {
 		"copy:fonts",
 		"copy:images",
 		"copy:buttercup",
+        "copy:admin_static",
+        "exec:pack_admin",
+        "copy:admin_react",
+        "sass:admin",
 		"build-popup",
 		"notify:built"
 	]);
@@ -149,8 +181,6 @@ module.exports = function(grunt) {
 			"exec:pack_popup",
 			"copy:popup_react",
 			"copy:popup_static"
-			// "jade:popup",
-			// "copy:popup_js"
 		]);
 	});
 

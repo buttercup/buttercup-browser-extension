@@ -2,11 +2,7 @@
 
     "use strict";
 
-    var addArchive = require("./add-archive.js");
-
     window.BC = {
-
-        addArchive: addArchive,
 
         getArchiveNames: function() {
             //return Promise.resolve(["number 1", "number 2"]);
