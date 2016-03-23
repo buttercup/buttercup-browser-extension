@@ -22,6 +22,16 @@ define("ArchiveHandler", function() {
             return names;
         }
 
+        getUnlockedWorkspaces() {
+            return this
+                .getNames()
+                .map((name) => this._archives[name])
+                .filter((archiveDetails) => {
+                    return (archiveDetails.workspace);
+                })
+                .map((details) => details.workspace);
+        }
+
 		openArchive(name) {
 			let credentialDetails = archiveManager.unlock(name/*, password */),
 				credentials = credentialDetails.credentials,

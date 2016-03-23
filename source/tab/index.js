@@ -17,9 +17,21 @@ require(["LoginForm/Searcher"], function(LoginFormSearcher) {
         );
     }
 
-    LoginFormSearcher.getLoginForms().forEach(function(form) {
-        console.log("Attached Buttercup login watcher:", form);
-        form.addEventListener("submit", loginFormSubmitted);
-    });
+    // -- Init
+
+    chrome.runtime.sendMessage(
+        {
+            command: "getEntriesForURL",
+            url: window.location.href
+        },
+        function(data) {
+            console.log("Entries", data.entries);
+
+            LoginFormSearcher.getLoginForms().forEach(function(form) {
+                console.log("Attached Buttercup login watcher:", form);
+                form.addEventListener("submit", loginFormSubmitted);
+            });
+        }
+    );
 
 });

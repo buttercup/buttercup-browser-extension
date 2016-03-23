@@ -2,6 +2,8 @@ define("MessageRouter", ["ArchiveHandler"], function(ArchiveHandler) {
 
 	"use strict";
 
+    var Buttercup = window.Buttercup;
+
 	var MessageRouter = function(state) {
 		this._state = state;
 		this._archiveHandler = new ArchiveHandler(state);
@@ -26,6 +28,17 @@ define("MessageRouter", ["ArchiveHandler"], function(ArchiveHandler) {
                 });
             } else if (request.command === "stashLogin") {
                 console.log("req", request, sender);
+            } else if (request.command === "getEntriesForURL") {
+                var entries = [];
+                this._archiveHandler.getUnlockedWorkspaces().forEach(function(workspace) {
+                    Buttercup.Web.ArchiveTools.getEntriesForURL(workspace.getArchive(), request.url)
+                        .forEach(function(entry) {
+                            entries.push(entry);
+                        });
+                });
+                sendResponse({
+                    entries: entries
+                });
             }
 		}
 	};
