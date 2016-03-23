@@ -4,9 +4,10 @@ require(["LoginForm/Searcher"], function(LoginFormSearcher) {
 
     console.log("Buttercup");
 
-    function loginFormSubmitted(event) {
-        let form = event.target,
-            data = LoginFormSearcher.getLoginData(form);
+    function loginFormSubmitted(form) {
+        // let form = event.target,
+        //     data = LoginFormSearcher.getLoginData(form);
+        let data = LoginFormSearcher.getLoginData(form);
         console.log("Send", data);
         chrome.runtime.sendMessage(
             {
@@ -27,9 +28,11 @@ require(["LoginForm/Searcher"], function(LoginFormSearcher) {
         function(data) {
             console.log("Entries", data.entries);
 
-            LoginFormSearcher.getLoginForms().forEach(function(form) {
-                console.log("Attached Buttercup login watcher:", form);
-                form.addEventListener("submit", loginFormSubmitted);
+            LoginFormSearcher.getLoginForms().forEach(function(loginForm) {
+                console.log("Attached Buttercup login watcher:", loginForm.form);
+                loginForm.form.addEventListener("submit", function(event) {
+                    loginFormSubmitted(loginForm);
+                });
             });
         }
     );
