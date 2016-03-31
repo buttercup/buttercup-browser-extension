@@ -9,7 +9,7 @@ require([
 
 	var __state = State.loadFromStorage(),
 		__msgRouter = new MessageRouter(__state);
-	
-	chrome.extension.onMessage.addListener(__msgRouter.handle.bind(__msgRouter));
+
+	chrome.runtime.onMessage.addListener(__msgRouter.handle.bind(__msgRouter));
 
 });
