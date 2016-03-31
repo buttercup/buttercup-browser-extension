@@ -21,7 +21,13 @@ define("MessageRouter", ["ArchiveHandler"], function(ArchiveHandler) {
 						sendResponse({
 							success: success
 						});
-					});
+					})
+                    .catch(function(err) {
+                        sendResponse({
+                            success: false
+                        });
+                        console.error("Failed adding archive:", err);
+                    })
 			} else if (request.command === "getArchiveNames") {
                 sendResponse({
                     names: this._archiveHandler.getNames()

@@ -11,9 +11,10 @@ const {
     browserHistory
 } = require("react-router");
 
-let App = require("./App"),
+const App = require("./App"),
     AddArchive = require("./AddArchive"),
-    AddWebDAV = require("./AddWebDAV");
+    AddWebDAV = require("./AddWebDAV"),
+    LoadingModal = require("./LoadingModal");
 
 ReactDOM.render((
     <Router history={browserHistory}>
@@ -22,6 +23,7 @@ ReactDOM.render((
             <Route path="addArchive/webdav" component={AddWebDAV}/>
             {/*<Route path="addArchive" component={AddArchive}/>
             <Route path="addArchive/webdav" component={AddWebDAV}/>*/}
+            <Route path="loading" component={LoadingModal}/>
         </Route>
     </Router>
 ), document.getElementById("app"));

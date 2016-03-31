@@ -1,9 +1,11 @@
 'use strict';
 
 const React = require("react"),
-    Link = require("react-router").Link;
+    {
+        Link
+    } = require("react-router");
 
-module.exports = React.createClass({
+const AddWebDAV = React.createClass({
 
     getInitialState: function() {
         return {
@@ -31,6 +33,7 @@ module.exports = React.createClass({
             remote_path: state.webdav_path,
             password: state.archive_password
         });
+        this.props.history.push('/loading');
     },
 
     render: function() {
@@ -83,3 +86,9 @@ module.exports = React.createClass({
     }
 
 });
+
+// AddWebDAV.contextTypes = {
+//     router: React.PropTypes.func.isRequired
+// };
+
+module.exports = AddWebDAV;

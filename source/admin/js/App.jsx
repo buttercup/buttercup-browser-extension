@@ -3,7 +3,7 @@
 const React = require("react"),
     Link = require("react-router").Link;
 
-module.exports = React.createClass({
+const App = React.createClass({
     render: function(){
         return <div>
             <h2>Buttercup</h2>
@@ -11,3 +11,9 @@ module.exports = React.createClass({
         </div>
     }
 });
+
+// App.contextTypes = {
+//     router: React.PropTypes.object.isRequired,
+// };
+
+module.exports = App;
