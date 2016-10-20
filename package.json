@@ -4,8 +4,11 @@
   "description": "Buttercup extension for Chrome.",
   "main": "source/background/index.js",
   "scripts": {
-    "build": "npm run clean && webpack",
+    "build": "npm run clean && webpack --progress && npm run copy",
     "clean": "rimraf ./dist/**/*",
+    "copy": "npm run copy:setup && npm run copy:tab",
+    "copy:setup": "cp ./source/setup/index.html dist/setup.html",
+    "copy:tab": "cp ./source/popup/index.html dist/popup.html",
     "test": "exit 1",
     "watch": "exit 1"
   },
@@ -26,7 +29,7 @@
     "url": "https://github.com/perry-mitchell/buttercup-chrome/issues"
   },
   "homepage": "https://github.com/perry-mitchell/buttercup-chrome#readme",
-  "dependencies": {
+  "devDependencies": {
     "babel-core": "^6.4.5",
     "babel-loader": "^6.2.2",
     "babel-plugin-transform-react-jsx": "^6.5.2",

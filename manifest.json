@@ -7,7 +7,7 @@
 
 	"browser_action": {
 		"default_icon": "resources/buttercup-256.png",
-		"default_popup": "dist/popup/index.html"
+		"default_popup": "dist/popup.html"
 	},
 
 	"icons": {
