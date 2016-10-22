@@ -17,10 +17,7 @@ module.exports = [
                     test: /\.js$/,
                     include: /buttercup-web/,
                     exclude: /(node_modules|bower_components)/,
-                    loader: 'babel',
-                    query: {
-                        presets: ['es2015']
-                    }
+                    loader: 'babel'
                 }
             ]
         },
@@ -45,10 +42,7 @@ module.exports = [
                 {
                     test: /\.js$/,
                     exclude: /(node_modules|bower_components)/,
-                    loader: 'babel',
-                    query: {
-                        presets: ['es2015']
-                    }
+                    loader: 'babel'
                 }
             ]
         },
@@ -74,25 +68,19 @@ module.exports = [
                 {
                     test: /\.js$/,
                     exclude: /(node_modules|bower_components)/,
-                    loader: 'babel',
-                    query: {
-                        presets: ['es2015']
-                    }
+                    loader: 'babel'
                 },
                 {
                     test: /\.jsx$/,
                     exclude: /(node_modules|bower_components)/,
-                    loader: 'babel',
-                    query: {
-                        presets: ['react', 'es2015']
-                    }
+                    loader: 'babel'
                 }
             ]
         },
         externals: {
             // don't bundle the 'react' npm package with our bundle.js
             // but get it from a global 'React' variable
-            'react': 'React'
+            // 'react': 'React'
         },
         resolve: {
             extensions: ['', '.js', '.jsx']
@@ -116,25 +104,19 @@ module.exports = [
                 {
                     test: /\.js$/,
                     exclude: /(node_modules|bower_components)/,
-                    loader: 'babel',
-                    query: {
-                        presets: ['es2015']
-                    }
+                    loader: 'babel'
                 },
                 {
                     test: /\.jsx$/,
                     exclude: /(node_modules|bower_components)/,
-                    loader: 'babel',
-                    query: {
-                        presets: ['react', 'es2015']
-                    }
+                    loader: 'babel'
                 }
             ]
         },
         externals: {
             // don't bundle the 'react' npm package with our bundle.js
             // but get it from a global 'React' variable
-            'react': 'React'
+            // 'react': 'React'
         },
         resolve: {
             extensions: ['', '.js', '.jsx']
