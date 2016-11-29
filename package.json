@@ -4,13 +4,14 @@
   "description": "Buttercup extension for Chrome.",
   "main": "source/background/index.js",
   "scripts": {
-    "build": "npm run clean && webpack --progress && npm run copy",
+    "build": "npm run clean && npm run copy && npm run webpack",
     "clean": "rimraf ./dist/**/*",
     "copy": "npm run copy:setup && npm run copy:tab",
     "copy:setup": "cp ./source/setup/index.html dist/setup.html",
     "copy:tab": "cp ./source/popup/index.html dist/popup.html",
+    "dev": "npm run clean && npm run copy && npm run webpack -- --watch",
     "test": "exit 1",
-    "watch": "exit 1"
+    "webpack": "webpack --progress"
   },
   "repository": {
     "type": "git",
