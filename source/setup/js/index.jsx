@@ -11,20 +11,20 @@ const {
     hashHistory
 } = require("react-router");
 
-const App = require("./App"),
-    // AddArchive = require("./AddArchive"),
-    // AddWebDAV = require("./AddWebDAV"),
-    LoadingModal = require("./LoadingModal"),
-    AddArchive = require("./AddArchive"),
-    NoMatch = require("./NoMatch");
+const App = require("./App");
+const LoadingModal = require("./LoadingModal");
+const MainMenu = require("./MainMenu");
+const AddArchive = require("./AddArchive");
+const NoMatch = require("./NoMatch");
 
 ReactDOM.render((
     <Router history={hashHistory}>
         <Route path="/" component={App}>
+            <IndexRoute component={MainMenu} />
             {/*<Route path="addArchive" component={AddArchive}/>
             <Route path="addArchive/webdav" component={AddWebDAV}/>*/}
             <Route path="loading" component={LoadingModal} />
-            <Route path="add-archive" component={AddArchive} />
+            <Route path="addArchive" component={AddArchive} />
             <Route path="*" component={NoMatch} />
         </Route>
     </Router>

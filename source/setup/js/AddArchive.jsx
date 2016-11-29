@@ -14,6 +14,7 @@ class AddArchive extends React.Component {
             <ul>
                 <li>WebDAV</li>
             </ul>
+            <Link to="/">Home</Link>
         </div>
     }
 

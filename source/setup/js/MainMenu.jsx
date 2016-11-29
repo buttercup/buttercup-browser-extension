@@ -10,8 +10,9 @@ class MainMenu extends React.Component {
 
     render() {
         return <div>
+            <h2>Buttercup</h2>
             <ul>
-                <li><Link to="/add-archive">Add archive</Link></li>
+                <li><Link to="/addArchive">Add archive</Link></li>
             </ul>
         </div>
     }
