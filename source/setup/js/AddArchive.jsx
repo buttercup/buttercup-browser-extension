@@ -6,16 +6,17 @@ const {
     Link
 } = require("react-router");
 
-class MainMenu extends React.Component {
+class AddArchive extends React.Component {
 
     render() {
         return <div>
+            <h3>Archive source</h3>
             <ul>
-                <li><Link to="/add-archive">Add archive</Link></li>
+                <li>WebDAV</li>
             </ul>
         </div>
     }
 
 }
 
-module.exports = MainMenu;
+module.exports = AddArchive;
