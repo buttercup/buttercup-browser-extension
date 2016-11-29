@@ -15,6 +15,7 @@ const App = require("./App");
 const LoadingModal = require("./LoadingModal");
 const MainMenu = require("./MainMenu");
 const AddArchive = require("./AddArchive");
+const AddArchiveEntry = require("./AddArchiveEntry");
 const NoMatch = require("./NoMatch");
 
 ReactDOM.render((
@@ -24,7 +25,9 @@ ReactDOM.render((
             {/*<Route path="addArchive" component={AddArchive}/>
             <Route path="addArchive/webdav" component={AddWebDAV}/>*/}
             <Route path="loading" component={LoadingModal} />
-            <Route path="addArchive" component={AddArchive} />
+            <Route path="addArchive" component={AddArchive}>
+                <Route path="/addArchive/:type" component={AddArchiveEntry} />
+            </Route>
             <Route path="*" component={NoMatch} />
         </Route>
     </Router>

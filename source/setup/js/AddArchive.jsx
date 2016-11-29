@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const React = require("react");
 
@@ -10,10 +10,13 @@ class AddArchive extends React.Component {
 
     render() {
         return <div>
-            <h3>Archive source</h3>
+            <h3>Add archive from source</h3>
             <ul>
-                <li>WebDAV</li>
+                <li><Link to="/addArchive/webdav">WebDAV</Link></li>
             </ul>
+            <div>
+                {this.props.children}
+            </div>
             <Link to="/">Home</Link>
         </div>
     }
