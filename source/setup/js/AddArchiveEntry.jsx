@@ -28,6 +28,7 @@ class AddArchiveEntry extends React.Component {
         return <div>
             <h3>Add from {this.props.params.type} source</h3>
             <FormClass />
+            <Link to="/">Home</Link>
         </div>
     }
 

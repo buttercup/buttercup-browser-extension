@@ -25,9 +25,8 @@ ReactDOM.render((
             {/*<Route path="addArchive" component={AddArchive}/>
             <Route path="addArchive/webdav" component={AddWebDAV}/>*/}
             <Route path="loading" component={LoadingModal} />
-            <Route path="addArchive" component={AddArchive}>
-                <Route path="/addArchive/:type" component={AddArchiveEntry} />
-            </Route>
+            <Route path="addArchive" component={AddArchive} />
+            <Route path="/addArchive/:type" component={AddArchiveEntry} />
             <Route path="*" component={NoMatch} />
         </Route>
     </Router>
