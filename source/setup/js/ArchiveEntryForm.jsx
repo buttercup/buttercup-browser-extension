@@ -9,13 +9,18 @@ class ArchiveEntryForm extends React.Component {
         this.state = {};
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
-        console.log("Change", this, event);
+        let input = event.target,
+            name = input.getAttribute("name"),
+            value = input.value;
+        this.state[name] = value;
     }
 
     handleSubmit(event) {
+        event.preventDefault();
         console.log("Submit", this, event);
     }
 
@@ -29,7 +34,7 @@ class ArchiveEntryForm extends React.Component {
     renderFormContents() {
         return <label>
             Master password:
-            <input type="password" name="master-password" value="" onChange={this.handleChange} />
+            <input type="password" name="master_password" value={this.state.master_password} onChange={this.handleChange} />
         </label>
     }
 
