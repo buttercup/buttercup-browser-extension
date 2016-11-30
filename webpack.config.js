@@ -15,17 +15,13 @@ module.exports = [
             loaders: [
                 {
                     test: /\.js$/,
-                    include: /buttercup-web/,
-                    exclude: /(node_modules|bower_components)/,
+                    exclude: /node_modules/,
                     loader: 'babel'
                 }
             ]
         },
         resolve: {
             extensions: ['', '.js'],
-            alias: {
-                __buttercup_web: path.resolve(__dirname, './node_modules/buttercup-web')
-            },
             fallback: [path.join(__dirname, 'node_modules')]
         }
     },

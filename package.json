@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npm run clean && npm run copy && npm run webpack",
     "clean": "rimraf ./dist/**/*",
-    "copy": "npm run copy:setup && npm run copy:tab",
+    "copy": "npm run copy:setup && npm run copy:tab && npm run copy:buttercup",
+    "copy:buttercup": "cp ./node_modules/buttercup-web/build/buttercup.min.js dist/",
     "copy:setup": "cp ./source/setup/index.html dist/setup.html",
     "copy:tab": "cp ./source/popup/index.html dist/popup.html",
     "dev": "npm run clean && concurrently --raw 'npm run watch:html' 'npm run webpack -- --watch'",

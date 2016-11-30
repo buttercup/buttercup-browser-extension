@@ -18,6 +18,7 @@
 
 	"background": {
 		"scripts": [
+            "dist/buttercup.min.js",
 			"dist/background.js"
 		]
 	},

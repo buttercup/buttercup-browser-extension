@@ -6,7 +6,9 @@ class ArchiveEntryForm extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            type: null
+        };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,7 +23,9 @@ class ArchiveEntryForm extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log("Submit", this, event);
+        chrome.runtime.sendMessage({ command: "add-archive", data: this.state }, function(response) {
+            
+        });
     }
 
     render() {

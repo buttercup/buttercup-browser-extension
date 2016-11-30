@@ -1,2 +1,6 @@
-window.Buttercup = require("__buttercup_web");
-console.log(window.Buttercup);
+"use strict";
+
+const addListeners = require("./messaging.js");
+
+// init
+addListeners();

@@ -6,6 +6,11 @@ const ArchiveEntryForm = require("./ArchiveEntryForm");
 
 class WebDAVArchiveEntryForm extends ArchiveEntryForm {
 
+    constructor(props) {
+        super(props);
+        this.state.type = "webdav";
+    }
+
     renderFormContents() {
         return <div>
             {super.renderFormContents()}
