@@ -12,16 +12,25 @@ class ArchiveEntryForm extends React.Component {
     }
 
     handleChange(event) {
-        console.log("Change", event);
+        console.log("Change", this, event);
+    }
+
+    handleSubmit(event) {
+        console.log("Submit", this, event);
     }
 
     render() {
         return <form>
-            <label>
-                Master password:
-                <input type="password" name="master-password" value="" onChange={this.handleChange} />
-            </label>
+            {this.renderFormContents()}
+            <input type="submit" name="Authenticate" onClick={this.handleSubmit} />
         </form>
+    }
+
+    renderFormContents() {
+        return <label>
+            Master password:
+            <input type="password" name="master-password" value="" onChange={this.handleChange} />
+        </label>
     }
 
 }
