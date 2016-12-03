@@ -2,12 +2,15 @@
 
 const React = require("react");
 
+const ArchiveList = require("./ArchiveList");
+
 class App extends React.Component {
 
     render() {
         return <div>
             <h2>Buttercup</h2>
-            <a href="#" onClick={this.setupClicked}>Setup</a>
+            <ArchiveList />
+            <a href="#" onClick={() => this.setupClicked()}>Setup</a>
             { this.props.children }
         </div>
     }
@@ -18,9 +21,5 @@ class App extends React.Component {
     }
 
 }
-
-// App.contextTypes = {
-//     router: React.PropTypes.object.isRequired,
-// };
 
 module.exports = App;

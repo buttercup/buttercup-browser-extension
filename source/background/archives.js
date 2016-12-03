@@ -9,8 +9,9 @@ module.exports = {
             case "webdav": {
                 let webdavCreds = new Credentials();
                 webdavCreds.type = "webdav";
-                webdavCreds.username = request.username;
-                webdavCreds.password = request.password;
+                webdavCreds.username = request.webdav_username;
+                webdavCreds.password = request.webdav_password;
+                webdavCreds.setMeta("address", request.webdav_address);
                 window.Buttercup.Web.archiveManager.addCredentials(
                     "Test name - to be replaced",
                     webdavCreds,
