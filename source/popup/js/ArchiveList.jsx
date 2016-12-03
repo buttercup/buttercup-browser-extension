@@ -22,7 +22,7 @@ class ArchiveList extends React.Component {
         Buttercup
             .fetchArchives()
             .then(archives => {
-                this.state.archives = archives;
+                this.setState({ archives });
             });
     }
 

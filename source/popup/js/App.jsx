@@ -7,12 +7,14 @@ const ArchiveList = require("./ArchiveList");
 class App extends React.Component {
 
     render() {
-        return <div>
-            <h2>Buttercup</h2>
-            <ArchiveList />
-            <a href="#" onClick={() => this.setupClicked()}>Setup</a>
-            { this.props.children }
-        </div>
+        return (
+            <div>
+                <h2>Buttercup</h2>
+                <ArchiveList />
+                <a href="#" onClick={() => this.setupClicked()}>Setup</a>
+                { this.props.children }
+            </div>
+        );
     }
 
     setupClicked(event) {
