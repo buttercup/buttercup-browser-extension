@@ -10,6 +10,16 @@ module.exports = function addListeners() {
                 let archiveData = request.data;
                 console.log("Add archive", archiveData);
                 archives.addArchiveByRequest(archiveData);
+                sendResponse({
+                    ok: true
+                });
+                break;
+            }
+
+            case "get-archive-states": {
+                let states = archives.getArchiveList();
+                console.log("Get archives", states);
+                sendResponse(states);
                 break;
             }
 

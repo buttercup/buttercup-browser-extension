@@ -22,6 +22,7 @@ class ArchiveList extends React.Component {
         Buttercup
             .fetchArchives()
             .then(archives => {
+                // archives = archives.map(archive => Object.assign(archive, { key: archive.name }));
                 this.setState({ archives });
             });
     }
@@ -30,8 +31,8 @@ class ArchiveList extends React.Component {
         return (
             <ul>
                 {this.state.archives.map(archive =>
-                    <li>
-                        <ArchiveListElement {...archive} key={archive.name} />
+                    <li key={archive.name}>
+                        <ArchiveListElement {...archive} />
                     </li>
                 )}
             </ul>

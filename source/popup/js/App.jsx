@@ -11,7 +11,7 @@ class App extends React.Component {
             <div>
                 <h2>Buttercup</h2>
                 <ArchiveList />
-                <a href="#" onClick={() => this.setupClicked()}>Setup</a>
+                <a href="#" onClick={(e) => this.setupClicked(e)}>Setup</a>
                 { this.props.children }
             </div>
         );

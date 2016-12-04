@@ -2,6 +2,8 @@
 
 const React = require("react");
 
+const NOOP = function() {};
+
 class ArchiveEntryForm extends React.Component {
 
     constructor(props) {
@@ -24,7 +26,13 @@ class ArchiveEntryForm extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         chrome.runtime.sendMessage({ command: "add-archive", data: this.state }, function(response) {
-            
+            if (response && response.ok === true) {
+                chrome.tabs.getCurrent(function(tab) {
+                    chrome.tabs.remove(tab.id, NOOP);
+                });
+            } else {
+                // @todo error
+            }
         });
     }
 
@@ -36,10 +44,18 @@ class ArchiveEntryForm extends React.Component {
     }
 
     renderFormContents() {
-        return <label>
-            Master password:
-            <input type="password" name="master_password" value={this.state.master_password} onChange={this.handleChange} />
-        </label>
+        return (
+            <div>
+                <label>
+                    Entry name:
+                    <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
+                </label>
+                <label>
+                    Master password:
+                    <input type="password" name="master_password" value={this.state.master_password} onChange={this.handleChange} />
+                </label>
+            </div>
+        );
     }
 
 }

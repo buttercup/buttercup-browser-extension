@@ -1,10 +1,12 @@
 "use strict";
 
+let Buttercup = window.Buttercup;
+
 module.exports = {
 
     addArchiveByRequest: function(request) {
         let Credentials = window.Buttercup.Credentials;
-        console.log(window.Buttercup, window.Buttercup.Web);
+        // console.log(window.Buttercup, window.Buttercup.Web);
         switch(request.type) {
             case "webdav": {
                 let webdavCreds = new Credentials();
@@ -12,18 +14,22 @@ module.exports = {
                 webdavCreds.username = request.webdav_username;
                 webdavCreds.password = request.webdav_password;
                 webdavCreds.setMeta("address", request.webdav_address);
-                window.Buttercup.Web.archiveManager.addCredentials(
-                    "Test name - to be replaced",
+                Buttercup.Web.archiveManager.addCredentials(
+                    request.name,
                     webdavCreds,
                     request.master_password
                 );
-                window.Buttercup.Web.archiveManager.saveState();
+                Buttercup.Web.archiveManager.saveState();
                 break;
             }
 
             default:
                 throw new Error(`Unknown archive type: ${request.type}`);
         }
+    },
+
+    getArchiveList: function() {
+        return Buttercup.Web.archiveManager.getCredentialStates();
     }
 
 };
