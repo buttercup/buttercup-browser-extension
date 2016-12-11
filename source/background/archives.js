@@ -14,6 +14,7 @@ module.exports = {
                 webdavCreds.username = request.webdav_username;
                 webdavCreds.password = request.webdav_password;
                 webdavCreds.setMeta("address", request.webdav_address);
+                webdavCreds.setMeta("path", request.webdav_path);
                 Buttercup.Web.archiveManager.addCredentials(
                     request.name,
                     webdavCreds,

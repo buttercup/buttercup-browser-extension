@@ -1,15 +1,21 @@
 const path = require("path");
 
+const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
+
+const SRC_BACKGROUND = path.resolve(SOURCE, "background");
+const SRC_POPUP = path.resolve(SOURCE, "popup");
+const SRC_SETUP = path.resolve(SOURCE, "setup");
+const SRC_TAB = path.resolve(SOURCE, "tab");
 
 module.exports = [
 
     // Background
     {
-        entry: path.resolve(SOURCE, "./background/index.js"),
+        entry: path.resolve(SRC_BACKGROUND, "index.js"),
         output: {
             filename: "background.js",
-            path: path.resolve(__dirname, "./dist")
+            path: DIST
         },
         module: {
             loaders: [
@@ -28,10 +34,10 @@ module.exports = [
 
     // Tab
     {
-        entry: path.resolve(SOURCE, "./tab/index.js"),
+        entry: path.resolve(SRC_TAB, "index.js"),
         output: {
             filename: "tab.js",
-            path: path.resolve(__dirname, "./dist")
+            path: DIST
         },
         module: {
             loaders: [
@@ -50,12 +56,12 @@ module.exports = [
     // Setup / Admin
     {
         entry: {
-            lib: path.resolve(SOURCE, "./setup/js/index.js"),
-            views: path.resolve(SOURCE, "./setup/js/index.jsx")
+            lib: path.resolve(SRC_SETUP, "./js/index.js"),
+            views: path.resolve(SRC_SETUP, "./js/index.jsx")
         },
         output: {
             filename: 'setup.[name].js',
-            path: path.resolve(__dirname, "./dist/"),
+            path: DIST,
             //make sure port 8090 is used when launching webpack-dev-server
             publicPath: 'http://localhost:8090/assets'
         },
@@ -86,12 +92,12 @@ module.exports = [
     // Popup
     {
         entry: {
-            lib: path.resolve(SOURCE, "./popup/js/index.js"),
-            views: path.resolve(SOURCE, "./popup/js/index.jsx")
+            lib: path.resolve(SRC_POPUP, "./js/index.js"),
+            views: path.resolve(SRC_POPUP, "./js/index.jsx")
         },
         output: {
             filename: 'popup.[name].js',
-            path: path.resolve(__dirname, "./dist/"),
+            path: DIST,
             //make sure port 8090 is used when launching webpack-dev-server
             publicPath: 'http://localhost:8090/assets'
         },
@@ -99,13 +105,21 @@ module.exports = [
             loaders: [
                 {
                     test: /\.js$/,
-                    exclude: /(node_modules|bower_components)/,
+                    exclude: /(node_modules)/,
                     loader: 'babel'
                 },
                 {
                     test: /\.jsx$/,
-                    exclude: /(node_modules|bower_components)/,
+                    exclude: /(node_modules)/,
                     loader: 'babel'
+                },
+                {
+                    test: /\.sass$/,
+                    loaders: [
+                        "style-loader",
+                        "css-loader",
+                        "sass-loader"
+                    ]
                 }
             ]
         },
@@ -115,7 +129,11 @@ module.exports = [
             // 'react': 'React'
         },
         resolve: {
-            extensions: ['', '.js', '.jsx']
+            extensions: ['', '.js', '.jsx', '.sass'],
+            root: [
+                path.resolve(SRC_POPUP, "js"),
+                path.resolve(SRC_POPUP, "sass")
+            ]
         }
     }
 

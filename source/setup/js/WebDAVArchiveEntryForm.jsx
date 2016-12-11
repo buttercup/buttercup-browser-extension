@@ -19,6 +19,10 @@ class WebDAVArchiveEntryForm extends ArchiveEntryForm {
                 <input type="text" name="webdav_address" value={this.state.webdav_address} onChange={this.handleChange} />
             </label>
             <label>
+                Remote archive path:
+                <input type="text" name="webdav_path" value={this.state.webdav_path} onChange={this.handleChange} />
+            </label>
+            <label>
                 WebDAV username (blank for none):
                 <input type="text" name="webdav_username" value={this.state.webdav_username} onChange={this.handleChange} />
             </label>

@@ -2,6 +2,8 @@
 
 const React = require("react");
 
+require("ArchiveList.sass");
+
 const ArchiveListElement = require("./ArchiveListElement");
 
 class ArchiveList extends React.Component {
@@ -29,7 +31,7 @@ class ArchiveList extends React.Component {
 
     render() {
         return (
-            <ul>
+            <ul className="archiveList">
                 {this.state.archives.map(archive =>
                     <li key={archive.name}>
                         <ArchiveListElement {...archive} />

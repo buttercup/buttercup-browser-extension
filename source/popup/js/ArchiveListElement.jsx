@@ -8,7 +8,7 @@ class ArchiveListElement extends React.Component {
         let lockState = (this.props.locked) ?
             `(🔒 locked)` : `(🔓 unlocked)`;
         return (
-            <span>{this.props.name} {lockState}</span>
+            <span className="listEl">{this.props.name} {lockState}</span>
         );
     }
 
