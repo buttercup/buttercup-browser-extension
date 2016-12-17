@@ -2,6 +2,9 @@
 
 const archives = require("./archives.js");
 
+const RESPOND_ASYNC = true;
+const RESPOND_SYNC = false;
+
 module.exports = function addListeners() {
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -9,11 +12,21 @@ module.exports = function addListeners() {
             case "add-archive": {
                 let archiveData = request.data;
                 console.log("Add archive", archiveData);
-                archives.addArchiveByRequest(archiveData);
-                sendResponse({
-                    ok: true
-                });
-                break;
+                archives
+                    .addArchiveByRequest(archiveData)
+                    .then(function(result) {
+                        sendResponse({
+                            ok: true
+                        });
+                    })
+                    .catch(function(err) {
+                        console.error(err);
+                        sendResponse({
+                            ok: false,
+                            error: err.message
+                        });
+                    });
+                return RESPOND_ASYNC;
             }
 
             case "get-archive-states": {
@@ -27,6 +40,7 @@ module.exports = function addListeners() {
                 // unrecognised command
                 break;
         }
+        return RESPOND_SYNC;
     });
 
 };
