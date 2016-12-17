@@ -9,6 +9,8 @@ The extension can remotely connect to archives via Buttercup's common communicat
 ### Supported browsers
 Current only **Chrome** is supported.
 
+We **hope** to add support for Firefox and Edge in the near future - We'd love any suggestions or contributions in this area!
+
 ## Contributing
 Contributions are very welcome and strongly encouraged, though we do ask that you stick to some basic styling parameters:
 
