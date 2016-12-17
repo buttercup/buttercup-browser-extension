@@ -16,6 +16,7 @@ const LoadingModal = require("./LoadingModal");
 const MainMenu = require("./MainMenu");
 const AddArchive = require("./AddArchive");
 const AddArchiveEntry = require("./AddArchiveEntry");
+const UnlockArchive = require("./UnlockArchive");
 const NoMatch = require("./NoMatch");
 
 ReactDOM.render((
@@ -27,6 +28,7 @@ ReactDOM.render((
             <Route path="loading" component={LoadingModal} />
             <Route path="addArchive" component={AddArchive} />
             <Route path="/addArchive/:type" component={AddArchiveEntry} />
+            <Route path="/unlockArchive/:name" component={UnlockArchive} />
             <Route path="*" component={NoMatch} />
         </Route>
     </Router>

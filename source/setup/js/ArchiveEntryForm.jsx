@@ -2,7 +2,7 @@
 
 const React = require("react");
 
-const NOOP = function() {};
+const NOPE = function() {};
 
 class ArchiveEntryForm extends React.Component {
 
@@ -25,7 +25,10 @@ class ArchiveEntryForm extends React.Component {
         let input = event.target,
             name = input.getAttribute("name"),
             value = input.value;
-        this.state[name] = value;
+        // this.state[name] = value;
+        this.setState({
+            [name]: value
+        })
     }
 
     handleSubmit(event) {
@@ -35,7 +38,7 @@ class ArchiveEntryForm extends React.Component {
             console.log("Response", response);
             if (response && response.ok === true) {
                 chrome.tabs.getCurrent(function(tab) {
-                    chrome.tabs.remove(tab.id, NOOP);
+                    chrome.tabs.remove(tab.id, NOPE);
                 });
             } else {
                 // @todo error
@@ -49,7 +52,7 @@ class ArchiveEntryForm extends React.Component {
         return <form>
             <fieldset disabled={this.state.loading}>
                 {this.renderFormContents()}
-                <input type="submit" name="Authenticate" onClick={this.handleSubmit} />
+                <input type="submit" value="Authenticate" onClick={this.handleSubmit} />
             </fieldset>
         </form>
     }

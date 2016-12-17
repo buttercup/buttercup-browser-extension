@@ -75,6 +75,10 @@ let archives = module.exports = {
 
     getArchiveList: function() {
         return Buttercup.Web.archiveManager.getCredentialStates();
+    },
+
+    unlockArchive: function(name, password) {
+        return Buttercup.Web.archiveManager.unlock(name, password);
     }
 
 };

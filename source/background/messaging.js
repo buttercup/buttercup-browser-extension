@@ -36,6 +36,26 @@ module.exports = function addListeners() {
                 break;
             }
 
+            case "unlock-archive": {
+                let opts = request.data;
+                console.log("Unlock archive", opts);
+                archives
+                    .unlockArchive(opts.name, opts.password)
+                    .then(function() {
+                        sendResponse({
+                            ok: true
+                        });
+                    })
+                    .catch(function(err) {
+                        console.error(err);
+                        sendResponse({
+                            ok: false,
+                            error: err.message
+                        });
+                    });
+                return RESPOND_ASYNC;
+            }
+
             default:
                 // unrecognised command
                 break;
