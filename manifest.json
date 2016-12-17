@@ -3,11 +3,11 @@
 
 	"name": "Buttercup",
 	"description": "Chrome Extension for Buttercup",
-	"version": "0.1.0",
+	"version": "0.2.0",
 
 	"browser_action": {
 		"default_icon": "resources/buttercup-256.png",
-		"default_popup": "dist/popup/index.html"
+		"default_popup": "popup.html#/"
 	},
 
 	"icons": {
@@ -18,14 +18,15 @@
 
 	"background": {
 		"scripts": [
-			"dist/background.js"
+            "buttercup.js",
+			"background.js"
 		]
 	},
 
 	"content_scripts" : [
 		{
 			"matches": ["http://*/*", "https://*/*"],
-			"js": ["dist/tab.js"]
+			"js": ["tab.js"]
 		}
 	],
 
