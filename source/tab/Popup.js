@@ -1,30 +1,56 @@
-function createPopup(position, width) {
-    let container = document.createElement("div");
-    container.style.border = "1px solid #000";
-    container.style.left = `${position.x}px`;
-    container.style.top = `${position.y}px`;
-    container.style.position = "absolute";
-    container.style.width = `${width}px`;
-    container.style.height = "100px";
-    container.style.backgroundColor = "#FFF";
-    let header = document.createElement("div");
-    header.style.width = "100%";
-    header.style.height = "20px";
-    header.style.position = "absolute";
-    header.style.left = "0px";
-    header.style.top = "0x";
-    header.style.borderBottom = "1px solid #999";
-    container.appendChild(header);
-    let passwordsContainer = document.createElement("div");
-    passwordsContainer.style.width = "100%";
-    passwordsContainer.style.height = "80px";
-    passwordsContainer.style.position = "absolute";
-    passwordsContainer.style.left = "0px";
-    passwordsContainer.style.top = "21px";
-    passwordsContainer.style.backgroundColor = "#EEE";
-    container.appendChild(passwordsContainer);
-    // content
+const {
+    el,
+    mount
+} = require("redom");
 
+function createPopup(position, width) {
+    const HEIGHT = 130;
+    let container = el(
+        "div",
+        {
+            "data-buttercup-role": "container",
+            style: {
+                border: "1px solid #000",
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                position: "absolute",
+                width: `${width}px`,
+                height: `${HEIGHT}px`,
+                backgroundColor: "#FFF",
+                overflow: "hidden"
+            }
+        },
+        el(
+            "div",
+            {
+                "data-buttercup-role": "header",
+                style: {
+                    width: "100%",
+                    height: "20px",
+                    position: "absolute",
+                    left: "0px",
+                    top: "0px",
+                    borderBottom: "1px solid #999"
+                }
+            }
+        ),
+        el(
+            "div",
+            {
+                "data-buttercup-role": "listbox",
+                style: {
+                    width: "100%",
+                    height: `${HEIGHT - 20}px`,
+                    position: "absolute",
+                    left: "0px",
+                    top: "21px",
+                    backgroundColor: "#EEE",
+                    overflowX: "hidden",
+                    overflowY: "scroll"
+                }
+            }
+        )
+    );
     return container;
 }
 
@@ -34,6 +60,10 @@ class Popup {
         this._form = loginForm;
         this._root = null;
         this._removeListeners = null;
+    }
+
+    get open() {
+        return !!this._root;
     }
 
     close() {
@@ -57,7 +87,7 @@ class Popup {
         }
         setTimeout(() => {
             this._root = createPopup(position, width);
-            document.body.appendChild(this._root);
+            mount(document.body, this._root);
             let onClick = (e) => {
                 if (this._root && this._root.contains(e.target)) {
                     e.stopPropagation();

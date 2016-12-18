@@ -42,7 +42,7 @@ class LoginForm {
         this._form = form;
         this._inputs = [];
         this._mouseOverButton = false;
-        this._popup = null;
+        this._popup = new Popup(this);
         this.locateKnownInputs();
     }
 
@@ -52,6 +52,14 @@ class LoginForm {
 
     get inputs() {
         return [...this._inputs];
+    }
+
+    get popup() {
+        return this._popup;
+    }
+
+    set popup(p) {
+        this._popup = p;
     }
 
     getInputForProperty(property) {
@@ -89,12 +97,15 @@ class LoginForm {
     onInputClick(e) {
         e.preventDefault();
         if (this._mouseOverButton) {
+            if (this.popup.open) {
+                this.popup.close();
+                return;
+            }
             let username = this.getInputForProperty("username");
             if (username) {
                 let usernameInput = username.input,
                     bounds = usernameInput.getBoundingClientRect();
-                this._popup = this._popup || new Popup(this);
-                this._popup.popup({
+                this.popup.popup({
                     x: usernameInput.offsetLeft,
                     y: usernameInput.offsetTop + bounds.height + 2
                 }, bounds.width);
