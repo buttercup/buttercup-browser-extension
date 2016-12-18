@@ -1,3 +1,5 @@
+const Popup = require("./popup.js");
+
 const BUTTERCUP_LOGO = "data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAAAuAAD/4QMtaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjMtYzAxMSA2Ni4xNDU2NjEsIDIwMTIvMDIvMDYtMTQ6NTY6MjcgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTY2QjE5RjlCQ0RFMTFFNkJCNUFDRUExQ0JERjc1NDMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTY2QjE5RkFCQ0RFMTFFNkJCNUFDRUExQ0JERjc1NDMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1NjZCMTlGN0JDREUxMUU2QkI1QUNFQTFDQkRGNzU0MyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1NjZCMTlGOEJDREUxMUU2QkI1QUNFQTFDQkRGNzU0MyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pv/uAA5BZG9iZQBkwAAAAAH/2wCEAAoHBwcHBwoHBwoOCQgJDhAMCgoMEBMPDxAPDxMSDhAPDxAOEhIVFhcWFRIdHR8fHR0pKSkpKS8vLy8vLy8vLy8BCgkJCgsKDQsLDRANDg0QFA4ODg4UFw8PEQ8PFx0VEhISEhUdGhwXFxccGiAgHR0gICgoJigoLy8vLy8vLy8vL//AABEIACAAIAMBIgACEQEDEQH/xAB+AAACAwEAAAAAAAAAAAAAAAADBgIFBwQBAAIDAQAAAAAAAAAAAAAAAAABAgMEBRAAAgECAwYDCAMAAAAAAAAAAQIDEQQAEgUhMVFxIgaBkaHwQWEyQhNDB4KSohEAAgEDAwQDAAAAAAAAAAAAAQIEABESITED8EFRcSIyFP/aAAwDAQACEQMRAD8A2GeeK2iaaZgkaAlmOwADaSThQvv2AFcpp1uHQflmJAPJBQ054H35qUmaPTkNEY55KHeFy5R/YmvIYqtF069udPe502GKW7+8Y2ebIwjRVDdCyVWrE7TTGjj41CZvrfbsK4c6dJaSYsUlcBd2Vc3Ol7KKuLL9gEyBdQtgqH8kJJpzVq+hw321zDdwrPA4eNwGVlNQQdxGMy17S7my+xdy26wCZAJxEQYhMC3y0+XMoDUxb9ianIksmnOaxkiSMcM3SwH8sp8+ODk40KZpp5FRgT5SyvyS/ll9GIxba4v7qPf1jIk8d8BVD0seAIFP9A15jHBoGs6dY6dNZ3rupllz0RSemi/Uu7aMaJfWMGoW7W86hlYEbRXfx+GEPU+xbyCQtZMXjJ2LQvTxXq818ThI6lMHJFtjVsuHJ45RmRVXkLLi6N6se4veh9w9yWmoWRsrTM5kdXd2XKFC7aKD7ycH7DsZJbuS9IpGtFB45epvXL64FpvYt7PIGvCUjB2ihSvi3V5Lh90+wt9Ot1t7dQqqANgpu4fD231OB3RUwTW+5pRYsrmliZLAQoLIg6Pmv//Z";
 
 const INPUT_QUERY = {
@@ -40,6 +42,7 @@ class LoginForm {
         this._form = form;
         this._inputs = [];
         this._mouseOverButton = false;
+        this._popup = null;
         this.locateKnownInputs();
     }
 
@@ -86,7 +89,16 @@ class LoginForm {
     onInputClick(e) {
         e.preventDefault();
         if (this._mouseOverButton) {
-            console.log("Open dialog");
+            let username = this.getInputForProperty("username");
+            if (username) {
+                let usernameInput = username.input,
+                    bounds = usernameInput.getBoundingClientRect();
+                this._popup = this._popup || new Popup(this);
+                this._popup.popup({
+                    x: usernameInput.offsetLeft,
+                    y: usernameInput.offsetTop + bounds.height + 2
+                }, bounds.width);
+            }
         }
     }
 
