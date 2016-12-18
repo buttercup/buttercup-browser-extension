@@ -7,7 +7,24 @@ function createPopup(position, width) {
     container.style.width = `${width}px`;
     container.style.height = "100px";
     container.style.backgroundColor = "#FFF";
-    container.innerHTML = `<strong>Buttercup</strong>`;
+    let header = document.createElement("div");
+    header.style.width = "100%";
+    header.style.height = "20px";
+    header.style.position = "absolute";
+    header.style.left = "0px";
+    header.style.top = "0x";
+    header.style.borderBottom = "1px solid #999";
+    container.appendChild(header);
+    let passwordsContainer = document.createElement("div");
+    passwordsContainer.style.width = "100%";
+    passwordsContainer.style.height = "80px";
+    passwordsContainer.style.position = "absolute";
+    passwordsContainer.style.left = "0px";
+    passwordsContainer.style.top = "21px";
+    passwordsContainer.style.backgroundColor = "#EEE";
+    container.appendChild(passwordsContainer);
+    // content
+
     return container;
 }
 
@@ -28,6 +45,10 @@ class Popup {
         }
         this._root = null;
         this._removeListeners = null;
+    }
+
+    getItemsForPage() {
+        
     }
 
     popup(position, width) {
