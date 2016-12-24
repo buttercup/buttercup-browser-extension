@@ -24,7 +24,6 @@ class ArchiveList extends React.Component {
         Buttercup
             .fetchArchives()
             .then(archives => {
-                // archives = archives.map(archive => Object.assign(archive, { key: archive.name }));
                 this.setState({ archives });
             });
     }

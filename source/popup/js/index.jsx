@@ -3,6 +3,8 @@
 const React = require("react");
 const ReactDOM = require("react-dom");
 
+require("index.sass");
+
 const {
     Router,
     Route,

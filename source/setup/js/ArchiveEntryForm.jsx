@@ -25,7 +25,6 @@ class ArchiveEntryForm extends React.Component {
         let input = event.target,
             name = input.getAttribute("name"),
             value = input.value;
-        // this.state[name] = value;
         this.setState({
             [name]: value
         })
@@ -34,14 +33,13 @@ class ArchiveEntryForm extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         this.enable(false);
-        chrome.runtime.sendMessage({ command: "add-archive", data: this.state }, function(response) {
+        chrome.runtime.sendMessage({ command: "add-archive", data: this.state }, (response) => {
             console.log("Response", response);
             if (response && response.ok === true) {
                 chrome.tabs.getCurrent(function(tab) {
                     chrome.tabs.remove(tab.id, NOPE);
                 });
             } else {
-                // @todo error
                 alert("There was an error processing the provided archive details:\n" + response.error);
                 this.enable(true);
             }

@@ -36,6 +36,11 @@ module.exports = function addListeners() {
                 break;
             }
 
+            case "get-entries-for-url": {
+                
+                break;
+            }
+
             case "unlock-archive": {
                 let opts = request.data;
                 console.log("Unlock archive", opts);

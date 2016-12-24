@@ -32,8 +32,11 @@ let archives = module.exports = {
                 webdavCreds.type = "webdav";
                 webdavCreds.username = request.webdav_username;
                 webdavCreds.password = request.webdav_password;
-                webdavCreds.setMeta("address", request.webdav_address);
-                webdavCreds.setMeta("path", request.webdav_path);
+                webdavCreds.setMeta(Credentials.DATASOURCE_META, JSON.stringify({
+                    type: "webdav",
+                    endpoint: request.webdav_address,
+                    path: request.webdav_path
+                }));
                 return webdavCreds;  
             })
             .then(function(credentials) {
@@ -53,13 +56,13 @@ let archives = module.exports = {
                     });
             })
             .then(function([credentials, workspace] = []) {
-                console.log(credentials, workspace);
-                Buttercup.Web.archiveManager.addCredentials(
+                Buttercup.Web.archiveManager.addArchive(
                     request.name,
+                    workspace,
                     credentials,
                     request.master_password
                 );
-                Buttercup.Web.archiveManager.saveState();
+                return Buttercup.Web.archiveManager.saveState();
             });
     },
 
@@ -74,7 +77,7 @@ let archives = module.exports = {
     },
 
     getArchiveList: function() {
-        return Buttercup.Web.archiveManager.getCredentialStates();
+        return Buttercup.Web.archiveManager.displayList;
     },
 
     unlockArchive: function(name, password) {
