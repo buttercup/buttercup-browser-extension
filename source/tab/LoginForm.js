@@ -95,6 +95,7 @@ class LoginForm {
                 input: userInput,
                 property: "username"
             });
+            userInput.setAttribute("autocomplete", "off");
         }
         // password
         let passInput = this.form.querySelector(INPUT_QUERY.PASSWORD.join(","));
@@ -104,6 +105,7 @@ class LoginForm {
                 input: passInput,
                 property: "password"
             });
+            passInput.setAttribute("autocomplete", "off");
         }
     }
 
