@@ -80,6 +80,19 @@ let archives = module.exports = {
         return Buttercup.Web.archiveManager.displayList;
     },
 
+    getMatchingEntriesForURL: function(url) {
+        let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives,
+            entries = [];
+        unlockedArchives.forEach(function(archiveItem) {
+            let archive = archiveItem.workspace.primary.archive;
+            let newEntries = Buttercup.Web.ArchiveTools.getEntriesForURL(archive, url);
+            if (newEntries.length > 0) {
+                entries = entries.concat(newEntries);
+            }
+        });
+        return entries;
+    },
+
     unlockArchive: function(name, password) {
         return Buttercup.Web.archiveManager.unlock(name, password);
     }

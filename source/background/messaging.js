@@ -37,13 +37,20 @@ module.exports = function addListeners() {
             }
 
             case "get-entries-for-url": {
-                
+                let matchingEntries = archives
+                    .getMatchingEntriesForURL(request.url)
+                    .map(entry => ({
+                        title: entry.getProperty("title")
+                    }));
+                sendResponse({
+                    ok: true,
+                    entries: matchingEntries
+                })
                 break;
             }
 
             case "unlock-archive": {
                 let opts = request.data;
-                console.log("Unlock archive", opts);
                 archives
                     .unlockArchive(opts.name, opts.password)
                     .then(function() {

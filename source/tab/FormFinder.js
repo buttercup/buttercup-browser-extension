@@ -38,6 +38,7 @@ class FormFinder {
                 .filter((el, index, arr) => arr.indexOf(el) === index)
                 .filter(el => el.getAttribute("data-buttercup") !== "attached")
                 .map(form => new LoginForm(form));
+                // @todo filter forms with no password etc.
         return this._forms = forms;
     }
 

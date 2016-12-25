@@ -3,38 +3,11 @@ const {
     mount
 } = require("redom");
 
+const matching = require("./matching.js");
+
 function createPopup(position, width) {
     const HEIGHT = 130;
-    let container = el(
-        "div",
-        {
-            "data-buttercup-role": "container",
-            style: {
-                border: "1px solid #000",
-                left: `${position.x}px`,
-                top: `${position.y}px`,
-                position: "absolute",
-                width: `${width}px`,
-                height: `${HEIGHT}px`,
-                backgroundColor: "#FFF",
-                overflow: "hidden"
-            }
-        },
-        el(
-            "div",
-            {
-                "data-buttercup-role": "header",
-                style: {
-                    width: "100%",
-                    height: "20px",
-                    position: "absolute",
-                    left: "0px",
-                    top: "0px",
-                    borderBottom: "1px solid #999"
-                }
-            }
-        ),
-        el(
+    let list = el(
             "div",
             {
                 "data-buttercup-role": "listbox",
@@ -49,47 +22,85 @@ function createPopup(position, width) {
                     overflowY: "scroll"
                 }
             }
-        )
-    );
-    return container;
+        ),
+        container = el(
+            "div",
+            {
+                "data-buttercup-role": "container",
+                style: {
+                    border: "1px solid #000",
+                    left: `${position.x}px`,
+                    top: `${position.y}px`,
+                    position: "absolute",
+                    width: `${width}px`,
+                    height: `${HEIGHT}px`,
+                    backgroundColor: "#FFF",
+                    overflow: "hidden"
+                }
+            },
+            el(
+                "div",
+                {
+                    "data-buttercup-role": "header",
+                    style: {
+                        width: "100%",
+                        height: "20px",
+                        position: "absolute",
+                        left: "0px",
+                        top: "0px",
+                        borderBottom: "1px solid #999"
+                    }
+                }
+            ),
+            list
+        );
+    return {
+        root: container,
+        list
+    };
 }
 
 class Popup {
 
     constructor(loginForm) {
         this._form = loginForm;
-        this._root = null;
+        this._elements = null;
         this._removeListeners = null;
     }
 
+    get elements() {
+        return this._elements;
+    }
+
     get open() {
-        return !!this._root;
+        return !!this._elements;
     }
 
     close() {
-        if (this._root) {
-            document.body.removeChild(this._root)
+        if (this._elements) {
+            document.body.removeChild(this._elements.root)
         }
         if (this._removeListeners) {
             this._removeListeners();
         }
-        this._root = null;
+        this._elements = null;
         this._removeListeners = null;
     }
 
     getItemsForPage() {
-        
+        return matching.getItemsForCurrentURL();
     }
 
     popup(position, width) {
-        if (this._root) {
+        if (this._elements) {
             this.close();
         }
         setTimeout(() => {
-            this._root = createPopup(position, width);
-            mount(document.body, this._root);
+            this._elements = createPopup(position, width);
+            mount(document.body, this._elements.root);
+            this.getItemsForPage().then(items => this.updatePageItems(items));
             let onClick = (e) => {
-                if (this._root && this._root.contains(e.target)) {
+                if (this._elements && this._elements.root.contains(e.target)) {
                     e.stopPropagation();
                     return;
                 }
@@ -98,6 +109,17 @@ class Popup {
             document.body.addEventListener("click", onClick, false);
             this._removeListeners = () => document.body.removeEventListener("click", onClick, false);
         }, 50);
+    }
+
+    updatePageItems(items) {
+        console.log("Items", items);
+        this.elements.list.innerHTML = "";
+        let listEl = el("ul");
+        mount(this.elements.list, listEl);
+        items.forEach(function(item) {
+            let listItem = el("li", item.title);
+            mount(listEl, listItem);
+        });
     }
 
 }
