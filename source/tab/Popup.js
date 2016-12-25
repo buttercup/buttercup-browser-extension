@@ -2,6 +2,7 @@ const {
     el,
     mount
 } = require("redom");
+const EventEmitter = require("events").EventEmitter;
 
 const matching = require("./matching.js");
 
@@ -60,9 +61,10 @@ function createPopup(position, width) {
     };
 }
 
-class Popup {
+class Popup extends EventEmitter {
 
     constructor(loginForm) {
+        super();
         this._form = loginForm;
         this._elements = null;
         this._removeListeners = null;
@@ -116,9 +118,17 @@ class Popup {
         this.elements.list.innerHTML = "";
         let listEl = el("ul");
         mount(this.elements.list, listEl);
-        items.forEach(function(item) {
-            let listItem = el("li", item.title);
+        items.forEach((item) => {
+            let listItem = el("li", {
+                style: {
+                    cursor: "pointer"
+                }
+            }, item.title);
             mount(listEl, listItem);
+            listItem.addEventListener("click", (event) => {
+                this.close();
+                this.emit("entryClick", item);
+            }, false);
         });
     }
 

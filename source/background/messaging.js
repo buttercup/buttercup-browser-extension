@@ -40,12 +40,36 @@ module.exports = function addListeners() {
                 let matchingEntries = archives
                     .getMatchingEntriesForURL(request.url)
                     .map(entry => ({
-                        title: entry.getProperty("title")
+                        id: entry.getID(),
+                        title: entry.getProperty("title"),
+                        archiveID: entry._getArchive().getID()
                     }));
                 sendResponse({
                     ok: true,
                     entries: matchingEntries
                 })
+                break;
+            }
+
+            case "get-entry-raw": {
+                let entry;
+                try {
+                    entry = archives.getEntry(request.archiveID, request.entryID);
+                } catch (err) {
+                    // @todo better way at logging errors
+                    // skip
+                }
+                if (entry) {
+                    sendResponse({
+                        ok: true,
+                        data: entry.toObject()
+                    });
+                } else {
+                    sendResponse({
+                        ok: false,
+                        error: "No archive/entry found"
+                    });
+                }
                 break;
             }
 
