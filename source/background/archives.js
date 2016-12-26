@@ -83,6 +83,32 @@ let archives = module.exports = {
             });
     },
 
+    createEntry: function(archiveID, groupID, title) {
+        let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives,
+            numArchives = unlockedArchives.length,
+            archive,
+            workspace;
+        for (let i = 0; i < numArchives; i += 1) {
+            let thisArchive = unlockedArchives[i].workspace.primary.archive;
+            if (thisArchive.getID() === archiveID) {
+                workspace = unlockedArchives[i].workspace;
+                archive = thisArchive;
+                break;
+            }
+        }
+        if (!archive) {
+            throw new Error(`Failed finding archive with ID: ${archiveID}`);
+        }
+        let group = archive.findGroupByID(groupID);
+        if (!group) {
+            throw new Error(`Failed finding group with ID ${groupID}`);
+        }
+        return {
+            workspace,
+            entry: group.createEntry(title),
+        };
+    },
+
     fetchWorkspace: function(datasource, masterPassword) {
         return datasource
             .load(masterPassword)

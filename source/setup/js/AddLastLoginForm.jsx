@@ -23,6 +23,7 @@ class AddLastLoginForm extends React.Component {
             username: "",
             password: "",
             url: "",
+            loginURL: "",
             archiveID: "",
             groupID: ""
         };
@@ -49,7 +50,8 @@ class AddLastLoginForm extends React.Component {
                 });
                 if (response.data.url) {
                     this.setState({
-                        url: response.data.url 
+                        url: response.data.url,
+                        loginURL: response.data.loginURL
                     });
                 }
             } else {
@@ -71,7 +73,7 @@ class AddLastLoginForm extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         this.enable(false);
-        chrome.runtime.sendMessage({ command: "save-new-entry", data: this.state }, function(response) {
+        chrome.runtime.sendMessage({ command: "save-new-entry", data: this.state }, (response) => {
             if (response && response.ok === true) {
                 // @todo show message
                 closeTab();
@@ -83,10 +85,14 @@ class AddLastLoginForm extends React.Component {
         });
     }
 
+    onSelect(archiveID, groupID) {
+        this.setState({ archiveID, groupID });
+    }
+
     render() {
         return <form className="addLastLogin">
             <fieldset disabled={this.state.loading}>
-                <ArchiveGroupExplorer />
+                <ArchiveGroupExplorer onSelect={this.onSelect.bind(this)} />
                 <label>
                     Title:
                     <input type="text" name="title" value={this.state.title} onChange={(e) => this.handleChange(e)} />
@@ -102,6 +108,10 @@ class AddLastLoginForm extends React.Component {
                 <label>
                     URL:
                     <input type="text" name="url" value={this.state.url} onChange={(e) => this.handleChange(e)} />
+                </label>
+                <label>
+                    URL (login):
+                    <input type="text" name="loginURL" value={this.state.loginURL} onChange={(e) => this.handleChange(e)} />
                 </label>
                 <input type="submit" value="Save" onClick={(e) => this.handleSubmit(e)} />
             </fieldset>

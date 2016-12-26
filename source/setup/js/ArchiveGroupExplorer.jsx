@@ -52,6 +52,9 @@ class ArchiveGroupExplorer extends React.Component {
             archiveID: itemDetails.archiveID,
             groupID: itemDetails.id
         });
+        if (this.props.onSelect) {
+            this.props.onSelect(itemDetails.archiveID, itemDetails.id);
+        }
     }
 
     render() {

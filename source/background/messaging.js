@@ -7,6 +7,17 @@ const StorageInterface = window.Buttercup.Web.StorageInterface;
 const RESPOND_ASYNC = true;
 const RESPOND_SYNC = false;
 
+function getEntriesForURL(url) {
+    let matchingEntries = archives
+        .getMatchingEntriesForURL(url)
+        .map(entry => ({
+            id: entry.getID(),
+            title: entry.getProperty("title"),
+            archiveID: entry._getArchive().getID()
+        }));
+    return matchingEntries;
+}
+
 module.exports = function addListeners() {
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -56,13 +67,7 @@ module.exports = function addListeners() {
             }
 
             case "get-entries-for-url": {
-                let matchingEntries = archives
-                    .getMatchingEntriesForURL(request.url)
-                    .map(entry => ({
-                        id: entry.getID(),
-                        title: entry.getProperty("title"),
-                        archiveID: entry._getArchive().getID()
-                    }));
+                let matchingEntries = getEntriesForURL(request.url);
                 sendResponse({
                     ok: true,
                     entries: matchingEntries
@@ -106,8 +111,51 @@ module.exports = function addListeners() {
             }
 
             case "save-form-submission": {
-                StorageInterface.setData("lastSubmission", request.data);
+                let matchingEntries = getEntriesForURL(request.data.url);
+                if (matchingEntries <= 0) {
+                    StorageInterface.setData("lastSubmission", request.data);
+                }
                 break;
+            }
+
+            case "save-new-entry": {
+                let data = request.data,
+                    workspace,
+                    entry;
+                try {
+                    let result = archives.createEntry(
+                        data.archiveID,
+                        data.groupID,
+                        data.title
+                    );
+                    workspace = result.workspace;
+                    entry = result.entry;
+                } catch (err) {
+                    sendResponse({
+                        ok: false,
+                        error: err.message
+                    });
+                    return RESPOND_SYNC;
+                }
+                entry
+                    .setProperty("username", data.username)
+                    .setProperty("password", data.password)
+                    .setMeta("URL", data.url)
+                    .setMeta("LoginURL", data.loginURL)
+                workspace
+                    .save()
+                    .then(function() {
+                        sendResponse({
+                            ok: true
+                        });
+                    })
+                    .catch(function(err) {
+                        sendResponse({
+                            ok: false,
+                            error: err.message
+                        });
+                    });
+                return RESPOND_ASYNC;
             }
 
             case "unlock-archive": {
