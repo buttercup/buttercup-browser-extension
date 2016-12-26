@@ -2,6 +2,8 @@
 
 const archives = require("./archives.js");
 
+const StorageInterface = window.Buttercup.Web.StorageInterface;
+
 const RESPOND_ASYNC = true;
 const RESPOND_SYNC = false;
 
@@ -29,9 +31,17 @@ module.exports = function addListeners() {
                 return RESPOND_ASYNC;
             }
 
+            case "archives-and-groups": {
+
+                sendResponse({
+                    ok: true,
+                    archives: []
+                });
+                break;
+            }
+
             case "get-archive-states": {
                 let states = archives.getArchiveList();
-                console.log("Get archives", states);
                 sendResponse(states);
                 break;
             }
@@ -70,6 +80,24 @@ module.exports = function addListeners() {
                         error: "No archive/entry found"
                     });
                 }
+                break;
+            }
+
+            case "last-form-submission": {
+                sendResponse({
+                    ok: true,
+                    data: StorageInterface.getData("lastSubmission", false)
+                });
+                break;
+            }
+
+            case "open-add-last-login": {
+                chrome.tabs.create({'url': chrome.extension.getURL('setup.html#/addLastLogin')}, function() {});
+                break;
+            }
+
+            case "save-form-submission": {
+                StorageInterface.setData("lastSubmission", request.data);
                 break;
             }
 

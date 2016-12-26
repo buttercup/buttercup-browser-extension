@@ -16,6 +16,7 @@ const LoadingModal = require("./LoadingModal");
 const MainMenu = require("./MainMenu");
 const AddArchive = require("./AddArchive");
 const AddArchiveEntry = require("./AddArchiveEntry");
+const AddLastLogin = require("./AddLastLogin");
 const UnlockArchive = require("./UnlockArchive");
 const NoMatch = require("./NoMatch");
 
@@ -23,11 +24,10 @@ ReactDOM.render((
     <Router history={hashHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={MainMenu} />
-            {/*<Route path="addArchive" component={AddArchive}/>
-            <Route path="addArchive/webdav" component={AddWebDAV}/>*/}
             <Route path="loading" component={LoadingModal} />
             <Route path="addArchive" component={AddArchive} />
             <Route path="/addArchive/:type" component={AddArchiveEntry} />
+            <Route path="addLastLogin" component={AddLastLogin} />
             <Route path="/unlockArchive/:name" component={UnlockArchive} />
             <Route path="*" component={NoMatch} />
         </Route>
