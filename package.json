@@ -15,7 +15,8 @@
     "copy:setup": "cp ./source/setup/index.html dist/setup.html",
     "copy:tab": "cp ./source/popup/index.html dist/popup.html",
     "dev": "npm run clean && concurrently --raw 'npm run watch:html' 'npm run webpack -- --watch'",
-    "test": "exit 1",
+    "test": "npm run test:lint",
+    "test:lint": "node node_modules/eslint/bin/eslint.js source/",
     "watch:html": "watch-run 'npm run copy:dev' -p source/setup/*.html,source/popup/*.html,node_modules/buttercup-web/build/*.js -i -s",
     "webpack": "webpack --progress"
   },
@@ -62,5 +63,8 @@
     "style-loader": "^0.13.1",
     "watch-run": "^1.2.4",
     "webpack": "^1.13.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2"
   }
 }

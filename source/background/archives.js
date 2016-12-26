@@ -32,7 +32,6 @@ let archives = module.exports = {
         switch(request.type) {
             case "webdav": {
                 return archives.addWebDAVArchive(request);
-                break;
             }
 
             default:
@@ -105,7 +104,7 @@ let archives = module.exports = {
         }
         return {
             workspace,
-            entry: group.createEntry(title),
+            entry: group.createEntry(title)
         };
     },
 
