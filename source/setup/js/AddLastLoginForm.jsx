@@ -3,6 +3,8 @@
 const React = require("react");
 const ArchiveGroupExplorer = require("./ArchiveGroupExplorer");
 
+require("AddLastLoginForm.sass");
+
 const NOPE = function() {};
 
 function closeTab() {
@@ -82,7 +84,7 @@ class AddLastLoginForm extends React.Component {
     }
 
     render() {
-        return <form>
+        return <form className="addLastLogin">
             <fieldset disabled={this.state.loading}>
                 <ArchiveGroupExplorer />
                 <label>

@@ -76,6 +76,14 @@ module.exports = [
                     test: /\.jsx$/,
                     exclude: /(node_modules|bower_components)/,
                     loader: 'babel'
+                },
+                {
+                    test: /\.sass$/,
+                    loaders: [
+                        "style-loader",
+                        "css-loader",
+                        "sass-loader"
+                    ]
                 }
             ]
         },
@@ -85,7 +93,11 @@ module.exports = [
             // 'react': 'React'
         },
         resolve: {
-            extensions: ['', '.js', '.jsx']
+            extensions: ['', '.js', '.jsx'],
+            root: [
+                path.resolve(SRC_SETUP, "js"),
+                path.resolve(SRC_SETUP, "sass")
+            ]
         }
     },
 

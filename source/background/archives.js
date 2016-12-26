@@ -9,6 +9,23 @@ const {
     SharedWorkspace
 } = Buttercup;
 
+function groupToSkeleton(item, isGroup) {
+    let subItems = item.getGroups().map(group => groupToSkeleton(group, true));
+    if (!isGroup) {
+        // archive
+        return {
+            archiveID: item.getID(),
+            groups: subItems
+        };
+    }
+    // group
+    return {
+        groupID: item.getID(),
+        groups: subItems,
+        title: item.getTitle()
+    };
+}
+
 let archives = module.exports = {
 
     addArchiveByRequest: function(request) {
@@ -113,6 +130,16 @@ let archives = module.exports = {
             }
         });
         return entries;
+    },
+
+    mapArchivesToSkeleton: function() {
+        let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives;
+        return unlockedArchives.map(item => Object.assign(
+            groupToSkeleton(item.workspace.primary.archive),
+            {
+                name: item.name
+            }
+        ));
     },
 
     unlockArchive: function(name, password) {

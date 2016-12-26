@@ -11,6 +11,8 @@ const {
     hashHistory
 } = require("react-router");
 
+require("index.sass");
+
 const App = require("./App");
 const LoadingModal = require("./LoadingModal");
 const MainMenu = require("./MainMenu");

@@ -32,10 +32,19 @@ module.exports = function addListeners() {
             }
 
             case "archives-and-groups": {
-
+                let items = [];
+                try {
+                    items = archives.mapArchivesToSkeleton();
+                } catch (err) {
+                    sendResponse({
+                        ok: false,
+                        error: err.message
+                    });
+                    break;
+                }
                 sendResponse({
                     ok: true,
-                    archives: []
+                    archives: items
                 });
                 break;
             }
