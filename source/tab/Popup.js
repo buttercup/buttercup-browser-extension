@@ -6,8 +6,11 @@ const EventEmitter = require("events").EventEmitter;
 
 const matching = require("./matching.js");
 
+const MIN_WIDTH = 150;
+
 function createPopup(position, width) {
     const HEIGHT = 130;
+    width = Math.max(width, MIN_WIDTH);
     let list = el(
             "div",
             {

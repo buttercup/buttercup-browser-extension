@@ -155,8 +155,8 @@ class LoginForm {
                 let usernameInput = username.input,
                     bounds = usernameInput.getBoundingClientRect();
                 this.popup.popup({
-                    x: usernameInput.offsetLeft,
-                    y: usernameInput.offsetTop + bounds.height + 2
+                    x: bounds.left,
+                    y: bounds.top + bounds.height + 2
                 }, bounds.width);
             }
         }
