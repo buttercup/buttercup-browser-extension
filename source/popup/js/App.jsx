@@ -19,7 +19,7 @@ class App extends React.Component {
 
     setupClicked(event) {
         event.preventDefault();
-        chrome.tabs.create({'url': chrome.extension.getURL('dist/setup.html#/')}, function(tab) { });
+        chrome.tabs.create({'url': chrome.extension.getURL('setup.html#/')}, function(tab) { });
     }
 
 }

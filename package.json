@@ -15,7 +15,8 @@
     "copy:setup": "cp ./source/setup/index.html dist/setup.html",
     "copy:tab": "cp ./source/popup/index.html dist/popup.html",
     "dev": "npm run clean && concurrently --raw 'npm run watch:html' 'npm run webpack -- --watch'",
-    "test": "exit 1",
+    "test": "npm run test:lint",
+    "test:lint": "node node_modules/eslint/bin/eslint.js source/",
     "watch:html": "watch-run 'npm run copy:dev' -p source/setup/*.html,source/popup/*.html,node_modules/buttercup-web/build/*.js -i -s",
     "webpack": "webpack --progress"
   },
@@ -36,17 +37,19 @@
     "url": "https://github.com/perry-mitchell/buttercup-chrome/issues"
   },
   "homepage": "https://github.com/perry-mitchell/buttercup-chrome#readme",
-  "devDependencies": {
+  "dependencies": {
     "babel-core": "^6.4.5",
     "babel-loader": "^6.2.2",
     "babel-plugin-transform-object-rest-spread": "^6.19.0",
     "babel-plugin-transform-react-jsx": "^6.5.2",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "buttercup-web": "~0.14.1",
+    "buttercup-web": "~0.15.0",
     "concurrently": "^3.1.0",
     "cpx": "^1.5.0",
     "css-loader": "^0.26.1",
+    "dropbox": "^2.5.0",
+    "events": "~1.1.1",
     "history": "^4.3.0",
     "jsx-loader": "^0.13.2",
     "lockr": "^0.8.4",
@@ -55,11 +58,14 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-router": "~2.8.1",
+    "redom": "~1.7.0",
     "rimraf": "^2.5.4",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "watch-run": "^1.2.4",
-    "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.16.2"
+    "webpack": "^1.13.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2"
   }
 }

@@ -10,7 +10,9 @@ class ArchiveEntryForm extends React.Component {
         super(props);
         this.state = {
             type: null,
-            loading: false
+            loading: false,
+            submitEnabled: true,
+            submitLabel: "Authenticate"
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -25,7 +27,6 @@ class ArchiveEntryForm extends React.Component {
         let input = event.target,
             name = input.getAttribute("name"),
             value = input.value;
-        // this.state[name] = value;
         this.setState({
             [name]: value
         })
@@ -34,14 +35,12 @@ class ArchiveEntryForm extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         this.enable(false);
-        chrome.runtime.sendMessage({ command: "add-archive", data: this.state }, function(response) {
-            console.log("Response", response);
+        chrome.runtime.sendMessage({ command: "add-archive", data: this.state }, (response) => {
             if (response && response.ok === true) {
                 chrome.tabs.getCurrent(function(tab) {
                     chrome.tabs.remove(tab.id, NOPE);
                 });
             } else {
-                // @todo error
                 alert("There was an error processing the provided archive details:\n" + response.error);
                 this.enable(true);
             }
@@ -52,7 +51,7 @@ class ArchiveEntryForm extends React.Component {
         return <form>
             <fieldset disabled={this.state.loading}>
                 {this.renderFormContents()}
-                <input type="submit" value="Authenticate" onClick={this.handleSubmit} />
+                <input type="submit" value={this.state.submitLabel} disabled={!this.state.submitEnabled} onClick={this.handleSubmit} />
             </fieldset>
         </form>
     }
