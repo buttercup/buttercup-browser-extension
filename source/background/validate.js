@@ -14,10 +14,6 @@ module.exports = {
             throw new Error("Datasource is not present or is invalid");
         }
         return workspace;
-    },
-
-    validateWebDAVArchive: function(details) {
-        return true;
     }
 
 };

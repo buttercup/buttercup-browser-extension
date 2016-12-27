@@ -1,6 +1,8 @@
 "use strict";
 
 const archives = require("./archives.js");
+const dropbox = require("./dropbox.js");
+const DropboxAuthenticator = require("./DropboxAuthenticator.js");
 
 const StorageInterface = window.Buttercup.Web.StorageInterface;
 
@@ -33,7 +35,6 @@ module.exports = function addListeners() {
                         });
                     })
                     .catch(function(err) {
-                        console.error(err);
                         sendResponse({
                             ok: false,
                             error: err.message
@@ -57,6 +58,29 @@ module.exports = function addListeners() {
                     ok: true,
                     archives: items
                 });
+                break;
+            }
+
+            case "authenticate-dropbox": {
+                let dba = new DropboxAuthenticator();
+                dba.authenticate()
+                    .then(function() {
+                        sendResponse({
+                            ok: true,
+                            token: dba.token
+                        });
+                    })
+                    .catch(function(err) {
+                        sendResponse({
+                            ok: false,
+                            error: err.message
+                        });
+                    });
+                return RESPOND_ASYNC;
+            }
+
+            case "close-tab": {
+                chrome.tabs.remove(sender.tab.id);
                 break;
             }
 
@@ -156,6 +180,12 @@ module.exports = function addListeners() {
                         });
                     });
                 return RESPOND_ASYNC;
+            }
+
+            case "set-dropbox-token": {
+                console.log("SET", request);
+                dropbox.setToken(request.token);
+                break;
             }
 
             case "unlock-archive": {

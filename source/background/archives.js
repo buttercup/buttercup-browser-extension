@@ -8,6 +8,7 @@ const {
     WebDAVDatasource,
     SharedWorkspace
 } = Buttercup;
+const DropboxDatasource = Buttercup.Web.DropboxDatasource;
 
 function groupToSkeleton(item, isGroup) {
     let subItems = item.getGroups().map(group => groupToSkeleton(group, true));
@@ -33,16 +34,58 @@ let archives = module.exports = {
             case "webdav": {
                 return archives.addWebDAVArchive(request);
             }
+            case "dropbox": {
+                return archives.addDropboxArchive(request);
+            }
 
             default:
                 throw new Error(`Unknown archive type: ${request.type}`);
         }
     },
 
+    addDropboxArchive: function(request) {
+        return Promise
+            .resolve(request)
+            // .then(validation.validateDropboxArchive)
+            .then(function() {
+                let dropboxCreds = new Credentials();
+                dropboxCreds.type = "dropbox";
+                dropboxCreds.setMeta(Credentials.DATASOURCE_META, JSON.stringify({
+                    type: "dropbox",
+                    token: request.dropbox_token,
+                    path: request.dropbox_path
+                }));
+                return dropboxCreds;
+            })
+            .then(function(credentials) {
+                return archives
+                    .fetchWorkspace(
+                        new DropboxDatasource(
+                            request.dropbox_token,
+                            request.dropbox_path
+                        ),
+                        request.master_password
+                    )
+                    .then(validation.validateWorkspace)
+                    .then(function(workspace) {
+                        return [credentials, workspace];
+                    });
+            })
+            .then(function([credentials, workspace] = []) {
+                Buttercup.Web.archiveManager.addArchive(
+                    request.name,
+                    workspace,
+                    credentials,
+                    request.master_password
+                );
+                return Buttercup.Web.archiveManager.saveState();
+            });
+    },
+
     addWebDAVArchive: function(request) {
         return Promise
             .resolve(request)
-            .then(validation.validateWebDAVArchive)
+            // .then(validation.validateWebDAVArchive)
             .then(function() {
                 let webdavCreds = new Credentials();
                 webdavCreds.type = "webdav";

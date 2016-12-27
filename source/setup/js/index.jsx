@@ -21,6 +21,7 @@ const AddArchiveEntry = require("./AddArchiveEntry");
 const AddLastLogin = require("./AddLastLogin");
 const UnlockArchive = require("./UnlockArchive");
 const NoMatch = require("./NoMatch");
+// const DropboxAuth = require("./DropboxAuth");
 
 ReactDOM.render((
     <Router history={hashHistory}>
@@ -31,6 +32,7 @@ ReactDOM.render((
             <Route path="/addArchive/:type" component={AddArchiveEntry} />
             <Route path="addLastLogin" component={AddLastLogin} />
             <Route path="/unlockArchive/:name" component={UnlockArchive} />
+            {/*<Route path="/dropbox/auth/:token" component={DropboxAuth} />*/}
             <Route path="*" component={NoMatch} />
         </Route>
     </Router>
