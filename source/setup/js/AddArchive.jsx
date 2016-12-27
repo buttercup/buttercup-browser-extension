@@ -12,6 +12,7 @@ class AddArchive extends React.Component {
         return <div>
             <h3>Add archive from source</h3>
             <ul>
+                <li><Link to="/addArchive/dropbox">Dropbox</Link></li>
                 <li><Link to="/addArchive/webdav">WebDAV</Link></li>
             </ul>
             <div>

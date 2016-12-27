@@ -7,6 +7,7 @@ const {
 } = require("react-router");
 
 const WebDAVArchiveEntryForm = require("./WebDAVArchiveEntryForm");
+const DropboxArchiveEntryForm = require("./DropboxArchiveEntryForm");
 
 class AddArchiveEntry extends React.Component {
 
@@ -20,6 +21,10 @@ class AddArchiveEntry extends React.Component {
             case "webdav": {
                 FormClass = WebDAVArchiveEntryForm;
                 break;
+            }
+            case "dropbox": {
+                FormClass = DropboxArchiveEntryForm;
+                break
             }
 
             default:

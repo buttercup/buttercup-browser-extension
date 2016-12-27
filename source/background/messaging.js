@@ -2,13 +2,12 @@
 
 const archives = require("./archives.js");
 const dropbox = require("./dropbox.js");
+const DropboxAuthenticator = require("./DropboxAuthenticator.js");
 
 const StorageInterface = window.Buttercup.Web.StorageInterface;
 
 const RESPOND_ASYNC = true;
 const RESPOND_SYNC = false;
-
-let __dropboxToken = null;
 
 function getEntriesForURL(url) {
     let matchingEntries = archives
@@ -60,6 +59,24 @@ module.exports = function addListeners() {
                     archives: items
                 });
                 break;
+            }
+
+            case "authenticate-dropbox": {
+                let dba = new DropboxAuthenticator();
+                dba.authenticate()
+                    .then(function() {
+                        sendResponse({
+                            ok: true,
+                            token: dba.token
+                        });
+                    })
+                    .catch(function(err) {
+                        sendResponse({
+                            ok: false,
+                            error: err.message
+                        });
+                    });
+                return RESPOND_ASYNC;
             }
 
             case "close-tab": {
