@@ -1,11 +1,14 @@
 "use strict";
 
 const archives = require("./archives.js");
+const dropbox = require("./dropbox.js");
 
 const StorageInterface = window.Buttercup.Web.StorageInterface;
 
 const RESPOND_ASYNC = true;
 const RESPOND_SYNC = false;
+
+let __dropboxToken = null;
 
 function getEntriesForURL(url) {
     let matchingEntries = archives
@@ -33,7 +36,6 @@ module.exports = function addListeners() {
                         });
                     })
                     .catch(function(err) {
-                        console.error(err);
                         sendResponse({
                             ok: false,
                             error: err.message
@@ -57,6 +59,11 @@ module.exports = function addListeners() {
                     ok: true,
                     archives: items
                 });
+                break;
+            }
+
+            case "close-tab": {
+                chrome.tabs.remove(sender.tab.id);
                 break;
             }
 
@@ -156,6 +163,12 @@ module.exports = function addListeners() {
                         });
                     });
                 return RESPOND_ASYNC;
+            }
+
+            case "set-dropbox-token": {
+                console.log("SET", request);
+                dropbox.setToken(request.token);
+                break;
             }
 
             case "unlock-archive": {
