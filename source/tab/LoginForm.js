@@ -126,7 +126,6 @@ class LoginForm {
     }
 
     onEntryClick(entryData) {
-        console.log("Click", entryData);
         // get data
         authentication
             .getEntryData(entryData.archiveID, entryData.id)
@@ -139,10 +138,7 @@ class LoginForm {
     }
 
     onFormSubmit(e) {
-        // e.preventDefault();
-        // alert("SUBMIT");
         let values = this.fetchValues();
-        console.log(values);
         submissions.trackFormData(values);
     }
 
@@ -159,7 +155,7 @@ class LoginForm {
                     bounds = usernameInput.getBoundingClientRect();
                 this.popup.popup({
                     x: bounds.left,
-                    y: bounds.top + bounds.height + 2
+                    y: window.scrollY + bounds.top + bounds.height + 2
                 }, bounds.width);
             }
         }
