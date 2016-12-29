@@ -61,11 +61,19 @@ module.exports = [
                         "url-loader",
                         "image-webpack"
                     ]
+                },
+                {
+                    test: /\.[ot]tf$/,
+                    loader: "url-loader"
                 }
             ]
         },
         resolve: {
-            extensions: ['', '.js']
+            extensions: ['', '.js'],
+            root: [
+                SRC_TAB,
+                path.resolve(DIST, "resources")
+            ]
         }
     },
 

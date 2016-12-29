@@ -7,10 +7,16 @@ const EventEmitter = require("events").EventEmitter;
 const matching = require("./matching.js");
 const config = require("../common/config.js");
 
+const ICON_SEARCH = require("../common/images/search.png");
+const ICON_SAVE = require("../common/images/save.png");
+const ICON_KEY = require("../common/images/key.png");
+
 const BUTTON_SIZE = 30;
+const BUTTON_IMAGE_SIZE = 24;
+const LIST_ITEM_HEIGHT = 28;
 const MIN_WIDTH = 150;
 
-function createPopup(position, width) {
+function createPopup(popup, position, width) {
     const HEIGHT = 130;
     width = Math.max(width, MIN_WIDTH);
     let list = el(
@@ -19,13 +25,46 @@ function createPopup(position, width) {
                 "data-buttercup-role": "listbox",
                 style: {
                     width: "100%",
-                    height: `${HEIGHT - 20}px`,
+                    height: `${HEIGHT - BUTTON_SIZE}px`,
                     position: "absolute",
                     left: "0px",
-                    top: "21px",
-                    // backgroundColor: "#EEE",
+                    top: `${BUTTON_SIZE + 1}px`,
                     overflowX: "hidden",
                     overflowY: "scroll"
+                }
+            }
+        ),
+        searchButton = el(
+            "div",
+            {
+                "data-buttercup-role": "button",
+                style: {
+                    width: `${BUTTON_SIZE}px`,
+                    height: `${BUTTON_SIZE}px`,
+                    position: "relative",
+                    display: "inline-block",
+                    cursor: "pointer",
+                    backgroundImage: `url(${ICON_SEARCH})`,
+                    backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat"
+                }
+            }
+        ),
+        saveButton = el(
+            "div",
+            {
+                "data-buttercup-role": "button",
+                style: {
+                    width: `${BUTTON_SIZE}px`,
+                    height: `${BUTTON_SIZE}px`,
+                    position: "relative",
+                    display: "inline-block",
+                    cursor: "pointer",
+                    backgroundImage: `url(${ICON_SAVE})`,
+                    backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat"
                 }
             }
         ),
@@ -35,6 +74,7 @@ function createPopup(position, width) {
                 "data-buttercup-role": "container",
                 style: {
                     border: "1px solid #000",
+                    borderRadius: "2px",
                     left: `${position.x}px`,
                     top: `${position.y}px`,
                     position: "absolute",
@@ -54,12 +94,17 @@ function createPopup(position, width) {
                         position: "absolute",
                         left: "0px",
                         top: "0px",
-                        borderBottom: "1px solid #999"
+                        borderBottom: "1px solid rgba(0, 0, 0, 0.2)"
                     }
-                }
+                },
+                searchButton,
+                saveButton
             ),
             list
         );
+    // events
+    popup.attachHoverEvents(searchButton);
+    popup.attachHoverEvents(saveButton);
     return {
         root: container,
         list
@@ -83,6 +128,11 @@ class Popup extends EventEmitter {
         return !!this._elements;
     }
 
+    attachHoverEvents(element) {
+        element.addEventListener("mouseenter", (event) => this.onButtonHover(event, true), false);
+        element.addEventListener("mouseleave", (event) => this.onButtonHover(event, false), false);
+    }
+
     close() {
         if (this._elements) {
             document.body.removeChild(this._elements.root)
@@ -95,7 +145,27 @@ class Popup extends EventEmitter {
     }
 
     getItemsForPage() {
+        // return Promise.resolve([
+        //     { title: "My login" },
+        //     { title: "My login 2" },
+        //     { title: "My login 3" },
+        //     { title: "My login 4" },
+        //     { title: "My login 5" },
+        //     { title: "My login 6" },
+        //     { title: "My login 7" }
+        // ]);
         return matching.getItemsForCurrentURL();
+    }
+
+    onButtonHover(event, inside) {
+        event.preventDefault();
+        event.stopPropagation();
+        let { target } = event;
+        if (inside) {
+            target.style.backgroundColor = `${config.BACKGROUND_BUTTERCUP_GREEN}`;
+        } else {
+            target.style.backgroundColor = "rgba(0, 0, 0, 0.0)";
+        }
     }
 
     popup(position, width) {
@@ -103,7 +173,7 @@ class Popup extends EventEmitter {
             this.close();
         }
         setTimeout(() => {
-            this._elements = createPopup(position, width);
+            this._elements = createPopup(this, position, width);
             mount(document.body, this._elements.root);
             this.getItemsForPage().then(items => this.updatePageItems(items));
             let onClick = (e) => {
@@ -121,12 +191,31 @@ class Popup extends EventEmitter {
     updatePageItems(items) {
         console.log("Items", items);
         this.elements.list.innerHTML = "";
-        let listEl = el("ul");
+        let listEl = el(
+            "ul",
+            {
+                style: {
+                    margin: "0px",
+                    padding: "0px",
+                    listStyleType: "none"
+                }
+            }
+        );
         mount(this.elements.list, listEl);
         items.forEach((item) => {
             let listItem = el("li", {
                 style: {
-                    cursor: "pointer"
+                    cursor: "pointer",
+                    color: "#FFF",
+                    fontFamily: `Buttercup-OpenSans`,
+                    height: `${LIST_ITEM_HEIGHT}px`,
+                    lineHeight: `${LIST_ITEM_HEIGHT}px`,
+                    paddingLeft: "30px",
+                    backgroundImage: `url(${ICON_KEY})`,
+                    backgroundSize: "20px",
+                    backgroundPosition: "5px 50%",
+                    backgroundRepeat: "no-repeat",
+                    backgroundColor: "rgba(0, 0, 0, 0.0)"
                 }
             }, item.title);
             mount(listEl, listItem);
@@ -134,6 +223,7 @@ class Popup extends EventEmitter {
                 this.close();
                 this.emit("entryClick", item);
             }, false);
+            this.attachHoverEvents(listItem);
         });
     }
 

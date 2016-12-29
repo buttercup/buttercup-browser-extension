@@ -1,6 +1,7 @@
 const Popup = require("./popup.js");
 const authentication = require("./authentication.js");
 const submissions = require("./submissions.js");
+const styles = require("./styles.js");
 
 const BUTTERCUP_LOGO = require("../common/images/logo-small.png");
 
@@ -36,6 +37,8 @@ function applyStyles(el, styles) {
             el.style[styleName] = styles[styleName];
         });
 }
+
+styles.placeStylesheet();
 
 class LoginForm {
 
