@@ -5,7 +5,9 @@ const {
 const EventEmitter = require("events").EventEmitter;
 
 const matching = require("./matching.js");
+const config = require("../common/config.js");
 
+const BUTTON_SIZE = 30;
 const MIN_WIDTH = 150;
 
 function createPopup(position, width) {
@@ -21,7 +23,7 @@ function createPopup(position, width) {
                     position: "absolute",
                     left: "0px",
                     top: "21px",
-                    backgroundColor: "#EEE",
+                    // backgroundColor: "#EEE",
                     overflowX: "hidden",
                     overflowY: "scroll"
                 }
@@ -38,7 +40,7 @@ function createPopup(position, width) {
                     position: "absolute",
                     width: `${width}px`,
                     height: `${HEIGHT}px`,
-                    backgroundColor: "#FFF",
+                    backgroundColor: config.BACKGROUND_DARK,
                     overflow: "hidden"
                 }
             },
@@ -48,7 +50,7 @@ function createPopup(position, width) {
                     "data-buttercup-role": "header",
                     style: {
                         width: "100%",
-                        height: "20px",
+                        height: `${BUTTON_SIZE}px`,
                         position: "absolute",
                         left: "0px",
                         top: "0px",

@@ -52,6 +52,7 @@
     "eslint": "^3.12.2",
     "events": "~1.1.1",
     "history": "^4.3.0",
+    "image-webpack-loader": "^3.1.0",
     "jsx-loader": "^0.13.2",
     "lockr": "^0.8.4",
     "movefiles": "^1.0.1",
@@ -63,6 +64,7 @@
     "rimraf": "^2.5.4",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "watch-run": "^1.2.4",
     "webpack": "^1.13.2"
   }

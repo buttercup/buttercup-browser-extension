@@ -8,6 +8,14 @@ const SRC_POPUP = path.resolve(SOURCE, "popup");
 const SRC_SETUP = path.resolve(SOURCE, "setup");
 const SRC_TAB = path.resolve(SOURCE, "tab");
 
+const imageWebpackLoader = {
+    pngquant: {
+        quality: "65-90",
+        speed: 4
+    }
+};
+
+
 module.exports = [
 
     // Background
@@ -39,12 +47,20 @@ module.exports = [
             filename: "tab.js",
             path: DIST
         },
+        imageWebpackLoader,
         module: {
             loaders: [
                 {
                     test: /\.js$/,
                     exclude: /(node_modules|bower_components)/,
                     loader: 'babel'
+                },
+                {
+                    test: /\.png$/i,
+                    loaders: [
+                        "url-loader",
+                        "image-webpack"
+                    ]
                 }
             ]
         },
