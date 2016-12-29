@@ -6,6 +6,7 @@ const Buttercup = window.Buttercup;
 const {
     Credentials,
     WebDAVDatasource,
+    OwnCloudDatasource,
     SharedWorkspace
 } = Buttercup;
 const DropboxDatasource = Buttercup.Web.DropboxDatasource;
@@ -27,6 +28,21 @@ function groupToSkeleton(item, isGroup) {
     };
 }
 
+function validateAndSave(name, workspace, credentials, password) {
+    return Promise
+        .resolve(workspace)
+        .then(validation.validateWorkspace)
+        .then(function() {
+            Buttercup.Web.archiveManager.addArchive(
+                name,
+                workspace,
+                credentials,
+                password
+            );
+            return Buttercup.Web.archiveManager.saveState();
+        });
+}
+
 let archives = module.exports = {
 
     addArchiveByRequest: function(request) {
@@ -36,6 +52,9 @@ let archives = module.exports = {
             }
             case "dropbox": {
                 return archives.addDropboxArchive(request);
+            }
+            case "owncloud": {
+                return archives.addOwnCloudArchive(request);
             }
 
             default:
@@ -66,26 +85,47 @@ let archives = module.exports = {
                         ),
                         request.master_password
                     )
-                    .then(validation.validateWorkspace)
-                    .then(function(workspace) {
-                        return [credentials, workspace];
-                    });
+                    .then(workspace => [workspace, credentials]);
             })
-            .then(function([credentials, workspace] = []) {
-                Buttercup.Web.archiveManager.addArchive(
-                    request.name,
-                    workspace,
-                    credentials,
-                    request.master_password
-                );
-                return Buttercup.Web.archiveManager.saveState();
-            });
+            .then(([workspace, credentials] = []) =>
+                validateAndSave(request.name, workspace, credentials, request.master_password));
+    },
+
+    addOwnCloudArchive: function(request) {
+        return Promise
+            .resolve(request)
+            .then(function() {
+                let owncloudCreds = new Credentials();
+                owncloudCreds.type = "owncloud";
+                owncloudCreds.username = request.owncloud_username;
+                owncloudCreds.password = request.owncloud_password;
+                owncloudCreds.setMeta(Credentials.DATASOURCE_META, JSON.stringify({
+                    type: "owncloud",
+                    endpoint: request.owncloud_address,
+                    path: request.owncloud_path
+                }));
+                return owncloudCreds;  
+            })
+            .then(function(credentials) {
+                return archives
+                    .fetchWorkspace(
+                        new OwnCloudDatasource(
+                            request.owncloud_address,
+                            request.owncloud_path,
+                            request.owncloud_username,
+                            request.owncloud_password
+                        ),
+                        request.master_password
+                    )
+                    .then(workspace => [workspace, credentials]);
+            })
+            .then(([workspace, credentials] = []) =>
+                validateAndSave(request.name, workspace, credentials, request.master_password));
     },
 
     addWebDAVArchive: function(request) {
         return Promise
             .resolve(request)
-            // .then(validation.validateWebDAVArchive)
             .then(function() {
                 let webdavCreds = new Credentials();
                 webdavCreds.type = "webdav";
@@ -109,20 +149,10 @@ let archives = module.exports = {
                         ),
                         request.master_password
                     )
-                    .then(validation.validateWorkspace)
-                    .then(function(workspace) {
-                        return [credentials, workspace];
-                    });
+                    .then(workspace => [workspace, credentials]);
             })
-            .then(function([credentials, workspace] = []) {
-                Buttercup.Web.archiveManager.addArchive(
-                    request.name,
-                    workspace,
-                    credentials,
-                    request.master_password
-                );
-                return Buttercup.Web.archiveManager.saveState();
-            });
+            .then(([workspace, credentials] = []) =>
+                validateAndSave(request.name, workspace, credentials, request.master_password));
     },
 
     createEntry: function(archiveID, groupID, title) {

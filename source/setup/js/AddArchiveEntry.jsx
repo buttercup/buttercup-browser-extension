@@ -8,6 +8,7 @@ const {
 
 const WebDAVArchiveEntryForm = require("./WebDAVArchiveEntryForm");
 const DropboxArchiveEntryForm = require("./DropboxArchiveEntryForm");
+const OwnCloudArchiveEntryForm = require("./OwnCloudArchiveEntryForm");
 
 class AddArchiveEntry extends React.Component {
 
@@ -24,7 +25,11 @@ class AddArchiveEntry extends React.Component {
             }
             case "dropbox": {
                 FormClass = DropboxArchiveEntryForm;
-                break
+                break;
+            }
+            case "owncloud": {
+                FormClass = OwnCloudArchiveEntryForm;
+                break;
             }
 
             default:
