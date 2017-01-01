@@ -7,6 +7,7 @@ const SRC_BACKGROUND = path.resolve(SOURCE, "background");
 const SRC_POPUP = path.resolve(SOURCE, "popup");
 const SRC_SETUP = path.resolve(SOURCE, "setup");
 const SRC_TAB = path.resolve(SOURCE, "tab");
+const SRC_COMMON = path.resolve(SOURCE, "common");
 
 const imageWebpackLoader = {
     pngquant: {
@@ -72,7 +73,7 @@ module.exports = [
             extensions: ['', '.js'],
             root: [
                 SRC_TAB,
-                path.resolve(DIST, "resources")
+                SRC_COMMON
             ]
         }
     },
@@ -156,6 +157,10 @@ module.exports = [
                         "css-loader",
                         "sass-loader"
                     ]
+                },
+                {
+                    test: /\.[ot]tf$/,
+                    loader: "url-loader"
                 }
             ]
         },
@@ -168,7 +173,8 @@ module.exports = [
             extensions: ['', '.js', '.jsx', '.sass'],
             root: [
                 path.resolve(SRC_POPUP, "js"),
-                path.resolve(SRC_POPUP, "sass")
+                path.resolve(SRC_POPUP, "sass"),
+                SRC_COMMON
             ]
         }
     }

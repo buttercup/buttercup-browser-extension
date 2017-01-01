@@ -82,7 +82,7 @@ function createPopup(popup, position, width) {
                     position: "absolute",
                     width: `${width}px`,
                     height: `${HEIGHT}px`,
-                    backgroundColor: config.BACKGROUND_DARK,
+                    backgroundColor: config.BACKGROUND_DARK_TRANSPARENT,
                     overflow: "hidden"
                 }
             },

@@ -1,3 +1,5 @@
+const styles = require("../../common/styles.js");
+
 window.Buttercup = {
 
     fetchArchives: function() {
@@ -11,3 +13,5 @@ window.Buttercup = {
     }
 
 };
+
+styles.placeStylesheet();
