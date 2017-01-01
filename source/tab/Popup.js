@@ -37,6 +37,7 @@ function createPopup(popup, position, width) {
         searchButton = el(
             "div",
             {
+                title: "Search entries",
                 "data-buttercup-role": "button",
                 style: {
                     width: `${BUTTON_SIZE}px`,
@@ -54,6 +55,7 @@ function createPopup(popup, position, width) {
         saveButton = el(
             "div",
             {
+                title: "Save next login",
                 "data-buttercup-role": "button",
                 style: {
                     width: `${BUTTON_SIZE}px`,
