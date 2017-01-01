@@ -14,7 +14,8 @@ We **hope** to add support for Firefox and Edge in the near future - We'd love a
 ## Contributing
 Contributions are very welcome and strongly encouraged, though we do ask that you stick to some basic styling parameters:
 
- - Use **tabs** for indentation
+ - Use **4 spaces** for indentation
  - New line at the end of each file
  - Commas on same line (at end)
  - Semicolons are not optional
+ - _(Just follow the editor config and existing styles)_
