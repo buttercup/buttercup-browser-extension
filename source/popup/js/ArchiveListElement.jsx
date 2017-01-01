@@ -1,33 +1,52 @@
 'use strict';
 
 const React = require("react");
+const IconLocked = require("react-icons/lib/fa/lock");
+const IconUnlocked = require("react-icons/lib/fa/unlock-alt");
+const IconConnect = require("react-icons/lib/fa/sign-in");
+const IconDisconnect = require("react-icons/lib/fa/sign-out");
 
 const NOPE = function() {};
 
 class ArchiveListElement extends React.Component {
 
     render() {
-        let lockState,
-            canUnlock = false;
+        let canUnlock = false,
+            type = "Dropbox",
+            Icon,
+            ControlIcon;
         switch (this.props.status) {
             case "unlocked":
-                lockState = `(🔓 unlocked)`;
+                Icon = IconUnlocked;
+                ControlIcon = IconDisconnect;
                 break;
             case "processing":
-                lockState = `(🔐 pending)`;
+                Icon = IconLocked;
+                break;
             case "locked":
                 canUnlock = true;
                 /* falls through */
             default:
-                lockState = `(🔒 locked)`;
+                Icon = IconLocked;
+                ControlIcon = IconConnect;
                 break;
         }
-        console.log("props", this.props);
         return (
-            <div>
-                <span className="listEl">{this.props.name} {lockState} </span>
-                {canUnlock && <a className="unlockArchive" href="#" onClick={(e) => this.unlockClicked(e)}>Unlock</a>}
-            </div>
+            <li className="listEl">
+                <div className={this.props.status + " status"}><Icon className="lockIcon" /></div>
+                <div className="name">
+                    <div className="title">{this.props.name}</div>
+                    <div className="type">{type}</div>
+                </div>
+                <div className="control">
+                    {ControlIcon &&
+                        <ControlIcon
+                            className={this.props.status + " icon"}
+                            onClick={(e) => this.unlockClicked(e)}
+                            />
+                    }
+                </div>
+            </li>
         );
     }
 

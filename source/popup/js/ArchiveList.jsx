@@ -24,6 +24,17 @@ class ArchiveList extends React.Component {
         Buttercup
             .fetchArchives()
             .then(archives => {
+                // this.setState({
+                //     archives: [
+                //         { name: "Test archive 1", status: "locked" },
+                //         { name: "Test archive 2", status: "locked" },
+                //         { name: "Test archive 3", status: "locked" },
+                //         { name: "Test archive 4", status: "locked" },
+                //         { name: "Test archive 5", status: "processing" },
+                //         { name: "Test archive 6", status: "locked" },
+                //         { name: "Test archive 7", status: "unlocked" }
+                //     ]
+                // });
                 this.setState({ archives });
             });
     }
@@ -32,9 +43,7 @@ class ArchiveList extends React.Component {
         return (
             <ul className="archiveList">
                 {this.state.archives.map(archive =>
-                    <li key={archive.name}>
-                        <ArchiveListElement {...archive} />
-                    </li>
+                    <ArchiveListElement key={archive.name} {...archive} />
                 )}
             </ul>
         );
