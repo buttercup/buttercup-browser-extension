@@ -59,6 +59,7 @@
     "node-sass": "^3.13.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
+    "react-icons": "^2.2.3",
     "react-router": "~2.8.1",
     "redom": "~1.7.0",
     "rimraf": "^2.5.4",
