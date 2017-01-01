@@ -3,22 +3,32 @@
 const React = require("react");
 const IconLocked = require("react-icons/lib/fa/lock");
 const IconUnlocked = require("react-icons/lib/fa/unlock-alt");
-const IconConnect = require("react-icons/lib/fa/sign-in");
-const IconDisconnect = require("react-icons/lib/fa/sign-out");
+const IconConnect = require("react-icons/lib/go/key");
+const IconDisconnect = require("react-icons/lib/go/lock");
 
 const NOPE = function() {};
 
 class ArchiveListElement extends React.Component {
 
+    get locked() {
+        return this.props.status !== "unlocked";
+    }
+
+    get processing() {
+        return this.props.status === "processing";
+    }
+
     render() {
         let canUnlock = false,
             type = "Dropbox",
+            actionTitle,
             Icon,
             ControlIcon;
         switch (this.props.status) {
             case "unlocked":
                 Icon = IconUnlocked;
                 ControlIcon = IconDisconnect;
+                actionTitle = "Lock this archive";
                 break;
             case "processing":
                 Icon = IconLocked;
@@ -29,6 +39,7 @@ class ArchiveListElement extends React.Component {
             default:
                 Icon = IconLocked;
                 ControlIcon = IconConnect;
+                actionTitle = "Unlock this archive";
                 break;
         }
         return (
@@ -38,11 +49,11 @@ class ArchiveListElement extends React.Component {
                     <div className="title">{this.props.name}</div>
                     <div className="type">{type}</div>
                 </div>
-                <div className="control">
+                <div className="control" title={actionTitle}>
                     {ControlIcon &&
                         <ControlIcon
                             className={this.props.status + " icon"}
-                            onClick={(e) => this.unlockClicked(e)}
+                            onClick={(e) => this.toggleLockClicked(e)}
                             />
                     }
                 </div>
@@ -50,12 +61,27 @@ class ArchiveListElement extends React.Component {
         );
     }
 
-    unlockClicked(e) {
+    toggleLockClicked(e) {
         e.preventDefault();
-        chrome.tabs.create(
-            { "url": chrome.extension.getURL("setup.html#/unlockArchive/" + encodeURIComponent(this.props.name)) },
-            NOPE
-        );
+        if (this.locked && this.processing !== true) {
+            // unlock
+            chrome.tabs.create(
+                { "url": chrome.extension.getURL("setup.html#/unlockArchive/" + encodeURIComponent(this.props.name)) },
+                NOPE
+            );
+        } else if (this.locked === false) {
+            // lock
+            Buttercup
+                .lockArchive(this.props.name)
+                .then(() => {
+                    if (this.props.onLocked) {
+                        this.props.onLocked();
+                    }
+                })
+                .catch(function(err) {
+                    alert("Failed locking archive: " + err.message);
+                });
+        }
     }
 
 }

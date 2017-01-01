@@ -129,6 +129,23 @@ module.exports = function addListeners() {
                 break;
             }
 
+            case "lock-archive": {
+                archives
+                    .lockArchive(request.name)
+                    .then(function() {
+                        sendResponse({
+                            ok: true
+                        });
+                    })
+                    .catch(function(err) {
+                        sendResponse({
+                            ok: false,
+                            error: err.message
+                        });
+                    });
+                return RESPOND_ASYNC;
+            }
+
             case "open-add-last-login": {
                 chrome.tabs.create({'url': chrome.extension.getURL('setup.html#/addLastLogin')}, function() {});
                 break;
@@ -183,7 +200,6 @@ module.exports = function addListeners() {
             }
 
             case "set-dropbox-token": {
-                console.log("SET", request);
                 dropbox.setToken(request.token);
                 break;
             }

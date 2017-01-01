@@ -43,7 +43,11 @@ class ArchiveList extends React.Component {
         return (
             <ul className="archiveList">
                 {this.state.archives.map(archive =>
-                    <ArchiveListElement key={archive.name} {...archive} />
+                    <ArchiveListElement
+                        key={archive.name}
+                        {...archive}
+                        onLocked={() => this.fetchArchives()}
+                        />
                 )}
             </ul>
         );

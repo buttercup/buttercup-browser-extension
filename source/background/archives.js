@@ -217,6 +217,10 @@ let archives = module.exports = {
         return null;
     },
 
+    lockArchive: function(name) {
+        return Buttercup.Web.archiveManager.lock(name);
+    },
+
     getMatchingEntriesForURL: function(url) {
         let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives,
             entries = [];
