@@ -5,6 +5,8 @@ const {
 } = require("redom");
 const EventEmitter = require("events").EventEmitter;
 
+const config = require("../common/config.js");
+
 const NOPE = function() {};
 
 function createPrompt(prompt) {
@@ -13,8 +15,8 @@ function createPrompt(prompt) {
         {
             style: {
                 fontSize: "16px",
-                fontFamily: "Arial",
-                color: "#000"
+                fontFamily: `Buttercup-OpenSans`,
+                color: config.BUTTERCUP_GREEN
             }
         },
         "Save new credentials?"
@@ -54,10 +56,11 @@ function createPrompt(prompt) {
                 right: "20px",
                 padding: "15px",
                 width: "140px",
-                height: "100px",
+                height: "80px",
                 overflow: "hidden",
-                border: "1px solid #000",
-                borderRadius: "3px"
+                background: config.BACKGROUND_DARK_TRANSPARENT,
+                borderRadius: "3px",
+                zIndex: 99999999
             }
         },
         title,

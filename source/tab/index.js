@@ -13,3 +13,7 @@ submissions.processLastSubmission();
 if (/^https:\/\/buttercup\.pw/i.test(window.location.href)) {
     require("./dropbox.js").processAccessToken(window.location.hash);
 }
+
+// let SP = require("./SavePrompt.js"),
+//     sp = new SP();
+// sp.show();
