@@ -46,20 +46,24 @@ function validateAndSave(name, workspace, credentials, password) {
 let archives = module.exports = {
 
     addArchiveByRequest: function(request) {
-        switch(request.type) {
-            case "webdav": {
-                return archives.addWebDAVArchive(request);
-            }
-            case "dropbox": {
-                return archives.addDropboxArchive(request);
-            }
-            case "owncloud": {
-                return archives.addOwnCloudArchive(request);
-            }
+        return Promise.resolve(request)
+            .then(validation.validateArchiveAddition)
+            .then(function() {
+                switch(request.type) {
+                    case "webdav": {
+                        return archives.addWebDAVArchive(request);
+                    }
+                    case "dropbox": {
+                        return archives.addDropboxArchive(request);
+                    }
+                    case "owncloud": {
+                        return archives.addOwnCloudArchive(request);
+                    }
 
-            default:
-                throw new Error(`Unknown archive type: ${request.type}`);
-        }
+                    default:
+                        throw new Error(`Unknown archive type: ${request.type}`);
+                }
+            });
     },
 
     addDropboxArchive: function(request) {
@@ -217,10 +221,6 @@ let archives = module.exports = {
         return null;
     },
 
-    lockArchive: function(name) {
-        return Buttercup.Web.archiveManager.lock(name);
-    },
-
     getMatchingEntriesForURL: function(url) {
         let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives,
             entries = [];
@@ -232,6 +232,10 @@ let archives = module.exports = {
             }
         });
         return entries;
+    },
+
+    lockArchive: function(name) {
+        return Buttercup.Web.archiveManager.lock(name);
     },
 
     mapArchivesToSkeleton: function() {
