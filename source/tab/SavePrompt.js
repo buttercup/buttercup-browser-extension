@@ -8,6 +8,24 @@ const EventEmitter = require("events").EventEmitter;
 const config = require("../common/config.js");
 
 const NOPE = function() {};
+const BUTTON_STYLES = {
+    width: "50px",
+    // height: "30px",
+    backgroundColor: config.BUTTERCUP_GREEN,
+	"-moz-border-radius": "7px",
+	"-webkit-border-radius": "7px",
+	borderRadius: "7px",
+	border: "1px solid #18ab29",
+	display: "block",
+	cursor: "pointer",
+	color: "#ffffff",
+	fontSize: "15px",
+	padding: "6px 10px",
+	textDecoration: "none",
+	textShadow: "0px 1px 0px #2f6627",
+    "-webkit-font-smoothing": "auto",
+    fontSmooth: "auto"
+};
 
 function createPrompt(prompt) {
     let title = el(
@@ -16,7 +34,11 @@ function createPrompt(prompt) {
             style: {
                 fontSize: "16px",
                 fontFamily: `Buttercup-OpenSans`,
-                color: config.BUTTERCUP_GREEN
+                color: "#FFF",
+                lineHeight: "normal",
+                fontWeight: "normal",
+                "-webkit-font-smoothing": "auto",
+                fontSmooth: "auto"
             }
         },
         "Save new credentials?"
@@ -24,26 +46,22 @@ function createPrompt(prompt) {
     prompt._yesButton = el(
         "button",
         {
-            style: {
+            style: Object.assign({
                 position: "absolute",
-                width: "40px",
-                height: "20px",
                 bottom: "15px",
-                right: "60px"
-            }
+                right: "70px"
+            }, BUTTON_STYLES)
         },
         "Yes"
     );
     prompt._noButton = el(
         "button",
         {
-            style: {
+            style: Object.assign({
                 position: "absolute",
-                width: "40px",
-                height: "20px",
                 bottom: "15px",
                 right: "15px"
-            }
+            }, BUTTON_STYLES)
         },
         "No"
     );
@@ -52,15 +70,19 @@ function createPrompt(prompt) {
         {
             style: {
                 position: "fixed",
+                boxSizing: "border-box",
                 top: "10px",
                 right: "20px",
                 padding: "15px",
-                width: "140px",
-                height: "80px",
+                width: "160px",
+                height: "130px",
                 overflow: "hidden",
                 background: config.BACKGROUND_DARK_TRANSPARENT,
                 borderRadius: "3px",
-                zIndex: 99999999
+                zIndex: 99999999,
+                "-webkit-box-shadow": "0px 0px 10px 6px rgba(255,255,255,0.75)",
+                "-moz-box-shadow": "0px 0px 10px 6px rgba(255,255,255,0.75)",
+                "box-shadow": "0px 0px 10px 6px rgba(255,255,255,0.75)"
             }
         },
         title,
