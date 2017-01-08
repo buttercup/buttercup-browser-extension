@@ -109,6 +109,10 @@ module.exports = [
                         "css-loader",
                         "sass-loader"
                     ]
+                },
+                {
+                    test: /\.[ot]tf$/,
+                    loader: "url-loader"
                 }
             ]
         },
@@ -121,7 +125,8 @@ module.exports = [
             extensions: ['', '.js', '.jsx'],
             root: [
                 path.resolve(SRC_SETUP, "js"),
-                path.resolve(SRC_SETUP, "sass")
+                path.resolve(SRC_SETUP, "sass"),
+                SRC_COMMON
             ]
         }
     },
