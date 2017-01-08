@@ -14,7 +14,7 @@ const {
 require("index.sass");
 
 const App = require("./App");
-const MainMenu = require("./MainMenu");
+const Home = require("./Home");
 const AddArchive = require("./AddArchive");
 const AddArchiveEntry = require("./AddArchiveEntry");
 const AddLastLogin = require("./AddLastLogin");
@@ -24,7 +24,7 @@ const NoMatch = require("./NoMatch");
 ReactDOM.render((
     <Router history={hashHistory}>
         <Route path="/" component={App}>
-            <IndexRoute component={MainMenu} />
+            <IndexRoute component={Home} />
             <Route path="addArchive" component={AddArchive} />
             <Route path="/addArchive/:type" component={AddArchiveEntry} />
             <Route path="addLastLogin" component={AddLastLogin} />

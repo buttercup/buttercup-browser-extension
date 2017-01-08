@@ -1,12 +1,13 @@
 "use strict";
 
 const React = require("react");
-
 const {
     Link
 } = require("react-router");
 
-class MainMenu extends React.Component {
+const ArchiveList = require("./ArchiveList");
+
+class Home extends React.Component {
 
     render() {
         return <div>
@@ -14,9 +15,13 @@ class MainMenu extends React.Component {
             <ul>
                 <li><Link to="/addArchive">Add archive</Link></li>
             </ul>
+            <div>
+                <h3>Archives</h3>
+                <ArchiveList />
+            </div>
         </div>
     }
 
 }
 
-module.exports = MainMenu;
+module.exports = Home;
