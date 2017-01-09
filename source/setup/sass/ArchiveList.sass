@@ -1,0 +1,75 @@
+$rowSize:                   50px
+$iconSize:                  30px
+$statusTransparency:        0.1
+
+ul.archiveList
+    list-style-type: none
+    padding: 0
+
+    li
+        width: 100%
+        height: $rowSize
+        display: flex
+        flex-direction: row
+        flex-wrap: nowrap
+        justify-content: flex-start
+        align-items: stretch
+        margin-bottom: 5px
+
+        div.status
+            order: 1
+            flex-grow: 0
+            display: flex
+            align-items: center
+            justify-content: center
+            width: $rowSize
+            border-radius: 5px
+            overflow: hidden
+            .lockIcon
+                width: $iconSize
+                height: $iconSize
+                color: #555
+            &.locked
+                background-color: rgba(255, 0, 0, $statusTransparency)
+            &.processing
+                background-color: rgba(255, 140, 0, $statusTransparency)
+            &.unlocked
+                background-color: rgba(127, 255, 0, $statusTransparency)
+
+        div.name
+            order: 2
+            flex-grow: 1
+            padding-left: 5px
+            padding-right: 5px
+            display: flex
+            flex-direction: column
+            flex-wrap: nowrap
+            justify-content: space-between
+            .title
+                font-size: 24px
+                order: 1
+            .type
+                order: 2
+                font-style: italic
+                color: #888
+                font-size: 12px
+
+        div.control
+            order: 3
+            flex-grow: 0
+            display: flex
+            width: $rowSize
+            align-items: center
+            justify-content: center
+            .icon
+                cursor: pointer
+                width: $iconSize
+                height: $iconSize
+                &.locked
+                    color: #EEE
+                    &:hover
+                        color: darken(#EEE, 20%)
+                &.unlocked
+                    color: #AAA
+                    &:hover
+                        color: darken(#AAA, 20%)
