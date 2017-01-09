@@ -1,20 +1,15 @@
 "use strict";
 
 const React = require("react");
-const {
-    Link
-} = require("react-router");
 
 const ArchiveList = require("./ArchiveList");
+const HeaderBar = require("./HeaderBar");
 
 class Home extends React.Component {
 
     render() {
         return <div>
-            <h2>Buttercup</h2>
-            <ul>
-                <li><Link to="/addArchive">Add archive</Link></li>
-            </ul>
+            <HeaderBar />
             <div>
                 <h3>Archives</h3>
                 <ArchiveList />

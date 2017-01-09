@@ -1,0 +1,54 @@
+$background: rgba(41, 44, 51, 1.0)
+$height: 70px
+$logoInset: 10px
+$logoSize: $height - ($logoInset * 2)
+
+body
+    padding-top: $height + 2px
+
+#header
+    position: fixed
+    z-index: 10
+    width: 100%
+    top: 0px
+    left: 0px
+    height: $height
+    background-color: $background
+
+    img.logo
+        width: $logoSize
+        height: $logoSize
+        position: absolute
+        left: $logoInset
+        top: $logoInset
+
+    h1.heading
+        color: rgb(0, 183, 172)
+        position: absolute
+        margin: 0px
+        left: $logoInset + $logoSize + 10px
+        top: 16px
+
+    ul.menu
+        list-style-type: none
+        position: absolute
+        left: 200px
+        top: 5px
+
+        li
+            display: inline-block
+            // height: 35px
+            // line-height: 35px
+            // padding-left: 8px
+            // padding-right: 8px
+
+            a
+                color: #FFF
+                display: block
+                height: 35px
+                line-height: 35px
+                padding-left: 8px
+                padding-right: 8px
+
+                &:hover
+                    background-color: lighten($background, 25%)
