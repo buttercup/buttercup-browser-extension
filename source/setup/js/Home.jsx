@@ -8,13 +8,15 @@ const HeaderBar = require("./HeaderBar");
 class Home extends React.Component {
 
     render() {
-        return <div>
-            <HeaderBar />
+        return (
             <div>
-                <h3>Archives</h3>
-                <ArchiveList />
+                <HeaderBar />
+                <div>
+                    <h3>Archives</h3>
+                    <ArchiveList />
+                </div>
             </div>
-        </div>
+        );
     }
 
 }

@@ -1,7 +1,9 @@
 {
-  "ecmaFeatures": {
+  "parserOptions": {
+    "ecmaFeatures": {
       "modules": true,
       "jsx": true
+    }
   },
   "env": {
     "amd": true,
