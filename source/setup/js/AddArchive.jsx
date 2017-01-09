@@ -5,11 +5,13 @@ const React = require("react");
 const {
     Link
 } = require("react-router");
+const HeaderBar = require("./HeaderBar");
 
 class AddArchive extends React.Component {
 
     render() {
         return <div>
+            <HeaderBar />
             <h3>Add archive from source</h3>
             <ul>
                 <li><Link to="/addArchive/dropbox">Dropbox</Link></li>
@@ -19,7 +21,6 @@ class AddArchive extends React.Component {
             <div>
                 {this.props.children}
             </div>
-            <Link to="/">Home</Link>
         </div>
     }
 

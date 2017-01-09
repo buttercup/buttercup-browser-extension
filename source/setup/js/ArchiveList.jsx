@@ -26,7 +26,7 @@ class ArchiveList extends React.Component {
             <div>
                 <ul>
                     {this.state.archives.map(archive =>
-                        <span>{ archive.name }</span>
+                        <li key={archive.name}>{ archive.name }</li>
                     )}
                 </ul>
             </div>
