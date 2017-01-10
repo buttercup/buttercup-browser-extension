@@ -54,8 +54,8 @@ ul.archiveList
                 color: #888
                 font-size: 12px
 
-        div.control
-            order: 3
+        div.control,
+        div.remove
             flex-grow: 0
             display: flex
             width: $rowSize
@@ -65,11 +65,18 @@ ul.archiveList
                 cursor: pointer
                 width: $iconSize
                 height: $iconSize
-                &.locked
-                    color: #EEE
-                    &:hover
-                        color: darken(#EEE, 20%)
-                &.unlocked
-                    color: #AAA
-                    &:hover
-                        color: darken(#AAA, 20%)
+
+        div.control
+            order: 3
+            .icon
+                color: #AAA
+                &:hover
+                    color: darken(#AAA, 20%)
+        
+        div.remove
+            order: 4
+            .icon
+                color: #AAA
+                &:hover
+                    color: darken(#AAA, 20%)
+            

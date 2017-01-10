@@ -7,6 +7,7 @@ const IconLocked = require("react-icons/lib/fa/lock");
 const IconUnlocked = require("react-icons/lib/fa/unlock-alt");
 const IconConnect = require("react-icons/lib/go/key");
 const IconDisconnect = require("react-icons/lib/go/lock");
+const IconRemove = require("react-icons/lib/go/x");
 
 require("ArchiveList.sass");
 
@@ -31,6 +32,36 @@ class ArchiveList extends React.Component {
 
     onArchivesUpdate(archives) {
         this.setState({ archives });
+    }
+
+    onRemoveArchiveClicked(e, archive) {
+        e.preventDefault();
+        if (window.confirm(`Are you sure you want to remove "${archive.name}"?`)) { 
+            chrome.runtime.sendMessage({ command: "remove-archive", name: archive.name }, (response) => {
+                if (response && response.ok) {
+                    this.fetchArchives();
+                } else {
+                    alert("Failed removing archive");
+                }
+            });
+        }
+    }
+
+    onToggleLockClicked(e, archive) {
+        e.preventDefault();
+        if (archive.status === "locked") {
+            // unlock
+            hashHistory.push("/unlockArchive/" + encodeURIComponent(archive.name) + "/return");
+        } else if (archive.status === "unlocked") {
+            // lock
+            chrome.runtime.sendMessage({ command: "lock-archive", name: archive.name }, (response) => {
+                if (response && response.ok) {
+                    this.fetchArchives();
+                } else {
+                    alert("Failed locking archive");
+                }
+            });
+        }
     }
 
     render() {
@@ -69,9 +100,15 @@ class ArchiveList extends React.Component {
                         {ControlIcon &&
                             <ControlIcon
                                 className={archive.status + " icon"}
-                                onClick={(e) => this.toggleLockClicked(e, archive)}
+                                onClick={(e) => this.onToggleLockClicked(e, archive)}
                                 />
                         }
+                    </div>
+                    <div className="remove" title="Remove archive">
+                        <IconRemove 
+                            className="icon"
+                            onClick={(e) => this.onRemoveArchiveClicked(e, archive)}
+                            />
                     </div>
                 </li>
             )
@@ -81,23 +118,6 @@ class ArchiveList extends React.Component {
                 {archives}
             </ul>
         );
-    }
-
-    toggleLockClicked(e, archive) {
-        e.preventDefault();
-        if (archive.status === "locked") {
-            // unlock
-            hashHistory.push("/unlockArchive/" + encodeURIComponent(archive.name));
-        } else if (archive.status === "unlocked") {
-            // lock
-            chrome.runtime.sendMessage({ command: "lock-archive", name: archive.name }, (response) => {
-                if (response && response.ok) {
-                    this.fetchArchives();
-                } else {
-                    alert("Failed locking archive");
-                }
-            });
-        }
     }
 
 }

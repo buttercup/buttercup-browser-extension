@@ -151,6 +151,21 @@ module.exports = function addListeners() {
                 break;
             }
 
+            case "remove-archive": {
+                let removed = archives.removeArchive(request.name);
+                if (removed) {
+                    sendResponse({
+                        ok: true
+                    });
+                } else {
+                    sendResponse({
+                        ok: false,
+                        error: "Unable to remove (possibly not found)"
+                    });
+                }
+                break;
+            }
+
             case "save-form-submission": {
                 let matchingEntries = getEntriesForURL(request.data.url);
                 if (matchingEntries <= 0) {

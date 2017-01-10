@@ -248,6 +248,10 @@ let archives = module.exports = {
         ));
     },
 
+    removeArchive: function(name) {
+        return Buttercup.Web.archiveManager.removeArchive(name);
+    },
+
     unlockArchive: function(name, password) {
         return Buttercup.Web.archiveManager.unlock(name, password);
     }

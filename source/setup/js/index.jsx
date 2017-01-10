@@ -28,7 +28,7 @@ ReactDOM.render((
             <Route path="addArchive" component={AddArchive} />
             <Route path="/addArchive/:type" component={AddArchiveEntry} />
             <Route path="addLastLogin" component={AddLastLogin} />
-            <Route path="/unlockArchive/:name" component={UnlockArchive} />
+            <Route path="/unlockArchive/:name(/:action)" component={UnlockArchive} />
             <Route path="*" component={NoMatch} />
         </Route>
     </Router>

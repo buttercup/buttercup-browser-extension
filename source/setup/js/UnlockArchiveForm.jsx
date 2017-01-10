@@ -2,8 +2,6 @@
 
 const React = require("react");
 
-const NOPE = function() {};
-
 class UnlockArchiveForm extends React.Component {
 
     constructor(props) {
@@ -33,12 +31,13 @@ class UnlockArchiveForm extends React.Component {
             password: this.state.password,
             name: this.props.name
         };
-        chrome.runtime.sendMessage({ command: "unlock-archive", data: archiveDetails }, function(response) {
-            console.log("Response", response);
+        chrome.runtime.sendMessage({ command: "unlock-archive", data: archiveDetails }, (response) => {
             if (response && response.ok === true) {
-                chrome.tabs.getCurrent(function(tab) {
-                    chrome.tabs.remove(tab.id, NOPE);
-                });
+                if (this.props.onUnlock) {
+                    this.props.onUnlock();
+                } else {
+                    alert("The archive was unlocked, but the application encountered a critical error and cannot continue");
+                }
             } else {
                 // @todo error
                 alert("There was an error unlocking the archive:\n" + response.error);
