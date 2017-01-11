@@ -114,9 +114,14 @@ class ArchiveList extends React.Component {
             )
         });
         return (
-            <ul className="archiveList">
-                {archives}
-            </ul>
+            <div>
+                <ul className="archiveList">
+                    {archives}
+                </ul>
+                {archives.length === 0 &&
+                    <div className="noArchives">No archives yet.</div>    
+                }
+            </div>
         );
     }
 
