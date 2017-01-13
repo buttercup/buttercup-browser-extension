@@ -3,6 +3,7 @@
 const React = require("react");
 
 const ArchiveEntryForm = require("./ArchiveEntryForm");
+const RemoteFileExplorer = require("./RemoteFileExplorer");
 
 class DropboxArchiveEntryForm extends ArchiveEntryForm {
 
@@ -52,6 +53,7 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
             <label>
                 Remote archive path:
                 <input type="text" name="dropbox_path" value={this.state.dropbox_path} onChange={this.handleChange} disabled={!this.state.authenticated} />
+                <RemoteFileExplorer disabled={!this.state.authenticated} />
             </label>
             <input type="hidden" name="dropbox_token" value={this.state.dropbox_token} />
         </div>

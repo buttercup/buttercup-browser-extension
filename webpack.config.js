@@ -111,6 +111,13 @@ module.exports = [
                     ]
                 },
                 {
+                    test: /\.css$/,
+                    loaders: [
+                        "style-loader",
+                        "css-loader"
+                    ]
+                },
+                {
                     test: /\.[ot]tf$/,
                     loader: "url-loader"
                 }
