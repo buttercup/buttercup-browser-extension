@@ -2,9 +2,6 @@
 
 const React = require("react");
 
-const {
-    Link
-} = require("react-router");
 const HeaderBar = require("./HeaderBar");
 
 const WebDAVArchiveEntryForm = require("./WebDAVArchiveEntryForm");
@@ -41,7 +38,6 @@ class AddArchiveEntry extends React.Component {
                 <HeaderBar />
                 <h3>Add from {this.props.params.type} source</h3>
                 <FormClass />
-                <Link to="/">Home</Link>
             </div>
         );
     }

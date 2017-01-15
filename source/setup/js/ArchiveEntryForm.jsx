@@ -51,10 +51,17 @@ class ArchiveEntryForm extends React.Component {
     }
 
     render() {
-        return <form>
+        return <form className="buttercup">
             <fieldset disabled={this.state.loading}>
                 {this.renderFormContents()}
-                <input type="submit" value={this.state.submitLabel} disabled={!this.state.submitEnabled} onClick={this.handleSubmit} />
+                <div className="row">
+                    <button
+                        disabled={!this.state.submitEnabled}
+                        onClick={this.handleSubmit}
+                        >
+                        {this.state.submitLabel}
+                    </button>
+                </div>
             </fieldset>
         </form>
     }
@@ -62,14 +69,14 @@ class ArchiveEntryForm extends React.Component {
     renderFormContents() {
         return (
             <div>
-                <label>
-                    Entry name:
+                <div className="row">
                     <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
-                </label>
-                <label>
-                    Master password:
+                    <label>Title</label>
+                </div>
+                <div className="row">
                     <input type="password" name="master_password" value={this.state.master_password} onChange={this.handleChange} />
-                </label>
+                    <label>Archive password</label>
+                </div>
             </div>
         );
     }

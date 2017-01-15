@@ -90,7 +90,7 @@ class ConnectArchiveDialog extends Component {
 
     render() {
         return (
-            <div>
+            <div className="dialogButtonView sameLine browse">
                 <button disabled={this.props.disabled} onClick={(e) => this.show(e)}>Browse</button>
                 <Rodal 
                     visible={this.state.modalVisible}

@@ -64,16 +64,18 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
         return (
             <div>
                 {super.renderFormContents()}
-                <button onClick={(e) => this.onAuthenticateClicked(e)} disabled={this.state.authenticated}>Authenticate Dropbox account</button>
-                <label>
-                    Remote archive path:
+                <div className="row">
+                    <button onClick={(e) => this.onAuthenticateClicked(e)} disabled={this.state.authenticated}>Authenticate Dropbox account</button>
+                </div>
+                <div className="row remotePath">
                     <input type="text" name="dropbox_path" value={this.state.dropbox_path} onChange={this.handleChange} disabled={!this.state.authenticated} />
+                    <label>Remote path</label>
                     <ConnectArchiveDialog
                         fs={fsInstance}
                         disabled={!this.state.authenticated}
                         onArchiveSelected={(...args) => this.onArchiveSelected(...args)}
                         />
-                </label>
+                </div>
                 <input type="hidden" name="dropbox_token" value={this.state.dropbox_token} />
             </div>
         );
