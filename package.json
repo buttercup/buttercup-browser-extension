@@ -59,6 +59,7 @@
     "lockr": "^0.8.4",
     "movefiles": "^1.0.1",
     "node-sass": "^3.13.0",
+    "rc-tree": "^1.4.2",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-icons": "^2.2.3",
