@@ -1,10 +1,11 @@
 "use strict";
 
 const React = require("react");
-const Rodal = require("rodal").default;
 const Spinner = require("react-spinner");
 const Tree = require("rc-tree");
+
 const { TreeNode } = Tree;
+const { Component, PropTypes } = React;
 
 require("rodal/lib/rodal.css");
 require("react-spinner/react-spinner.css");
@@ -19,29 +20,42 @@ function processLeafData(stat) {
     };
 }
 
-class RemoteFileExplorer extends React.Component {
+class RemoteFileExplorer extends Component {
 
     constructor(props) {
         super(props);
         this._fsInstance = this.props.fs || null;
         this.state = {
-            allowSelectArchive: true,
-            createNew: false,
+            // createNew: false,
             dirContents: null,
-            modalVisible: false,
+            // modalVisible: false,
+            fs: null,
             remotePath: "",
+            showArchives: this.props.allowSelectArchive === true,
             selectedKeys: []
         };
     }
 
     get fs() {
-        return this.props.fs;
+        return this.state.fs;
     }
 
-    componentWillReceiveProps() {
-        if (this.fs && this.state.dirContents === null) {
-            this.fetchDirectory("/");
+    componentWillReceiveProps(nextProps) {
+        let showArchives = nextProps.allowSelectArchive === true,
+            newState = {
+                fs: this.props.fs
+            };
+        if (this.state.showArchives !== showArchives) {
+            Object.assign(newState, {
+                dirContents: null,
+                showArchives
+            });
         }
+        this.setState(newState, () => {
+            if (this.fs && this.state.dirContents === null) {
+                this.fetchDirectory("/");
+            }
+        });
     }
 
     fetchDirectory(dir) {
@@ -49,10 +63,10 @@ class RemoteFileExplorer extends React.Component {
             .readDirectory(dir)
             .then(contents => contents.filter(item => {
                 return item.isDirectory() ||
-                    (this.state.allowSelectArchive && /\.bcup$/i.test(item.name));
+                    (this.state.showArchives && /\.bcup$/i.test(item.name));
             }))
             .then(contents => {
-                console.log("Remote contents", dir, contents);
+                // console.log("Remote contents", dir, contents);
                 this.setState({
                     dirContents: Object.assign(this.state.dirContents || {}, {
                         [dir]: contents.map(processLeafData)
@@ -63,10 +77,6 @@ class RemoteFileExplorer extends React.Component {
                 alert(`An error occurred fetching Dropbox contents: ${err.message}`);
                 throw err;
             });
-    }
-
-    hide() {
-        this.setState({ modalVisible: false });
     }
 
     onLoadData(treeNode) {
@@ -90,17 +100,13 @@ class RemoteFileExplorer extends React.Component {
     }
 
     render() {
+        // <button onClick={(e) => this.show(e)}>Browse</button>
         return (
             <div>
-                <button onClick={(e) => this.show(e)}>Browse</button>
-                <Rodal visible={this.state.modalVisible} onClose={() => this.hide()}>
-                    <div className="modalContents">
-                        {this.state.dirContents === null ?
-                            <Spinner /> :
-                            this.renderTree()
-                        }
-                    </div>
-                </Rodal>
+                {this.state.dirContents === null ?
+                    <Spinner /> :
+                    this.renderTree()
+                }
             </div>
         );
     }
@@ -140,11 +146,10 @@ class RemoteFileExplorer extends React.Component {
         );
     }
 
-    show(e) {
-        e.preventDefault();
-        this.setState({ modalVisible: true });
-    }
-
 }
+
+RemoteFileExplorer.propTypes = {
+    allowSelectArchive: PropTypes.bool
+};
 
 module.exports = RemoteFileExplorer;

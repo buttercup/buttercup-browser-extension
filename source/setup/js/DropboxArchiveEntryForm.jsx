@@ -5,7 +5,7 @@ const createDropboxFS = require("dropbox-fs");
 const anyFs = require("any-fs");
 
 const ArchiveEntryForm = require("./ArchiveEntryForm");
-const RemoteFileExplorer = require("./RemoteFileExplorer");
+const ConnectArchiveDialog = require("./ConnectArchiveDialog");
 
 class DropboxArchiveEntryForm extends ArchiveEntryForm {
 
@@ -65,7 +65,7 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
                 <label>
                     Remote archive path:
                     <input type="text" name="dropbox_path" value={this.state.dropbox_path} onChange={this.handleChange} disabled={!this.state.authenticated} />
-                    <RemoteFileExplorer fs={fsInstance} disabled={!this.state.authenticated} />
+                    <ConnectArchiveDialog fs={fsInstance} disabled={!this.state.authenticated} />
                 </label>
                 <input type="hidden" name="dropbox_token" value={this.state.dropbox_token} />
             </div>
