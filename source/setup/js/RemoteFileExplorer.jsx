@@ -14,8 +14,34 @@ class RemoteFileExplorer extends React.Component {
         super(props);
         this._fsInstance = this.props.fs || null;
         this.state = {
-            modalVisible: false
+            dirContents: null,
+            modalVisible: false,
+            remotePath: "/"
         };
+    }
+
+    get fs() {
+        return this.props.fs;
+    }
+
+    componentWillReceiveProps() {
+        if (this.fs) {
+            this.fetchDirectory();
+        }
+    }
+
+    fetchDirectory() {
+        this.fs
+            .readDirectory(this.state.remotePath)
+            .then(contents => {
+                console.log("Remote contents", contents);
+                this.setState({
+                    dirContents: contents
+                });
+            })
+            .catch(err => {
+                alert(`An error occurred fetching Dropbox contents: ${err.message}`);
+            });
     }
 
     hide() {
@@ -28,7 +54,14 @@ class RemoteFileExplorer extends React.Component {
                 <button onClick={(e) => this.show(e)}>Browse</button>
                 <Rodal visible={this.state.modalVisible} onClose={() => this.hide()}>
                     <div className="modalContents">
-                        <Spinner />
+                        {this.state.dirContents === null ?
+                            <Spinner /> :
+                            <div>
+                                <pre>
+                                    {JSON.stringify(this.state.dirContents, undefined, 4)}
+                                </pre>
+                            </div>
+                        }
                     </div>
                 </Rodal>
             </div>

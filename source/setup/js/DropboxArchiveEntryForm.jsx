@@ -1,6 +1,8 @@
 "use strict";
 
 const React = require("react");
+const createDropboxFS = require("dropbox-fs");
+const anyFs = require("any-fs");
 
 const ArchiveEntryForm = require("./ArchiveEntryForm");
 const RemoteFileExplorer = require("./RemoteFileExplorer");
@@ -22,11 +24,17 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
         });
     }
 
+    createFS() {
+        let dfs = createDropboxFS({
+            apiKey: this.state.dropbox_token
+        });
+        return anyFs(dfs);
+    }
+
     onAuthenticateClicked(event) {
         event.preventDefault();
         this.enable(false);
         chrome.runtime.sendMessage({ command: "authenticate-dropbox" }, (response) => {
-            console.log("RESPONSE", response);
             if (response && response.ok === true) {
                 this.onAuthenticated(response.token);
             } else {
@@ -47,16 +55,21 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
     }
 
     renderFormContents() {
-        return <div>
-            {super.renderFormContents()}
-            <button onClick={(e) => this.onAuthenticateClicked(e)} disabled={this.state.authenticated}>Authenticate Dropbox account</button>
-            <label>
-                Remote archive path:
-                <input type="text" name="dropbox_path" value={this.state.dropbox_path} onChange={this.handleChange} disabled={!this.state.authenticated} />
-                <RemoteFileExplorer disabled={!this.state.authenticated} />
-            </label>
-            <input type="hidden" name="dropbox_token" value={this.state.dropbox_token} />
-        </div>
+        let fsInstance = this.state.authenticated ?
+            this.createFS() :
+            null;
+        return (
+            <div>
+                {super.renderFormContents()}
+                <button onClick={(e) => this.onAuthenticateClicked(e)} disabled={this.state.authenticated}>Authenticate Dropbox account</button>
+                <label>
+                    Remote archive path:
+                    <input type="text" name="dropbox_path" value={this.state.dropbox_path} onChange={this.handleChange} disabled={!this.state.authenticated} />
+                    <RemoteFileExplorer fs={fsInstance} disabled={!this.state.authenticated} />
+                </label>
+                <input type="hidden" name="dropbox_token" value={this.state.dropbox_token} />
+            </div>
+        );
     }
 
 }
