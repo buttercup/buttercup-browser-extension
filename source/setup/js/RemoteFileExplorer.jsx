@@ -25,8 +25,12 @@ class RemoteFileExplorer extends React.Component {
         super(props);
         this._fsInstance = this.props.fs || null;
         this.state = {
+            allowSelectArchive: true,
+            createNew: false,
             dirContents: null,
-            modalVisible: false
+            modalVisible: false,
+            remotePath: "",
+            selectedKeys: []
         };
     }
 
@@ -35,7 +39,7 @@ class RemoteFileExplorer extends React.Component {
     }
 
     componentWillReceiveProps() {
-        if (this.fs) {
+        if (this.fs && this.state.dirContents === null) {
             this.fetchDirectory("/");
         }
     }
@@ -43,6 +47,10 @@ class RemoteFileExplorer extends React.Component {
     fetchDirectory(dir) {
         return this.fs
             .readDirectory(dir)
+            .then(contents => contents.filter(item => {
+                return item.isDirectory() ||
+                    (this.state.allowSelectArchive && /\.bcup$/i.test(item.name));
+            }))
             .then(contents => {
                 console.log("Remote contents", dir, contents);
                 this.setState({
@@ -66,22 +74,18 @@ class RemoteFileExplorer extends React.Component {
         if (this.state.dirContents[targetPath]) {
             return Promise.resolve();
         } else {
-            return this
-                .fetchDirectory(targetPath)
-                .then(() => {
-                    // this.setState({
-                    //     dirContents: Object.assign(this.state.dirContents, {
-                    //         [targetPath]: Object.assign(this.state.dirContents[targetPath], {
-                    //             children: true
-                    //         })
-                    //     })
-                    // });
-                    // console.log("SET STATE", targetPath, this.state);
-                })
-                .catch(function(err) {
-                    alert(`Failed loading data for path: ${targetPath}`);
-                    throw err;
-                });
+            return this.fetchDirectory(targetPath);
+        }
+    }
+
+    onSelect(nodes) {
+        let selectedKeys = [...nodes];
+        const filePath = nodes.shift();
+        if (filePath) {
+            this.setState({
+                remotePath: filePath,
+                selectedKeys
+            });
         }
     }
 
@@ -127,7 +131,9 @@ class RemoteFileExplorer extends React.Component {
         const treeNodes = loopItem("/");
         return (
             <Tree
+                onSelect={(nodes) => this.onSelect(nodes)}
                 loadData={(node) => this.onLoadData(node)}
+                selectedKeys={this.state.selectedKeys}
                 >
                 {treeNodes}
             </Tree>
