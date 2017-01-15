@@ -25,8 +25,8 @@ class RemoteFileExplorer extends React.Component {
     render() {
         return (
             <div>
-                <button onClick={this.show.bind(this)}>Browse</button>
-                <Rodal visible={this.state.modalVisible} onClose={this.hide.bind(this)}>
+                <button onClick={(e) => this.show(e)}>Browse</button>
+                <Rodal visible={this.state.modalVisible} onClose={() => this.hide()}>
                     <div className="modalContents">
                         <Spinner />
                     </div>
@@ -35,7 +35,8 @@ class RemoteFileExplorer extends React.Component {
         );
     }
 
-    show() {
+    show(e) {
+        e.preventDefault();
         this.setState({ modalVisible: true });
     }
 
