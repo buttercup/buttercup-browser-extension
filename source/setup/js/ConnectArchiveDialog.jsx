@@ -7,6 +7,7 @@ const RemoteFileExplorer = require("./RemoteFileExplorer");
 const Rodal = require("rodal").default;
 
 const { Component, PropTypes } = React;
+const BUTTERCUP_FILE = /\.bcup$/i;
 
 require("ConnectArchiveDialog.sass");
 
@@ -16,11 +17,12 @@ class ConnectArchiveDialog extends Component {
         super(props);
         this.state = {
             allowSelectArchive: true,
-            archivePath: "",
             createNew: false,
             currentOption: "existing",
             filename: "",
-            modalVisible: false
+            modalVisible: false,
+            remoteDir: "/",
+            selectedPath: ""
         };
     }
 
@@ -28,45 +30,61 @@ class ConnectArchiveDialog extends Component {
         return this.state.filename.trim();
     }
 
+    get finalPath() {
+        if (this.state.createNew) {
+            if (this.filename.length > 0 && this.state.remoteDir.length > 0) {
+                return path.resolve(this.state.remoteDir, this.filename);
+            }
+        } else {
+            return this.state.selectedPath;
+        }
+        return "";
+    }
+
     hide() {
         this.setState({ modalVisible: false });
     }
 
     onFilenameChange(e) {
+        this.onOptionChange("new");
         this.setState({
             filename: e.target.value
         });
     }
 
-    onOptionClick(e) {
+    onOptionChange(e) {
+        let newOption = (typeof e === "string") ? e : e.target.value;
         this.setState({
-            allowSelectArchive: (e.target.value === "existing"),
-            currentOption: e.target.value
+            allowSelectArchive: (newOption === "existing"),
+            currentOption: newOption
         });
     }
 
     onSelectClick(e) {
         e.preventDefault();
-        if (/\.bcup$/i.test(this.state.archivePath)) {
-            this.props.onArchiveSelected(this.state.archivePath);
+        if (BUTTERCUP_FILE.test(this.finalPath)) {
+            this.props.onArchiveSelected(this.finalPath, this.state.createNew);
             this.hide();
         } else {
             alert("Please select a valid archive before continuing");
         }
     }
 
-    onUpdateSelection(remotePath, type) {
-        let archivePath = "",
-            createNew = false;
+    onUpdateSelection(filePath, type) {
+        let selectedPath = "",
+            createNew = false,
+            remoteDir = this.state.remoteDir;
         if (type === "directory" && this.filename.length >= 0) {
             createNew = true;
-            archivePath = path.resolve(remotePath, this.filename);
+            selectedPath = path.resolve(filePath, this.filename);
+            remoteDir = filePath;
         } else if (type === "file") {
-            archivePath = remotePath;
+            selectedPath = filePath;
         }
         this.setState({
-            archivePath,
-            createNew
+            selectedPath,
+            createNew,
+            remoteDir
         });
     }
 
@@ -89,7 +107,7 @@ class ConnectArchiveDialog extends Component {
                                         type="checkbox"
                                         value="existing"
                                         checked={this.state.currentOption === "existing"}
-                                        onChange={(e) => this.onOptionClick(e)}
+                                        onChange={(e) => this.onOptionChange(e)}
                                         />
                                     Select existing archive
                                 </label>
@@ -100,7 +118,7 @@ class ConnectArchiveDialog extends Component {
                                             type="checkbox"
                                             value="new"
                                             checked={this.state.currentOption === "new"}
-                                            onChange={(e) => this.onOptionClick(e)}
+                                            onChange={(e) => this.onOptionChange(e)}
                                             />
                                         Create new archive
                                     </label>
@@ -143,7 +161,7 @@ class ConnectArchiveDialog extends Component {
 
     updateFilename() {
         let filename = this.state.filename;
-        if (/\.bcup$/i.test(filename) !== true) {
+        if (BUTTERCUP_FILE.test(filename) !== true) {
             this.setState({
                 filename: `${filename}.bcup`
             });

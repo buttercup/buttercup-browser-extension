@@ -4,6 +4,7 @@ const validation = require("./validate.js");
 
 const Buttercup = window.Buttercup;
 const {
+    Archive,
     Credentials,
     WebDAVDatasource,
     OwnCloudDatasource,
@@ -81,12 +82,24 @@ let archives = module.exports = {
                 return dropboxCreds;
             })
             .then(function(credentials) {
+                let datasource = new DropboxDatasource(
+                    request.dropbox_token,
+                    request.dropbox_path
+                );
+                if (request.connect === "new") {
+                    let workspace = new SharedWorkspace();
+                    workspace.setPrimaryArchive(
+                        Archive.createWithDefaults(),
+                        datasource,
+                        request.master_password
+                    );
+                    return workspace
+                        .save()
+                        .then(() => [workspace, credentials]);
+                }
                 return archives
                     .fetchWorkspace(
-                        new DropboxDatasource(
-                            request.dropbox_token,
-                            request.dropbox_path
-                        ),
+                        datasource,
                         request.master_password
                     )
                     .then(workspace => [workspace, credentials]);

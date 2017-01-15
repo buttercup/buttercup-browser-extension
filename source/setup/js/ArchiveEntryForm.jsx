@@ -9,10 +9,13 @@ class ArchiveEntryForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: null,
+            connect: "existing",
             loading: false,
+            master_password: "",
+            name: "",
             submitEnabled: true,
-            submitLabel: "Authenticate"
+            submitLabel: "Authenticate",
+            type: null
         };
 
         this.handleChange = this.handleChange.bind(this);

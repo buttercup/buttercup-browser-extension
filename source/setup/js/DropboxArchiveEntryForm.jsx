@@ -9,10 +9,6 @@ const ConnectArchiveDialog = require("./ConnectArchiveDialog");
 
 class DropboxArchiveEntryForm extends ArchiveEntryForm {
 
-    constructor(props) {
-        super(props);
-    }
-
     componentWillMount() {
         this.setState({
             submitEnabled: false,
@@ -31,8 +27,9 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
         return anyFs(dfs);
     }
 
-    onArchiveSelected(filePath) {
+    onArchiveSelected(filePath, createNew) {
         this.setState({
+            connect: createNew ? "new" : "existing",
             dropbox_path: filePath
         });
     }
@@ -74,7 +71,7 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
                     <ConnectArchiveDialog
                         fs={fsInstance}
                         disabled={!this.state.authenticated}
-                        onArchiveSelected={(filePath) => this.onArchiveSelected(filePath)}
+                        onArchiveSelected={(...args) => this.onArchiveSelected(...args)}
                         />
                 </label>
                 <input type="hidden" name="dropbox_token" value={this.state.dropbox_token} />
