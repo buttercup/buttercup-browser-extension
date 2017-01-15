@@ -31,6 +31,12 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
         return anyFs(dfs);
     }
 
+    onArchiveSelected(filePath) {
+        this.setState({
+            dropbox_path: filePath
+        });
+    }
+
     onAuthenticateClicked(event) {
         event.preventDefault();
         this.enable(false);
@@ -65,7 +71,11 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
                 <label>
                     Remote archive path:
                     <input type="text" name="dropbox_path" value={this.state.dropbox_path} onChange={this.handleChange} disabled={!this.state.authenticated} />
-                    <ConnectArchiveDialog fs={fsInstance} disabled={!this.state.authenticated} />
+                    <ConnectArchiveDialog
+                        fs={fsInstance}
+                        disabled={!this.state.authenticated}
+                        onArchiveSelected={(filePath) => this.onArchiveSelected(filePath)}
+                        />
                 </label>
                 <input type="hidden" name="dropbox_token" value={this.state.dropbox_token} />
             </div>

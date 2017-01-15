@@ -26,11 +26,10 @@ class RemoteFileExplorer extends Component {
         super(props);
         this._fsInstance = this.props.fs || null;
         this.state = {
-            // createNew: false,
             dirContents: null,
-            // modalVisible: false,
             fs: null,
             remotePath: "",
+            selectedType: "",
             showArchives: this.props.allowSelectArchive === true,
             selectedKeys: []
         };
@@ -56,6 +55,12 @@ class RemoteFileExplorer extends Component {
                 this.fetchDirectory("/");
             }
         });
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if (nextState.remotePath !== this.state.remotePath) {
+            this.props.onChoosePath(nextState.remotePath, nextState.selectedType);
+        }
     }
 
     fetchDirectory(dir) {
@@ -88,12 +93,13 @@ class RemoteFileExplorer extends Component {
         }
     }
 
-    onSelect(nodes) {
+    onSelect(nodes, event) {
         let selectedKeys = [...nodes];
         const filePath = nodes.shift();
         if (filePath) {
             this.setState({
                 remotePath: filePath,
+                selectedType: event.node.props.isLeaf ? "file" : "directory",
                 selectedKeys
             });
         }
@@ -137,7 +143,7 @@ class RemoteFileExplorer extends Component {
         const treeNodes = loopItem("/");
         return (
             <Tree
-                onSelect={(nodes) => this.onSelect(nodes)}
+                onSelect={(...args) => this.onSelect(...args)}
                 loadData={(node) => this.onLoadData(node)}
                 selectedKeys={this.state.selectedKeys}
                 >
@@ -149,7 +155,9 @@ class RemoteFileExplorer extends Component {
 }
 
 RemoteFileExplorer.propTypes = {
-    allowSelectArchive: PropTypes.bool
+    allowSelectArchive:     PropTypes.bool,
+    fs:                     PropTypes.object,
+    onChoosePath:           PropTypes.func
 };
 
 module.exports = RemoteFileExplorer;
