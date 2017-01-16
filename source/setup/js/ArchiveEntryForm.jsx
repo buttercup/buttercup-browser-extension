@@ -9,10 +9,13 @@ class ArchiveEntryForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: null,
+            connect: "existing",
             loading: false,
+            master_password: "",
+            name: "",
             submitEnabled: true,
-            submitLabel: "Authenticate"
+            submitLabel: "Authenticate",
+            type: null
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -32,6 +35,12 @@ class ArchiveEntryForm extends React.Component {
         })
     }
 
+    handleCreateNewChange(checkbox) {
+        this.setState({
+            connect: event.target.checked ? "new" : "existing"
+        });
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         this.enable(false);
@@ -48,10 +57,27 @@ class ArchiveEntryForm extends React.Component {
     }
 
     render() {
-        return <form>
+        return <form className="buttercup">
             <fieldset disabled={this.state.loading}>
                 {this.renderFormContents()}
-                <input type="submit" value={this.state.submitLabel} disabled={!this.state.submitEnabled} onClick={this.handleSubmit} />
+                <div className="row">
+                    <input
+                        id="create-new-cb"
+                        type="checkbox"
+                        name="create-new"
+                        value={this.state.connect === "new"} 
+                        onChange={(e) => this.handleCreateNewChange(e)}
+                        />
+                    <label htmlFor="create-new-cb">Create new archive at path</label>
+                </div>
+                <div className="row">
+                    <button
+                        disabled={!this.state.submitEnabled}
+                        onClick={this.handleSubmit}
+                        >
+                        {this.state.submitLabel}
+                    </button>
+                </div>
             </fieldset>
         </form>
     }
@@ -59,14 +85,14 @@ class ArchiveEntryForm extends React.Component {
     renderFormContents() {
         return (
             <div>
-                <label>
-                    Entry name:
+                <div className="row">
                     <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
-                </label>
-                <label>
-                    Master password:
+                    <label>Title</label>
+                </div>
+                <div className="row">
                     <input type="password" name="master_password" value={this.state.master_password} onChange={this.handleChange} />
-                </label>
+                    <label>Archive password</label>
+                </div>
             </div>
         );
     }
