@@ -21,6 +21,14 @@ form.buttercup
         margin-bottom: 25px
         position: relative
         overflow: hidden
+        input[type="checkbox"] ~ span, input[type="radio"] ~ span
+            position: absolute
+            top: 50%
+            transform: translateY(-50%)
+            font-size: 14px
+            padding-left: 8px
+        &.check
+            height: 30px !important
     input[type="text"], input[type="password"], textarea
         width: 100%
         height: 40px
@@ -31,11 +39,11 @@ form.buttercup
         border-radius: 3px
         transition: all 0.3s $custom-easing
     .row.remotePath
-        input[type="text"]
+        > input[type="text"]
             width: calc(100% - 100px)
-        .sameLine
+        > .sameLine
             display: inline-block
-        .browse
+        > .browse
             width: 90px
             margin-left: 10px
     textarea
@@ -159,7 +167,7 @@ form.buttercup
         font-weight: bold
         text-shadow: 0 0 2px rgba(0, 0, 0, 0.1)
         text-align: center
-        // text-transform: uppercase
+        cursor: pointer
         letter-spacing: .05em
         color: white
         border: none
@@ -168,6 +176,10 @@ form.buttercup
         transition: all 0.3s $custom-easing
         transform: translateZ(0) translateX(0)
         z-index: 2
+        &:disabled
+            background: #CCC
+            color: $blue
+            cursor: inherit
         &:before
             content: ''
             display: block
@@ -183,7 +195,7 @@ form.buttercup
             transition: all 0.3s $custom-easing
             transform: translateZ(0) scale(0)
             z-index: -1
-        &:hover, &:focus
+        &:hover:not(:disabled), &:focus:not(:disabled)
             &:before
                 transform: scale(1)
                 transition: all 0.3s $custom-easing

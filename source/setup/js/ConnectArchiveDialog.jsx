@@ -102,37 +102,35 @@ class ConnectArchiveDialog extends Component {
                         <div className="configuration">
                             <h3>Options</h3>
                             <div className="options">
-                                <label>
+                                <div className="row check">
                                     <input
                                         type="checkbox"
                                         value="existing"
                                         checked={this.state.currentOption === "existing"}
                                         onChange={(e) => this.onOptionChange(e)}
                                         />
-                                    Select existing archive
-                                </label>
-                                <hr />
-                                <div>
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            value="new"
-                                            checked={this.state.currentOption === "new"}
-                                            onChange={(e) => this.onOptionChange(e)}
-                                            />
-                                        Create new archive
-                                    </label>
+                                    <label onClick={() => this.onOptionChange("existing")}></label>
+                                    <span>Select existing archive</span>
                                 </div>
-                                <div>
-                                    <label>
-                                        Filename:
-                                        <input
-                                            type="text"
-                                            value={this.state.filename}
-                                            onChange={(e) => this.onFilenameChange(e)}
-                                            onBlur={() => this.updateFilename()}
-                                            />
-                                    </label>
+                                <hr />
+                                <div className="row check">
+                                    <input
+                                        type="checkbox"
+                                        value="new"
+                                        checked={this.state.currentOption === "new"}
+                                        onChange={(e) => this.onOptionChange(e)}
+                                        />
+                                    <label onClick={() => this.onOptionChange("new")}></label>
+                                    <span>Create new archive</span>
+                                </div>
+                                <div className="row">
+                                    <input
+                                        type="text"
+                                        value={this.state.filename}
+                                        onChange={(e) => this.onFilenameChange(e)}
+                                        onBlur={() => this.updateFilename()}
+                                        />
+                                    <label>Filename</label>
                                 </div>
                                 <div>
                                     <button onClick={(e) => this.onSelectClick(e)}>
