@@ -1,6 +1,6 @@
 const path = require("path");
 
-const DIST = path.resolve(__dirname, "./dist");
+const BUILD = path.resolve(__dirname, "./build");
 const SOURCE = path.resolve(__dirname, "./source");
 
 const SRC_BACKGROUND = path.resolve(SOURCE, "background");
@@ -24,7 +24,7 @@ module.exports = [
         entry: path.resolve(SRC_BACKGROUND, "index.js"),
         output: {
             filename: "background.js",
-            path: DIST
+            path: BUILD
         },
         module: {
             loaders: [
@@ -46,7 +46,7 @@ module.exports = [
         entry: path.resolve(SRC_TAB, "index.js"),
         output: {
             filename: "tab.js",
-            path: DIST
+            path: BUILD
         },
         imageWebpackLoader,
         module: {
@@ -86,7 +86,7 @@ module.exports = [
         },
         output: {
             filename: 'setup.[name].js',
-            path: DIST,
+            path: BUILD,
             //make sure port 8090 is used when launching webpack-dev-server
             publicPath: 'http://localhost:8090/assets'
         },
@@ -149,7 +149,7 @@ module.exports = [
         },
         output: {
             filename: 'popup.[name].js',
-            path: DIST,
+            path: BUILD,
             //make sure port 8090 is used when launching webpack-dev-server
             publicPath: 'http://localhost:8090/assets'
         },
