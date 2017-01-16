@@ -35,6 +35,12 @@ class ArchiveEntryForm extends React.Component {
         })
     }
 
+    handleCreateNewChange(checkbox) {
+        this.setState({
+            connect: event.target.checked ? "new" : "existing"
+        });
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         this.enable(false);
@@ -54,6 +60,16 @@ class ArchiveEntryForm extends React.Component {
         return <form className="buttercup">
             <fieldset disabled={this.state.loading}>
                 {this.renderFormContents()}
+                <div className="row">
+                    <input
+                        id="create-new-cb"
+                        type="checkbox"
+                        name="create-new"
+                        value={this.state.connect === "new"} 
+                        onChange={(e) => this.handleCreateNewChange(e)}
+                        />
+                    <label htmlFor="create-new-cb">Create new archive at path</label>
+                </div>
                 <div className="row">
                     <button
                         disabled={!this.state.submitEnabled}

@@ -21,14 +21,18 @@ form.buttercup
         margin-bottom: 25px
         position: relative
         overflow: hidden
-        input[type="checkbox"] ~ span, input[type="radio"] ~ span
-            position: absolute
-            top: 50%
-            transform: translateY(-50%)
-            font-size: 14px
-            padding-left: 8px
-        &.check
-            height: 30px !important
+    input[type="checkbox"]
+        + label
+            color: #888
+        &:checked
+            + label
+                color: #000
+            + label .icon
+                background: #1161ee
+            + label .icon:before
+                transform: scale(1) rotate(45deg)
+            + label .icon:after
+                transform: scale(1) rotate(-45deg)
     input[type="text"], input[type="password"], textarea
         width: 100%
         height: 40px
@@ -80,83 +84,6 @@ form.buttercup
         transform: translateZ(0) translateX(-100%)
     textarea:focus + label
         transform: translateZ(0) translateY(-100%)
-    input[type="checkbox"], input[type="radio"]
-        position: absolute
-        overflow: hidden
-        clip: rect(0 0 0 0)
-        height: 1px
-        width: 1px
-        margin: -1px
-        padding: 0
-    input[type="radio"] + label
-        position: relative
-        display: inline-block
-        overflow: hidden
-        text-indent: -9999px
-        background: $gray
-        width: 30px
-        height: 30px
-        border-radius: 100%
-        cursor: pointer
-        transition: all 0.3s $custom-easing
-        &:before
-            content: ''
-            position: absolute
-            display: block
-            height: 10px
-            width: 10px
-            top: 50%
-            left: 50%
-            background: white
-            border-radius: 100%
-            box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1)
-            transition: all 0.3s $custom-easing 0.1s
-            transform: translateZ(0) translate(-50%, -50%) scale(0)
-    input[type="radio"]:checked + label
-        background: $blue
-        &:before
-            transform: translateZ(0) translate(-50%, -50%) scale(1)
-    input[type="checkbox"] + label
-        position: relative
-        display: inline-block
-        overflow: hidden
-        text-indent: -9999px
-        background: $gray
-        width: 60px
-        height: 30px
-        border-radius: 100px
-        cursor: pointer
-        transition: all 0.3s $custom-easing
-        &:before
-            content: ''
-            position: absolute
-            display: block
-            top: 0
-            right: 0
-            bottom: 0
-            left: 0
-            background: $blue
-            border-radius: 100px
-            transition: all 0.3s $custom-easing 0.1s
-            transform: translateZ(0) scale(0)
-        &:after
-            content: ''
-            position: absolute
-            top: 2px
-            left: 2px
-            display: block
-            height: 26px
-            width: 26px
-            background: white
-            border-radius: 100%
-            box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2)
-            transition: all 0.3s $custom-easing
-            transform: translateZ(0) translateX(0)
-    input[type="checkbox"]:checked + label
-        background: $blue
-        &:after
-            left: calc(100% - 28px)
-            transform: translateZ(0)
     button
         position: relative
         overflow: hidden

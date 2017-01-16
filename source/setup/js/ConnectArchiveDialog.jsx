@@ -102,26 +102,26 @@ class ConnectArchiveDialog extends Component {
                         <div className="configuration">
                             <h3>Options</h3>
                             <div className="options">
-                                <div className="row check">
+                                <div className="row">
                                     <input
+                                        id="connect-existing-cb"
                                         type="checkbox"
                                         value="existing"
                                         checked={this.state.currentOption === "existing"}
                                         onChange={(e) => this.onOptionChange(e)}
                                         />
-                                    <label onClick={() => this.onOptionChange("existing")}></label>
-                                    <span>Select existing archive</span>
+                                    <label htmlFor="connect-existing-cb">Select existing archive</label>
                                 </div>
                                 <hr />
-                                <div className="row check">
+                                <div className="row">
                                     <input
+                                        id="connect-new-cb"
                                         type="checkbox"
                                         value="new"
                                         checked={this.state.currentOption === "new"}
                                         onChange={(e) => this.onOptionChange(e)}
                                         />
-                                    <label onClick={() => this.onOptionChange("new")}></label>
-                                    <span>Create new archive</span>
+                                    <label htmlFor="connect-new-cb">Create new archive</label>
                                 </div>
                                 <div className="row">
                                     <input

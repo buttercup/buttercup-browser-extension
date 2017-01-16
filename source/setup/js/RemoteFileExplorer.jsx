@@ -71,7 +71,6 @@ class RemoteFileExplorer extends Component {
                     (this.state.showArchives && /\.bcup$/i.test(item.name));
             }))
             .then(contents => {
-                // console.log("Remote contents", dir, contents);
                 this.setState({
                     dirContents: Object.assign(this.state.dirContents || {}, {
                         [dir]: contents.map(processLeafData)
@@ -108,7 +107,7 @@ class RemoteFileExplorer extends Component {
     render() {
         // <button onClick={(e) => this.show(e)}>Browse</button>
         return (
-            <div>
+            <div className="explorerContainer">
                 {this.state.dirContents === null ?
                     <Spinner /> :
                     this.renderTree()
