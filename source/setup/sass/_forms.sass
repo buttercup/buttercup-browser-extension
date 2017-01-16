@@ -66,13 +66,18 @@ form.buttercup
         width: 140px
         text-shadow: 0 0 2px rgba(0, 0, 0, 0.1)
         text-align: center
-        // text-transform: uppercase
         letter-spacing: .05em
         color: white
         background: $blue
         border-radius: 3px 0 0 3px
         transition: all 0.3s $custom-easing
         transform: translateZ(0) translateX(0)
+
+    input[type="text"].short, input[type="password"].short
+        padding-left: 110px
+    input[type="text"].short + label, input[type="password"].short + label
+        width: 100px
+
     textarea + label
         width: 100%
         border-radius: 3px 3px 0 0

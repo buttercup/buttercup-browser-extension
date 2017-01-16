@@ -125,6 +125,7 @@ class ConnectArchiveDialog extends Component {
                                 </div>
                                 <div className="row">
                                     <input
+                                        className="short"
                                         type="text"
                                         value={this.state.filename}
                                         onChange={(e) => this.onFilenameChange(e)}
