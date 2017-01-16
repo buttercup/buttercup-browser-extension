@@ -11,6 +11,9 @@ Current only **Chrome** is supported.
 
 We **hope** to add support for Firefox and Edge in the near future - We'd love any suggestions or contributions in this area!
 
+### Adding to Chrome
+You can load an **unpacked extension** in Chrome by navigating to [chrome://extensions/](chrome://extensions/). Simply locate the project's directory and use **dist/** as the extension directory.
+
 ## Contributing
 Contributions are very welcome and strongly encouraged, though we do ask that you stick to some basic styling parameters:
 
