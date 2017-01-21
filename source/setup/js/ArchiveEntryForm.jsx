@@ -35,9 +35,9 @@ class ArchiveEntryForm extends React.Component {
         })
     }
 
-    handleCreateNewChange(checkbox) {
+    handleCreateNewChange() {
         this.setState({
-            connect: event.target.checked ? "new" : "existing"
+            connect: this.state.connect === "existing" ? "new" : "existing"
         });
     }
 
@@ -64,9 +64,8 @@ class ArchiveEntryForm extends React.Component {
                     <input
                         id="create-new-cb"
                         type="checkbox"
-                        name="create-new"
-                        value={this.state.connect === "new"} 
-                        onChange={(e) => this.handleCreateNewChange(e)}
+                        checked={this.state.connect === "new"} 
+                        onChange={() => this.handleCreateNewChange()}
                         />
                     <label htmlFor="create-new-cb">Create new archive at path</label>
                 </div>

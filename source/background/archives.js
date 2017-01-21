@@ -156,14 +156,26 @@ let archives = module.exports = {
                 return webdavCreds;  
             })
             .then(function(credentials) {
+                let datasource = new WebDAVDatasource(
+                    request.webdav_address,
+                    request.webdav_path,
+                    request.webdav_username,
+                    request.webdav_password
+                );
+                if (request.connect === "new") {
+                    let workspace = new SharedWorkspace();
+                    workspace.setPrimaryArchive(
+                        Archive.createWithDefaults(),
+                        datasource,
+                        request.master_password
+                    );
+                    return workspace
+                        .save()
+                        .then(() => [workspace, credentials]);
+                }
                 return archives
                     .fetchWorkspace(
-                        new WebDAVDatasource(
-                            request.webdav_address,
-                            request.webdav_path,
-                            request.webdav_username,
-                            request.webdav_password
-                        ),
+                        datasource,
                         request.master_password
                     )
                     .then(workspace => [workspace, credentials]);
