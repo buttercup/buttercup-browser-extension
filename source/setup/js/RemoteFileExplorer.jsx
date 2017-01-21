@@ -26,6 +26,7 @@ class RemoteFileExplorer extends Component {
         super(props);
         this._fsInstance = this.props.fs || null;
         this.state = {
+            active: false,
             dirContents: null,
             fs: null,
             remotePath: "",
@@ -42,6 +43,7 @@ class RemoteFileExplorer extends Component {
     componentWillReceiveProps(nextProps) {
         let showArchives = nextProps.allowSelectArchive === true,
             newState = {
+                active: nextProps.active,
                 fs: this.props.fs
             };
         if (this.state.showArchives !== showArchives) {
@@ -51,7 +53,7 @@ class RemoteFileExplorer extends Component {
             });
         }
         this.setState(newState, () => {
-            if (this.fs && this.state.dirContents === null) {
+            if (this.fs && this.state.active && this.state.dirContents === null) {
                 this.fetchDirectory("/");
             }
         });
@@ -105,7 +107,6 @@ class RemoteFileExplorer extends Component {
     }
 
     render() {
-        // <button onClick={(e) => this.show(e)}>Browse</button>
         return (
             <div className="explorerContainer">
                 {this.state.dirContents === null ?

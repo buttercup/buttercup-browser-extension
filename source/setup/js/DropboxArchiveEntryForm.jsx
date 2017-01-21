@@ -12,7 +12,6 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
     componentWillMount() {
         this.setState({
             submitEnabled: false,
-            submitLabel: "Connect",
             type: "dropbox",
             authenticated: false,
             dropbox_token: "",
@@ -71,6 +70,7 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
                     <input type="text" name="dropbox_path" value={this.state.dropbox_path} onChange={this.handleChange} disabled={!this.state.authenticated} />
                     <label>Remote path</label>
                     <ConnectArchiveDialog
+                        explorerActive={true}
                         fs={fsInstance}
                         disabled={!this.state.authenticated}
                         onArchiveSelected={(...args) => this.onArchiveSelected(...args)}

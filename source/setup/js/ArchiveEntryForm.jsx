@@ -14,7 +14,7 @@ class ArchiveEntryForm extends React.Component {
             master_password: "",
             name: "",
             submitEnabled: true,
-            submitLabel: "Authenticate",
+            submitLabel: "Connect",
             type: null
         };
 

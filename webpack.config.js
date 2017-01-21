@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 
 const BUILD = path.resolve(__dirname, "./build");
 const SOURCE = path.resolve(__dirname, "./source");
@@ -37,7 +38,7 @@ module.exports = [
         },
         resolve: {
             extensions: ['', '.js'],
-            fallback: [path.join(__dirname, 'node_modules')]
+            fallback: [path.join(__dirname, "node_modules")]
         }
     },
 
@@ -103,6 +104,10 @@ module.exports = [
                     loader: 'babel'
                 },
                 {
+                    test: /\.json$/i,
+                    loader: "json-loader"
+                },
+                {
                     test: /\.sass$/,
                     loaders: [
                         "style-loader",
@@ -126,6 +131,9 @@ module.exports = [
         node: {
             fs: "empty"
         },
+        plugins: [
+            new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop")
+        ],
         externals: {
             // don't bundle the 'react' npm package with our bundle.js
             // but get it from a global 'React' variable
@@ -133,11 +141,15 @@ module.exports = [
         },
         resolve: {
             extensions: ['', '.js', '.jsx'],
+            fallback: [path.join(__dirname, "node_modules")],
             root: [
                 path.resolve(SRC_SETUP, "js"),
                 path.resolve(SRC_SETUP, "sass"),
                 SRC_COMMON
             ]
+        },
+        resolveLoader: {
+            fallback: [path.join(__dirname, "node_modules")]
         }
     },
 

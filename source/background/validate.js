@@ -5,7 +5,7 @@ let validate = module.exports = {
     },
 
     validateArchiveAddition: function(request) {
-        console.log("ARCHIVE", request);
+        console.log("Add archive (validate)", request);
         let { name } = request;
         if (validate.archiveNameAvailable(name) !== true) {
             throw new Error(`Name is already taken: ${name}`);
@@ -16,6 +16,11 @@ let validate = module.exports = {
             case "dropbox": {
                 validate.validateObjectString(request, "dropbox_path");
                 validate.validateObjectString(request, "dropbox_token");
+                break;
+            }
+
+            case "webdav": {
+                validate.validateObjectString(request, "webdav_path");
                 break;
             }
 

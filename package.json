@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/perry-mitchell/buttercup-chrome#readme",
   "devDependencies": {
-    "any-fs": "^0.1.0",
+    "any-fs": "~0.2.0",
     "babel-core": "^6.4.5",
     "babel-loader": "^6.2.2",
     "babel-plugin-transform-object-rest-spread": "^6.19.0",
@@ -53,14 +53,16 @@
     "cpx": "^1.5.0",
     "css-loader": "^0.26.1",
     "dropbox": "^2.5.0",
-    "dropbox-fs": "0.0.4",
+    "dropbox-fs": "~0.0.4",
     "eslint": "^3.12.2",
     "events": "~1.1.1",
     "history": "^4.3.0",
     "image-webpack-loader": "^3.1.0",
+    "json-loader": "^0.5.4",
     "jsx-loader": "^0.13.2",
     "lockr": "^0.8.4",
     "movefiles": "^1.0.1",
+    "node-noop": "^1.0.0",
     "node-sass": "^3.13.0",
     "rc-tree": "^1.4.2",
     "react": "^15.3.2",
@@ -75,6 +77,7 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "watch-run": "^1.2.4",
+    "webdav-fs": "1.0.0-rc3",
     "webpack": "^1.13.2"
   }
 }

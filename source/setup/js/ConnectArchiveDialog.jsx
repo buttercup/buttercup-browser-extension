@@ -19,6 +19,7 @@ class ConnectArchiveDialog extends Component {
             allowSelectArchive: true,
             createNew: false,
             currentOption: "existing",
+            explorerActive: false,
             filename: "",
             modalVisible: false,
             remoteDir: "/",
@@ -39,6 +40,12 @@ class ConnectArchiveDialog extends Component {
             return this.state.selectedPath;
         }
         return "";
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            explorerActive: nextProps.explorerActive
+        });
     }
 
     hide() {
@@ -143,6 +150,7 @@ class ConnectArchiveDialog extends Component {
                         <div className="explorer">
                             <RemoteFileExplorer
                                 fs={this.props.fs}
+                                active={this.state.explorerActive}
                                 allowSelectArchive={this.state.allowSelectArchive}
                                 onChoosePath={(...args) => this.onUpdateSelection(...args)}
                                 />
@@ -170,6 +178,7 @@ class ConnectArchiveDialog extends Component {
 }
 
 ConnectArchiveDialog.propTypes = {
+    explorerActive:         PropTypes.bool,
     onArchiveSelected:      PropTypes.func
 };
 
