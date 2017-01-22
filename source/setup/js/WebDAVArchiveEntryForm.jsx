@@ -4,10 +4,10 @@ const React = require("react");
 const createWebDAVFS = require("webdav-fs");
 const anyFs = require("any-fs");
 
-const ArchiveEntryForm = require("./ArchiveEntryForm");
+const BaseFSArchiveEntryForm = require("./BaseFSArchiveEntryForm");
 const ConnectArchiveDialog = require("./ConnectArchiveDialog");
 
-class WebDAVArchiveEntryForm extends ArchiveEntryForm {
+class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
 
     constructor(props) {
         super(props);
@@ -18,42 +18,6 @@ class WebDAVArchiveEntryForm extends ArchiveEntryForm {
             webdav_password: "",
             webdav_path: ""
         });
-        this.fs = null;
-        this._checkingFs = false;
-        this._checkAgain = false;
-    }
-
-    checkFS() {
-        if (this._checkingFs) {
-            this._checkAgain = true;
-            return;
-        }
-        console.log("Checking fs");
-        let fs = this.createFS();
-        if (fs === null) {
-            return;
-        }
-        this._checkingFs = true;
-        fs.readDirectory("/").then(
-            () => {
-                this._checkingFs = false;
-                this._checkAgain = false;
-                this.fs = fs;
-                console.log("Fs success");
-                this.forceUpdate();
-            },
-            (err) => {
-                console.log("Fs failure", err);
-                this._checkingFs = false;
-                let checkAgain = this._checkAgain;
-                this._checkAgain = false;
-                if (checkAgain) {
-                    console.log("Check fs again");
-                    this.checkFS();
-                }
-                return Promise.resolve();
-            }
-        );
     }
 
     createFS() {
