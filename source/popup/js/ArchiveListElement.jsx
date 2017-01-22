@@ -6,6 +6,8 @@ const IconUnlocked = require("react-icons/lib/fa/unlock-alt");
 const IconConnect = require("react-icons/lib/go/key");
 const IconDisconnect = require("react-icons/lib/go/lock");
 
+const tools = require("../../common/tools");
+
 const NOPE = function() {};
 
 class ArchiveListElement extends React.Component {
@@ -18,9 +20,12 @@ class ArchiveListElement extends React.Component {
         return this.props.status === "processing";
     }
 
+    get type() {
+        return tools.niceType(this.props.type);
+    }
+
     render() {
         let canUnlock = false,
-            type = "Dropbox",
             actionTitle,
             Icon,
             ControlIcon;
@@ -47,7 +52,7 @@ class ArchiveListElement extends React.Component {
                 <div className={this.props.status + " status"}><Icon className="lockIcon" /></div>
                 <div className="name">
                     <div className="title">{this.props.name}</div>
-                    <div className="type">{type}</div>
+                    <div className="type">{this.type}</div>
                 </div>
                 <div className="control" title={actionTitle}>
                     {ControlIcon &&

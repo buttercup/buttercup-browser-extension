@@ -40,6 +40,7 @@ class ArchiveList extends React.Component {
     }
 
     render() {
+        console.log("ARCHIVES", this.state.archives);
         return (
             <div>
                 {this.state.archives.length > 0 ?

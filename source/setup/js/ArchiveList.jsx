@@ -9,6 +9,8 @@ const IconConnect = require("react-icons/lib/go/key");
 const IconDisconnect = require("react-icons/lib/go/lock");
 const IconRemove = require("react-icons/lib/go/x");
 
+const tools = require("../../common/tools");
+
 require("ArchiveList.sass");
 
 class ArchiveList extends React.Component {
@@ -67,7 +69,7 @@ class ArchiveList extends React.Component {
     render() {
         let archives = this.state.archives.map(archive => {
             let canUnlock = false,
-                type = "Dropbox",
+                type = tools.niceType(archive.type),
                 actionTitle,
                 Icon,
                 ControlIcon;
