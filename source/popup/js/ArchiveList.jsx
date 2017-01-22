@@ -41,15 +41,22 @@ class ArchiveList extends React.Component {
 
     render() {
         return (
-            <ul className="archiveList">
-                {this.state.archives.map(archive =>
-                    <ArchiveListElement
-                        key={archive.name}
-                        {...archive}
-                        onLocked={() => this.fetchArchives()}
-                        />
-                )}
-            </ul>
+            <div>
+                {this.state.archives.length > 0 ?
+                    <ul className="archiveList">
+                        {this.state.archives.map(archive =>
+                            <ArchiveListElement
+                                key={archive.name}
+                                {...archive}
+                                onLocked={() => this.fetchArchives()}
+                                />
+                        )}
+                    </ul> :
+                    <div style={{ textAlign: "center" }}>
+                        <i>No archives... yet.</i>
+                    </div>
+                }
+            </div>
         );
     }
 
