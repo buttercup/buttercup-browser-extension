@@ -285,7 +285,10 @@ let archives = module.exports = {
     },
 
     removeArchive: function(name) {
-        return Buttercup.Web.archiveManager.removeArchive(name);
+        let removed = Buttercup.Web.archiveManager.removeArchive(name);
+        return Buttercup.Web.archiveManager
+            .saveState()
+            .then(() => removed);
     },
 
     unlockArchive: function(name, password) {

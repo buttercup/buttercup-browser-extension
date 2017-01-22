@@ -152,18 +152,21 @@ module.exports = function addListeners() {
             }
 
             case "remove-archive": {
-                let removed = archives.removeArchive(request.name);
-                if (removed) {
-                    sendResponse({
-                        ok: true
+                archives
+                    .removeArchive(request.name)
+                    .then(function(removed) {
+                        if (removed) {
+                            sendResponse({
+                                ok: true
+                            });
+                        } else {
+                            sendResponse({
+                                ok: false,
+                                error: "Unable to remove (possibly not found)"
+                            });
+                        }
                     });
-                } else {
-                    sendResponse({
-                        ok: false,
-                        error: "Unable to remove (possibly not found)"
-                    });
-                }
-                break;
+                return RESPOND_ASYNC;
             }
 
             case "save-form-submission": {
