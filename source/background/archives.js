@@ -70,7 +70,6 @@ let archives = module.exports = {
     addDropboxArchive: function(request) {
         return Promise
             .resolve(request)
-            // .then(validation.validateDropboxArchive)
             .then(function() {
                 let dropboxCreds = new Credentials();
                 dropboxCreds.type = "dropbox";
@@ -124,14 +123,26 @@ let archives = module.exports = {
                 return owncloudCreds;  
             })
             .then(function(credentials) {
+                let datasource = new OwnCloudDatasource(
+                    request.owncloud_address,
+                    request.owncloud_path,
+                    request.owncloud_username,
+                    request.owncloud_password
+                );
+                if (request.connect === "new") {
+                    let workspace = new SharedWorkspace();
+                    workspace.setPrimaryArchive(
+                        Archive.createWithDefaults(),
+                        datasource,
+                        request.master_password
+                    );
+                    return workspace
+                        .save()
+                        .then(() => [workspace, credentials]);
+                }
                 return archives
                     .fetchWorkspace(
-                        new OwnCloudDatasource(
-                            request.owncloud_address,
-                            request.owncloud_path,
-                            request.owncloud_username,
-                            request.owncloud_password
-                        ),
+                        datasource,
                         request.master_password
                     )
                     .then(workspace => [workspace, credentials]);

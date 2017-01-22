@@ -24,6 +24,11 @@ let validate = module.exports = {
                 break;
             }
 
+            case "owncloud": {
+                validate.validateObjectString(request, "owncloud_path");
+                break;
+            }
+
             default:
                 throw new Error(`Unknown archive type: ${request.type}`);
         }
