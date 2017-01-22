@@ -1,0 +1,39 @@
+.archiveTypeList
+    list-style-type: none
+    padding: 0
+    width: 480px
+    border: 1px solid rgba(0, 0, 0, 0.15)
+    border-radius: 12px
+    overflow: hidden
+    margin-left: auto
+    margin-right: auto
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: space-around
+    align-items: stretch
+
+    li
+        flex-grow: 1
+        min-width: 128px
+        min-height: 128px
+        display: flex
+        align-items: flex-end
+        justify-content: center
+        padding-bottom: 8px
+        background-size: 75% 75%
+        background-repeat: no-repeat
+        background-position-x: center
+        background-position-y: 20%
+        cursor: pointer
+        &:hover
+            background-color: rgba(0, 183, 172, 0.2)
+
+        &.dropbox
+            background-image: url("../../../resources/providers/dropbox.png")
+
+        &.owncloud
+            background-image: url("../../../resources/providers/owncloud.png")
+
+        &.webdav
+            background-image: url("../../../resources/providers/webdav.png")

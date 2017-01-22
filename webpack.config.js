@@ -125,6 +125,10 @@ module.exports = [
                 {
                     test: /\.[ot]tf$/,
                     loader: "url-loader"
+                },
+                {
+                    test: /\.png$/i,
+                    loader: "url-loader"
                 }
             ]
         },
