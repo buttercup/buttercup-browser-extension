@@ -1,12 +1,10 @@
-'use strict';
+import React from "react";
+import IconLocked from "react-icons/lib/fa/lock";
+import IconUnlocked from "react-icons/lib/fa/unlock-alt";
+import IconConnect from "react-icons/lib/go/key";
+import IconDisconnect from "react-icons/lib/go/lock";
 
-const React = require("react");
-const IconLocked = require("react-icons/lib/fa/lock");
-const IconUnlocked = require("react-icons/lib/fa/unlock-alt");
-const IconConnect = require("react-icons/lib/go/key");
-const IconDisconnect = require("react-icons/lib/go/lock");
-
-const tools = require("../../common/tools");
+import tools from "../../common/tools";
 
 const NOPE = function() {};
 
@@ -91,4 +89,4 @@ class ArchiveListElement extends React.Component {
 
 }
 
-module.exports = ArchiveListElement;
+export default ArchiveListElement;

@@ -1,19 +1,18 @@
 "use strict";
 
-const React = require("react");
-const ReactDOM = require("react-dom");
-
-require("index.sass");
-
-const {
+import React from "react";
+import ReactDOM from "react-dom";
+import {
     Router,
     Route,
     Link,
     IndexRoute,
     hashHistory
-} = require("react-router");
+} from "react-router";
 
-const App = require("./App");
+import App from "./App";
+
+import "index.sass";
 
 ReactDOM.render((
     <Router history={hashHistory}>

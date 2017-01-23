@@ -1,4 +1,4 @@
-const styles = require("../../common/styles.js");
+import styles from "../../common/styles";
 
 window.Buttercup = {
 

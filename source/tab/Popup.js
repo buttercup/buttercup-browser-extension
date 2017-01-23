@@ -11,19 +11,6 @@ import ICON_SEARCH from "../common/images/search.png";
 import ICON_SAVE from "../common/images/save.png";
 import ICON_KEY from "../common/images/key.png";
 
-// const {
-//     el,
-//     mount
-// } = require("redom");
-// const EventEmitter = require("events").EventEmitter;
-
-// const matching = require("./matching.js");
-// const config = require("../common/config.js");
-
-// const ICON_SEARCH = require("../common/images/search.png");
-// const ICON_SAVE = require("../common/images/save.png");
-// const ICON_KEY = require("../common/images/key.png");
-
 const BUTTON_SIZE = 30;
 const BUTTON_IMAGE_SIZE = 24;
 const LIST_ITEM_HEIGHT = 28;

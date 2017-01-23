@@ -1,10 +1,8 @@
-'use strict';
+import React from "react";
 
-const React = require("react");
+import ArchiveListElement from "./ArchiveListElement";
 
-require("ArchiveList.sass");
-
-const ArchiveListElement = require("./ArchiveListElement");
+import "ArchiveList.sass";
 
 class ArchiveList extends React.Component {
 
@@ -63,4 +61,4 @@ class ArchiveList extends React.Component {
 
 }
 
-module.exports = ArchiveList;
+export default ArchiveList;

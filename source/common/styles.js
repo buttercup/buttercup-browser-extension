@@ -1,8 +1,8 @@
 let __placedStylesheet = false;
 
-const OPEN_SANS = require("../../resources/OpenSans-regular.ttf");
+import OPEN_SANS from "../../resources/OpenSans-regular.ttf";
 
-module.exports = {
+export default {
 
     placeStylesheet: function() {
         if (__placedStylesheet) {

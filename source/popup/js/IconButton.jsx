@@ -1,17 +1,8 @@
-'use strict';
+import React from "react";
 
-const React = require("react");
-
-require("IconButton.sass");
+import "IconButton.sass";
 
 class IconButton extends React.Component {
-
-    // buttonClicked(event) {
-    //     event.preventDefault();
-    //     if (this.props.onClick) {
-    //         this.props.onClick(event);
-    //     }
-    // }
 
     render() {
         let renderProps = Object.assign({}, this.props);
@@ -30,4 +21,4 @@ class IconButton extends React.Component {
 
 }
 
-module.exports = IconButton;
+export default IconButton;

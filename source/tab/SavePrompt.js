@@ -7,15 +7,6 @@ import { EventEmitter } from "events";
 
 import config from "../common/config";
 
-// const {
-//     el,
-//     mount,
-//     unmount
-// } = require("redom");
-// const EventEmitter = require("events").EventEmitter;
-
-// const config = require("../common/config.js");
-
 const NOPE = function() {};
 const BUTTON_STYLES = {
     width: "50px",

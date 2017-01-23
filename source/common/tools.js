@@ -1,6 +1,6 @@
 "use strict";
 
-let tools = module.exports = {
+let tools = {
 
     niceType: function(type) {
         switch (type) {
@@ -22,3 +22,5 @@ let tools = module.exports = {
     }
 
 };
+
+export default tools;
