@@ -1,8 +1,6 @@
-"use strict";
-
-const archives = require("./archives.js");
-const dropbox = require("./dropbox.js");
-const DropboxAuthenticator = require("./DropboxAuthenticator.js");
+import archives from "./archives";
+import dropbox from "./dropboxToken";
+import DropboxAuthenticator from "./DropboxAuthenticator";
 
 const StorageInterface = window.Buttercup.Web.StorageInterface;
 
@@ -20,7 +18,7 @@ function getEntriesForURL(url) {
     return matchingEntries;
 }
 
-module.exports = function addListeners() {
+export default function addListeners() {
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         switch(request.command) {

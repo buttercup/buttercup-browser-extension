@@ -1,9 +1,10 @@
-const Dropbox = require("dropbox");
-const dbTools = require("./dropbox.js");
+import Dropbox from "dropbox";
+import dbTools from "./dropboxToken";
 
 class DropboxAuthenticator {
 
     constructor(accessToken) {
+        console.log(Dropbox);
         this._token = accessToken || null;
         this._client = (accessToken) ?
             new Dropbox({ accessToken }) :
@@ -40,4 +41,4 @@ class DropboxAuthenticator {
 
 }
 
-module.exports = DropboxAuthenticator;
+export default DropboxAuthenticator;

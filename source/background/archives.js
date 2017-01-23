@@ -1,6 +1,4 @@
-"use strict";
-
-const validation = require("./validate.js");
+import validation from "./validate.js";
 
 const Buttercup = window.Buttercup;
 const {
@@ -44,7 +42,7 @@ function validateAndSave(name, workspace, credentials, password) {
         });
 }
 
-let archives = module.exports = {
+let archives = {
 
     addArchiveByRequest: function(request) {
         return Promise.resolve(request)
@@ -296,3 +294,5 @@ let archives = module.exports = {
     }
 
 };
+
+export default archives;

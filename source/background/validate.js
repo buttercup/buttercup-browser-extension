@@ -1,4 +1,4 @@
-let validate = module.exports = {
+let validate = {
 
     archiveNameAvailable: function(name) {
         return Buttercup.Web.archiveManager.archives.hasOwnProperty(name) === false;
@@ -60,3 +60,5 @@ let validate = module.exports = {
     }
 
 };
+
+export default validate;

@@ -27,6 +27,9 @@ const additionalPlugins = process.env.NODE_ENV === "production" ?
             compress: {
                 warnings: false
             }
+        }),
+        new webpack.DefinePlugin({
+            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
         })
     ] : [];
 
@@ -107,7 +110,8 @@ module.exports = [
             extensions: [".js"],
             modules: [
                 SRC_TAB,
-                SRC_COMMON
+                SRC_COMMON,
+                NODE_MODULES
             ]
         }
     },
@@ -128,6 +132,9 @@ module.exports = [
             rules: [
                 {
                     test: /\.js$/,
+                    include: [
+                        path.resolve(NODE_MODULES, "./any-fs")
+                    ],
                     exclude: [
                         NODE_MODULES
                     ],
@@ -262,7 +269,8 @@ module.exports = [
             modules: [
                 path.resolve(SRC_POPUP, "js"),
                 path.resolve(SRC_POPUP, "sass"),
-                SRC_COMMON
+                SRC_COMMON,
+                NODE_MODULES
             ]
         }
     }
