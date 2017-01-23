@@ -17,7 +17,7 @@
     "copy:setup": "cp ./source/setup/index.html build/setup.html",
     "copy:tab": "cp ./source/popup/index.html build/popup.html",
     "dev": "npm run clean:build && concurrently --raw 'npm run watch:html' 'npm run webpack -- --watch'",
-    "release": "npm run clean && npm run build && cp -r build/ dist/",
+    "release": "npm run clean && NODE_ENV=production npm run build && cp -r build/ dist/",
     "test": "npm run test:lint",
     "test:lint": "node node_modules/eslint/bin/eslint.js source/",
     "watch:html": "watch-run 'npm run copy:dev' -p source/setup/*.html,source/popup/*.html,node_modules/buttercup-web/build/*.js -i -s",
@@ -77,7 +77,7 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "watch-run": "^1.2.4",
-    "webdav-fs": "1.0.0-rc3",
+    "webdav-fs": "1.0.0-rc5",
     "webpack": "^1.13.2"
   }
 }

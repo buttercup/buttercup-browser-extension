@@ -17,6 +17,14 @@ const imageWebpackLoader = {
     }
 };
 
+const additionalPlugins = process.env.NODE_ENV === "production" ?
+    [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        })
+    ] : [];
 
 module.exports = [
 
@@ -36,6 +44,9 @@ module.exports = [
                 }
             ]
         },
+        plugins: [
+            ...additionalPlugins
+        ],
         resolve: {
             extensions: ['', '.js'],
             fallback: [path.join(__dirname, "node_modules")]
@@ -70,6 +81,9 @@ module.exports = [
                 }
             ]
         },
+        plugins: [
+            ...additionalPlugins
+        ],
         resolve: {
             extensions: ['', '.js'],
             root: [
@@ -136,7 +150,8 @@ module.exports = [
             fs: "empty"
         },
         plugins: [
-            new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop")
+            new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop"),
+            ...additionalPlugins
         ],
         externals: {
             // don't bundle the 'react' npm package with our bundle.js
@@ -200,6 +215,9 @@ module.exports = [
             // but get it from a global 'React' variable
             // 'react': 'React'
         },
+        plugins: [
+            ...additionalPlugins
+        ],
         resolve: {
             extensions: ['', '.js', '.jsx', '.sass'],
             root: [
