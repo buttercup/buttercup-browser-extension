@@ -1,11 +1,20 @@
-const {
+import {
     el,
     mount,
     unmount
-} = require("redom");
-const EventEmitter = require("events").EventEmitter;
+} from "redom";
+import { EventEmitter } from "events";
 
-const config = require("../common/config.js");
+import config from "../common/config";
+
+// const {
+//     el,
+//     mount,
+//     unmount
+// } = require("redom");
+// const EventEmitter = require("events").EventEmitter;
+
+// const config = require("../common/config.js");
 
 const NOPE = function() {};
 const BUTTON_STYLES = {
@@ -128,4 +137,4 @@ class SavePrompt extends EventEmitter {
 
 }
 
-module.exports = SavePrompt;
+export default SavePrompt;

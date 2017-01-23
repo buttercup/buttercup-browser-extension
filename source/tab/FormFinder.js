@@ -1,4 +1,4 @@
-const LoginForm = require("./LoginForm.js");
+import LoginForm from "./LoginForm";
 
 const FORM_QUERIES = [
     `form[id*=login]`,
@@ -44,4 +44,4 @@ class FormFinder {
 
 }
 
-module.exports = FormFinder;
+export default FormFinder;

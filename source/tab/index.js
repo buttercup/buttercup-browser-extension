@@ -1,6 +1,6 @@
-const FormFinder = require("./FormFinder.js");
-const submissions = require("./submissions.js");
-const styles = require("../common/styles.js");
+import FormFinder from "./FormFinder";
+import submissions from "./submissions";
+import styles from "../common/styles";
 
 let ff = new FormFinder();
 ff.findLoginForms().forEach(function(form) {

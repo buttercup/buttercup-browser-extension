@@ -1,6 +1,6 @@
-const Popup = require("./popup.js");
-const authentication = require("./authentication.js");
-const submissions = require("./submissions.js");
+import Popup from "./popup";
+import authentication from "./authentication";
+import submissions from "./submissions";
 
 const BUTTERCUP_LOGO = require("../common/images/logo-small.png");
 
@@ -207,4 +207,4 @@ class LoginForm {
 
 }
 
-module.exports = LoginForm;
+export default LoginForm;

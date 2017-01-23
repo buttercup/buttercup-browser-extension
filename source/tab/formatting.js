@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 
     formatURLForSaving: function(url) {
         // strip protocol

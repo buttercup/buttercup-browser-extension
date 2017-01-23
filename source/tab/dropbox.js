@@ -1,6 +1,6 @@
 const NOPE = function() {};
 
-module.exports = {
+export default {
 
     processAccessToken: function(fragment) {
         fragment = fragment.replace(/^#/, "");

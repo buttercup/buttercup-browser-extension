@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 
     getEntryData: function(archiveID, entryID) {
         return new Promise(function(resolve, reject) {

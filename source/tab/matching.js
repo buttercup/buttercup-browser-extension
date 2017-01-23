@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 
     getItemsForCurrentURL: function() {
         let currentURL = window.location.href;
