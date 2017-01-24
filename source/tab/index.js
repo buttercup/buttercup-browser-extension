@@ -1,6 +1,7 @@
 import FormFinder from "./FormFinder";
 import submissions from "./submissions";
-import { placeStylesheet } from "../../common/styles";
+import { placeStylesheet } from "../common/styles";
+import { processAccessToken } from "./dropbox";
 
 let ff = new FormFinder();
 ff.findLoginForms().forEach(function(form) {
@@ -11,7 +12,7 @@ placeStylesheet();
 submissions.processLastSubmission();
 
 if (/^https:\/\/buttercup\.pw/i.test(window.location.href)) {
-    require("./dropbox.js").processAccessToken(window.location.hash);
+    processAccessToken(window.location.hash);
 }
 
 // let SP = require("./SavePrompt.js"),
