@@ -17,8 +17,8 @@ let tools = {
     },
 
     ucFirst: function(text) {
-        text = text.toLowerCase();
-        return text.charAt(0).toUpperCase() + text.substr(1);
+        let formattedText = text.toLowerCase();
+        return formattedText.charAt(0).toUpperCase() + formattedText.substr(1);
     }
 
 };

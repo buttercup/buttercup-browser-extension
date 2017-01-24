@@ -12,7 +12,7 @@ let validate = {
         }
         validate.validateObjectString(request, "name");
         validate.validateObjectString(request, "master_password");
-        switch(request.type) {
+        switch (request.type) {
             case "dropbox": {
                 validate.validateObjectString(request, "dropbox_path");
                 validate.validateObjectString(request, "dropbox_token");
@@ -47,7 +47,7 @@ let validate = {
         if (!workspace) {
             throw new Error("Workspace is undefined");
         }
-        let { archive, datasource, password } = workspace.primary;
+        let { archive, datasource /* , password */ } = workspace.primary;
         try {
             archive.getGroups();
         } catch (err) {

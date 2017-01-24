@@ -3,8 +3,8 @@ const NOPE = function() {};
 export default {
 
     processAccessToken: function(fragment) {
-        fragment = fragment.replace(/^#/, "");
-        let blocks = (fragment || "").split("&"),
+        let frag = fragment.replace(/^#/, "");
+        let blocks = (frag || "").split("&"),
             blockNum = blocks.length;
         for (let i = 0; i < blockNum; i += 1) {
             let [ key, value ] = blocks[i].split("=");

@@ -3,9 +3,7 @@ import ReactDOM from "react-dom";
 import {
     Router,
     Route,
-    Link,
     IndexRoute,
-    useRouterHistory,
     hashHistory
 } from "react-router";
 import App from "./App";

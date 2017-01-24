@@ -1,12 +1,5 @@
-/*
-<input type="hidden" name="archiveID" value={this.state.archiveID} onChange={(e) => this.handleChange(e)} />
-<input type="hidden" name="groupID" value={this.state.groupID} onChange={(e) => this.handleChange(e)} />
-*/
-
-"use strict";
-
-const React = require("react");
-const ArchiveGroupExplorerNode = require("./ArchiveGroupExplorerNode");
+import React from "react";
+import ArchiveGroupExplorerNode from "./ArchiveGroupExplorerNode";
 
 const NOPE = function() {};
 
@@ -74,4 +67,4 @@ class ArchiveGroupExplorer extends React.Component {
 
 }
 
-module.exports = ArchiveGroupExplorer;
+export default ArchiveGroupExplorer;

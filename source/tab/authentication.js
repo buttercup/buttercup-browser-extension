@@ -8,7 +8,7 @@ export default {
                 if (response.ok !== true) {
                     return reject(new Error(response.error || "Failed fetching entry for ID"));
                 }
-                resolve(response.data);
+                return resolve(response.data);
             });
         });
     }

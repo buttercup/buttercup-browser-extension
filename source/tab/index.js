@@ -1,13 +1,13 @@
 import FormFinder from "./FormFinder";
 import submissions from "./submissions";
-import styles from "../common/styles";
+import { placeStylesheet } from "../../common/styles";
 
 let ff = new FormFinder();
 ff.findLoginForms().forEach(function(form) {
     form.placeContextButton();
 });
 
-styles.placeStylesheet();
+placeStylesheet();
 submissions.processLastSubmission();
 
 if (/^https:\/\/buttercup\.pw/i.test(window.location.href)) {

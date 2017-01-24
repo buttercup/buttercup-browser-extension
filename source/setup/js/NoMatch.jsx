@@ -1,20 +1,17 @@
-"use strict";
-
-const React = require("react");
-
-const {
-    Link
-} = require("react-router");
+import React from "react";
+import { Link } from "react-router";
 
 class NoMatch extends React.Component {
 
     render() {
-        return <div>
-            <h3>Bad link</h3>
-            <Link to="/">Return home</Link>
-        </div>
+        return (
+            <div>
+                <h3>Bad link</h3>
+                <Link to="/">Return home</Link>
+            </div>
+        );
     }
 
 }
 
-module.exports = NoMatch;
+export default NoMatch;

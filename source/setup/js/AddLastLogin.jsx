@@ -1,8 +1,6 @@
-"use strict";
+import React from "react";
 
-const React = require("react");
-
-const AddLastLoginForm = require("./AddLastLoginForm");
+import AddLastLoginForm from "./AddLastLoginForm";
 
 class UnlockArchive extends React.Component {
 
@@ -15,4 +13,4 @@ class UnlockArchive extends React.Component {
 
 }
 
-module.exports = UnlockArchive;
+export default UnlockArchive;

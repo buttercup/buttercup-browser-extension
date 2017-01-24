@@ -27,7 +27,7 @@ class DropboxAuthenticator {
         let callbackURL = "https://buttercup.pw/",
             dropboxURL = this.client.getAuthenticationUrl(callbackURL);
         chrome.tabs.create({ url: dropboxURL });
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             let interval = setInterval(() => {
                 let token = dbTools.getToken();
                 if (token) {

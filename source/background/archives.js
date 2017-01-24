@@ -48,7 +48,7 @@ let archives = {
         return Promise.resolve(request)
             .then(validation.validateArchiveAddition)
             .then(function() {
-                switch(request.type) {
+                switch (request.type) {
                     case "webdav": {
                         return archives.addWebDAVArchive(request);
                     }
@@ -118,7 +118,7 @@ let archives = {
                     endpoint: request.owncloud_address,
                     path: request.owncloud_path
                 }));
-                return owncloudCreds;  
+                return owncloudCreds;
             })
             .then(function(credentials) {
                 let datasource = new OwnCloudDatasource(
@@ -162,7 +162,7 @@ let archives = {
                     endpoint: request.webdav_address,
                     path: request.webdav_path
                 }));
-                return webdavCreds;  
+                return webdavCreds;
             })
             .then(function(credentials) {
                 let datasource = new WebDAVDatasource(

@@ -1,6 +1,4 @@
-"use strict";
-
-const React = require("react");
+import React from "react";
 
 class UnlockArchiveForm extends React.Component {
 
@@ -55,9 +53,9 @@ class UnlockArchiveForm extends React.Component {
                 </label>
                 <input type="submit" value="Unlock" onClick={(e) => this.handleSubmit(e)} />
             </fieldset>
-        </form>
+        </form>;
     }
 
 }
 
-module.exports = UnlockArchiveForm;
+export default UnlockArchiveForm;

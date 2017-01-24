@@ -1,9 +1,8 @@
-"use strict";
+import React from "react";
 
-const React = require("react");
-const ArchiveGroupExplorer = require("./ArchiveGroupExplorer");
+import ArchiveGroupExplorer from "./ArchiveGroupExplorer";
 
-require("AddLastLoginForm.sass");
+import "AddLastLoginForm.sass";
 
 const NOPE = function() {};
 
@@ -120,4 +119,4 @@ class AddLastLoginForm extends React.Component {
 
 }
 
-module.exports = AddLastLoginForm;
+export default AddLastLoginForm;

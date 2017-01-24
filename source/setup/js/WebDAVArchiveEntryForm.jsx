@@ -1,11 +1,9 @@
-"use strict";
+import React from "react";
+import createWebDAVFS from "webdav-fs";
+import anyFs from "any-fs";
 
-const React = require("react");
-const createWebDAVFS = require("webdav-fs");
-const anyFs = require("any-fs");
-
-const BaseFSArchiveEntryForm = require("./BaseFSArchiveEntryForm");
-const ConnectArchiveDialog = require("./ConnectArchiveDialog");
+import BaseFSArchiveEntryForm from "./BaseFSArchiveEntryForm";
+import ConnectArchiveDialog from "./ConnectArchiveDialog";
 
 class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
 
@@ -97,9 +95,9 @@ class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
                         onArchiveSelected={(...args) => this.onArchiveSelected(...args)}
                         />
             </div>
-        </div>
+        </div>;
     }
 
 }
 
-module.exports = WebDAVArchiveEntryForm;
+export default WebDAVArchiveEntryForm;

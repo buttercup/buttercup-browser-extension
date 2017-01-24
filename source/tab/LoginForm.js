@@ -7,24 +7,24 @@ const BUTTERCUP_LOGO = require("../common/images/logo-small.png");
 const INPUT_QUERY = {
 
     USERNAME: [
-        `input[name=username]`,
-        `input[id=username]`,
-        `input[name*=username]`,
-        `input[id*=username]`,
-        `input[name=email]`,
-        `input[id=email]`,
-        `input[name*=user]`,
-        `input[id*=user]`,
-        `input[name*=email]`
+        "input[name=username]",
+        "input[id=username]",
+        "input[name*=username]",
+        "input[id*=username]",
+        "input[name=email]",
+        "input[id=email]",
+        "input[name*=user]",
+        "input[id*=user]",
+        "input[name*=email]"
     ],
 
     PASSWORD: [
-        `input[name=password]`,
-        `input[id=password]`,
-        `input[type=password]`,
-        `input[name*=password]`,
-        `input[name*=pass]`,
-        `input[id*=pass]`
+        "input[name=password]",
+        "input[id=password]",
+        "input[type=password]",
+        "input[name*=password]",
+        "input[name*=pass]",
+        "input[id*=pass]"
     ]
 
 };
@@ -32,7 +32,7 @@ const INPUT_QUERY = {
 function applyStyles(el, styles) {
     Object
         .keys(styles)
-        .forEach(function(styleName) {
+        .forEach(function setStyle(styleName) {
             el.style[styleName] = styles[styleName];
         });
 }
@@ -67,7 +67,7 @@ class LoginForm {
     }
 
     fetchValues() {
-        return this.inputs.map(function(inputRecord) {
+        return this.inputs.map(function mapInput(inputRecord) {
             let value = inputRecord.input.value,
                 data = Object.assign({
                     value
@@ -78,7 +78,7 @@ class LoginForm {
     }
 
     filloutForm(entryData) {
-        this.inputs.forEach(function(inputRecord) {
+        this.inputs.forEach(function mapInput(inputRecord) {
             let { type, input } = inputRecord;
             if (type === "property") {
                 let property = inputRecord.property,
@@ -134,7 +134,7 @@ class LoginForm {
             });
     }
 
-    onFormSubmit(e) {
+    onFormSubmit() {
         let values = this.fetchValues();
         submissions.trackFormData(values);
     }

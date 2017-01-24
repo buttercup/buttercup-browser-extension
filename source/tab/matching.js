@@ -9,7 +9,7 @@ export default {
                 if (response.ok !== true) {
                     return reject(new Error(response.error || "Failed fetching entries for URL"));
                 }
-                resolve(response.entries);
+                return resolve(response.entries);
             });
         });
     }

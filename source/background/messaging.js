@@ -19,15 +19,14 @@ function getEntriesForURL(url) {
 }
 
 export default function addListeners() {
-
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-        switch(request.command) {
+        switch (request.command) {
 
             case "add-archive": {
                 let archiveData = request.data;
                 archives
                     .addArchiveByRequest(archiveData)
-                    .then(function(result) {
+                    .then(function() {
                         sendResponse({
                             ok: true
                         });
@@ -93,7 +92,7 @@ export default function addListeners() {
                 sendResponse({
                     ok: true,
                     entries: matchingEntries
-                })
+                });
                 break;
             }
 
@@ -145,7 +144,7 @@ export default function addListeners() {
             }
 
             case "open-add-last-login": {
-                chrome.tabs.create({'url': chrome.extension.getURL('setup.html#/addLastLogin')}, function() {});
+                chrome.tabs.create({ url: chrome.extension.getURL("setup.html#/addLastLogin")}, function() {});
                 break;
             }
 
@@ -198,7 +197,7 @@ export default function addListeners() {
                     .setProperty("username", data.username)
                     .setProperty("password", data.password)
                     .setMeta("URL", data.url)
-                    .setMeta("LoginURL", data.loginURL)
+                    .setMeta("LoginURL", data.loginURL);
                 workspace
                     .save()
                     .then(function() {
@@ -246,5 +245,4 @@ export default function addListeners() {
         }
         return RESPOND_SYNC;
     });
-
-};
+}

@@ -1,11 +1,4 @@
-"use strict";
-
-const React = require("react");
-const createWebDAVFS = require("webdav-fs");
-const anyFs = require("any-fs");
-
-const ArchiveEntryForm = require("./ArchiveEntryForm");
-const ConnectArchiveDialog = require("./ConnectArchiveDialog");
+import ArchiveEntryForm from "./ArchiveEntryForm";
 
 class BaseFSArchiveEntryForm extends ArchiveEntryForm {
 
@@ -47,4 +40,4 @@ class BaseFSArchiveEntryForm extends ArchiveEntryForm {
 
 }
 
-module.exports = BaseFSArchiveEntryForm;
+export default BaseFSArchiveEntryForm;
