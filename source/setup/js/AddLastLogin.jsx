@@ -1,16 +1,20 @@
 import React from "react";
 
+import HeaderBar from "./HeaderBar";
 import AddLastLoginForm from "./AddLastLoginForm";
 
-class UnlockArchive extends React.Component {
+class AddLastLogin extends React.Component {
 
     render() {
-        return <div>
-            <h3>Add new entry</h3>
-            <AddLastLoginForm />
-        </div>
+        return (
+            <div>
+                <HeaderBar />
+                <h3>Add new entry</h3>
+                <AddLastLoginForm />
+            </div>
+        );
     }
 
 }
 
-export default UnlockArchive;
+export default AddLastLogin;
