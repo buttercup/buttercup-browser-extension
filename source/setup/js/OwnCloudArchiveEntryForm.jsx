@@ -35,10 +35,9 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
                 this.state.owncloud_username,
                 this.state.owncloud_password
             );
-        } else {
-            wfs = createWebDAVFS(owncloudAddress);
+            return anyFs(wfs);
         }
-        return anyFs(wfs);
+        return null;
     }
 
     onArchiveSelected(filePath, createNew) {

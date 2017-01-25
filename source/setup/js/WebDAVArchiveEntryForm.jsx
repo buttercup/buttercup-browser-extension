@@ -32,10 +32,9 @@ class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
                 this.state.webdav_username,
                 this.state.webdav_password
             );
-        } else {
-            wfs = createWebDAVFS(this.state.webdav_address);
+            return anyFs(wfs);
         }
-        return anyFs(wfs);
+        return null;
     }
 
     onArchiveSelected(filePath, createNew) {
