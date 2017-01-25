@@ -1,12 +1,34 @@
 import React from "react";
-import ArchiveGroupExplorerNode from "./ArchiveGroupExplorerNode";
+// import ArchiveGroupExplorerNode from "./ArchiveGroupExplorerNode";
+import Tree from "rc-tree";
 
+import "rc-tree/assets/index.css";
+
+const { TreeNode } = Tree;
+
+const KEY_SEPARATOR = "!!::!!";
 const NOPE = function() {};
 
 function closeTab() {
     chrome.tabs.getCurrent(function(tab) {
         chrome.tabs.remove(tab.id, NOPE);
     });
+}
+
+function createLeaf(item) {
+    let isArchive = item.hasOwnProperty("archiveID"),
+        key = isArchive ? `!${item.archiveID}` : item.groupID,
+        title = item.name || item.title;
+    return (
+        <TreeNode
+            className={isArchive ? "archive" : "group"}
+            title={title}
+            key={`${key}${KEY_SEPARATOR}${title}`}
+            isLeaf={false}
+            >
+            {item.groups && item.groups.map(createLeaf)}
+        </TreeNode>
+    );
 }
 
 class ArchiveGroupExplorer extends React.Component {
@@ -17,7 +39,9 @@ class ArchiveGroupExplorer extends React.Component {
             archives: [],
             archiveID: "",
             groupID: "",
-            chosen: ""
+            chosen: "",
+            chosenTitle: "",
+            selectedKeys: []
         };
     }
 
@@ -27,10 +51,9 @@ class ArchiveGroupExplorer extends React.Component {
 
     fetchArchivesAndGroups() {
         chrome.runtime.sendMessage({ command: "archives-and-groups" }, (response) => {
-            console.log("RESP", response);
             if (response && response.ok === true) {
                 this.setState({
-                    archives: response.archives 
+                    archives: response.archives
                 });
             } else {
                 alert("There was an error fetching archives:\n" + response.error);
@@ -39,26 +62,31 @@ class ArchiveGroupExplorer extends React.Component {
         });
     }
 
-    onSelect(itemDetails) {
-        this.setState({
-            chosen: itemDetails.title,
-            archiveID: itemDetails.archiveID,
-            groupID: itemDetails.id
-        });
-        if (this.props.onSelect) {
-            this.props.onSelect(itemDetails.archiveID, itemDetails.id);
+    onSelect(nodes) {
+        let selectedKeys = [...nodes],
+            key = nodes.shift(),
+            [id, title] = key.split(KEY_SEPARATOR);
+        if (/^[^!]/.test(id)) {
+            this.setState({
+                chosen: id,
+                chosenTitle: title,
+                selectedKeys
+            });
         }
     }
 
     render() {
-        let archives = this.state.archives.map(archive =>
-            <ArchiveGroupExplorerNode key={archive.archiveID} {...archive} onSelect={this.onSelect.bind(this)} />
-        );
+        let treeNodes = this.state.archives.map(archive => createLeaf(archive));
         return <div>
-            {archives}
+            <Tree
+                onSelect={(...args) => this.onSelect(...args)}
+                selectedKeys={this.state.selectedKeys}
+                >
+                {treeNodes}
+            </Tree>
             <label>
                 Target group:
-                <input type="text" name="chosen" value={this.state.chosen} readOnly />
+                <input type="text" name="chosenTitle" value={this.state.chosenTitle} readOnly />
             </label>
             <input type="hidden" name="archiveID" value={this.state.archiveID} />
             <input type="hidden" name="groupID" value={this.state.groupID} />

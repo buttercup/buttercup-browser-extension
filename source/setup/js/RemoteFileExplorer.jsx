@@ -87,9 +87,8 @@ class RemoteFileExplorer extends Component {
         let targetPath = treeNode.props.eventKey;
         if (this.state.dirContents[targetPath]) {
             return Promise.resolve();
-        } else {
-            return this.fetchDirectory(targetPath);
         }
+        return this.fetchDirectory(targetPath);
     }
 
     onSelect(nodes, event) {
