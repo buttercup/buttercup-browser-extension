@@ -1,10 +1,10 @@
 import React from "react";
-// import ArchiveGroupExplorerNode from "./ArchiveGroupExplorerNode";
 import Tree from "rc-tree";
 
 import "rc-tree/assets/index.css";
 
 const { TreeNode } = Tree;
+const { PropTypes } = React;
 
 const KEY_SEPARATOR = "!!::!!";
 const NOPE = function() {};
@@ -15,18 +15,20 @@ function closeTab() {
     });
 }
 
-function createLeaf(item) {
+function createLeaf(item, parentArchiveID) {
+    let archiveID = parentArchiveID || item.archiveID;
     let isArchive = item.hasOwnProperty("archiveID"),
-        key = isArchive ? `!${item.archiveID}` : item.groupID,
-        title = item.name || item.title;
+        // key = isArchive ? `!${item.archiveID}` : item.groupID,
+        title = item.name || item.title,
+        groupID = isArchive ? "0" : item.groupID;
     return (
         <TreeNode
             className={isArchive ? "archive" : "group"}
             title={title}
-            key={`${key}${KEY_SEPARATOR}${title}`}
+            key={`${title}${KEY_SEPARATOR}${archiveID}${KEY_SEPARATOR}${groupID}`}
             isLeaf={false}
             >
-            {item.groups && item.groups.map(createLeaf)}
+            {item.groups && item.groups.map(group => createLeaf(group, archiveID))}
         </TreeNode>
     );
 }
@@ -40,7 +42,6 @@ class ArchiveGroupExplorer extends React.Component {
             archiveID: "",
             groupID: "",
             chosen: "",
-            chosenTitle: "",
             selectedKeys: []
         };
     }
@@ -65,34 +66,41 @@ class ArchiveGroupExplorer extends React.Component {
     onSelect(nodes) {
         let selectedKeys = [...nodes],
             key = nodes.shift(),
-            [id, title] = key.split(KEY_SEPARATOR);
-        if (/^[^!]/.test(id)) {
+            [title, archiveID, groupID] = key.split(KEY_SEPARATOR);
+        if (groupID !== "0") {
             this.setState({
-                chosen: id,
-                chosenTitle: title,
+                archiveID,
+                groupID,
+                chosen: title,
                 selectedKeys
             });
+            this.props.onSelect(archiveID, groupID);
         }
     }
 
     render() {
         let treeNodes = this.state.archives.map(archive => createLeaf(archive));
-        return <div>
-            <Tree
-                onSelect={(...args) => this.onSelect(...args)}
-                selectedKeys={this.state.selectedKeys}
-                >
-                {treeNodes}
-            </Tree>
-            <label>
-                Target group:
-                <input type="text" name="chosenTitle" value={this.state.chosenTitle} readOnly />
-            </label>
-            <input type="hidden" name="archiveID" value={this.state.archiveID} />
-            <input type="hidden" name="groupID" value={this.state.groupID} />
-        </div>;
+        return (
+            <div className="row">
+                <Tree
+                    onSelect={(...args) => this.onSelect(...args)}
+                    selectedKeys={this.state.selectedKeys}
+                    >
+                    {treeNodes}
+                </Tree>
+                <div className="targetGroup">
+                    {this.state.chosen}
+                </div>
+                <input type="hidden" name="archiveID" value={this.state.archiveID} />
+                <input type="hidden" name="groupID" value={this.state.groupID} />
+            </div>
+        );
     }
 
 }
+
+ArchiveGroupExplorer.propTypes = {
+    onSelect:       PropTypes.func.isRequired
+};
 
 export default ArchiveGroupExplorer;
