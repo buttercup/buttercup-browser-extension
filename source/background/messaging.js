@@ -1,8 +1,6 @@
-"use strict";
-
-const archives = require("./archives.js");
-const dropbox = require("./dropbox.js");
-const DropboxAuthenticator = require("./DropboxAuthenticator.js");
+import archives from "./archives";
+import dropbox from "./dropboxToken";
+import DropboxAuthenticator from "./DropboxAuthenticator";
 
 const StorageInterface = window.Buttercup.Web.StorageInterface;
 
@@ -20,16 +18,15 @@ function getEntriesForURL(url) {
     return matchingEntries;
 }
 
-module.exports = function addListeners() {
-
+export default function addListeners() {
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-        switch(request.command) {
+        switch (request.command) {
 
             case "add-archive": {
                 let archiveData = request.data;
                 archives
                     .addArchiveByRequest(archiveData)
-                    .then(function(result) {
+                    .then(function() {
                         sendResponse({
                             ok: true
                         });
@@ -95,7 +92,7 @@ module.exports = function addListeners() {
                 sendResponse({
                     ok: true,
                     entries: matchingEntries
-                })
+                });
                 break;
             }
 
@@ -147,7 +144,7 @@ module.exports = function addListeners() {
             }
 
             case "open-add-last-login": {
-                chrome.tabs.create({'url': chrome.extension.getURL('setup.html#/addLastLogin')}, function() {});
+                chrome.tabs.create({ url: chrome.extension.getURL("setup.html#/addLastLogin")}, function() {});
                 break;
             }
 
@@ -200,7 +197,7 @@ module.exports = function addListeners() {
                     .setProperty("username", data.username)
                     .setProperty("password", data.password)
                     .setMeta("URL", data.url)
-                    .setMeta("LoginURL", data.loginURL)
+                    .setMeta("LoginURL", data.loginURL);
                 workspace
                     .save()
                     .then(function() {
@@ -248,5 +245,4 @@ module.exports = function addListeners() {
         }
         return RESPOND_SYNC;
     });
-
-};
+}

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 
     getItemsForCurrentURL: function() {
         let currentURL = window.location.href;
@@ -9,7 +9,7 @@ module.exports = {
                 if (response.ok !== true) {
                     return reject(new Error(response.error || "Failed fetching entries for URL"));
                 }
-                resolve(response.entries);
+                return resolve(response.entries);
             });
         });
     }

@@ -1,6 +1,6 @@
 "use strict";
 
-let tools = module.exports = {
+let tools = {
 
     niceType: function(type) {
         switch (type) {
@@ -17,8 +17,10 @@ let tools = module.exports = {
     },
 
     ucFirst: function(text) {
-        text = text.toLowerCase();
-        return text.charAt(0).toUpperCase() + text.substr(1);
+        let formattedText = text.toLowerCase();
+        return formattedText.charAt(0).toUpperCase() + formattedText.substr(1);
     }
 
 };
+
+export default tools;

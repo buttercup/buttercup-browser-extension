@@ -1,18 +1,15 @@
-"use strict";
+import React from "react";
+import { hashHistory } from "react-router";
 
-const React = require("react");
-
-const { hashHistory } = require("react-router");
-
-const UnlockArchiveForm = require("./UnlockArchiveForm");
-const HeaderBar = require("./HeaderBar");
+import UnlockArchiveForm from "./UnlockArchiveForm";
+import HeaderBar from "./HeaderBar";
 
 const NOPE = function() {};
 
 class UnlockArchive extends React.Component {
 
     onUnlock() {
-        switch(this.props.params.action) {
+        switch (this.props.params.action) {
             case "return": {
                 hashHistory.goBack();
                 break;
@@ -27,13 +24,15 @@ class UnlockArchive extends React.Component {
     }
 
     render() {
-        return <div>
-            <HeaderBar />
-            <h3>Unlock archive: {this.props.params.name}</h3>
-            <UnlockArchiveForm {...this.props.params} onUnlock={() => this.onUnlock()} />
-        </div>
+        return (
+            <div>
+                <HeaderBar />
+                <h3>Unlock archive: {this.props.params.name}</h3>
+                <UnlockArchiveForm {...this.props.params} onUnlock={() => this.onUnlock()} />
+            </div>
+        );
     }
 
 }
 
-module.exports = UnlockArchive;
+export default UnlockArchive;

@@ -1,12 +1,9 @@
-"use strict";
+import React from "react";
+import { hashHistory } from "react-router";
 
-const React = require("react");
-const { hashHistory } = require("react-router");
+import HeaderBar from "./HeaderBar";
 
-const HeaderBar = require("./HeaderBar");
-
-require("AddArchive.sass");
-
+import "AddArchive.sass";
 
 function browseTo(slug) {
     return () => {
@@ -17,20 +14,22 @@ function browseTo(slug) {
 class AddArchive extends React.Component {
 
     render() {
-        return <div>
-            <HeaderBar />
-            <h3>Add archive from source</h3>
-            <ul className="archiveTypeList">
-                <li className="dropbox" onClick={browseTo("dropbox")}>Dropbox</li>
-                <li className="owncloud" onClick={browseTo("owncloud")}>ownCloud</li>
-                <li className="webdav" onClick={browseTo("webdav")}>WebDAV</li>
-            </ul>
+        return (
             <div>
-                {this.props.children}
+                <HeaderBar />
+                <h3>Add archive from source</h3>
+                <ul className="archiveTypeList">
+                    <li className="dropbox" onClick={browseTo("dropbox")}>Dropbox</li>
+                    <li className="owncloud" onClick={browseTo("owncloud")}>ownCloud</li>
+                    <li className="webdav" onClick={browseTo("webdav")}>WebDAV</li>
+                </ul>
+                <div>
+                    {this.props.children}
+                </div>
             </div>
-        </div>
+        );
     }
 
 }
 
-module.exports = AddArchive;
+export default AddArchive;

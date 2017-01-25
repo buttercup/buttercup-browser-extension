@@ -1,6 +1,4 @@
-"use strict";
-
-const React = require("react");
+import React from "react";
 
 const NOPE = function() {};
 
@@ -32,7 +30,7 @@ class ArchiveEntryForm extends React.Component {
             value = input.value;
         this.setState({
             [name]: value
-        })
+        });
     }
 
     handleCreateNewChange() {
@@ -78,7 +76,7 @@ class ArchiveEntryForm extends React.Component {
                     </button>
                 </div>
             </fieldset>
-        </form>
+        </form>;
     }
 
     renderFormContents() {
@@ -98,4 +96,4 @@ class ArchiveEntryForm extends React.Component {
 
 }
 
-module.exports = ArchiveEntryForm;
+export default ArchiveEntryForm;

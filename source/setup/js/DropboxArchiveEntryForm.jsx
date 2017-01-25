@@ -1,11 +1,10 @@
-"use strict";
+import React from "react";
 
-const React = require("react");
-const createDropboxFS = require("dropbox-fs");
-const anyFs = require("any-fs");
+import createDropboxFS from "dropbox-fs";
+import anyFs from "any-fs";
 
-const ArchiveEntryForm = require("./ArchiveEntryForm");
-const ConnectArchiveDialog = require("./ConnectArchiveDialog");
+import ArchiveEntryForm from "./ArchiveEntryForm";
+import ConnectArchiveDialog from "./ConnectArchiveDialog";
 
 class DropboxArchiveEntryForm extends ArchiveEntryForm {
 
@@ -83,4 +82,4 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
 
 }
 
-module.exports = DropboxArchiveEntryForm;
+export default DropboxArchiveEntryForm;

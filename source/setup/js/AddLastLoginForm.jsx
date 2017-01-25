@@ -1,9 +1,8 @@
-"use strict";
+import React from "react";
 
-const React = require("react");
-const ArchiveGroupExplorer = require("./ArchiveGroupExplorer");
+import ArchiveGroupExplorer from "./ArchiveGroupExplorer";
 
-require("AddLastLoginForm.sass");
+import "AddLastLoginForm.sass";
 
 const NOPE = function() {};
 
@@ -13,12 +12,38 @@ function closeTab() {
     });
 }
 
+function validateDataset(data, soft = true) {
+    let errors = [];
+    if (data.title.trim().length <= 0) {
+        errors.push("Title is empty");
+    }
+    if (data.username.trim().length <= 0) {
+        errors.push("Username is empty");
+    }
+    if (data.password.trim().length <= 0) {
+        errors.push("Password is empty");
+    }
+    if (data.url.trim().length <= 0) {
+        errors.push("URL is empty");
+    }
+    if (data.archiveID.trim().length <= 0) {
+        errors.push("No destination archive chosen");
+    }
+    if (data.groupID.trim().length <= 0) {
+        errors.push("No destination group chosen");
+    }
+    if (errors.length > 0 && !soft) {
+        alert(`Unable to save due to some errors:\n\n${errors.join("\n")}`);
+    }
+    return errors.length === 0;
+}
+
 class AddLastLoginForm extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            canSave: false,
             title: "",
             username: "",
             password: "",
@@ -34,7 +59,7 @@ class AddLastLoginForm extends React.Component {
     }
 
     enable(en = true) {
-        this.setState({ loading: !en });
+        this.setState({ canSave: en });
     }
 
     fetchLastSubmission() {
@@ -65,14 +90,22 @@ class AddLastLoginForm extends React.Component {
         let input = event.target,
             value = input.value,
             name = input.getAttribute("name");
-        this.setState({
-            [name]: value
-        });
+        this.setState(
+            {
+                [name]: value
+            },
+            () => {
+                this.validateChanges();
+            }
+        );
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        this.enable(false);
+        let ok = this.validateChanges(/* quiet check */ false);
+        if (!ok) {
+            return;
+        }
         chrome.runtime.sendMessage({ command: "save-new-entry", data: this.state }, (response) => {
             if (response && response.ok === true) {
                 // @todo show message
@@ -86,38 +119,85 @@ class AddLastLoginForm extends React.Component {
     }
 
     onSelect(archiveID, groupID) {
-        this.setState({ archiveID, groupID });
+        this.setState(
+            { archiveID, groupID },
+            () => {
+                this.validateChanges();
+            }
+        );
     }
 
     render() {
-        return <form className="addLastLogin">
-            <fieldset disabled={this.state.loading}>
-                <ArchiveGroupExplorer onSelect={this.onSelect.bind(this)} />
-                <label>
-                    Title:
-                    <input type="text" name="title" value={this.state.title} onChange={(e) => this.handleChange(e)} />
-                </label>
-                <label>
-                    Username:
-                    <input type="text" name="username" value={this.state.username} onChange={(e) => this.handleChange(e)} />
-                </label>
-                <label>
-                    Password:
-                    <input type="password" name="password" value={this.state.password} onChange={(e) => this.handleChange(e)} />
-                </label>
-                <label>
-                    URL:
-                    <input type="text" name="url" value={this.state.url} onChange={(e) => this.handleChange(e)} />
-                </label>
-                <label>
-                    URL (login):
-                    <input type="text" name="loginURL" value={this.state.loginURL} onChange={(e) => this.handleChange(e)} />
-                </label>
-                <input type="submit" value="Save" onClick={(e) => this.handleSubmit(e)} />
-            </fieldset>
-        </form>
+        return (
+            <form className="addLastLogin buttercup">
+                <fieldset>
+                    <h4>Choose a destination for saving</h4>
+                    <ArchiveGroupExplorer onSelect={this.onSelect.bind(this)} />
+                    <h4>Edit details before saving</h4>
+                    <div className="row">
+                        <input
+                            type="text"
+                            name="title"
+                            value={this.state.title}
+                            onChange={(e) => this.handleChange(e)}
+                            />
+                        <label>Title</label>
+                    </div>
+                    <div className="row">
+                        <input
+                            type="text"
+                            name="username"
+                            value={this.state.username}
+                            onChange={(e) => this.handleChange(e)}
+                            />
+                        <label>Username</label>
+                    </div>
+                    <div className="row">
+                        <input
+                            type="password"
+                            name="password"
+                            value={this.state.password}
+                            onChange={(e) => this.handleChange(e)}
+                            />
+                        <label>Password</label>
+                    </div>
+                    <div className="row">
+                        <input
+                            type="text"
+                            name="url"
+                            value={this.state.url}
+                            onChange={(e) => this.handleChange(e)}
+                            />
+                        <label>URL</label>
+                    </div>
+                    <div className="row">
+                        <input
+                            type="text"
+                            name="loginURL"
+                            value={this.state.loginURL}
+                            onChange={(e) => this.handleChange(e)}
+                            />
+                        <label>URL (login)</label>
+                    </div>
+                    <div className="row">
+                        <button
+                            disabled={!this.state.canSave}
+                            onClick={(e) => this.handleSubmit(e)}
+                            >
+                            Save
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+        );
+    }
+
+    validateChanges(soft = true) {
+        let isValid = validateDataset(this.state, soft);
+        this.enable(isValid);
+        return isValid;
     }
 
 }
 
-module.exports = AddLastLoginForm;
+export default AddLastLoginForm;

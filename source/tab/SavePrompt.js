@@ -1,28 +1,27 @@
-const {
+import {
     el,
     mount,
     unmount
-} = require("redom");
-const EventEmitter = require("events").EventEmitter;
+} from "redom";
+import { EventEmitter } from "events";
 
-const config = require("../common/config.js");
+import config from "../common/config";
 
 const NOPE = function() {};
 const BUTTON_STYLES = {
     width: "50px",
-    // height: "30px",
     backgroundColor: config.BUTTERCUP_GREEN,
-	"-moz-border-radius": "7px",
-	"-webkit-border-radius": "7px",
-	borderRadius: "7px",
-	border: "1px solid #18ab29",
-	display: "block",
-	cursor: "pointer",
-	color: "#ffffff",
-	fontSize: "15px",
-	padding: "6px 10px",
-	textDecoration: "none",
-	textShadow: "0px 1px 0px #2f6627",
+    "-moz-border-radius": "7px",
+    "-webkit-border-radius": "7px",
+    borderRadius: "7px",
+    border: "1px solid #18ab29",
+    display: "block",
+    cursor: "pointer",
+    color: "#ffffff",
+    fontSize: "15px",
+    padding: "6px 10px",
+    textDecoration: "none",
+    textShadow: "0px 1px 0px #2f6627",
     "-webkit-font-smoothing": "auto",
     fontSmooth: "auto"
 };
@@ -33,7 +32,7 @@ function createPrompt(prompt) {
         {
             style: {
                 fontSize: "16px",
-                fontFamily: `Buttercup-OpenSans`,
+                fontFamily: "Buttercup-OpenSans",
                 color: "#FFF",
                 lineHeight: "normal",
                 fontWeight: "normal",
@@ -128,4 +127,4 @@ class SavePrompt extends EventEmitter {
 
 }
 
-module.exports = SavePrompt;
+export default SavePrompt;

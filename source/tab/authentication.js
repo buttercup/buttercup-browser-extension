@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 
     getEntryData: function(archiveID, entryID) {
         return new Promise(function(resolve, reject) {
@@ -8,7 +8,7 @@ module.exports = {
                 if (response.ok !== true) {
                     return reject(new Error(response.error || "Failed fetching entry for ID"));
                 }
-                resolve(response.data);
+                return resolve(response.data);
             });
         });
     }

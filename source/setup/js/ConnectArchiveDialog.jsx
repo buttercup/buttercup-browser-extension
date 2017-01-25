@@ -1,15 +1,13 @@
-"use strict";
+import path from "path";
+import React from "react";
 
-const path = require("path");
-const React = require("react");
+import RemoteFileExplorer from "./RemoteFileExplorer";
+import Rodal from "rodal";
 
-const RemoteFileExplorer = require("./RemoteFileExplorer");
-const Rodal = require("rodal").default;
+import "ConnectArchiveDialog.sass";
 
 const { Component, PropTypes } = React;
 const BUTTERCUP_FILE = /\.bcup$/i;
-
-require("ConnectArchiveDialog.sass");
 
 class ConnectArchiveDialog extends Component {
 
@@ -99,7 +97,7 @@ class ConnectArchiveDialog extends Component {
         return (
             <div className="dialogButtonView sameLine browse">
                 <button disabled={this.props.disabled} onClick={(e) => this.show(e)}>Browse</button>
-                <Rodal 
+                <Rodal
                     visible={this.state.modalVisible}
                     onClose={() => this.hide()}
                     width={700}
@@ -182,4 +180,4 @@ ConnectArchiveDialog.propTypes = {
     onArchiveSelected:      PropTypes.func
 };
 
-module.exports = ConnectArchiveDialog;
+export default ConnectArchiveDialog;

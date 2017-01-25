@@ -1,18 +1,20 @@
-"use strict";
+import React from "react";
 
-const React = require("react");
+import HeaderBar from "./HeaderBar";
+import AddLastLoginForm from "./AddLastLoginForm";
 
-const AddLastLoginForm = require("./AddLastLoginForm");
-
-class UnlockArchive extends React.Component {
+class AddLastLogin extends React.Component {
 
     render() {
-        return <div>
-            <h3>Add new entry</h3>
-            <AddLastLoginForm />
-        </div>
+        return (
+            <div>
+                <HeaderBar />
+                <h3>Add new entry</h3>
+                <AddLastLoginForm />
+            </div>
+        );
     }
 
 }
 
-module.exports = UnlockArchive;
+export default AddLastLogin;

@@ -1,9 +1,10 @@
-const Dropbox = require("dropbox");
-const dbTools = require("./dropbox.js");
+import Dropbox from "dropbox";
+import dbTools from "./dropboxToken";
 
 class DropboxAuthenticator {
 
     constructor(accessToken) {
+        console.log(Dropbox);
         this._token = accessToken || null;
         this._client = (accessToken) ?
             new Dropbox({ accessToken }) :
@@ -26,7 +27,7 @@ class DropboxAuthenticator {
         let callbackURL = "https://buttercup.pw/",
             dropboxURL = this.client.getAuthenticationUrl(callbackURL);
         chrome.tabs.create({ url: dropboxURL });
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             let interval = setInterval(() => {
                 let token = dbTools.getToken();
                 if (token) {
@@ -40,4 +41,4 @@ class DropboxAuthenticator {
 
 }
 
-module.exports = DropboxAuthenticator;
+export default DropboxAuthenticator;

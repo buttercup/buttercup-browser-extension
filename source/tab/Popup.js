@@ -1,15 +1,15 @@
-const {
+import {
     el,
     mount
-} = require("redom");
-const EventEmitter = require("events").EventEmitter;
+} from "redom";
+import { EventEmitter } from "events";
 
-const matching = require("./matching.js");
-const config = require("../common/config.js");
+import matching from "./matching";
+import config from "../common/config";
 
-const ICON_SEARCH = require("../common/images/search.png");
-const ICON_SAVE = require("../common/images/save.png");
-const ICON_KEY = require("../common/images/key.png");
+import ICON_SEARCH from "../common/images/search.png";
+import ICON_SAVE from "../common/images/save.png";
+import ICON_KEY from "../common/images/key.png";
 
 const BUTTON_SIZE = 30;
 const BUTTON_IMAGE_SIZE = 24;
@@ -18,92 +18,92 @@ const MIN_WIDTH = 150;
 
 function createPopup(popup, position, width) {
     const HEIGHT = 130;
-    width = Math.max(width, MIN_WIDTH);
+    let popupWidth = Math.max(width, MIN_WIDTH);
     let list = el(
+        "div",
+        {
+            "data-buttercup-role": "listbox",
+            style: {
+                width: "100%",
+                height: `${HEIGHT - BUTTON_SIZE}px`,
+                position: "absolute",
+                left: "0px",
+                top: `${BUTTON_SIZE + 1}px`,
+                overflowX: "hidden",
+                overflowY: "scroll"
+            }
+        }
+    );
+    let searchButton = el(
+        "div",
+        {
+            title: "Search entries",
+            "data-buttercup-role": "button",
+            style: {
+                width: `${BUTTON_SIZE}px`,
+                height: `${BUTTON_SIZE}px`,
+                position: "relative",
+                display: "inline-block",
+                cursor: "pointer",
+                backgroundImage: `url(${ICON_SEARCH})`,
+                backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat"
+            }
+        }
+    );
+    let saveButton = el(
+        "div",
+        {
+            title: "Save next login",
+            "data-buttercup-role": "button",
+            style: {
+                width: `${BUTTON_SIZE}px`,
+                height: `${BUTTON_SIZE}px`,
+                position: "relative",
+                display: "inline-block",
+                cursor: "pointer",
+                backgroundImage: `url(${ICON_SAVE})`,
+                backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat"
+            }
+        }
+    );
+    let container = el(
+        "div",
+        {
+            "data-buttercup-role": "container",
+            style: {
+                border: "1px solid #000",
+                borderRadius: "2px",
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                position: "absolute",
+                width: `${popupWidth}px`,
+                height: `${HEIGHT}px`,
+                backgroundColor: config.BACKGROUND_DARK_TRANSPARENT,
+                overflow: "hidden"
+            }
+        },
+        el(
             "div",
             {
-                "data-buttercup-role": "listbox",
+                "data-buttercup-role": "header",
                 style: {
                     width: "100%",
-                    height: `${HEIGHT - BUTTON_SIZE}px`,
+                    height: `${BUTTON_SIZE}px`,
                     position: "absolute",
                     left: "0px",
-                    top: `${BUTTON_SIZE + 1}px`,
-                    overflowX: "hidden",
-                    overflowY: "scroll"
-                }
-            }
-        ),
-        searchButton = el(
-            "div",
-            {
-                title: "Search entries",
-                "data-buttercup-role": "button",
-                style: {
-                    width: `${BUTTON_SIZE}px`,
-                    height: `${BUTTON_SIZE}px`,
-                    position: "relative",
-                    display: "inline-block",
-                    cursor: "pointer",
-                    backgroundImage: `url(${ICON_SEARCH})`,
-                    backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat"
-                }
-            }
-        ),
-        saveButton = el(
-            "div",
-            {
-                title: "Save next login",
-                "data-buttercup-role": "button",
-                style: {
-                    width: `${BUTTON_SIZE}px`,
-                    height: `${BUTTON_SIZE}px`,
-                    position: "relative",
-                    display: "inline-block",
-                    cursor: "pointer",
-                    backgroundImage: `url(${ICON_SAVE})`,
-                    backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat"
-                }
-            }
-        ),
-        container = el(
-            "div",
-            {
-                "data-buttercup-role": "container",
-                style: {
-                    border: "1px solid #000",
-                    borderRadius: "2px",
-                    left: `${position.x}px`,
-                    top: `${position.y}px`,
-                    position: "absolute",
-                    width: `${width}px`,
-                    height: `${HEIGHT}px`,
-                    backgroundColor: config.BACKGROUND_DARK_TRANSPARENT,
-                    overflow: "hidden"
+                    top: "0px",
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)"
                 }
             },
-            el(
-                "div",
-                {
-                    "data-buttercup-role": "header",
-                    style: {
-                        width: "100%",
-                        height: `${BUTTON_SIZE}px`,
-                        position: "absolute",
-                        left: "0px",
-                        top: "0px",
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.2)"
-                    }
-                },
-                searchButton,
-                saveButton
-            ),
-            list
-        );
+            searchButton,
+            saveButton
+        ),
+        list
+    );
     // events
     popup.attachHoverEvents(searchButton);
     popup.attachHoverEvents(saveButton);
@@ -127,7 +127,7 @@ class Popup extends EventEmitter {
     }
 
     get open() {
-        return !!this._elements;
+        return this._elements !== null;
     }
 
     attachHoverEvents(element) {
@@ -137,7 +137,7 @@ class Popup extends EventEmitter {
 
     close() {
         if (this._elements) {
-            document.body.removeChild(this._elements.root)
+            document.body.removeChild(this._elements.root);
         }
         if (this._removeListeners) {
             this._removeListeners();
@@ -209,7 +209,7 @@ class Popup extends EventEmitter {
                 style: {
                     cursor: "pointer",
                     color: "#FFF",
-                    fontFamily: `Buttercup-OpenSans`,
+                    fontFamily: "Buttercup-OpenSans",
                     height: `${LIST_ITEM_HEIGHT}px`,
                     lineHeight: `${LIST_ITEM_HEIGHT}px`,
                     paddingLeft: "30px",
@@ -221,7 +221,7 @@ class Popup extends EventEmitter {
                 }
             }, item.title);
             mount(listEl, listItem);
-            listItem.addEventListener("click", (event) => {
+            listItem.addEventListener("click", () => {
                 this.close();
                 this.emit("entryClick", item);
             }, false);
@@ -231,4 +231,4 @@ class Popup extends EventEmitter {
 
 }
 
-module.exports = Popup;
+export default Popup;

@@ -1,6 +1,4 @@
-"use strict";
-
-const addListeners = require("./messaging.js");
+import addListeners from "./messaging";
 
 // init
 addListeners();

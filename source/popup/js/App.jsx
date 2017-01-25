@@ -1,10 +1,8 @@
-'use strict';
+import React from "react";
 
-const React = require("react");
-
-const ArchiveList = require("./ArchiveList");
-const IconButton = require("./IconButton");
-const ConfigureIcon = require("react-icons/lib/fa/cogs");
+import ArchiveList from "./ArchiveList";
+import IconButton from "./IconButton";
+import ConfigureIcon from "react-icons/lib/fa/cogs";
 
 class App extends React.Component {
 
@@ -28,4 +26,4 @@ class App extends React.Component {
 
 }
 
-module.exports = App;
+export default App;

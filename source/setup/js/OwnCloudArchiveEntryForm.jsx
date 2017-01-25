@@ -1,13 +1,11 @@
-"use strict";
+import url from "url";
+import React from "react";
 
-const url = require("url");
+import createWebDAVFS from "webdav-fs";
+import anyFs from "any-fs";
 
-const React = require("react");
-const createWebDAVFS = require("webdav-fs");
-const anyFs = require("any-fs");
-
-const BaseFSArchiveEntryForm = require("./BaseFSArchiveEntryForm");
-const ConnectArchiveDialog = require("./ConnectArchiveDialog");
+import BaseFSArchiveEntryForm from "./BaseFSArchiveEntryForm";
+import ConnectArchiveDialog from "./ConnectArchiveDialog";
 
 class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
 
@@ -37,10 +35,9 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
                 this.state.owncloud_username,
                 this.state.owncloud_password
             );
-        } else {
-            wfs = createWebDAVFS(owncloudAddress);
+            return anyFs(wfs);
         }
-        return anyFs(wfs);
+        return null;
     }
 
     onArchiveSelected(filePath, createNew) {
@@ -100,9 +97,9 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
                         onArchiveSelected={(...args) => this.onArchiveSelected(...args)}
                         />
             </div>
-        </div>
+        </div>;
     }
 
 }
 
-module.exports = OwnCloudArchiveEntryForm;
+export default OwnCloudArchiveEntryForm;

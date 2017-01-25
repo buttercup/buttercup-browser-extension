@@ -1,6 +1,4 @@
-"use strict";
-
-const validation = require("./validate.js");
+import validation from "./validate.js";
 
 const Buttercup = window.Buttercup;
 const {
@@ -44,13 +42,13 @@ function validateAndSave(name, workspace, credentials, password) {
         });
 }
 
-let archives = module.exports = {
+let archives = {
 
     addArchiveByRequest: function(request) {
         return Promise.resolve(request)
             .then(validation.validateArchiveAddition)
             .then(function() {
-                switch(request.type) {
+                switch (request.type) {
                     case "webdav": {
                         return archives.addWebDAVArchive(request);
                     }
@@ -120,7 +118,7 @@ let archives = module.exports = {
                     endpoint: request.owncloud_address,
                     path: request.owncloud_path
                 }));
-                return owncloudCreds;  
+                return owncloudCreds;
             })
             .then(function(credentials) {
                 let datasource = new OwnCloudDatasource(
@@ -164,7 +162,7 @@ let archives = module.exports = {
                     endpoint: request.webdav_address,
                     path: request.webdav_path
                 }));
-                return webdavCreds;  
+                return webdavCreds;
             })
             .then(function(credentials) {
                 let datasource = new WebDAVDatasource(
@@ -296,3 +294,5 @@ let archives = module.exports = {
     }
 
 };
+
+export default archives;

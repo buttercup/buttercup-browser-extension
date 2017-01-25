@@ -1,12 +1,9 @@
-"use strict";
+import React from "react";
 
-const React = require("react");
-
-const HeaderBar = require("./HeaderBar");
-
-const WebDAVArchiveEntryForm = require("./WebDAVArchiveEntryForm");
-const DropboxArchiveEntryForm = require("./DropboxArchiveEntryForm");
-const OwnCloudArchiveEntryForm = require("./OwnCloudArchiveEntryForm");
+import HeaderBar from "./HeaderBar";
+import WebDAVArchiveEntryForm from "./WebDAVArchiveEntryForm";
+import DropboxArchiveEntryForm from "./DropboxArchiveEntryForm";
+import OwnCloudArchiveEntryForm from "./OwnCloudArchiveEntryForm";
 
 class AddArchiveEntry extends React.Component {
 
@@ -44,4 +41,4 @@ class AddArchiveEntry extends React.Component {
 
 }
 
-module.exports = AddArchiveEntry;
+export default AddArchiveEntry;

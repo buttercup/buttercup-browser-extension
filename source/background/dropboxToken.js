@@ -1,6 +1,6 @@
 let __token = null;
 
-module.exports = {
+let dropboxToken = {
 
     getToken: function() {
         return __token;
@@ -11,3 +11,5 @@ module.exports = {
     }
 
 };
+
+export default dropboxToken;

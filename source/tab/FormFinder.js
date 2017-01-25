@@ -1,11 +1,11 @@
-const LoginForm = require("./LoginForm.js");
+import LoginForm from "./LoginForm";
 
 const FORM_QUERIES = [
-    `form[id*=login]`,
-    `form[name*=login]`,
-    `form label[for*=login]`,
-    `form input[name*=username]`,
-    `form input[type=password]`
+    "form[id*=login]",
+    "form[name*=login]",
+    "form label[for*=login]",
+    "form input[name*=username]",
+    "form input[type=password]"
 ];
 
 function findFormElement(el) {
@@ -39,9 +39,10 @@ class FormFinder {
                 .filter(el => el.getAttribute("data-buttercup") !== "attached")
                 .map(form => new LoginForm(form));
                 // @todo filter forms with no password etc.
-        return this._forms = forms;
+        this._forms = forms;
+        return forms;
     }
 
 }
 
-module.exports = FormFinder;
+export default FormFinder;

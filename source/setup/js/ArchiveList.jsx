@@ -1,17 +1,15 @@
-"use strict";
+import React from "react";
+import { hashHistory } from "react-router";
 
-const React = require("react");
-const { hashHistory } = require("react-router");
+import IconLocked from "react-icons/lib/fa/lock";
+import IconUnlocked from "react-icons/lib/fa/unlock-alt";
+import IconConnect from "react-icons/lib/go/key";
+import IconDisconnect from "react-icons/lib/go/lock";
+import IconRemove from "react-icons/lib/go/x";
 
-const IconLocked = require("react-icons/lib/fa/lock");
-const IconUnlocked = require("react-icons/lib/fa/unlock-alt");
-const IconConnect = require("react-icons/lib/go/key");
-const IconDisconnect = require("react-icons/lib/go/lock");
-const IconRemove = require("react-icons/lib/go/x");
+import tools from "../../common/tools";
 
-const tools = require("../../common/tools");
-
-require("ArchiveList.sass");
+import "ArchiveList.sass";
 
 class ArchiveList extends React.Component {
 
@@ -68,8 +66,7 @@ class ArchiveList extends React.Component {
 
     render() {
         let archives = this.state.archives.map(archive => {
-            let canUnlock = false,
-                type = tools.niceType(archive.type),
+            let type = tools.niceType(archive.type),
                 actionTitle,
                 Icon,
                 ControlIcon;
@@ -83,7 +80,6 @@ class ArchiveList extends React.Component {
                     Icon = IconLocked;
                     break;
                 case "locked":
-                    canUnlock = true;
                     /* falls through */
                 default:
                     Icon = IconLocked;
@@ -107,13 +103,13 @@ class ArchiveList extends React.Component {
                         }
                     </div>
                     <div className="remove" title="Remove archive">
-                        <IconRemove 
+                        <IconRemove
                             className="icon"
                             onClick={(e) => this.onRemoveArchiveClicked(e, archive)}
                             />
                     </div>
                 </li>
-            )
+            );
         });
         return (
             <div>
@@ -121,7 +117,7 @@ class ArchiveList extends React.Component {
                     {archives}
                 </ul>
                 {archives.length === 0 &&
-                    <div className="noArchives">No archives yet.</div>    
+                    <div className="noArchives">No archives yet.</div>
                 }
             </div>
         );
@@ -129,4 +125,4 @@ class ArchiveList extends React.Component {
 
 }
 
-module.exports = ArchiveList;
+export default ArchiveList;

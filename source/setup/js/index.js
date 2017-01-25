@@ -1,3 +1,3 @@
-const styles = require("../../common/styles.js");
+import { placeStylesheet } from "../../common/styles";
 
-styles.placeStylesheet();
+placeStylesheet();

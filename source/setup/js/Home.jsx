@@ -1,9 +1,7 @@
-"use strict";
+import React from "react";
 
-const React = require("react");
-
-const ArchiveList = require("./ArchiveList");
-const HeaderBar = require("./HeaderBar");
+import ArchiveList from "./ArchiveList";
+import HeaderBar from "./HeaderBar";
 
 class Home extends React.Component {
 
@@ -21,4 +19,4 @@ class Home extends React.Component {
 
 }
 
-module.exports = Home;
+export default Home;

@@ -1,10 +1,10 @@
-const SavePrompt = require("./SavePrompt.js");
-const formatting = require("./formatting.js");
+import SavePrompt from "./SavePrompt";
+import formatting from "./formatting";
 
 const MAX_LOGIN_TIME =      30; // seconds
 const NOPE =                function() {};
 
-module.exports = {
+export default {
 
     processLastSubmission: function() {
         chrome.runtime.sendMessage(

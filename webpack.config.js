@@ -3,6 +3,7 @@ const webpack = require("webpack");
 
 const BUILD = path.resolve(__dirname, "./build");
 const SOURCE = path.resolve(__dirname, "./source");
+const NODE_MODULES = path.resolve(__dirname, "./node_modules");
 
 const SRC_BACKGROUND = path.resolve(SOURCE, "background");
 const SRC_POPUP = path.resolve(SOURCE, "popup");
@@ -10,9 +11,12 @@ const SRC_SETUP = path.resolve(SOURCE, "setup");
 const SRC_TAB = path.resolve(SOURCE, "tab");
 const SRC_COMMON = path.resolve(SOURCE, "common");
 
-const imageWebpackLoader = {
+const imageWebpackLoaderQuery = {
+    progressive: true,
+    optimizationLevel: 7,
+    interlaced: false,
     pngquant: {
-        quality: "65-90",
+        quality: '65-90',
         speed: 4
     }
 };
@@ -23,6 +27,9 @@ const additionalPlugins = process.env.NODE_ENV === "production" ?
             compress: {
                 warnings: false
             }
+        }),
+        new webpack.DefinePlugin({
+            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
         })
     ] : [];
 
@@ -36,11 +43,15 @@ module.exports = [
             path: BUILD
         },
         module: {
-            loaders: [
+            rules: [
                 {
                     test: /\.js$/,
-                    exclude: /node_modules/,
-                    loader: 'babel'
+                    exclude: [
+                        NODE_MODULES
+                    ],
+                    use: [
+                        { loader: "babel-loader" }
+                    ]
                 }
             ]
         },
@@ -48,8 +59,11 @@ module.exports = [
             ...additionalPlugins
         ],
         resolve: {
-            extensions: ['', '.js'],
-            fallback: [path.join(__dirname, "node_modules")]
+            extensions: [".js"],
+            modules: [
+                SRC_BACKGROUND,
+                NODE_MODULES
+            ]
         }
     },
 
@@ -60,24 +74,32 @@ module.exports = [
             filename: "tab.js",
             path: BUILD
         },
-        imageWebpackLoader,
         module: {
-            loaders: [
+            rules: [
                 {
                     test: /\.js$/,
-                    exclude: /(node_modules|bower_components)/,
-                    loader: 'babel'
+                    exclude: [
+                        NODE_MODULES
+                    ],
+                    use: [
+                        { loader: "babel-loader" }
+                    ]
                 },
                 {
                     test: /\.png$/i,
-                    loaders: [
-                        "url-loader",
-                        "image-webpack"
+                    use: [
+                        { loader: "url-loader" },
+                        {
+                            loader: "image-webpack-loader",
+                            query: imageWebpackLoaderQuery
+                        }
                     ]
                 },
                 {
                     test: /\.[ot]tf$/,
-                    loader: "url-loader"
+                    use: [
+                        { loader: "url-loader" }
+                    ]
                 }
             ]
         },
@@ -85,10 +107,11 @@ module.exports = [
             ...additionalPlugins
         ],
         resolve: {
-            extensions: ['', '.js'],
-            root: [
+            extensions: [".js"],
+            modules: [
                 SRC_TAB,
-                SRC_COMMON
+                SRC_COMMON,
+                NODE_MODULES
             ]
         }
     },
@@ -106,43 +129,64 @@ module.exports = [
             publicPath: 'http://localhost:8090/assets'
         },
         module: {
-            loaders: [
+            rules: [
                 {
                     test: /\.js$/,
-                    exclude: /(node_modules|bower_components)/,
-                    loader: 'babel'
+                    include: [
+                        path.resolve(NODE_MODULES, "./any-fs")
+                    ],
+                    exclude: [
+                        NODE_MODULES
+                    ],
+                    use: [
+                        { loader: "babel-loader" }
+                    ]
                 },
                 {
                     test: /\.jsx$/,
-                    exclude: /(node_modules|bower_components)/,
-                    loader: 'babel'
+                    exclude: [
+                        NODE_MODULES
+                    ],
+                    use: [
+                        { loader: "babel-loader" }
+                    ]
                 },
                 {
                     test: /\.json$/i,
-                    loader: "json-loader"
+                    use: [
+                        { loader: "json-loader" }
+                    ]
                 },
                 {
                     test: /\.sass$/,
-                    loaders: [
-                        "style-loader",
-                        "css-loader",
-                        "sass-loader"
+                    use: [
+                        { loader: "style-loader" },
+                        { loader: "css-loader" },
+                        { loader: "sass-loader" }
                     ]
                 },
                 {
                     test: /\.css$/,
-                    loaders: [
-                        "style-loader",
-                        "css-loader"
+                    use: [
+                        { loader: "style-loader" },
+                        { loader: "css-loader" }
                     ]
                 },
                 {
                     test: /\.[ot]tf$/,
-                    loader: "url-loader"
+                    use: [
+                        { loader: "url-loader" }
+                    ]
                 },
                 {
                     test: /\.png$/i,
-                    loader: "url-loader"
+                    use: [
+                        { loader: "url-loader" },
+                        {
+                            loader: "image-webpack-loader",
+                            query: imageWebpackLoaderQuery
+                        }
+                    ]
                 }
             ]
         },
@@ -153,22 +197,19 @@ module.exports = [
             new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop"),
             ...additionalPlugins
         ],
-        externals: {
-            // don't bundle the 'react' npm package with our bundle.js
-            // but get it from a global 'React' variable
-            // 'react': 'React'
-        },
         resolve: {
-            extensions: ['', '.js', '.jsx'],
-            fallback: [path.join(__dirname, "node_modules")],
-            root: [
+            extensions: [".js", ".jsx"],
+            modules: [
                 path.resolve(SRC_SETUP, "js"),
                 path.resolve(SRC_SETUP, "sass"),
-                SRC_COMMON
+                SRC_COMMON,
+                NODE_MODULES
             ]
         },
         resolveLoader: {
-            fallback: [path.join(__dirname, "node_modules")]
+            modules: [
+                NODE_MODULES
+            ]
         }
     },
 
@@ -188,42 +229,48 @@ module.exports = [
             loaders: [
                 {
                     test: /\.js$/,
-                    exclude: /(node_modules)/,
-                    loader: 'babel'
+                    exclude: [
+                        NODE_MODULES
+                    ],
+                    use: [
+                        { loader: "babel-loader" }
+                    ]
                 },
                 {
                     test: /\.jsx$/,
-                    exclude: /(node_modules)/,
-                    loader: 'babel'
+                    exclude: [
+                        NODE_MODULES
+                    ],
+                    use: [
+                        { loader: "babel-loader" }
+                    ]
                 },
                 {
                     test: /\.sass$/,
-                    loaders: [
-                        "style-loader",
-                        "css-loader",
-                        "sass-loader"
+                    use: [
+                        { loader: "style-loader" },
+                        { loader: "css-loader" },
+                        { loader: "sass-loader" }
                     ]
                 },
                 {
                     test: /\.[ot]tf$/,
-                    loader: "url-loader"
+                    use: [
+                        { loader: "url-loader" }
+                    ]
                 }
             ]
-        },
-        externals: {
-            // don't bundle the 'react' npm package with our bundle.js
-            // but get it from a global 'React' variable
-            // 'react': 'React'
         },
         plugins: [
             ...additionalPlugins
         ],
         resolve: {
-            extensions: ['', '.js', '.jsx', '.sass'],
-            root: [
+            extensions: [".js", ".jsx", ".sass"],
+            modules: [
                 path.resolve(SRC_POPUP, "js"),
                 path.resolve(SRC_POPUP, "sass"),
-                SRC_COMMON
+                SRC_COMMON,
+                NODE_MODULES
             ]
         }
     }

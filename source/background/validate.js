@@ -1,4 +1,4 @@
-let validate = module.exports = {
+let validate = {
 
     archiveNameAvailable: function(name) {
         return Buttercup.Web.archiveManager.archives.hasOwnProperty(name) === false;
@@ -12,7 +12,7 @@ let validate = module.exports = {
         }
         validate.validateObjectString(request, "name");
         validate.validateObjectString(request, "master_password");
-        switch(request.type) {
+        switch (request.type) {
             case "dropbox": {
                 validate.validateObjectString(request, "dropbox_path");
                 validate.validateObjectString(request, "dropbox_token");
@@ -47,7 +47,7 @@ let validate = module.exports = {
         if (!workspace) {
             throw new Error("Workspace is undefined");
         }
-        let { archive, datasource, password } = workspace.primary;
+        let { archive, datasource /* , password */ } = workspace.primary;
         try {
             archive.getGroups();
         } catch (err) {
@@ -60,3 +60,5 @@ let validate = module.exports = {
     }
 
 };
+
+export default validate;

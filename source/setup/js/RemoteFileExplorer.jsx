@@ -1,16 +1,14 @@
-"use strict";
+import React from "react";
+import Spinner from "react-spinner";
+import Tree from "rc-tree";
 
-const React = require("react");
-const Spinner = require("react-spinner");
-const Tree = require("rc-tree");
+import "rodal/lib/rodal.css";
+import "react-spinner/react-spinner.css";
+import "rc-tree/assets/index.css";
+import "RemoteFileExplorer.sass";
 
 const { TreeNode } = Tree;
 const { Component, PropTypes } = React;
-
-require("rodal/lib/rodal.css");
-require("react-spinner/react-spinner.css");
-require("rc-tree/assets/index.css");
-require("RemoteFileExplorer.sass");
 
 function processLeafData(stat) {
     return {
@@ -89,9 +87,8 @@ class RemoteFileExplorer extends Component {
         let targetPath = treeNode.props.eventKey;
         if (this.state.dirContents[targetPath]) {
             return Promise.resolve();
-        } else {
-            return this.fetchDirectory(targetPath);
         }
+        return this.fetchDirectory(targetPath);
     }
 
     onSelect(nodes, event) {
@@ -160,4 +157,4 @@ RemoteFileExplorer.propTypes = {
     onChoosePath:           PropTypes.func
 };
 
-module.exports = RemoteFileExplorer;
+export default RemoteFileExplorer;

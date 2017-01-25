@@ -1,4 +1,4 @@
-const styles = require("../../common/styles.js");
+import { placeStylesheet } from "../../common/styles";
 
 window.Buttercup = {
 
@@ -28,4 +28,4 @@ window.Buttercup = {
 
 };
 
-styles.placeStylesheet();
+placeStylesheet();

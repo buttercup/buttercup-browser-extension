@@ -1,13 +1,13 @@
-module.exports = {
+export default {
 
     formatURLForSaving: function(url) {
         // strip protocol
-        url = url.replace(/^https?:\/\//i, "");
+        let formattedURL = url.replace(/^https?:\/\//i, "");
         // remove query string
-        url = url.split("?").shift();
+        formattedURL = formattedURL.split("?").shift();
         // remove fragment
-        url = url.split("#").shift();
-        return url;
+        formattedURL = formattedURL.split("#").shift();
+        return formattedURL;
     }
 
 };

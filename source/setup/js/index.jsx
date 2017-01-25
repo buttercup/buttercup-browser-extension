@@ -1,25 +1,20 @@
-"use strict";
-
-const React = require("react"),
-    ReactDOM = require("react-dom");
-
-const {
+import React from "react";
+import ReactDOM from "react-dom";
+import {
     Router,
     Route,
-    Link,
     IndexRoute,
     hashHistory
-} = require("react-router");
+} from "react-router";
+import App from "./App";
+import Home from "./Home";
+import AddArchive from "./AddArchive";
+import AddArchiveEntry from "./AddArchiveEntry";
+import AddLastLogin from "./AddLastLogin";
+import UnlockArchive from "./UnlockArchive";
+import NoMatch from "./NoMatch";
 
-require("index.sass");
-
-const App = require("./App");
-const Home = require("./Home");
-const AddArchive = require("./AddArchive");
-const AddArchiveEntry = require("./AddArchiveEntry");
-const AddLastLogin = require("./AddLastLogin");
-const UnlockArchive = require("./UnlockArchive");
-const NoMatch = require("./NoMatch");
+import "index.sass";
 
 ReactDOM.render((
     <Router history={hashHistory}>
