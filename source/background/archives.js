@@ -295,4 +295,8 @@ let archives = {
 
 };
 
+export function updateAll() {
+    return Buttercup.Web.archiveManager.updateUnlocked();
+}
+
 export default archives;
