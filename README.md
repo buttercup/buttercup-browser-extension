@@ -1,6 +1,10 @@
 # Buttercup Browser Extension
 Buttercup credentials manager extension for the browser.
 
+<p align="center">
+    <img src="chrome-extension.jpg" />
+</p>
+
 ## About
 This browser extension allows users to interface with password archives authored by the [Buttercup password manager](https://github.com/buttercup-pw/buttercup) (though it **does not** require the application to be installed).
 
