@@ -16,7 +16,7 @@ const imageWebpackLoaderQuery = {
     optimizationLevel: 7,
     interlaced: false,
     pngquant: {
-        quality: '65-90',
+        quality: "65-90",
         speed: 4
     }
 };
@@ -31,7 +31,8 @@ const additionalPlugins = process.env.NODE_ENV === "production" ?
         new webpack.DefinePlugin({
             "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
         })
-    ] : [];
+    ] :
+    [];
 
 module.exports = [
 
@@ -123,20 +124,21 @@ module.exports = [
             views: path.resolve(SRC_SETUP, "./js/index.jsx")
         },
         output: {
-            filename: 'setup.[name].js',
+            filename: "setup.[name].js",
             path: BUILD,
-            //make sure port 8090 is used when launching webpack-dev-server
-            publicPath: 'http://localhost:8090/assets'
+            // make sure port 8090 is used when launching webpack-dev-server
+            publicPath: "http://localhost:8090/assets"
         },
         module: {
             rules: [
                 {
                     test: /\.js$/,
                     include: [
-                        path.resolve(NODE_MODULES, "./any-fs")
-                    ],
-                    exclude: [
-                        NODE_MODULES
+                        SRC_SETUP,
+                        SRC_COMMON,
+                        path.resolve(NODE_MODULES, "./any-fs"),
+                        path.resolve(NODE_MODULES, "./webdav-fs"),
+                        path.resolve(NODE_MODULES, "./dropbox-fs")
                     ],
                     use: [
                         { loader: "babel-loader" }
@@ -220,10 +222,10 @@ module.exports = [
             views: path.resolve(SRC_POPUP, "./js/index.jsx")
         },
         output: {
-            filename: 'popup.[name].js',
+            filename: "popup.[name].js",
             path: BUILD,
-            //make sure port 8090 is used when launching webpack-dev-server
-            publicPath: 'http://localhost:8090/assets'
+            // make sure port 8090 is used when launching webpack-dev-server
+            publicPath: "http://localhost:8090/assets"
         },
         module: {
             loaders: [
