@@ -46,9 +46,6 @@ class ArchiveEntryForm extends React.Component {
         chrome.runtime.sendMessage({ command: "add-archive", data: this.state }, (response) => {
             if (response && response.ok === true) {
                 hashHistory.push("/");
-                // chrome.tabs.getCurrent(function(tab) {
-                //     chrome.tabs.remove(tab.id, NOPE);
-                // });
             } else {
                 alert("There was an error processing the provided archive details:\n" + response.error);
                 this.enable(true);
