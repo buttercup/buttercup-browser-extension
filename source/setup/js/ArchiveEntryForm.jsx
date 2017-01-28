@@ -1,4 +1,5 @@
 import React from "react";
+import { hashHistory } from "react-router";
 
 const NOPE = function() {};
 
@@ -44,9 +45,10 @@ class ArchiveEntryForm extends React.Component {
         this.enable(false);
         chrome.runtime.sendMessage({ command: "add-archive", data: this.state }, (response) => {
             if (response && response.ok === true) {
-                chrome.tabs.getCurrent(function(tab) {
-                    chrome.tabs.remove(tab.id, NOPE);
-                });
+                hashHistory.push("/");
+                // chrome.tabs.getCurrent(function(tab) {
+                //     chrome.tabs.remove(tab.id, NOPE);
+                // });
             } else {
                 alert("There was an error processing the provided archive details:\n" + response.error);
                 this.enable(true);
