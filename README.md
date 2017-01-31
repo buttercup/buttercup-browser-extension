@@ -1,3 +1,11 @@
+<h1 align="center">
+  <br/>
+  <img src="https://cdn.rawgit.com/buttercup-pw/buttercup-assets/4bbfd317/badge/browsers.svg" alt="Buttercup for Browsers">
+  <br/>
+  <br/>
+  <br/>
+</h1>
+
 # Buttercup Browser Extension
 Buttercup credentials manager extension for the browser.
 
