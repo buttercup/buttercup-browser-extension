@@ -3,10 +3,16 @@ import submissions from "./submissions";
 import { placeStylesheet } from "../common/styles";
 import { processAccessToken } from "./dropbox";
 
-let ff = new FormFinder();
-ff.findLoginForms().forEach(function(form) {
-    form.placeContextButton();
-});
+const ff = new FormFinder();
+
+setInterval(function() {
+    ff.findLoginForms().forEach(function(form) {
+        form.placeContextButton();
+        form.on("formSubmission", function() {
+            submissions.processLastSubmission();
+        });
+    });
+}, 350);
 
 placeStylesheet();
 submissions.processLastSubmission();

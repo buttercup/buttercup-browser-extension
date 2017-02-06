@@ -1,3 +1,5 @@
+import { EventEmitter } from "events";
+
 import Popup from "./popup";
 import authentication from "./authentication";
 import submissions from "./submissions";
@@ -37,9 +39,10 @@ function applyStyles(el, styles) {
         });
 }
 
-class LoginForm {
+class LoginForm extends EventEmitter {
 
     constructor(form) {
+        super();
         form.setAttribute("data-buttercup", "attached");
         this._form = form;
         this._inputs = [];
@@ -118,7 +121,7 @@ class LoginForm {
                 input: passInput,
                 property: "password"
             });
-            passInput.setAttribute("autocomplete", "off");
+            passInput.setAttribute("autocomplete", "new-password");
         }
     }
 
@@ -137,6 +140,7 @@ class LoginForm {
     onFormSubmit() {
         let values = this.fetchValues();
         submissions.trackFormData(values);
+        this.emit("formSubmission");
     }
 
     onInputClick(e) {

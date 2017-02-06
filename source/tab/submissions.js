@@ -15,9 +15,9 @@ export default {
                     if (timeSince <= MAX_LOGIN_TIME) {
                         let prompt = new SavePrompt();
                         prompt.show();
-                        chrome.runtime.sendMessage({ command: "save-form-submission", data: { time: 0 } }, NOPE);
                     }
                 }
+                // chrome.runtime.sendMessage({ command: "save-form-submission", data: { time: 0 } }, NOPE);
             }
         );
     },
