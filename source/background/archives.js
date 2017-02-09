@@ -268,6 +268,10 @@ let archives = {
         return entries;
     },
 
+    getUnlockedArchiveList: function() {
+        return Buttercup.Web.archiveManager.unlockedArchives;
+    },
+
     lockArchive: function(name) {
         return Buttercup.Web.archiveManager.lock(name);
     },

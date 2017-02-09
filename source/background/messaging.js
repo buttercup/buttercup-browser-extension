@@ -119,8 +119,9 @@ export default function addListeners() {
             }
 
             case "last-form-submission": {
+                let archivesCount = archives.getUnlockedArchiveList().length;
                 sendResponse({
-                    ok: true,
+                    ok: archivesCount > 0,
                     data: StorageInterface.getData("lastSubmission", false)
                 });
                 break;
