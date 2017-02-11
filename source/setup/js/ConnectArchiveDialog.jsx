@@ -17,7 +17,6 @@ class ConnectArchiveDialog extends Component {
             allowSelectArchive: true,
             createNew: false,
             currentOption: "existing",
-            explorerActive: false,
             filename: "",
             modalVisible: false,
             remoteDir: "/",
@@ -39,15 +38,14 @@ class ConnectArchiveDialog extends Component {
         }
         return "";
     }
-    
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            explorerActive: nextProps.explorerActive
-        });
-    }
 
     hide() {
         this.setState({ modalVisible: false });
+    }
+
+    onError(err) {
+        alert(err.message);
+        this.hide();
     }
 
     onFilenameChange(e) {
@@ -96,7 +94,7 @@ class ConnectArchiveDialog extends Component {
     render() {
         return (
             <div className="dialogButtonView sameLine browse">
-                <button disabled={this.props.disabled} onClick={(e) => this.show(e)}>Browse</button>
+                <button onClick={(e) => this.show(e)}>Browse</button>
                 <Rodal
                     visible={this.state.modalVisible}
                     onClose={() => this.hide()}
@@ -148,9 +146,10 @@ class ConnectArchiveDialog extends Component {
                         <div className="explorer">
                             <RemoteFileExplorer
                                 fs={this.props.fs}
-                                active={this.state.explorerActive}
+                                active={this.state.modalVisible}
                                 allowSelectArchive={this.state.allowSelectArchive}
                                 onChoosePath={(...args) => this.onUpdateSelection(...args)}
+                                onError={(err) => this.onError(err)}
                                 />
                         </div>
                     </div>
@@ -176,8 +175,7 @@ class ConnectArchiveDialog extends Component {
 }
 
 ConnectArchiveDialog.propTypes = {
-    explorerActive:         PropTypes.bool,
-    onArchiveSelected:      PropTypes.func
+    onArchiveSelected: PropTypes.func
 };
 
 export default ConnectArchiveDialog;

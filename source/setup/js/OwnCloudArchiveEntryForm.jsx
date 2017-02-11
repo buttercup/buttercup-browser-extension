@@ -48,7 +48,6 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
     }
 
     renderFormContents() {
-        let fsReady = !!this.fs;
         return <div>
             {super.renderFormContents()}
             <div className="row">
@@ -87,13 +86,10 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
                     name="owncloud_path"
                     value={this.state.owncloud_path}
                     onChange={this.handleChange}
-                    disabled={!fsReady}
                     />
                 <label>Remote archive path</label>
                 <ConnectArchiveDialog
                         fs={this.fs}
-                        disabled={!fsReady}
-                        explorerActive={fsReady}
                         onArchiveSelected={(...args) => this.onArchiveSelected(...args)}
                         />
             </div>

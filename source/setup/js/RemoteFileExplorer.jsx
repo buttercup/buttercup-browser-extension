@@ -44,7 +44,9 @@ class RemoteFileExplorer extends Component {
                 active: nextProps.active,
                 fs: this.props.fs
             };
-        if (this.state.showArchives !== showArchives) {
+        if (this.state.showArchives !== showArchives ||
+            (nextProps.active !== true && this.state.dirContents !== null)) {
+            console.log("Clear");
             Object.assign(newState, {
                 dirContents: null,
                 showArchives
@@ -64,6 +66,7 @@ class RemoteFileExplorer extends Component {
     }
 
     fetchDirectory(dir) {
+        console.log("Clear cookies", String(document.cookie));
         return this.fs
             .readDirectory(dir)
             .then(contents => contents.filter(item => {
@@ -78,8 +81,12 @@ class RemoteFileExplorer extends Component {
                 });
             })
             .catch(err => {
-                alert(`An error occurred fetching Dropbox contents: ${err.message}`);
-                throw err;
+                const error = new Error(`Failed fetching remote directory contents:\n${err.message}`);
+                if (this.props.onError) {
+                    this.props.onError(error);
+                } else {
+                    alert(error.message);
+                }
             });
     }
 
@@ -154,7 +161,8 @@ class RemoteFileExplorer extends Component {
 RemoteFileExplorer.propTypes = {
     allowSelectArchive:     PropTypes.bool,
     fs:                     PropTypes.object,
-    onChoosePath:           PropTypes.func
+    onChoosePath:           PropTypes.func,
+    onError:                PropTypes.func
 };
 
 export default RemoteFileExplorer;
