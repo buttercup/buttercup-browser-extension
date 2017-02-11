@@ -39,6 +39,19 @@ function applyStyles(el, styles) {
         });
 }
 
+function findFirst(queries, parent = document) {
+    let element = null;
+    queries.some(function(query) {
+        let target = parent.querySelector(query);
+        if (target) {
+            element = target;
+            return true;
+        }
+        return false;
+    });
+    return element;
+}
+
 class LoginForm extends EventEmitter {
 
     constructor(form) {
@@ -104,7 +117,7 @@ class LoginForm extends EventEmitter {
     locateKnownInputs() {
         this._inputs = [];
         // username
-        let userInput = this.form.querySelector(INPUT_QUERY.USERNAME.join(","));
+        let userInput = findFirst(INPUT_QUERY.USERNAME, this.form);
         if (userInput) {
             this._inputs.push({
                 type: "property",
@@ -114,7 +127,7 @@ class LoginForm extends EventEmitter {
             userInput.setAttribute("autocomplete", "off");
         }
         // password
-        let passInput = this.form.querySelector(INPUT_QUERY.PASSWORD.join(","));
+        let passInput = findFirst(INPUT_QUERY.PASSWORD, this.form);
         if (passInput) {
             this._inputs.push({
                 type: "property",

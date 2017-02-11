@@ -78,7 +78,7 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "watch-run": "^1.2.4",
-    "webdav-fs": "1.0.0-rc6",
-    "webpack": "~2.2.0"
+    "webdav-fs": "1.0.0-rc7",
+    "webpack": "~2.2.1"
   }
 }

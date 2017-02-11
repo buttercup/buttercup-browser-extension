@@ -88,8 +88,11 @@ class ArchiveGroupExplorer extends React.Component {
                     >
                     {treeNodes}
                 </Tree>
-                <div className="targetGroup">
-                    {this.state.chosen}
+                <div className={(this.state.chosen.length > 0 ? "set" : "unset") + " targetGroup"}>
+                    {this.state.chosen.length > 0 ?
+                        this.state.chosen :
+                        "No group chosen yet"
+                    }
                 </div>
                 <input type="hidden" name="archiveID" value={this.state.archiveID} />
                 <input type="hidden" name="groupID" value={this.state.groupID} />

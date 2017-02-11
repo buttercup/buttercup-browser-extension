@@ -83,7 +83,8 @@ function createPopup(popup, position, width) {
                 width: `${popupWidth}px`,
                 height: `${HEIGHT}px`,
                 backgroundColor: config.BACKGROUND_DARK_TRANSPARENT,
-                overflow: "hidden"
+                overflow: "hidden",
+                zIndex: 9999999
             }
         },
         el(
@@ -96,7 +97,8 @@ function createPopup(popup, position, width) {
                     position: "absolute",
                     left: "0px",
                     top: "0px",
-                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)"
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                    textAlign: "left"
                 }
             },
             searchButton,
