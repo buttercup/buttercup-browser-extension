@@ -13,7 +13,7 @@ Buttercup credentials manager extension for the browser.
     <img src="chrome-extension.jpg" />
 </p>
 
-[![Buttercup](https://cdn.rawgit.com/buttercup-pw/buttercup-assets/6582a033/badge/buttercup-slim.svg)](https://buttercup.pw)
+[![Buttercup](https://cdn.rawgit.com/buttercup-pw/buttercup-assets/6582a033/badge/buttercup-slim.svg)](https://buttercup.pw) [![Build Status](https://travis-ci.org/buttercup-pw/buttercup-browser-extension.svg?branch=master)](https://travis-ci.org/buttercup-pw/buttercup-browser-extension)
 
 ## About
 This browser extension allows users to interface with password archives authored by the [Buttercup password manager](https://github.com/buttercup-pw/buttercup) (though it **does not** require the application to be installed).
