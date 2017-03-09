@@ -36,6 +36,7 @@ export default function addListeners() {
                             ok: false,
                             error: err.message
                         });
+                        console.error(err);
                     });
                 return RESPOND_ASYNC;
             }
@@ -49,6 +50,7 @@ export default function addListeners() {
                         ok: false,
                         error: err.message
                     });
+                    console.error(err);
                     break;
                 }
                 sendResponse({
@@ -72,6 +74,7 @@ export default function addListeners() {
                             ok: false,
                             error: err.message
                         });
+                        console.error(err);
                     });
                 return RESPOND_ASYNC;
             }
@@ -140,6 +143,7 @@ export default function addListeners() {
                             ok: false,
                             error: err.message
                         });
+                        console.error(err);
                     });
                 return RESPOND_ASYNC;
             }
@@ -192,6 +196,7 @@ export default function addListeners() {
                         ok: false,
                         error: err.message
                     });
+                    console.error(err);
                     return RESPOND_SYNC;
                 }
                 entry
@@ -211,6 +216,7 @@ export default function addListeners() {
                             ok: false,
                             error: err.message
                         });
+                        console.error(err);
                     });
                 return RESPOND_ASYNC;
             }
@@ -230,11 +236,12 @@ export default function addListeners() {
                         });
                     })
                     .catch(function(err) {
-                        console.error(err);
+                        console.log("ERRR", err);
                         sendResponse({
                             ok: false,
                             error: err.message
                         });
+                        console.error(err);
                     });
                 return RESPOND_ASYNC;
             }

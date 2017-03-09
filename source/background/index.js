@@ -4,6 +4,7 @@ import { updateAll } from "./archives";
 const UPDATE_EVERY_MINUTES = 5;
 
 // init
+window.Buttercup.Web.HashingTools.patchCorePBKDF();
 addListeners();
 
 // automatic archive updating
