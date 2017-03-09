@@ -260,6 +260,7 @@ class Popup extends EventEmitter {
                     fontFamily: "Buttercup-OpenSans",
                     height: `${LIST_ITEM_HEIGHT}px`,
                     lineHeight: `${LIST_ITEM_HEIGHT}px`,
+                    margin: "0",
                     paddingLeft: "30px",
                     backgroundImage: `url(${ICON_KEY})`,
                     backgroundSize: "20px",
