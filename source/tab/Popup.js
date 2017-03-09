@@ -17,7 +17,7 @@ const LIST_ITEM_HEIGHT = 28;
 const MIN_WIDTH = 150;
 
 function createPopup(popup, position, width, enableButtons = true) {
-    const HEIGHT = 130;
+    const HEIGHT = 170;
     let popupWidth = Math.max(width, MIN_WIDTH),
         buttonStyle = enableButtons ? {} : {
             "-webkit-filter": "grayscale(1)",
@@ -222,8 +222,25 @@ class Popup extends EventEmitter {
     }
 
     updatePageItems(items) {
-        console.log("Items", items);
         this.elements.list.innerHTML = "";
+        if (items.length <= 0) {
+            mount(this.elements.list, el(
+                "div",
+                {
+                    style: {
+                        width: "100%",
+                        color: "#CCC",
+                        fontFamily: "Buttercup-OpenSans",
+                        fontSize: "15px",
+                        fontStyle: "italic",
+                        textAlign: "center",
+                        marginTop: "5px"
+                    }
+                },
+                "No entries for this page"
+            ));
+            return;
+        }
         let listEl = el(
             "ul",
             {
