@@ -1,7 +1,7 @@
 let validate = {
 
     archiveNameAvailable: function(name) {
-        return Buttercup.Web.archiveManager.archives.hasOwnProperty(name) === false;
+        return Buttercup.Web.ArchiveManager.getSharedManager().archives.hasOwnProperty(name) === false;
     },
 
     validateArchiveAddition: function(request) {

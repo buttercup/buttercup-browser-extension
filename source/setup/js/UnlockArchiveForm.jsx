@@ -38,6 +38,7 @@ class UnlockArchiveForm extends React.Component {
                 }
             } else {
                 // @todo error
+                console.log("RESP", response);
                 alert("There was an error unlocking the archive:\n" + response.error);
                 this.enable(true);
             }

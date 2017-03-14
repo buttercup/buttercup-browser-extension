@@ -3,12 +3,18 @@ import validation from "./validate.js";
 const Buttercup = window.Buttercup;
 const {
     Archive,
-    Credentials,
+    createCredentials,
     WebDAVDatasource,
     OwnCloudDatasource,
-    SharedWorkspace
+    Workspace
 } = Buttercup;
-const DropboxDatasource = Buttercup.Web.DropboxDatasource;
+const {
+    DropboxDatasource
+} = Buttercup.Web;
+
+function getArchiveManager() {
+    return Buttercup.Web.ArchiveManager.getSharedManager();
+}
 
 function groupToSkeleton(item, isGroup) {
     let subItems = item.getGroups().map(group => groupToSkeleton(group, true));
@@ -27,18 +33,19 @@ function groupToSkeleton(item, isGroup) {
     };
 }
 
-function validateAndSave(name, workspace, credentials, password) {
+function validateAndSave(name, workspace, storageCredentials, password) {
+    const archiveManager = getArchiveManager();
     return Promise
         .resolve(workspace)
         .then(validation.validateWorkspace)
         .then(function() {
-            Buttercup.Web.archiveManager.addArchive(
+            archiveManager.addArchive(
                 name,
                 workspace,
-                credentials,
+                storageCredentials,
                 password
             );
-            return Buttercup.Web.archiveManager.saveState();
+            return archiveManager.saveState();
         });
 }
 
@@ -69,9 +76,8 @@ let archives = {
         return Promise
             .resolve(request)
             .then(function() {
-                let dropboxCreds = new Credentials();
-                dropboxCreds.type = "dropbox";
-                dropboxCreds.setMeta(Credentials.DATASOURCE_META, JSON.stringify({
+                let dropboxCreds = createCredentials("dropbox");
+                dropboxCreds.setValue("datasource", JSON.stringify({
                     type: "dropbox",
                     token: request.dropbox_token,
                     path: request.dropbox_path
@@ -84,11 +90,11 @@ let archives = {
                     request.dropbox_path
                 );
                 if (request.connect === "new") {
-                    let workspace = new SharedWorkspace();
+                    let workspace = new Workspace();
                     workspace.setPrimaryArchive(
                         Archive.createWithDefaults(),
                         datasource,
-                        request.master_password
+                        createCredentials.fromPassword(request.master_password)
                     );
                     return workspace
                         .save()
@@ -97,7 +103,7 @@ let archives = {
                 return archives
                     .fetchWorkspace(
                         datasource,
-                        request.master_password
+                        createCredentials.fromPassword(request.master_password)
                     )
                     .then(workspace => [workspace, credentials]);
             })
@@ -109,11 +115,10 @@ let archives = {
         return Promise
             .resolve(request)
             .then(function() {
-                let owncloudCreds = new Credentials();
-                owncloudCreds.type = "owncloud";
+                let owncloudCreds = createCredentials("owncloud");
                 owncloudCreds.username = request.owncloud_username;
                 owncloudCreds.password = request.owncloud_password;
-                owncloudCreds.setMeta(Credentials.DATASOURCE_META, JSON.stringify({
+                owncloudCreds.setValue("datasource", JSON.stringify({
                     type: "owncloud",
                     endpoint: request.owncloud_address,
                     path: request.owncloud_path
@@ -124,15 +129,17 @@ let archives = {
                 let datasource = new OwnCloudDatasource(
                     request.owncloud_address,
                     request.owncloud_path,
-                    request.owncloud_username,
-                    request.owncloud_password
+                    createCredentials({
+                        username: request.owncloud_username,
+                        password: request.owncloud_password
+                    })
                 );
                 if (request.connect === "new") {
-                    let workspace = new SharedWorkspace();
+                    const workspace = new Workspace();
                     workspace.setPrimaryArchive(
                         Archive.createWithDefaults(),
                         datasource,
-                        request.master_password
+                        createCredentials.fromPassword(request.master_password)
                     );
                     return workspace
                         .save()
@@ -141,7 +148,7 @@ let archives = {
                 return archives
                     .fetchWorkspace(
                         datasource,
-                        request.master_password
+                        createCredentials.fromPassword(request.master_password)
                     )
                     .then(workspace => [workspace, credentials]);
             })
@@ -153,11 +160,10 @@ let archives = {
         return Promise
             .resolve(request)
             .then(function() {
-                let webdavCreds = new Credentials();
-                webdavCreds.type = "webdav";
+                let webdavCreds = createCredentials("webdav");
                 webdavCreds.username = request.webdav_username;
                 webdavCreds.password = request.webdav_password;
-                webdavCreds.setMeta(Credentials.DATASOURCE_META, JSON.stringify({
+                webdavCreds.setValue("datasource", JSON.stringify({
                     type: "webdav",
                     endpoint: request.webdav_address,
                     path: request.webdav_path
@@ -168,15 +174,17 @@ let archives = {
                 let datasource = new WebDAVDatasource(
                     request.webdav_address,
                     request.webdav_path,
-                    request.webdav_username,
-                    request.webdav_password
+                    createCredentials({
+                        username: request.webdav_username,
+                        password: request.webdav_password
+                    })
                 );
                 if (request.connect === "new") {
-                    let workspace = new SharedWorkspace();
+                    let workspace = new Workspace();
                     workspace.setPrimaryArchive(
                         Archive.createWithDefaults(),
                         datasource,
-                        request.master_password
+                        createCredentials.fromPassword(request.master_password)
                     );
                     return workspace
                         .save()
@@ -185,7 +193,7 @@ let archives = {
                 return archives
                     .fetchWorkspace(
                         datasource,
-                        request.master_password
+                        createCredentials.fromPassword(request.master_password)
                     )
                     .then(workspace => [workspace, credentials]);
             })
@@ -194,7 +202,7 @@ let archives = {
     },
 
     createEntry: function(archiveID, groupID, title) {
-        let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives,
+        let unlockedArchives = getArchiveManager().unlockedArchives,
             numArchives = unlockedArchives.length,
             archive,
             workspace;
@@ -219,22 +227,22 @@ let archives = {
         };
     },
 
-    fetchWorkspace: function(datasource, masterPassword) {
+    fetchWorkspace: function(datasource, credentials) {
         return datasource
-            .load(masterPassword)
+            .load(credentials)
             .then(function(archive) {
-                let workspace = new SharedWorkspace();
-                workspace.setPrimaryArchive(archive, datasource, masterPassword);
+                let workspace = new Workspace();
+                workspace.setPrimaryArchive(archive, datasource, credentials);
                 return workspace;
             });
     },
 
     getArchiveList: function() {
-        return Buttercup.Web.archiveManager.displayList;
+        return getArchiveManager().displayList;
     },
 
     getEntry: function(archiveID, entryID) {
-        let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives,
+        let unlockedArchives = getArchiveManager().unlockedArchives,
             numArchives = unlockedArchives.length;
         // try archive ID first:
         for (let i = 0; i < numArchives; i += 1) {
@@ -256,7 +264,7 @@ let archives = {
     },
 
     getMatchingEntriesForURL: function(url) {
-        let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives,
+        let unlockedArchives = getArchiveManager().unlockedArchives,
             entries = [];
         unlockedArchives.forEach(function(archiveItem) {
             let archive = archiveItem.workspace.primary.archive;
@@ -269,15 +277,15 @@ let archives = {
     },
 
     getUnlockedArchiveList: function() {
-        return Buttercup.Web.archiveManager.unlockedArchives;
+        return getArchiveManager().unlockedArchives;
     },
 
     lockArchive: function(name) {
-        return Buttercup.Web.archiveManager.lock(name);
+        return getArchiveManager().lock(name);
     },
 
     mapArchivesToSkeleton: function() {
-        let unlockedArchives = Buttercup.Web.archiveManager.unlockedArchives;
+        let unlockedArchives = getArchiveManager().unlockedArchives;
         return unlockedArchives.map(item => Object.assign(
             groupToSkeleton(item.workspace.primary.archive),
             {
@@ -287,20 +295,21 @@ let archives = {
     },
 
     removeArchive: function(name) {
-        let removed = Buttercup.Web.archiveManager.removeArchive(name);
-        return Buttercup.Web.archiveManager
+        const archiveManager = getArchiveManager();
+        let removed = archiveManager.removeArchive(name);
+        return archiveManager
             .saveState()
             .then(() => removed);
     },
 
     unlockArchive: function(name, password) {
-        return Buttercup.Web.archiveManager.unlock(name, password);
+        return getArchiveManager().unlock(name, password);
     }
 
 };
 
 export function updateAll() {
-    return Buttercup.Web.archiveManager.updateUnlocked();
+    return getArchiveManager().updateUnlocked();
 }
 
 export default archives;

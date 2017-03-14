@@ -16,9 +16,13 @@ const BUTTON_IMAGE_SIZE = 24;
 const LIST_ITEM_HEIGHT = 28;
 const MIN_WIDTH = 150;
 
-function createPopup(popup, position, width) {
-    const HEIGHT = 130;
-    let popupWidth = Math.max(width, MIN_WIDTH);
+function createPopup(popup, position, width, enableButtons = true) {
+    const HEIGHT = 170;
+    let popupWidth = Math.max(width, MIN_WIDTH),
+        buttonStyle = enableButtons ? {} : {
+            "-webkit-filter": "grayscale(1)",
+            filter: "grayscale(1)"
+        };
     let list = el(
         "div",
         {
@@ -48,7 +52,8 @@ function createPopup(popup, position, width) {
                 backgroundImage: `url(${ICON_SEARCH})`,
                 backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
                 backgroundPosition: "center",
-                backgroundRepeat: "no-repeat"
+                backgroundRepeat: "no-repeat",
+                ...buttonStyle
             }
         }
     );
@@ -66,9 +71,42 @@ function createPopup(popup, position, width) {
                 backgroundImage: `url(${ICON_SAVE})`,
                 backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
                 backgroundPosition: "center",
-                backgroundRepeat: "no-repeat"
+                backgroundRepeat: "no-repeat",
+                ...buttonStyle
             }
         }
+    );
+    let header = el(
+        "div",
+        {
+            "data-buttercup-role": "header",
+            style: {
+                width: "100%",
+                height: `${BUTTON_SIZE}px`,
+                position: "absolute",
+                left: "0px",
+                top: "0px",
+                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                textAlign: "right"
+            }
+        },
+        searchButton,
+        saveButton
+    );
+    let title = el(
+        "div",
+        {
+            "data-buttercup-role": "title",
+            style: {
+                fontFamily: "Buttercup-OpenSans",
+                color: config.BUTTERCUP_GREEN,
+                fontSize: "19px",
+                position: "absolute",
+                left: "5px",
+                top: "2px"
+            }
+        },
+        "Buttercup"
     );
     let container = el(
         "div",
@@ -87,23 +125,8 @@ function createPopup(popup, position, width) {
                 zIndex: 9999999
             }
         },
-        el(
-            "div",
-            {
-                "data-buttercup-role": "header",
-                style: {
-                    width: "100%",
-                    height: `${BUTTON_SIZE}px`,
-                    position: "absolute",
-                    left: "0px",
-                    top: "0px",
-                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-                    textAlign: "left"
-                }
-            },
-            searchButton,
-            saveButton
-        ),
+        title,
+        header,
         list
     );
     // events
@@ -111,7 +134,8 @@ function createPopup(popup, position, width) {
     popup.attachHoverEvents(saveButton);
     return {
         root: container,
-        list
+        list,
+        header
     };
 }
 
@@ -122,10 +146,15 @@ class Popup extends EventEmitter {
         this._form = loginForm;
         this._elements = null;
         this._removeListeners = null;
+        this._archiveReady = false;
     }
 
     get elements() {
         return this._elements;
+    }
+
+    get hasArchiveReady() {
+        return this._archiveReady;
     }
 
     get open() {
@@ -177,7 +206,7 @@ class Popup extends EventEmitter {
             this.close();
         }
         setTimeout(() => {
-            this._elements = createPopup(this, position, width);
+            this._elements = createPopup(this, position, width, this.hasArchiveReady);
             mount(document.body, this._elements.root);
             this.getItemsForPage().then(items => this.updatePageItems(items));
             let onClick = (e) => {
@@ -193,8 +222,25 @@ class Popup extends EventEmitter {
     }
 
     updatePageItems(items) {
-        console.log("Items", items);
         this.elements.list.innerHTML = "";
+        if (items.length <= 0) {
+            mount(this.elements.list, el(
+                "div",
+                {
+                    style: {
+                        width: "100%",
+                        color: "#CCC",
+                        fontFamily: "Buttercup-OpenSans",
+                        fontSize: "15px",
+                        fontStyle: "italic",
+                        textAlign: "center",
+                        marginTop: "5px"
+                    }
+                },
+                "No entries for this page"
+            ));
+            return;
+        }
         let listEl = el(
             "ul",
             {
@@ -214,6 +260,7 @@ class Popup extends EventEmitter {
                     fontFamily: "Buttercup-OpenSans",
                     height: `${LIST_ITEM_HEIGHT}px`,
                     lineHeight: `${LIST_ITEM_HEIGHT}px`,
+                    margin: "0",
                     paddingLeft: "30px",
                     backgroundImage: `url(${ICON_KEY})`,
                     backgroundSize: "20px",
