@@ -93,7 +93,7 @@ class LoginForm extends EventEmitter {
         });
     }
 
-    filloutForm(entryData) {
+    filloutForm(entryData, autoSubmit = true) {
         this.inputs.forEach(function mapInput(inputRecord) {
             let { type, input } = inputRecord;
             if (type === "property") {
@@ -102,6 +102,9 @@ class LoginForm extends EventEmitter {
                 input.value = value;
             }
         });
+        if (autoSubmit) {
+            this.form.submit();
+        }
     }
 
     getInputForProperty(property) {
