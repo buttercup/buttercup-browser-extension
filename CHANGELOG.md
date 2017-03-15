@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v0.7.0
+
+ * **Support for Firefox**
+ * Auto-submit when selecting credentials on a form
+ * Styles normalisation
+
 ## v0.6.0
 _2017-03-14_
 
