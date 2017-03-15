@@ -10,7 +10,7 @@ export default {
         chrome.runtime.sendMessage(
             { command: "last-form-submission" },
             function(response) {
-                if (response.ok && response.data) {
+                if (response && response.ok && response.data) {
                     let timeSince = (Date.now() - response.data.time) / 1000;
                     if (timeSince <= MAX_LOGIN_TIME) {
                         let prompt = new SavePrompt();

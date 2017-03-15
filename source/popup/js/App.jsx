@@ -4,6 +4,8 @@ import ArchiveList from "./ArchiveList";
 import IconButton from "./IconButton";
 import ConfigureIcon from "react-icons/lib/fa/cogs";
 
+const NOOP = function() {};
+
 class App extends React.Component {
 
     render() {
@@ -21,7 +23,8 @@ class App extends React.Component {
 
     setupClicked(event) {
         event.preventDefault();
-        chrome.tabs.create({'url': chrome.extension.getURL('setup.html#/')}, function(tab) { });
+        chrome.tabs.create({ url: chrome.extension.getURL("setup.html#/") }, NOOP);
+        window.close();
     }
 
 }

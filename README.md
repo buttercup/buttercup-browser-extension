@@ -13,7 +13,7 @@ Buttercup credentials manager extension for the browser.
     <img src="chrome-extension.jpg" />
 </p>
 
-[![Buttercup](https://cdn.rawgit.com/buttercup-pw/buttercup-assets/6582a033/badge/buttercup-slim.svg)](https://buttercup.pw) [![Build Status](https://travis-ci.org/buttercup-pw/buttercup-browser-extension.svg?branch=master)](https://travis-ci.org/buttercup-pw/buttercup-browser-extension)
+[![Buttercup](https://cdn.rawgit.com/buttercup-pw/buttercup-assets/6582a033/badge/buttercup-slim.svg)](https://buttercup.pw) [![Build Status](https://travis-ci.org/buttercup-pw/buttercup-browser-extension.svg?branch=master)](https://travis-ci.org/buttercup-pw/buttercup-browser-extension) [![Chrome Web Store](https://img.shields.io/chrome-web-store/d/heflipieckodmcppbnembejjmabajjjj.svg?label=Chrome%20downloads)](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB)
 
 ## About
 This browser extension allows users to interface with password archives authored by the [Buttercup password manager](https://github.com/buttercup-pw/buttercup) (though it **does not** require the application to be installed).
@@ -21,12 +21,15 @@ This browser extension allows users to interface with password archives authored
 The extension can remotely connect to archives via Buttercup's common communication protocols (WebDAV, Dropbox etc.).
 
 ### Supported browsers
-Current only **Chrome** is supported.
+Both [Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) and Firefox are supported.
 
-We **hope** to add support for Firefox and Edge in the near future - We'd love any suggestions or contributions in this area!
+Other browsers will be supported in order of request/popularity.
 
 ### Adding to Chrome
 You can load an **unpacked extension** in Chrome by navigating to [chrome://extensions/](chrome://extensions/). Simply locate the project's directory and use **dist/** as the extension directory.
+
+### Adding to Firefox
+You can load an **unpacked extension** in Firefox by navigating to [about:debugging](about:debugging). Click "Load Temporary Add-on" and locate the project's directory, using **dist/** as the extension directory.
 
 ## Contributing
 Contributions are very welcome and strongly encouraged, though we do ask that you stick to some basic styling parameters:

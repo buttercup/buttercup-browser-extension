@@ -69,7 +69,7 @@ class ArchiveListElement extends React.Component {
         if (this.locked && this.processing !== true) {
             // unlock
             chrome.tabs.create(
-                { "url": chrome.extension.getURL("setup.html#/unlockArchive/" + encodeURIComponent(this.props.name)) },
+                { url: chrome.extension.getURL("setup.html#/unlockArchive/" + encodeURIComponent(this.props.name)) },
                 NOPE
             );
         } else if (this.locked === false) {

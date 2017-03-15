@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 
 	"name": "Buttercup",
-	"description": "Chrome Extension for Buttercup",
+	"description": "Browser extension for Buttercup",
 	"version": "0.6.0",
 
 	"browser_action": {
