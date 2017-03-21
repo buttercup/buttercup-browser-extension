@@ -7,7 +7,7 @@ const ff = new FormFinder();
 
 setInterval(function() {
     ff.findLoginForms().forEach(function(form) {
-        form.placeContextButton();
+        form.placeContextButtons();
         form.on("formSubmission", function() {
             submissions.processLastSubmission();
         });

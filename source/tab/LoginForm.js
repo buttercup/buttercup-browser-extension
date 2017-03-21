@@ -13,11 +13,14 @@ const INPUT_QUERY = {
         "input[id=username]",
         "input[name*=username]",
         "input[id*=username]",
+        "input[type=email]",
         "input[name=email]",
         "input[id=email]",
         "input[name*=user]",
         "input[id*=user]",
-        "input[name*=email]"
+        "input[name*=email]",
+        "input.username",
+        "input.email"
     ],
 
     PASSWORD: [
@@ -26,7 +29,8 @@ const INPUT_QUERY = {
         "input[type=password]",
         "input[name*=password]",
         "input[name*=pass]",
-        "input[id*=pass]"
+        "input[id*=pass]",
+        "input.password"
     ]
 
 };
@@ -121,6 +125,7 @@ class LoginForm extends EventEmitter {
         this._inputs = [];
         // username
         let userInput = findFirst(INPUT_QUERY.USERNAME, this.form);
+        console.log("INPUT", userInput);
         if (userInput) {
             this._inputs.push({
                 type: "property",
@@ -128,6 +133,7 @@ class LoginForm extends EventEmitter {
                 property: "username"
             });
             userInput.setAttribute("autocomplete", "off");
+            userInput.setAttribute("data-buttercup-input", "username");
         }
         // password
         let passInput = findFirst(INPUT_QUERY.PASSWORD, this.form);
@@ -138,6 +144,7 @@ class LoginForm extends EventEmitter {
                 property: "password"
             });
             passInput.setAttribute("autocomplete", "new-password");
+            passInput.setAttribute("data-buttercup-input", "password");
         }
     }
 
@@ -166,62 +173,102 @@ class LoginForm extends EventEmitter {
                 this.popup.close();
                 return;
             }
-            let username = this.getInputForProperty("username");
-            if (username) {
-                let usernameInput = username.input,
-                    bounds = usernameInput.getBoundingClientRect();
-                this.popup.popup({
-                    x: bounds.left,
-                    y: window.scrollY + bounds.top + bounds.height + 2
-                }, bounds.width);
-            }
+            let input = e.target,
+                bounds = input.getBoundingClientRect();
+            this.popup.popup({
+                x: bounds.left,
+                y: window.scrollY + bounds.top + bounds.height + 2
+            }, bounds.width);
+            // let username = this.getInputForProperty("username");
+            // if (username) {
+            //     let usernameInput = username.input,
+            //         bounds = usernameInput.getBoundingClientRect();
+            //     this.popup.popup({
+            //         x: bounds.left,
+            //         y: window.scrollY + bounds.top + bounds.height + 2
+            //     }, bounds.width);
+            // }
         }
     }
 
-    onInputExit() {
-        // this._mouseInsideInput = false;
-        let username = this.getInputForProperty("username");
-        if (username) {
-            let usernameInput = username.input;
-            usernameInput.style.cursor = "auto";
-            this._mouseOverButton = false;
-        }
+    onInputExit(e) {
+        let input = e.target;
+        input.style.cursor = "auto";
+        this._mouseOverButton = false;
+        // let username = this.getInputForProperty("username");
+        // if (username) {
+        //     let usernameInput = username.input;
+        //     usernameInput.style.cursor = "auto";
+        //     this._mouseOverButton = false;
+        // }
     }
 
     onInputMove(e) {
-        let username = this.getInputForProperty("username");
-        if (username) {
-            let usernameInput = username.input,
-                bounds = usernameInput.getBoundingClientRect();
-            let x = e.clientX - bounds.left;
-            if (x >= (bounds.width - 18 - 5)) {
-                this._mouseOverButton = true;
-                usernameInput.style.cursor = "pointer";
-            } else {
-                this._mouseOverButton = false;
-                usernameInput.style.cursor = "auto";
-            }
+        let input = e.target,
+            bounds = input.getBoundingClientRect();
+        let x = e.clientX - bounds.left;
+        if (x >= (bounds.width - 18 - 5)) {
+            this._mouseOverButton = true;
+            input.style.cursor = "pointer";
+        } else {
+            this._mouseOverButton = false;
+            input.style.cursor = "auto";
         }
+        // let username = this.getInputForProperty("username");
+        // if (username) {
+        //     let usernameInput = username.input,
+        //         bounds = usernameInput.getBoundingClientRect();
+        //     let x = e.clientX - bounds.left;
+        //     if (x >= (bounds.width - 18 - 5)) {
+        //         this._mouseOverButton = true;
+        //         usernameInput.style.cursor = "pointer";
+        //     } else {
+        //         this._mouseOverButton = false;
+        //         usernameInput.style.cursor = "auto";
+        //     }
+        // }
     }
 
-    placeContextButton() {
-        let username = this.getInputForProperty("username");
+    placeContextButton(input) {
+        applyStyles(input, {
+            backgroundImage: `url("${BUTTERCUP_LOGO}")`,
+            backgroundRepeat: "no-repeat",
+            backgroundAttachment: "scroll",
+            backgroundSize: "18px 18px",
+            backgroundPosition: "98% 50%",
+            cursor: "auto"
+        });
+        let boundClick = this.onInputClick.bind(this),
+            boundExit = this.onInputExit.bind(this),
+            boundMove = this.onInputMove.bind(this);
+        input.addEventListener("click", boundClick, false);
+        input.addEventListener("mouseleave", boundExit, false);
+        input.addEventListener("mousemove", boundMove, false);
+    }
+
+    placeContextButtons() {
+        let username = this.getInputForProperty("username"),
+            password = this.getInputForProperty("password");
         if (username) {
-            let usernameInput = username.input;
-            applyStyles(usernameInput, {
-                backgroundImage: `url("${BUTTERCUP_LOGO}")`,
-                backgroundRepeat: "no-repeat",
-                backgroundAttachment: "scroll",
-                backgroundSize: "18px 18px",
-                backgroundPosition: "98% 50%",
-                cursor: "auto"
-            });
-            let boundClick = this.onInputClick.bind(this),
-                boundExit = this.onInputExit.bind(this),
-                boundMove = this.onInputMove.bind(this);
-            usernameInput.addEventListener("click", boundClick, false);
-            usernameInput.addEventListener("mouseleave", boundExit, false);
-            usernameInput.addEventListener("mousemove", boundMove, false);
+            this.placeContextButton(username.input);
+            // let usernameInput = username.input;
+            // applyStyles(usernameInput, {
+            //     backgroundImage: `url("${BUTTERCUP_LOGO}")`,
+            //     backgroundRepeat: "no-repeat",
+            //     backgroundAttachment: "scroll",
+            //     backgroundSize: "18px 18px",
+            //     backgroundPosition: "98% 50%",
+            //     cursor: "auto"
+            // });
+            // let boundClick = this.onInputClick.bind(this),
+            //     boundExit = this.onInputExit.bind(this),
+            //     boundMove = this.onInputMove.bind(this);
+            // usernameInput.addEventListener("click", boundClick, false);
+            // usernameInput.addEventListener("mouseleave", boundExit, false);
+            // usernameInput.addEventListener("mousemove", boundMove, false);
+        }
+        if (password) {
+            this.placeContextButton(password.input);
         }
     }
 
