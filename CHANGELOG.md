@@ -1,6 +1,13 @@
 # Buttercup browser extension changelog
 
+## v0.8.0
+_2017-03-22_
+
+ * Fuzzy searching for entries on login-forms
+ * Login-form popup available on password fields
+
 ## v0.7.0
+_2017-03-15_
 
  * **Support for Firefox**
  * Auto-submit when selecting credentials on a form
