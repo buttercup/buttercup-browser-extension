@@ -7,6 +7,17 @@ const StorageInterface = window.Buttercup.Web.StorageInterface;
 const RESPOND_ASYNC = true;
 const RESPOND_SYNC = false;
 
+function getEntriesForSearch(query) {
+    let matchingEntries = archives
+        .getMatchingEntriesForSearch(query)
+        .map(entry => ({
+            id: entry.getID(),
+            title: entry.getProperty("title"),
+            archiveID: entry._getArchive().getID()
+        }));
+    return matchingEntries;
+}
+
 function getEntriesForURL(url) {
     let matchingEntries = archives
         .getMatchingEntriesForURL(url)
@@ -87,6 +98,15 @@ export default function addListeners() {
             case "get-archive-states": {
                 let states = archives.getArchiveList();
                 sendResponse(states);
+                break;
+            }
+
+            case "get-entries-for-search": {
+                let matchingEntries = getEntriesForSearch(request.query);
+                sendResponse({
+                    ok: true,
+                    entries: matchingEntries
+                });
                 break;
             }
 

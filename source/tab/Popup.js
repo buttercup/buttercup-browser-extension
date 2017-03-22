@@ -7,17 +7,19 @@ import { EventEmitter } from "events";
 import matching from "./matching";
 import config from "../common/config";
 
-import ICON_SEARCH from "../common/images/search.png";
+// import ICON_SEARCH from "../common/images/search.png";
 import ICON_SAVE from "../common/images/save.png";
 import ICON_KEY from "../common/images/key.png";
+import ICON_SEARCHBAR from "../common/images/searchbar.png";
 
 const BUTTON_SIZE = 30;
 const BUTTON_IMAGE_SIZE = 24;
+const ICON_SEARCH_IMAGE_SIZE = 18;
 const LIST_ITEM_HEIGHT = 28;
-const MIN_WIDTH = 150;
+const MIN_WIDTH = 300;
 
 function createPopup(popup, position, width, enableButtons = true) {
-    const HEIGHT = 170;
+    const HEIGHT = 250;
     let popupWidth = Math.max(width, MIN_WIDTH),
         buttonStyle = enableButtons ? {} : {
             "-webkit-filter": "grayscale(1)",
@@ -32,31 +34,31 @@ function createPopup(popup, position, width, enableButtons = true) {
                 height: `${HEIGHT - BUTTON_SIZE}px`,
                 position: "absolute",
                 left: "0px",
-                top: `${BUTTON_SIZE + 1}px`,
+                top: `${(BUTTON_SIZE * 2) + 1}px`,
                 overflowX: "hidden",
                 overflowY: "scroll"
             }
         }
     );
-    let searchButton = el(
-        "div",
-        {
-            title: "Search entries",
-            "data-buttercup-role": "button",
-            style: {
-                width: `${BUTTON_SIZE}px`,
-                height: `${BUTTON_SIZE}px`,
-                position: "relative",
-                display: "inline-block",
-                cursor: "pointer",
-                backgroundImage: `url(${ICON_SEARCH})`,
-                backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                ...buttonStyle
-            }
-        }
-    );
+    // let searchButton = el(
+    //     "div",
+    //     {
+    //         title: "Search entries",
+    //         "data-buttercup-role": "button",
+    //         style: {
+    //             width: `${BUTTON_SIZE}px`,
+    //             height: `${BUTTON_SIZE}px`,
+    //             position: "relative",
+    //             display: "inline-block",
+    //             cursor: "pointer",
+    //             backgroundImage: `url(${ICON_SEARCH})`,
+    //             backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
+    //             backgroundPosition: "center",
+    //             backgroundRepeat: "no-repeat",
+    //             ...buttonStyle
+    //         }
+    //     }
+    // );
     let saveButton = el(
         "div",
         {
@@ -90,9 +92,42 @@ function createPopup(popup, position, width, enableButtons = true) {
                 textAlign: "right"
             }
         },
-        searchButton,
+        // searchButton,
         saveButton
     );
+    let searchInput = el(
+            "input",
+            {
+                style: {
+                    backgroundColor: "rgba(0, 0, 0, 0.0)",
+                    width: "100%",
+                    height: "100%",
+                    color: "#FFF",
+                    fontStyle: "italic",
+                    outline: "none",
+                    border: "none",
+                    textIndent: "30px"
+                }
+            }
+        ),
+        searchBar = el(
+            "div",
+            {
+                style: {
+                    backgroundImage: `url(${ICON_SEARCHBAR})`,
+                    backgroundSize: `${ICON_SEARCH_IMAGE_SIZE}px`,
+                    backgroundPosition: "5px 3px",
+                    backgroundRepeat: "no-repeat",
+                    width: "100%",
+                    height: `${BUTTON_SIZE}px`,
+                    position: "absolute",
+                    left: "0px",
+                    top: `${BUTTON_SIZE}px`,
+                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)"
+                }
+            },
+            searchInput
+        );
     let title = el(
         "div",
         {
@@ -127,15 +162,17 @@ function createPopup(popup, position, width, enableButtons = true) {
         },
         title,
         header,
+        searchBar,
         list
     );
     // events
-    popup.attachHoverEvents(searchButton);
+    // popup.attachHoverEvents(searchButton);
     popup.attachHoverEvents(saveButton);
     return {
         root: container,
         list,
-        header
+        header,
+        searchInput
     };
 }
 
@@ -147,6 +184,7 @@ class Popup extends EventEmitter {
         this._elements = null;
         this._removeListeners = null;
         this._archiveReady = false;
+        this._searchText = "";
     }
 
     get elements() {
@@ -167,6 +205,7 @@ class Popup extends EventEmitter {
     }
 
     close() {
+        this._searchText = "";
         if (this._elements) {
             document.body.removeChild(this._elements.root);
         }
@@ -187,7 +226,9 @@ class Popup extends EventEmitter {
         //     { title: "My login 6" },
         //     { title: "My login 7" }
         // ]);
-        return matching.getItemsForCurrentURL();
+        return (this._searchText.length > 0) ?
+            matching.getItemsForSearchQuery(this._searchText) :
+            matching.getItemsForCurrentURL();
     }
 
     onButtonHover(event, inside) {
@@ -205,10 +246,20 @@ class Popup extends EventEmitter {
         if (this._elements) {
             this.close();
         }
+        const updateItems = () => this.getItemsForPage().then(items => this.updatePageItems(items));
         setTimeout(() => {
             this._elements = createPopup(this, position, width, this.hasArchiveReady);
             mount(document.body, this._elements.root);
-            this.getItemsForPage().then(items => this.updatePageItems(items));
+            // handle searching
+            this._elements.searchInput.focus();
+            let onSearchUpdate = (e) => {
+                this._searchText = e.target.value;
+                updateItems();
+            };
+            this._elements.searchInput.oninput = onSearchUpdate;
+            // update items
+            updateItems();
+            // close click
             let onClick = (e) => {
                 if (this._elements && this._elements.root.contains(e.target)) {
                     e.stopPropagation();
@@ -217,12 +268,16 @@ class Popup extends EventEmitter {
                 this.close();
             };
             document.body.addEventListener("click", onClick, false);
+            // destruction
             this._removeListeners = () => document.body.removeEventListener("click", onClick, false);
         }, 50);
     }
 
     updatePageItems(items) {
         this.elements.list.innerHTML = "";
+        let emptyMessage = (this._searchText.length > 0) ?
+            "No entries found for this search" :
+            "No entries for this page";
         if (items.length <= 0) {
             mount(this.elements.list, el(
                 "div",
@@ -237,7 +292,7 @@ class Popup extends EventEmitter {
                         marginTop: "5px"
                     }
                 },
-                "No entries for this page"
+                emptyMessage
             ));
             return;
         }
