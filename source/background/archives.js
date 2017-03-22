@@ -9,7 +9,8 @@ const {
     Workspace
 } = Buttercup;
 const {
-    DropboxDatasource
+    DropboxDatasource,
+    EntryFinder
 } = Buttercup.Web;
 
 function getArchiveManager() {
@@ -261,6 +262,14 @@ let archives = {
             }
         }
         return null;
+    },
+
+    getMatchingEntriesForSearch: function(query) {
+        const unlockedArchives = getArchiveManager()
+            .unlockedArchives
+            .map(item => item.workspace.primary.archive);
+        const ef = new EntryFinder(unlockedArchives);
+        return ef.search(query).map(res => res.entry);
     },
 
     getMatchingEntriesForURL: function(url) {
