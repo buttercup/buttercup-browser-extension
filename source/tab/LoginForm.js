@@ -179,15 +179,6 @@ class LoginForm extends EventEmitter {
                 x: bounds.left,
                 y: window.scrollY + bounds.top + bounds.height + 2
             }, bounds.width);
-            // let username = this.getInputForProperty("username");
-            // if (username) {
-            //     let usernameInput = username.input,
-            //         bounds = usernameInput.getBoundingClientRect();
-            //     this.popup.popup({
-            //         x: bounds.left,
-            //         y: window.scrollY + bounds.top + bounds.height + 2
-            //     }, bounds.width);
-            // }
         }
     }
 
@@ -195,12 +186,6 @@ class LoginForm extends EventEmitter {
         let input = e.target;
         input.style.cursor = "auto";
         this._mouseOverButton = false;
-        // let username = this.getInputForProperty("username");
-        // if (username) {
-        //     let usernameInput = username.input;
-        //     usernameInput.style.cursor = "auto";
-        //     this._mouseOverButton = false;
-        // }
     }
 
     onInputMove(e) {
@@ -214,19 +199,6 @@ class LoginForm extends EventEmitter {
             this._mouseOverButton = false;
             input.style.cursor = "auto";
         }
-        // let username = this.getInputForProperty("username");
-        // if (username) {
-        //     let usernameInput = username.input,
-        //         bounds = usernameInput.getBoundingClientRect();
-        //     let x = e.clientX - bounds.left;
-        //     if (x >= (bounds.width - 18 - 5)) {
-        //         this._mouseOverButton = true;
-        //         usernameInput.style.cursor = "pointer";
-        //     } else {
-        //         this._mouseOverButton = false;
-        //         usernameInput.style.cursor = "auto";
-        //     }
-        // }
     }
 
     placeContextButton(input) {
@@ -251,21 +223,6 @@ class LoginForm extends EventEmitter {
             password = this.getInputForProperty("password");
         if (username) {
             this.placeContextButton(username.input);
-            // let usernameInput = username.input;
-            // applyStyles(usernameInput, {
-            //     backgroundImage: `url("${BUTTERCUP_LOGO}")`,
-            //     backgroundRepeat: "no-repeat",
-            //     backgroundAttachment: "scroll",
-            //     backgroundSize: "18px 18px",
-            //     backgroundPosition: "98% 50%",
-            //     cursor: "auto"
-            // });
-            // let boundClick = this.onInputClick.bind(this),
-            //     boundExit = this.onInputExit.bind(this),
-            //     boundMove = this.onInputMove.bind(this);
-            // usernameInput.addEventListener("click", boundClick, false);
-            // usernameInput.addEventListener("mouseleave", boundExit, false);
-            // usernameInput.addEventListener("mousemove", boundMove, false);
         }
         if (password) {
             this.placeContextButton(password.input);
