@@ -13,6 +13,17 @@ const {
     EntryFinder
 } = Buttercup.Web;
 
+function generateEntryPath(entry) {
+    let group = entry.getGroup(),
+        entryPath = [group];
+    let parent;
+    while ((parent = group.getGroup()) !== null) {
+        entryPath.unshift(parent);
+        group = parent;
+    }
+    return entryPath.map(group => group.getTitle());
+}
+
 function getArchiveManager() {
     return Buttercup.Web.ArchiveManager.getSharedManager();
 }
@@ -269,7 +280,11 @@ let archives = {
             .unlockedArchives
             .map(item => item.workspace.primary.archive);
         const ef = new EntryFinder(unlockedArchives);
-        return ef.search(query).map(res => res.entry);
+        return ef.search(query).map(res => ({
+            entry: res.entry,
+            path: generateEntryPath(res.entry),
+            archiveName: "Unknown"
+        }));
     },
 
     getMatchingEntriesForURL: function(url) {
@@ -279,7 +294,11 @@ let archives = {
             let archive = archiveItem.workspace.primary.archive;
             let newEntries = Buttercup.Web.ArchiveTools.getEntriesForURL(archive, url);
             if (newEntries.length > 0) {
-                entries = entries.concat(newEntries);
+                entries = entries.concat(newEntries.map(entry => ({
+                    entry,
+                    path: generateEntryPath(entry),
+                    archiveName: archiveItem.name
+                })));
             }
         });
         return entries;

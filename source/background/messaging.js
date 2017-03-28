@@ -10,10 +10,12 @@ const RESPOND_SYNC = false;
 function getEntriesForSearch(query) {
     let matchingEntries = archives
         .getMatchingEntriesForSearch(query)
-        .map(entry => ({
-            id: entry.getID(),
-            title: entry.getProperty("title"),
-            archiveID: entry._getArchive().getID()
+        .map(info => ({
+            id: info.entry.getID(),
+            title: info.entry.getProperty("title"),
+            archiveID: info.entry._getArchive().getID(),
+            archiveName: info.archiveName,
+            entryPath: info.path
         }));
     return matchingEntries;
 }
@@ -21,10 +23,12 @@ function getEntriesForSearch(query) {
 function getEntriesForURL(url) {
     let matchingEntries = archives
         .getMatchingEntriesForURL(url)
-        .map(entry => ({
-            id: entry.getID(),
-            title: entry.getProperty("title"),
-            archiveID: entry._getArchive().getID()
+        .map(info => ({
+            id: info.entry.getID(),
+            title: info.entry.getProperty("title"),
+            archiveID: info.entry._getArchive().getID(),
+            archiveName: info.archiveName,
+            entryPath: info.path
         }));
     return matchingEntries;
 }
