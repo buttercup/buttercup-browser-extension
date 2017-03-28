@@ -279,11 +279,14 @@ let archives = {
         const unlockedArchives = getArchiveManager()
             .unlockedArchives
             .map(item => item.workspace.primary.archive);
+        const archiveNames = getArchiveManager()
+            .unlockedArchives
+            .reduce((names, item) => ({ ...names, [item.workspace.primary.archive.getID()]: item.name }), {});
         const ef = new EntryFinder(unlockedArchives);
         return ef.search(query).map(res => ({
             entry: res.entry,
             path: generateEntryPath(res.entry),
-            archiveName: "Unknown"
+            archiveName: archiveNames[res.archive.getID()]
         }));
     },
 
