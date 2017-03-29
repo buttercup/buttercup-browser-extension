@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v0.9.0
+_2017-03-29_
+
+ * Improved UI for popup password list (archive + groups pathing)
+ * Bugfix: Fixed wrong-password during unlock sequence breaking state
+
 ## v0.8.0
 _2017-03-22_
 
