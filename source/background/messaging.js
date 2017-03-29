@@ -260,7 +260,6 @@ export default function addListeners() {
                         });
                     })
                     .catch(function(err) {
-                        console.log("ERRR", err);
                         sendResponse({
                             ok: false,
                             error: err.message
