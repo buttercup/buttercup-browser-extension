@@ -15,8 +15,60 @@ import ICON_SEARCHBAR from "../common/images/searchbar.png";
 const BUTTON_SIZE = 30;
 const BUTTON_IMAGE_SIZE = 24;
 const ICON_SEARCH_IMAGE_SIZE = 18;
-const LIST_ITEM_HEIGHT = 28;
+const LIST_ITEM_HEIGHT = 44;
 const MIN_WIDTH = 300;
+
+function createPathElement(archiveName, groupNames, overrideStyles = {}) {
+    const createSpacer = () => el(
+        "span",
+        {
+            style: {
+                color: "rgba(255, 255, 255, 0.4)"
+            }
+        },
+        " ⤑ "
+    );
+    const archiveEl = el(
+        "span",
+        {
+            style: {
+                fontFamily: "Buttercup-OpenSans",
+                fontSize: "13px",
+                fontWeight: "bold",
+                fontStyle: "italic",
+                color: "rgba(255, 255, 255, 0.4)"
+            }
+        },
+        `📚 ${archiveName}`
+    );
+    const pathEls = groupNames.reduce((elements, groupName) => [
+        ...elements,
+        createSpacer(),
+        el(
+            "span",
+            {
+                style: {
+                    fontFamily: "Buttercup-OpenSans",
+                    fontSize: "13px",
+                    fontWeight: "normal",
+                    fontStyle: "italic",
+                    color: "rgba(255, 255, 255, 0.6)"
+                }
+            },
+            groupName
+        )
+    ], []);
+    return el(
+        "div",
+        {
+            style: {
+                ...overrideStyles
+            }
+        },
+        archiveEl,
+        ...pathEls
+    );
+}
 
 function createPopup(popup, position, width, enableButtons = true) {
     const HEIGHT = 250;
@@ -31,7 +83,7 @@ function createPopup(popup, position, width, enableButtons = true) {
             "data-buttercup-role": "listbox",
             style: {
                 width: "100%",
-                height: `${HEIGHT - BUTTON_SIZE}px`,
+                height: `${HEIGHT - (BUTTON_SIZE * 2) - 2}px`,
                 position: "absolute",
                 left: "0px",
                 top: `${(BUTTON_SIZE * 2) + 1}px`,
@@ -297,33 +349,58 @@ class Popup extends EventEmitter {
             return;
         }
         let listEl = el(
-            "ul",
+            "div",
             {
                 style: {
                     margin: "0px",
-                    padding: "0px",
-                    listStyleType: "none"
+                    padding: "0px" // ,
+                    // listStyleType: "none"
                 }
             }
         );
         mount(this.elements.list, listEl);
-        items.forEach((item) => {
-            let listItem = el("li", {
-                style: {
-                    cursor: "pointer",
-                    color: "#FFF",
-                    fontFamily: "Buttercup-OpenSans",
-                    height: `${LIST_ITEM_HEIGHT}px`,
-                    lineHeight: `${LIST_ITEM_HEIGHT}px`,
-                    margin: "0",
-                    paddingLeft: "30px",
-                    backgroundImage: `url(${ICON_KEY})`,
-                    backgroundSize: "20px",
-                    backgroundPosition: "5px 50%",
-                    backgroundRepeat: "no-repeat",
-                    backgroundColor: "rgba(0, 0, 0, 0.0)"
-                }
-            }, item.title);
+        items.forEach(item => {
+            let listItem = el(
+                "div",
+                {
+                    style: {
+                        cursor: "pointer",
+                        backgroundImage: `url(${ICON_KEY})`,
+                        backgroundSize: "20px",
+                        backgroundPosition: "5px 2px",
+                        backgroundRepeat: "no-repeat",
+                        backgroundColor: "rgba(0, 0, 0, 0.0)",
+                        height: `${LIST_ITEM_HEIGHT}px`,
+                        margin: "0",
+                        overflow: "hidden",
+                        position: "relative",
+                        width: "100%"
+                    }
+                },
+                el(
+                    "span",
+                    {
+                        style: {
+                            color: "#FFF",
+                            fontFamily: "Buttercup-OpenSans",
+                            position: "absolute",
+                            left: "30px",
+                            top: "2px",
+                            lineHeight: "19px",
+                            fontSize: "18px",
+                            fontStyle: "normal"
+                        }
+                    },
+                    item.title
+                ),
+                createPathElement(item.archiveName, item.entryPath, {
+                    position: "absolute",
+                    top: "22px",
+                    left: "28px",
+                    width: "100%",
+                    height: "20px"
+                })
+            );
             mount(listEl, listItem);
             listItem.addEventListener("click", () => {
                 this.close();

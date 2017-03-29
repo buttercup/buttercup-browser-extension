@@ -125,7 +125,6 @@ class LoginForm extends EventEmitter {
         this._inputs = [];
         // username
         let userInput = findFirst(INPUT_QUERY.USERNAME, this.form);
-        console.log("INPUT", userInput);
         if (userInput) {
             this._inputs.push({
                 type: "property",
