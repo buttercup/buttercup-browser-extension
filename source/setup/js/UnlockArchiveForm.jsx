@@ -45,13 +45,22 @@ class UnlockArchiveForm extends React.Component {
     }
 
     render() {
-        return <form>
+        return <form className="buttercup">
             <fieldset disabled={this.state.loading}>
-                <label>
-                    Master password:
-                    <input type="password" name="password" value={this.props.password} onChange={(e) => this.handlePasswordChange(e)} />
-                </label>
-                <input type="submit" value="Unlock" onClick={(e) => this.handleSubmit(e)} />
+                <div className="row">
+                    <input
+                    type="password"
+                    name="password"
+                    value={this.props.password}
+                    onChange={(e) => this.handlePasswordChange(e)}
+                    />
+                    <label htmlFor="password">Master password</label>
+                </div>
+                <div className="row">
+                    <button onClick={(e) => this.handleSubmit(e)}>
+                        Unlock
+                    </button>
+                </div>
             </fieldset>
         </form>;
     }
