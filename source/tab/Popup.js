@@ -312,7 +312,7 @@ class Popup extends EventEmitter {
             // update items
             updateItems();
             // close click
-            let onClick = (e) => {
+            const onClick = (e) => {
                 if (this._elements && this._elements.root.contains(e.target)) {
                     e.stopPropagation();
                     return;

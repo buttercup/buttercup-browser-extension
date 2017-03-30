@@ -4,8 +4,8 @@ import Popup from "./popup";
 import authentication from "./authentication";
 import submissions from "./submissions";
 
+const AUTOSUBMIT_DEFAULT = true;
 const BUTTERCUP_LOGO = require("../common/images/logo-small.png");
-
 const INPUT_QUERY = {
 
     USERNAME: [
@@ -35,6 +35,10 @@ const INPUT_QUERY = {
 
 };
 
+let __nextFormID = 1;
+let __forms = {};
+let __selectedForm = null;
+
 function applyStyles(el, styles) {
     Object
         .keys(styles)
@@ -56,10 +60,19 @@ function findFirst(queries, parent = document) {
     return element;
 }
 
+function generateFormID() {
+    const id = `bcup-form:${__nextFormID}`;
+    __nextFormID += 1;
+    return id;
+}
+
 class LoginForm extends EventEmitter {
 
     constructor(form) {
         super();
+        this._id = generateFormID();
+        __forms[this._id] = this;
+        form.setAttribute("data-buttercup-form-id", this._id);
         form.setAttribute("data-buttercup", "attached");
         this._form = form;
         this._inputs = [];
@@ -97,7 +110,7 @@ class LoginForm extends EventEmitter {
         });
     }
 
-    filloutForm(entryData, autoSubmit = true) {
+    filloutForm(entryData, autoSubmit = AUTOSUBMIT_DEFAULT) {
         this.inputs.forEach(function mapInput(inputRecord) {
             let { type, input } = inputRecord;
             if (type === "property") {
@@ -124,7 +137,7 @@ class LoginForm extends EventEmitter {
     locateKnownInputs() {
         this._inputs = [];
         // username
-        let userInput = findFirst(INPUT_QUERY.USERNAME, this.form);
+        const userInput = findFirst(INPUT_QUERY.USERNAME, this.form);
         if (userInput) {
             this._inputs.push({
                 type: "property",
@@ -133,9 +146,10 @@ class LoginForm extends EventEmitter {
             });
             userInput.setAttribute("autocomplete", "off");
             userInput.setAttribute("data-buttercup-input", "username");
+            userInput.setAttribute("data-buttercup-form-id", this._id);
         }
         // password
-        let passInput = findFirst(INPUT_QUERY.PASSWORD, this.form);
+        const passInput = findFirst(INPUT_QUERY.PASSWORD, this.form);
         if (passInput) {
             this._inputs.push({
                 type: "property",
@@ -144,15 +158,16 @@ class LoginForm extends EventEmitter {
             });
             passInput.setAttribute("autocomplete", "new-password");
             passInput.setAttribute("data-buttercup-input", "password");
+            passInput.setAttribute("data-buttercup-form-id", this._id);
         }
     }
 
-    onEntryClick(entryData) {
+    onEntryClick(entryData, autoSubmit = AUTOSUBMIT_DEFAULT) {
         // get data
         authentication
             .getEntryData(entryData.archiveID, entryData.id)
             .then((entryRaw) => {
-                this.filloutForm(entryRaw);
+                this.filloutForm(entryRaw, autoSubmit);
             })
             .catch(function(err) {
                 alert(`Error loading credentials: ${err.message}`);
@@ -228,6 +243,22 @@ class LoginForm extends EventEmitter {
         }
     }
 
+    select() {
+        __selectedForm = this;
+    }
+
 }
+
+LoginForm.deselect = function() {
+    __selectedForm = null;
+};
+
+LoginForm.getFormWithID = function(id) {
+    return __forms[id];
+};
+
+LoginForm.getSelectedForm = function() {
+    return __selectedForm;
+};
 
 export default LoginForm;
