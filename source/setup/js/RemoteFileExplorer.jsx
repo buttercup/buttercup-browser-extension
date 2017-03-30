@@ -46,7 +46,6 @@ class RemoteFileExplorer extends Component {
             };
         if (this.state.showArchives !== showArchives ||
             (nextProps.active !== true && this.state.dirContents !== null)) {
-            console.log("Clear");
             Object.assign(newState, {
                 dirContents: null,
                 showArchives
@@ -66,7 +65,6 @@ class RemoteFileExplorer extends Component {
     }
 
     fetchDirectory(dir) {
-        console.log("Clear cookies", String(document.cookie));
         return this.fs
             .readDirectory(dir)
             .then(contents => contents.filter(item => {
