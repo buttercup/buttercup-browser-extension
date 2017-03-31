@@ -4,7 +4,6 @@ import dbTools from "./dropboxToken";
 class DropboxAuthenticator {
 
     constructor(accessToken) {
-        console.log(Dropbox);
         this._token = accessToken || null;
         this._client = (accessToken) ?
             new Dropbox({ accessToken }) :

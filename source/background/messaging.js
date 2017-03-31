@@ -1,6 +1,7 @@
 import archives from "./archives";
 import dropbox from "./dropboxToken";
 import DropboxAuthenticator from "./DropboxAuthenticator";
+import { hideContextMenu, showContextMenu } from "./context";
 
 const StorageInterface = window.Buttercup.Web.StorageInterface;
 
@@ -247,6 +248,18 @@ export default function addListeners() {
 
             case "set-dropbox-token": {
                 dropbox.setToken(request.token);
+                break;
+            }
+
+            case "toggle-context": {
+                if (request.enabled) {
+                    showContextMenu();
+                } else {
+                    hideContextMenu();
+                }
+                sendResponse({
+                    ok: true
+                });
                 break;
             }
 

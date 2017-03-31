@@ -65,7 +65,6 @@ class AddLastLoginForm extends React.Component {
     fetchLastSubmission() {
         chrome.runtime.sendMessage({ command: "last-form-submission" }, (response) => {
             if (response && response.ok === true) {
-                console.log("Data", response.data);
                 response.data.values.forEach((inputValue) => {
                     if (inputValue.type === "property") {
                         this.setState({

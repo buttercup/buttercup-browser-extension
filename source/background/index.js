@@ -22,4 +22,3 @@ addListeners();
             });
     }, UPDATE_EVERY_MINUTES * 60 * 1000);
 })();
-
