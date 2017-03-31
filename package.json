@@ -1,6 +1,6 @@
 {
   "name": "buttercup-chrome",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Buttercup extension for Chrome.",
   "main": "source/background/index.js",
   "scripts": {

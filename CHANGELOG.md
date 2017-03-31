@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v0.10.0
+_2017-03-31_
+
+ * Added right-click context menu on form inputs
+ * Fixed overflow on remote filesystem explorer when adding archives
+ * Finalised styling on unlock-archive form
+
 ## v0.9.0
 _2017-03-29_
 

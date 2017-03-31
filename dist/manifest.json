@@ -3,7 +3,7 @@
 
 	"name": "Buttercup",
 	"description": "Browser extension for Buttercup",
-	"version": "0.9.0",
+	"version": "0.10.0",
 
 	"browser_action": {
 		"default_icon": "resources/buttercup-256.png",
@@ -13,7 +13,8 @@
 	"icons": {
         "256": "resources/buttercup-256.png",
 		"128": "resources/buttercup-128.png",
-		"48": "resources/buttercup-48.png"
+		"48": "resources/buttercup-48.png",
+        "16": "resources/buttercup-16.png"
 	},
 
 	"background": {
@@ -34,7 +35,8 @@
 		"activeTab",
 		"tabs",
 		"<all_urls>",
-		"notifications"
+		"notifications",
+        "contextMenus"
 	]
 
 }
