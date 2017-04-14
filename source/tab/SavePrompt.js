@@ -116,7 +116,6 @@ class SavePrompt extends EventEmitter {
         e.preventDefault();
         this.close();
         chrome.runtime.sendMessage({ command: "open-add-last-login" }, NOPE);
-        // chrome.tabs.create({'url': chrome.extension.getURL('setup.html#/addLastLogin')}, function() {});
     }
 
     show() {

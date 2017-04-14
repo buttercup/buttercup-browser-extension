@@ -205,7 +205,7 @@ class LoginForm extends EventEmitter {
     onFormSubmit() {
         if (this.formSubmissionType === FORM_SUBMIT_USER_ACTION) {
             let values = this.fetchValues();
-            submissions.trackFormData(values);
+            submissions.trackFormData(document.title, values);
             this.emit("formSubmission");
         }
     }

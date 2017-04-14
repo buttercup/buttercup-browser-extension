@@ -74,6 +74,7 @@ class AddLastLoginForm extends React.Component {
                 });
                 if (response.data.url) {
                     this.setState({
+                        title: response.data.pageTitle || "",
                         url: response.data.url,
                         loginURL: response.data.loginURL
                     });

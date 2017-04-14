@@ -28,12 +28,13 @@ export default {
         );
     },
 
-    trackFormData: function(inputValues) {
+    trackFormData: function(pageTitle, inputValues) {
         chrome.runtime.sendMessage({
             command: "save-form-submission",
             data: {
                 time: Date.now(),
                 values: inputValues,
+                pageTitle,
                 url: formatting.formatURLForSaving(window.location.href),
                 loginURL: window.location.href
             }
