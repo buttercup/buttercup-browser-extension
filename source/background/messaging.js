@@ -95,6 +95,11 @@ export default function addListeners() {
                 return RESPOND_ASYNC;
             }
 
+            case "clear-last-submission": {
+                StorageInterface.setData("lastSubmission", false)
+                break;
+            }
+
             case "close-tab": {
                 chrome.tabs.remove(sender.tab.id);
                 break;

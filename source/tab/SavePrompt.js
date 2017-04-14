@@ -6,6 +6,7 @@ import {
 import { EventEmitter } from "events";
 
 import config from "../common/config";
+import submissions from "./submissions";
 
 const NOPE = function() {};
 const BUTTON_STYLES = {
@@ -107,6 +108,7 @@ class SavePrompt extends EventEmitter {
 
     onNoClick(e) {
         e.preventDefault();
+        submissions.clearLastSubmission();
         this.close();
     }
 

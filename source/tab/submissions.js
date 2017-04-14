@@ -6,6 +6,12 @@ const NOPE =                function() {};
 
 export default {
 
+    clearLastSubmission: function() {
+        chrome.runtime.sendMessage({
+            command: "clear-last-submission"
+        }, NOPE);
+    },
+
     processLastSubmission: function() {
         chrome.runtime.sendMessage(
             { command: "last-form-submission" },
