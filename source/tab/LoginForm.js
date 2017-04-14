@@ -6,6 +6,8 @@ import submissions from "./submissions";
 
 const AUTOSUBMIT_DEFAULT = true;
 const BUTTERCUP_LOGO = require("../common/images/logo-small.png");
+const FORM_SUBMIT_AUTO_SUBMISSION = "form-auto-submit";
+const FORM_SUBMIT_USER_ACTION = "form-user-action";
 const INPUT_QUERY = {
 
     USERNAME: [
@@ -31,6 +33,13 @@ const INPUT_QUERY = {
         "input[name*=pass]",
         "input[id*=pass]",
         "input.password"
+    ],
+
+    SUBMIT: [
+        "input[name=submit][type=submit]",
+        "input[name=submit]",
+        "input[value*='Login']",
+        "input[type=submit]"
     ]
 
 };
@@ -75,7 +84,9 @@ class LoginForm extends EventEmitter {
         form.setAttribute("data-buttercup-form-id", this._id);
         form.setAttribute("data-buttercup", "attached");
         this._form = form;
+        this._formSubmissionType = FORM_SUBMIT_USER_ACTION;
         this._inputs = [];
+        this._submitButton = null;
         this._mouseOverButton = false;
         this._popup = new Popup(this);
         this.locateKnownInputs();
@@ -87,12 +98,20 @@ class LoginForm extends EventEmitter {
         return this._form;
     }
 
+    get formSubmissionType() {
+        return this._formSubmissionType;
+    }
+
     get inputs() {
         return [...this._inputs];
     }
 
     get popup() {
         return this._popup;
+    }
+    
+    get submitButton() {
+        return this._submitButton;
     }
 
     set popup(p) {
@@ -120,7 +139,12 @@ class LoginForm extends EventEmitter {
             }
         });
         if (autoSubmit) {
-            this.form.submit();
+            this._formSubmissionType = FORM_SUBMIT_AUTO_SUBMISSION;
+            if (this.submitButton) {
+                this.submitButton.click();
+            } else {
+                this.form.submit();
+            }
         }
     }
 
@@ -160,6 +184,10 @@ class LoginForm extends EventEmitter {
             passInput.setAttribute("data-buttercup-input", "password");
             passInput.setAttribute("data-buttercup-form-id", this._id);
         }
+        const submitButton = findFirst(INPUT_QUERY.SUBMIT, this.form);
+        if (submitButton) {
+            this._submitButton = submitButton;
+        }
     }
 
     onEntryClick(entryData, autoSubmit = AUTOSUBMIT_DEFAULT) {
@@ -175,9 +203,11 @@ class LoginForm extends EventEmitter {
     }
 
     onFormSubmit() {
-        let values = this.fetchValues();
-        submissions.trackFormData(values);
-        this.emit("formSubmission");
+        if (this.formSubmissionType === FORM_SUBMIT_USER_ACTION) {
+            let values = this.fetchValues();
+            submissions.trackFormData(values);
+            this.emit("formSubmission");
+        }
     }
 
     onInputClick(e) {
