@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v0.11.0
+_2017-04-14_
+
+ * Bugfix: Clicking "No" on save prompt would not cancel further popups
+ * Bugfix: Form submission error when selecting credentials
+ * Prefill title when saving new credentials
+
 ## v0.10.0
 _2017-03-31_
 
