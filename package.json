@@ -1,7 +1,7 @@
 {
-  "name": "buttercup-chrome",
+  "name": "buttercup-browser-extension",
   "version": "0.10.0",
-  "description": "Buttercup extension for Chrome.",
+  "description": "Buttercup browser extension for Chrome and Firefox.",
   "main": "source/background/index.js",
   "scripts": {
     "build": "npm run clean:build && npm run copy && npm run webpack",
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/perry-mitchell/buttercup-chrome.git"
+    "url": "git+https://github.com/buttercup/buttercup-browser-extension.git"
   },
   "keywords": [
     "buttercup",
@@ -38,9 +38,9 @@
   "author": "Perry Mitchell <perry@perrymitchell.net>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/perry-mitchell/buttercup-chrome/issues"
+    "url": "https://github.com/buttercup/buttercup-browser-extension/issues"
   },
-  "homepage": "https://github.com/perry-mitchell/buttercup-chrome#readme",
+  "homepage": "https://github.com/buttercup/buttercup-browser-extension#readme",
   "devDependencies": {
     "any-fs": "~0.2.0",
     "babel-core": "^6.4.5",
