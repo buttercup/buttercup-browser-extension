@@ -37,6 +37,16 @@
 		"<all_urls>",
 		"notifications",
         "contextMenus"
-	]
+	],
+
+	"commands": {
+		"login-with-first-credentials":{
+			"suggested_key": {
+				"default": "Ctrl+B",
+				"mac": "Command+B"
+			},
+			"description": "Login using first matching credentials"
+		}
+	}
 
 }

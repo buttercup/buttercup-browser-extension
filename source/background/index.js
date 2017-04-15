@@ -1,11 +1,13 @@
-import addListeners from "./messaging";
+import addMessagingListeners from "./messaging";
+import addHotkeyListeners from "./hotkeys";
 import { updateAll } from "./archives";
 
 const UPDATE_EVERY_MINUTES = 5;
 
 // init
 window.Buttercup.Web.HashingTools.patchCorePBKDF();
-addListeners();
+addMessagingListeners();
+addHotkeyListeners();
 
 // automatic archive updating
 (function autoUpdate() {

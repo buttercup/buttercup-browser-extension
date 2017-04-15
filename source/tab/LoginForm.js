@@ -44,7 +44,9 @@ const INPUT_QUERY = {
 
 };
 
-let __nextFormID = 1;
+export const FIRST_FORM_INC = 1;
+
+let __nextFormID = FIRST_FORM_INC;
 let __forms = {};
 let __selectedForm = null;
 
@@ -69,8 +71,8 @@ function findFirst(queries, parent = document) {
     return element;
 }
 
-function generateFormID() {
-    const id = `bcup-form:${__nextFormID}`;
+export function generateFormID(nextID = __nextFormID) {
+    const id = `bcup-form:${nextID}`;
     __nextFormID += 1;
     return id;
 }
