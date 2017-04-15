@@ -3,7 +3,7 @@
 
 	"name": "Buttercup",
 	"description": "Browser extension for Buttercup",
-	"version": "0.11.0",
+	"version": "0.12.0",
 
 	"browser_action": {
 		"default_icon": "resources/buttercup-256.png",
@@ -37,6 +37,16 @@
 		"<all_urls>",
 		"notifications",
         "contextMenus"
-	]
+	],
+
+	"commands": {
+		"login-with-first-credentials":{
+			"suggested_key": {
+				"default": "Ctrl+B",
+				"mac": "Command+B"
+			},
+			"description": "Login using first matching credentials"
+		}
+	}
 
 }
