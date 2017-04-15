@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v0.12.0
+_2017-04-15_
+
+ * Bugfix: Popup formatting issues
+ * Added hotkey for auto-login (Command+B (Mac) / Ctrl+B (Windows/Linux))
+
 ## v0.11.0
 _2017-04-14_
 
