@@ -6,7 +6,10 @@
     "mocha": false,
     "jasmine": false
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
