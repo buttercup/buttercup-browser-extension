@@ -8,6 +8,8 @@ const StorageInterface = window.Buttercup.Web.StorageInterface;
 const RESPOND_ASYNC = true;
 const RESPOND_SYNC = false;
 
+let __lastFormSubmission = null;
+
 function getEntriesForSearch(query) {
     let matchingEntries = archives
         .getMatchingEntriesForSearch(query)
@@ -96,7 +98,7 @@ export default function addListeners() {
             }
 
             case "clear-last-submission": {
-                StorageInterface.setData("lastSubmission", false)
+                __lastFormSubmission = null;
                 break;
             }
 
@@ -152,10 +154,10 @@ export default function addListeners() {
             }
 
             case "last-form-submission": {
-                let archivesCount = archives.getUnlockedArchiveList().length;
+                const archivesCount = archives.getUnlockedArchiveList().length;
                 sendResponse({
                     ok: archivesCount > 0,
-                    data: StorageInterface.getData("lastSubmission", false)
+                    data: __lastFormSubmission || false
                 });
                 break;
             }
@@ -203,8 +205,8 @@ export default function addListeners() {
 
             case "save-form-submission": {
                 let matchingEntries = getEntriesForURL(request.data.url);
-                if (matchingEntries <= 0) {
-                    StorageInterface.setData("lastSubmission", request.data);
+                if (matchingEntries.length <= 0) {
+                    __lastFormSubmission = request.data;
                 }
                 break;
             }
