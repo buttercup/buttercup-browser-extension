@@ -13,7 +13,6 @@ class App extends React.Component {
             <div>
                 <h2 className="green">Buttercup</h2>
                 <ArchiveList />
-                { this.props.children }
                 <IconButton className="configure" onClick={(e) => this.setupClicked(e)}>
                     <ConfigureIcon />
                 </IconButton>

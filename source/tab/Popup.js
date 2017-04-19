@@ -72,12 +72,12 @@ function createPathElement(archiveName, groupNames, overrideStyles = {}) {
 
 function createPopup(popup, position, width, enableButtons = true) {
     const HEIGHT = 250;
-    let popupWidth = Math.max(width, MIN_WIDTH),
-        buttonStyle = enableButtons ? {} : {
-            "-webkit-filter": "grayscale(1)",
-            filter: "grayscale(1)"
-        };
-    let list = el(
+    const popupWidth = Math.max(width, MIN_WIDTH);
+    const buttonStyle = enableButtons ? {} : {
+        "-webkit-filter": "grayscale(1)",
+        filter: "grayscale(1)"
+    };
+    const list = el(
         "div",
         {
             "data-buttercup-role": "listbox",
@@ -92,26 +92,7 @@ function createPopup(popup, position, width, enableButtons = true) {
             }
         }
     );
-    // let searchButton = el(
-    //     "div",
-    //     {
-    //         title: "Search entries",
-    //         "data-buttercup-role": "button",
-    //         style: {
-    //             width: `${BUTTON_SIZE}px`,
-    //             height: `${BUTTON_SIZE}px`,
-    //             position: "relative",
-    //             display: "inline-block",
-    //             cursor: "pointer",
-    //             backgroundImage: `url(${ICON_SEARCH})`,
-    //             backgroundSize: `${BUTTON_IMAGE_SIZE}px`,
-    //             backgroundPosition: "center",
-    //             backgroundRepeat: "no-repeat",
-    //             ...buttonStyle
-    //         }
-    //     }
-    // );
-    let saveButton = el(
+    const saveButton = el(
         "div",
         {
             title: "Save next login",
@@ -130,7 +111,7 @@ function createPopup(popup, position, width, enableButtons = true) {
             }
         }
     );
-    let header = el(
+    const header = el(
         "div",
         {
             "data-buttercup-role": "header",
@@ -144,43 +125,42 @@ function createPopup(popup, position, width, enableButtons = true) {
                 textAlign: "right"
             }
         },
-        // searchButton,
         saveButton
     );
-    let searchInput = el(
-            "input",
-            {
-                style: {
-                    backgroundColor: "rgba(0, 0, 0, 0.0)",
-                    width: "100%",
-                    height: "100%",
-                    color: "#FFF",
-                    fontStyle: "italic",
-                    outline: "none",
-                    border: "none",
-                    textIndent: "30px"
-                }
+    const searchInput = el(
+        "input",
+        {
+            style: {
+                backgroundColor: "rgba(0, 0, 0, 0.0)",
+                width: "100%",
+                height: "100%",
+                color: "#FFF",
+                fontStyle: "italic",
+                outline: "none",
+                border: "none",
+                textIndent: "30px"
             }
-        ),
-        searchBar = el(
-            "div",
-            {
-                style: {
-                    backgroundImage: `url(${ICON_SEARCHBAR})`,
-                    backgroundSize: `${ICON_SEARCH_IMAGE_SIZE}px`,
-                    backgroundPosition: "5px 3px",
-                    backgroundRepeat: "no-repeat",
-                    width: "100%",
-                    height: `${BUTTON_SIZE}px`,
-                    position: "absolute",
-                    left: "0px",
-                    top: `${BUTTON_SIZE}px`,
-                    borderBottom: "1px solid rgba(0, 0, 0, 0.2)"
-                }
-            },
-            searchInput
-        );
-    let title = el(
+        }
+    );
+    const searchBar = el(
+        "div",
+        {
+            style: {
+                backgroundImage: `url(${ICON_SEARCHBAR})`,
+                backgroundSize: `${ICON_SEARCH_IMAGE_SIZE}px`,
+                backgroundPosition: "5px 3px",
+                backgroundRepeat: "no-repeat",
+                width: "100%",
+                height: `${BUTTON_SIZE}px`,
+                position: "absolute",
+                left: "0px",
+                top: `${BUTTON_SIZE}px`,
+                borderBottom: "1px solid rgba(0, 0, 0, 0.2)"
+            }
+        },
+        searchInput
+    );
+    const title = el(
         "div",
         {
             "data-buttercup-role": "title",
@@ -195,7 +175,7 @@ function createPopup(popup, position, width, enableButtons = true) {
         },
         "Buttercup"
     );
-    let container = el(
+    const container = el(
         "div",
         {
             "data-buttercup-role": "container",
@@ -286,7 +266,7 @@ class Popup extends EventEmitter {
     onButtonHover(event, inside) {
         event.preventDefault();
         event.stopPropagation();
-        let { target } = event;
+        const { target } = event;
         if (inside) {
             target.style.backgroundColor = `${config.BACKGROUND_BUTTERCUP_GREEN}`;
         } else {
@@ -304,7 +284,7 @@ class Popup extends EventEmitter {
             mount(document.body, this._elements.root);
             // handle searching
             this._elements.searchInput.focus();
-            let onSearchUpdate = (e) => {
+            const onSearchUpdate = (e) => {
                 this._searchText = e.target.value;
                 updateItems();
             };
@@ -327,7 +307,7 @@ class Popup extends EventEmitter {
 
     updatePageItems(items) {
         this.elements.list.innerHTML = "";
-        let emptyMessage = (this._searchText.length > 0) ?
+        const emptyMessage = (this._searchText.length > 0) ?
             "No entries found for this search" :
             "No entries for this page";
         if (items.length <= 0) {
@@ -348,7 +328,7 @@ class Popup extends EventEmitter {
             ));
             return;
         }
-        let listEl = el(
+        const listEl = el(
             "div",
             {
                 style: {
@@ -360,7 +340,7 @@ class Popup extends EventEmitter {
         );
         mount(this.elements.list, listEl);
         items.forEach(item => {
-            let listItem = el(
+            const listItem = el(
                 "div",
                 {
                     style: {

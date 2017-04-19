@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import "IconButton.sass";
 
@@ -14,11 +15,15 @@ class IconButton extends React.Component {
         delete renderProps.children;
         return (
             <button tabIndex="-1" {...renderProps}>
-                {this.props.children}
+                { this.props.children }
             </button>
         );
     }
 
 }
+
+IconButton.propTypes = {
+    children: PropTypes.element.isRequired
+};
 
 export default IconButton;

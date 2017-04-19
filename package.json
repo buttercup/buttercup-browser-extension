@@ -66,6 +66,7 @@
     "movefiles": "^1.0.1",
     "node-noop": "^1.0.0",
     "node-sass": "^3.13.0",
+    "prop-types": "^15.5.8",
     "rc-tree": "^1.4.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",

@@ -5,13 +5,12 @@ let validate = {
     },
 
     validateArchiveAddition: function(request) {
-        console.log("Add archive (validate)", request);
         let { name } = request;
         if (validate.archiveNameAvailable(name) !== true) {
             throw new Error(`Name is already taken: ${name}`);
         }
         validate.validateObjectString(request, "name");
-        validate.validateObjectString(request, "master_password");
+        validate.validateObjectString(request, "masterPassword");
         switch (request.type) {
             case "dropbox": {
                 validate.validateObjectString(request, "dropbox_path");
