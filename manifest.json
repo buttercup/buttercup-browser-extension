@@ -33,9 +33,9 @@
 
 	"permissions": [
 		"activeTab",
+		"http://*/*",
+		"https://*/*",
 		"tabs",
-		"<all_urls>",
-		"notifications",
         "contextMenus"
 	],
 
