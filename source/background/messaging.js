@@ -3,8 +3,6 @@ import dropbox from "./dropboxToken";
 import DropboxAuthenticator from "./DropboxAuthenticator";
 import { hideContextMenu, showContextMenu } from "./context";
 
-const StorageInterface = window.Buttercup.Web.StorageInterface;
-
 const RESPOND_ASYNC = true;
 const RESPOND_SYNC = false;
 
