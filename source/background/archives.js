@@ -21,7 +21,7 @@ function generateEntryPath(entry) {
         entryPath.unshift(parent);
         group = parent;
     }
-    return entryPath.map(group => group.getTitle());
+    return entryPath.map(pathGroup => pathGroup.getTitle());
 }
 
 function getArchiveManager() {
