@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import IconLocked from "react-icons/lib/fa/lock";
 import IconUnlocked from "react-icons/lib/fa/unlock-alt";
 import IconConnect from "react-icons/lib/go/key";
@@ -7,15 +8,18 @@ import IconDisconnect from "react-icons/lib/go/lock";
 import tools from "../../common/tools";
 
 const NOPE = function() {};
+const STATUS_LOCKED = "locked";
+const STATUS_PENDING = "processing";
+const STATUS_UNLOCKED = "unlocked";
 
 class ArchiveListElement extends React.Component {
 
     get locked() {
-        return this.props.status !== "unlocked";
+        return this.props.status !== STATUS_UNLOCKED;
     }
 
     get processing() {
-        return this.props.status === "processing";
+        return this.props.status === STATUS_PENDING;
     }
 
     get type() {
@@ -23,21 +27,19 @@ class ArchiveListElement extends React.Component {
     }
 
     render() {
-        let canUnlock = false,
-            actionTitle,
+        let actionTitle,
             Icon,
             ControlIcon;
         switch (this.props.status) {
-            case "unlocked":
+            case STATUS_UNLOCKED:
                 Icon = IconUnlocked;
                 ControlIcon = IconDisconnect;
                 actionTitle = "Lock this archive";
                 break;
-            case "processing":
+            case STATUS_PENDING:
                 Icon = IconLocked;
                 break;
-            case "locked":
-                canUnlock = true;
+            case STATUS_LOCKED:
                 /* falls through */
             default:
                 Icon = IconLocked;
@@ -88,5 +90,16 @@ class ArchiveListElement extends React.Component {
     }
 
 }
+
+ArchiveListElement.propTypes = {
+    name: PropTypes.string.isRequired,
+    onLocked: PropTypes.func,
+    status: PropTypes.oneOf([STATUS_LOCKED, STATUS_PENDING, STATUS_UNLOCKED]).isRequired,
+    type: PropTypes.string.isRequired
+};
+
+ArchiveListElement.defaultProps = {
+    onLocked: () => {}
+};
 
 export default ArchiveListElement;

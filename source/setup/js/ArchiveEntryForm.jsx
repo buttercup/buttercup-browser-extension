@@ -1,8 +1,6 @@
 import React from "react";
 import { hashHistory } from "react-router";
 
-const NOPE = function() {};
-
 class ArchiveEntryForm extends React.Component {
 
     constructor(props) {
@@ -10,7 +8,7 @@ class ArchiveEntryForm extends React.Component {
         this.state = {
             connect: "existing",
             loading: false,
-            master_password: "",
+            masterPassword: "",
             name: "",
             submitEnabled: true,
             submitLabel: "Connect",
@@ -86,7 +84,7 @@ class ArchiveEntryForm extends React.Component {
                     <label>Title</label>
                 </div>
                 <div className="row">
-                    <input type="password" name="master_password" value={this.state.master_password} onChange={this.handleChange} />
+                    <input type="password" name="masterPassword" value={this.state.masterPassword} onChange={this.handleChange} />
                     <label>Archive password</label>
                 </div>
             </div>

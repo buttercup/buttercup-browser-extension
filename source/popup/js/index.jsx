@@ -5,8 +5,8 @@ import ReactDOM from "react-dom";
 import {
     Router,
     Route,
-    Link,
-    IndexRoute,
+    // Link,
+    // IndexRoute,
     hashHistory
 } from "react-router";
 

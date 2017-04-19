@@ -106,7 +106,7 @@ let archives = {
                     workspace.setPrimaryArchive(
                         Archive.createWithDefaults(),
                         datasource,
-                        createCredentials.fromPassword(request.master_password)
+                        createCredentials.fromPassword(request.masterPassword)
                     );
                     return workspace
                         .save()
@@ -115,12 +115,12 @@ let archives = {
                 return archives
                     .fetchWorkspace(
                         datasource,
-                        createCredentials.fromPassword(request.master_password)
+                        createCredentials.fromPassword(request.masterPassword)
                     )
                     .then(workspace => [workspace, credentials]);
             })
             .then(([workspace, credentials] = []) =>
-                validateAndSave(request.name, workspace, credentials, request.master_password));
+                validateAndSave(request.name, workspace, credentials, request.masterPassword));
     },
 
     addOwnCloudArchive: function(request) {
@@ -151,7 +151,7 @@ let archives = {
                     workspace.setPrimaryArchive(
                         Archive.createWithDefaults(),
                         datasource,
-                        createCredentials.fromPassword(request.master_password)
+                        createCredentials.fromPassword(request.masterPassword)
                     );
                     return workspace
                         .save()
@@ -160,12 +160,12 @@ let archives = {
                 return archives
                     .fetchWorkspace(
                         datasource,
-                        createCredentials.fromPassword(request.master_password)
+                        createCredentials.fromPassword(request.masterPassword)
                     )
                     .then(workspace => [workspace, credentials]);
             })
             .then(([workspace, credentials] = []) =>
-                validateAndSave(request.name, workspace, credentials, request.master_password));
+                validateAndSave(request.name, workspace, credentials, request.masterPassword));
     },
 
     addWebDAVArchive: function(request) {
@@ -196,7 +196,7 @@ let archives = {
                     workspace.setPrimaryArchive(
                         Archive.createWithDefaults(),
                         datasource,
-                        createCredentials.fromPassword(request.master_password)
+                        createCredentials.fromPassword(request.masterPassword)
                     );
                     return workspace
                         .save()
@@ -205,12 +205,12 @@ let archives = {
                 return archives
                     .fetchWorkspace(
                         datasource,
-                        createCredentials.fromPassword(request.master_password)
+                        createCredentials.fromPassword(request.masterPassword)
                     )
                     .then(workspace => [workspace, credentials]);
             })
             .then(([workspace, credentials] = []) =>
-                validateAndSave(request.name, workspace, credentials, request.master_password));
+                validateAndSave(request.name, workspace, credentials, request.masterPassword));
     },
 
     createEntry: function(archiveID, groupID, title) {
