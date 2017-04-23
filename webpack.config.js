@@ -11,13 +11,22 @@ const SRC_SETUP = path.resolve(SOURCE, "setup");
 const SRC_TAB = path.resolve(SOURCE, "tab");
 const SRC_COMMON = path.resolve(SOURCE, "common");
 
-const imageWebpackLoaderQuery = {
-    progressive: true,
-    optimizationLevel: 7,
-    interlaced: false,
-    pngquant: {
-        quality: "65-90",
-        speed: 4
+const LOADER_IMAGE = {
+    loader: "image-webpack-loader",
+    query: {
+        mozjpeg: {
+            progressive: true
+        },
+        gifsicle: {
+            interlaced: false
+        },
+        optipng: {
+            optimizationLevel: 7
+        },
+        pngquant: {
+            quality: "75-90",
+            speed: 4
+        }
     }
 };
 
@@ -90,10 +99,7 @@ module.exports = [
                     test: /\.png$/i,
                     use: [
                         { loader: "url-loader" },
-                        {
-                            loader: "image-webpack-loader",
-                            query: imageWebpackLoaderQuery
-                        }
+                        LOADER_IMAGE
                     ]
                 },
                 {
@@ -184,10 +190,7 @@ module.exports = [
                     test: /\.png$/i,
                     use: [
                         { loader: "url-loader" },
-                        {
-                            loader: "image-webpack-loader",
-                            query: imageWebpackLoaderQuery
-                        }
+                        LOADER_IMAGE
                     ]
                 }
             ]
