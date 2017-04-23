@@ -1,7 +1,9 @@
+const REQUEST_TIMEOUT = 250;
+
 function getItemsForCurrentURL() {
     let currentURL = window.location.href;
     return new Promise(function(resolve, reject) {
-        let timeout = setTimeout(() => reject(new Error("Timed-out getting entries")), 200);
+        let timeout = setTimeout(() => reject(new Error("Timed-out getting entries")), REQUEST_TIMEOUT);
         chrome.runtime.sendMessage({ command: "get-entries-for-url", url: currentURL }, function(response) {
             clearTimeout(timeout);
             if (response.ok !== true) {
@@ -14,7 +16,7 @@ function getItemsForCurrentURL() {
 
 function getItemsForSearchQuery(query) {
     return new Promise(function(resolve, reject) {
-        let timeout = setTimeout(() => reject(new Error("Timed-out getting entries")), 200);
+        let timeout = setTimeout(() => reject(new Error("Timed-out getting entries")), REQUEST_TIMEOUT);
         chrome.runtime.sendMessage({ command: "get-entries-for-search", query }, function(response) {
             clearTimeout(timeout);
             if (response.ok !== true) {

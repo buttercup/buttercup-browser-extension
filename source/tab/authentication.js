@@ -1,4 +1,4 @@
-function getEntryData(archiveID, entryID) {
+export function getEntryData(archiveID, entryID) {
     return new Promise(function _getEntryData(resolve, reject) {
         const timeout = setTimeout(() => reject(new Error("Timed-out getting entry data")), 200);
         chrome.runtime.sendMessage(
@@ -13,7 +13,3 @@ function getEntryData(archiveID, entryID) {
         );
     });
 }
-
-export default {
-    getEntryData
-};

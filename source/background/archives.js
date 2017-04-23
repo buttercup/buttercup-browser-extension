@@ -61,7 +61,7 @@ function validateAndSave(name, workspace, storageCredentials, password) {
         });
 }
 
-let archives = {
+const archives = {
 
     addArchiveByRequest: function(request) {
         return Promise.resolve(request)
@@ -338,6 +338,32 @@ let archives = {
     }
 
 };
+
+export function getLoginCredentialsTree() {
+    const groupToTree = group => {
+        return {
+            type: "group",
+            name: group.getTitle(),
+            id: group.getID(),
+            items: [
+                ...group.getGroups().map(g => groupToTree(g)),
+                ...group.getEntries().map(entry => ({
+                    type: "entry",
+                    name: entry.getProperty("title"),
+                    id: entry.getID()
+                }))
+            ]
+        };
+    };
+    return archives
+        .getUnlockedArchiveList()
+        .map(item => ({
+            type: "archive",
+            name: item.name,
+            id: item.workspace.primary.archive.getID(),
+            items: item.workspace.primary.archive.getGroups().map(g => groupToTree(g))
+        }));
+}
 
 export function updateAll() {
     return getArchiveManager().updateUnlocked();

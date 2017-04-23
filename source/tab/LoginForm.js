@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 
 import Popup from "./popup";
-import authentication from "./authentication";
+import { getEntryData } from "./authentication";
 import submissions from "./submissions";
 
 const AUTOSUBMIT_DEFAULT = true;
@@ -194,8 +194,7 @@ class LoginForm extends EventEmitter {
 
     onEntryClick(entryData, autoSubmit = AUTOSUBMIT_DEFAULT) {
         // get data
-        authentication
-            .getEntryData(entryData.archiveID, entryData.id)
+        getEntryData(entryData.archiveID, entryData.id)
             .then((entryRaw) => {
                 this.filloutForm(entryRaw, autoSubmit);
             })
