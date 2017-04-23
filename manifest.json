@@ -42,8 +42,8 @@
 	"commands": {
 		"login-with-first-credentials":{
 			"suggested_key": {
-				"default": "Ctrl+B",
-				"mac": "Command+B"
+				"default": "Ctrl+Shift+L",
+				"mac": "Command+Shift+L"
 			},
 			"description": "Login using first matching credentials"
 		}
