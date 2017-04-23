@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v0.12.1
+_2017-04-19_
+
+ * Spring clean:
+   * Reduced permissions requirements in manifest
+   * Improved last submitted form security
+
 ## v0.12.0
 _2017-04-15_
 
