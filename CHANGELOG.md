@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v0.13.0
+_2017-04-23_
+
+ * Added right-click context menu drilldown for choosing which entry to fill form with
+ * Updated hotkey for auto-login (Command+Shift+L for Mac, Ctrl+Shift+L for Windows/Linux)
+ * Fixed deprecation warnings during build and updated some packages
+
 ## v0.12.1
 _2017-04-19_
 
