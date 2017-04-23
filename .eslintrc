@@ -130,7 +130,7 @@
     "consistent-this": [1,"_this"],
     "eol-last": 2,
     "func-names": 1,
-    "indent": ["error", 4, { "SwitchCase": 1 }],
+    "indent": ["error", 4, { "SwitchCase": 1, "MemberExpression": 1 }],
     "key-spacing": ["error",{"afterColon":true}],
     "linebreak-style": [2,"unix"],
     "new-cap": [2,{"newIsCap":true,"capIsNew":true}],
