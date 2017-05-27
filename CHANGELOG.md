@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v0.13.1
+_2017-05-27_
+
+ * Bugfix: Archive creation in root level
+
 ## v0.13.0
 _2017-04-23_
 
