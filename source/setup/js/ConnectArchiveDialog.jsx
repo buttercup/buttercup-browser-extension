@@ -56,10 +56,15 @@ class ConnectArchiveDialog extends Component {
     }
 
     onOptionChange(e) {
-        let newOption = (typeof e === "string") ? e : e.target.value;
+        const newOption = (typeof e === "string") ? e : e.target.value;
+        const additionalChanges = {};
+        if (newOption === "new") {
+            additionalChanges.createNew = true;
+        }
         this.setState({
             allowSelectArchive: (newOption === "existing"),
-            currentOption: newOption
+            currentOption: newOption,
+            ...additionalChanges
         });
     }
 
