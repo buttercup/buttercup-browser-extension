@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v0.14.0
+_2017-06-07_
+
+ * Bugfix: [Malformed URL error](https://github.com/buttercup/buttercup-browser-extension/issues/71) - old WebDAV client caused issues with special characters in passwords
+ * Add back old Buttercup-core-web classes for compatibility
+
 ## v0.13.1
 _2017-05-27_
 
