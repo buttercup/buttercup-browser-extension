@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v0.14.1
+_2017-06-24_
+
+ * Bugfix: [Unable to connect to certain WebDAV services](https://github.com/buttercup/buttercup-desktop/issues/303)
+
 ## v0.14.0
 _2017-06-07_
 
