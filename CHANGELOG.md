@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v0.14.2
+_2017-07-15_
+
+ * Bugfix: [ownCloud subfolder installations: Subfolder ignored](https://github.com/buttercup/buttercup-browser-extension/issues/80)
+
 ## v0.14.1
 _2017-06-24_
 
