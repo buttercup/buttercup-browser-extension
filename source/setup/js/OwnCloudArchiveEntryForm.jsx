@@ -24,8 +24,8 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
         if (this.state.owncloud_address.trim().length <= 0) {
             return null;
         }
-        let wfs,
-            owncloudAddress = url.resolve(this.state.owncloud_address, "/remote.php/webdav/");
+        let wfs;
+        const owncloudAddress = url.resolve(this.state.owncloud_address, "remote.php/webdav/");
         if (this.state.owncloud_username && this.state.owncloud_username.trim().length > 0) {
             if (this.state.owncloud_password.trim().length <= 0) {
                 return null;
