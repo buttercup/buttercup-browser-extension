@@ -21,7 +21,7 @@ This browser extension allows users to interface with password archives authored
 The extension can remotely connect to archives via Buttercup's common communication protocols (WebDAV, Dropbox etc.).
 
 ### Supported browsers
-Both [Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) and Firefox are supported.
+[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), Firefox and [Opera](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) (with the ["Download Chrome Extension"](https://addons.opera.com/en-gb/extensions/details/download-chrome-extension-9/) installed) are supported.
 
 Other browsers will be supported in order of request/popularity.
 
