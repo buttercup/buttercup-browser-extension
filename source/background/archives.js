@@ -6,6 +6,7 @@ const {
     createCredentials,
     WebDAVDatasource,
     OwnCloudDatasource,
+    TextDatasource,
     Workspace
 } = Buttercup;
 const {
@@ -77,11 +78,50 @@ const archives = {
                     case "owncloud": {
                         return archives.addOwnCloudArchive(request);
                     }
+                    case "local-archive-upload": {
+                        return archives.addLocalUploadedArchive(request);
+                    }
 
                     default:
                         throw new Error(`Unknown archive type: ${request.type}`);
                 }
             });
+    },
+
+    addLocalUploadedArchive: request => {
+        return Promise
+            .resolve(request)
+            .then(() => {
+                let localArchiveCreds = createCredentials("localArchive");
+                localArchiveCreds.setValue("datasource", JSON.stringify({
+                    type: "localArchive"
+                }));
+                return localArchiveCreds;
+            })
+            .then(credentials => {
+                let datasource = new TextDatasource(request.localArchiveContent);
+
+                if (request.connect === "new") {
+                    let workspace = new Workspace();
+                    workspace.setPrimaryArchive(
+                        Archive.createWithDefaults(),
+                        datasource,
+                        createCredentials.fromPassword(request.masterPassword)
+                    );
+                    return workspace
+                        .save()
+                        .then(() => [workspace, credentials]);
+                }
+
+                return archives
+                    .fetchWorkspace(
+                        datasource,
+                        createCredentials.fromPassword(request.masterPassword)
+                    )
+                    .then(workspace => [workspace, credentials]);
+            })
+            .then(([workspace, credentials] = []) =>
+                validateAndSave(request.name, workspace, credentials, request.masterPassword));
     },
 
     addDropboxArchive: function(request) {
