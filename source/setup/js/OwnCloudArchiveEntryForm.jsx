@@ -13,27 +13,27 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
         super(props);
         Object.assign(this.state, {
             type: "owncloud",
-            owncloud_address: "",
-            owncloud_username: "",
-            owncloud_password: "",
-            owncloud_path: ""
+            owncloudAddress: "",
+            owncloudUsername: "",
+            owncloudPassword: "",
+            owncloudPath: ""
         });
     }
 
     createFS() {
-        if (this.state.owncloud_address.trim().length <= 0) {
+        if (this.state.owncloudAddress.trim().length <= 0) {
             return null;
         }
         let wfs;
-        const owncloudAddress = url.resolve(this.state.owncloud_address, "remote.php/webdav/");
-        if (this.state.owncloud_username && this.state.owncloud_username.trim().length > 0) {
-            if (this.state.owncloud_password.trim().length <= 0) {
+        const owncloudAddress = url.resolve(this.state.owncloudAddress, "remote.php/webdav/");
+        if (this.state.owncloudUsername && this.state.owncloudUsername.trim().length > 0) {
+            if (this.state.owncloudPassword.trim().length <= 0) {
                 return null;
             }
             wfs = createWebDAVFS(
                 owncloudAddress,
-                this.state.owncloud_username,
-                this.state.owncloud_password
+                this.state.owncloudUsername,
+                this.state.owncloudPassword
             );
             return anyFs(wfs);
         }
@@ -43,7 +43,7 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
     onArchiveSelected(filePath, createNew) {
         this.setState({
             connect: createNew ? "new" : "existing",
-            owncloud_path: filePath
+            owncloudPath: filePath
         });
     }
 
@@ -53,8 +53,8 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
             <div className="row">
                 <input
                     type="text"
-                    name="owncloud_address"
-                    value={this.state.owncloud_address}
+                    name="owncloudAddress"
+                    value={this.state.owncloudAddress}
                     onChange={this.handleChange}
                     onBlur={() => this.checkFS()}
                     />
@@ -63,8 +63,8 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
             <div className="row">
                 <input
                     type="text"
-                    name="owncloud_username"
-                    value={this.state.owncloud_username}
+                    name="owncloudUsername"
+                    value={this.state.owncloudUsername}
                     onChange={this.handleChange}
                     onBlur={() => this.checkFS()}
                     />
@@ -73,8 +73,8 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
             <div className="row">
                 <input
                     type="password"
-                    name="owncloud_password"
-                    value={this.state.owncloud_password}
+                    name="owncloudPassword"
+                    value={this.state.owncloudPassword}
                     onChange={this.handleChange}
                     onBlur={() => this.checkFS()}
                     />
@@ -83,8 +83,8 @@ class OwnCloudArchiveEntryForm extends BaseFSArchiveEntryForm {
             <div className="row remotePath">
                 <input
                     type="text"
-                    name="owncloud_path"
-                    value={this.state.owncloud_path}
+                    name="owncloudPath"
+                    value={this.state.owncloudPath}
                     onChange={this.handleChange}
                     />
                 <label>Remote archive path</label>

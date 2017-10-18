@@ -1,10 +1,11 @@
 import React from "react";
 import { hashHistory } from "react-router";
+import { noop } from "lodash";
 
 import UnlockArchiveForm from "./UnlockArchiveForm";
 import HeaderBar from "./HeaderBar";
 
-const NOPE = function() {};
+const { PropTypes } = React;
 
 class UnlockArchive extends React.Component {
 
@@ -17,7 +18,7 @@ class UnlockArchive extends React.Component {
             
             default: {
                 chrome.tabs.getCurrent(function(tab) {
-                    chrome.tabs.remove(tab.id, NOPE);
+                    chrome.tabs.remove(tab.id, noop);
                 });
             }
         }
@@ -34,5 +35,12 @@ class UnlockArchive extends React.Component {
     }
 
 }
+
+UnlockArchive.propTypes = {
+    params: PropTypes.shape({
+        action: PropTypes.string,
+        name: PropTypes.string
+    })
+};
 
 export default UnlockArchive;

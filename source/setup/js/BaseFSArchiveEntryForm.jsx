@@ -26,7 +26,7 @@ class BaseFSArchiveEntryForm extends ArchiveEntryForm {
                 this.fs = fs;
                 this.forceUpdate();
             },
-            (err) => {
+            () => {
                 this._checkingFs = false;
                 let checkAgain = this._checkAgain;
                 this._checkAgain = false;

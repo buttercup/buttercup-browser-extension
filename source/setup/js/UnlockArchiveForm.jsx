@@ -1,5 +1,7 @@
 import React from "react";
 
+const { PropTypes } = React;
+
 class UnlockArchiveForm extends React.Component {
 
     constructor(props) {
@@ -66,5 +68,11 @@ class UnlockArchiveForm extends React.Component {
     }
 
 }
+
+UnlockArchiveForm.propTypes = {
+    password: PropTypes.string,
+    name: PropTypes.string,
+    onUnlock: PropTypes.func
+};
 
 export default UnlockArchiveForm;

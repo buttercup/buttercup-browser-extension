@@ -13,14 +13,14 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
             submitEnabled: false,
             type: "dropbox",
             authenticated: false,
-            dropbox_token: "",
-            dropbox_path: ""
+            dropboxToken: "",
+            dropboxPath: ""
         });
     }
 
     createFS() {
         let dfs = createDropboxFS({
-            apiKey: this.state.dropbox_token
+            apiKey: this.state.dropboxToken
         });
         return anyFs(dfs);
     }
@@ -28,7 +28,7 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
     onArchiveSelected(filePath, createNew) {
         this.setState({
             connect: createNew ? "new" : "existing",
-            dropbox_path: filePath
+            dropboxPath: filePath
         });
     }
 
@@ -50,7 +50,7 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
         this.setState({
             submitEnabled: true,
             authenticated: true,
-            dropbox_token: token
+            dropboxToken: token
         });
         this.enable(true);
     }
@@ -66,7 +66,7 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
                     <button onClick={(e) => this.onAuthenticateClicked(e)} disabled={this.state.authenticated}>Authenticate Dropbox account</button>
                 </div>
                 <div className="row remotePath">
-                    <input type="text" name="dropbox_path" value={this.state.dropbox_path} onChange={this.handleChange} disabled={!this.state.authenticated} />
+                    <input type="text" name="dropboxPath" value={this.state.dropboxPath} onChange={this.handleChange} disabled={!this.state.authenticated} />
                     <label>Remote path</label>
                     <ConnectArchiveDialog
                         explorerActive={true}
@@ -75,7 +75,7 @@ class DropboxArchiveEntryForm extends ArchiveEntryForm {
                         onArchiveSelected={(...args) => this.onArchiveSelected(...args)}
                         />
                 </div>
-                <input type="hidden" name="dropbox_token" value={this.state.dropbox_token} />
+                <input type="hidden" name="dropboxToken" value={this.state.dropboxToken} />
             </div>
         );
     }

@@ -180,7 +180,8 @@ class ConnectArchiveDialog extends Component {
 }
 
 ConnectArchiveDialog.propTypes = {
-    onArchiveSelected: PropTypes.func
+    onArchiveSelected: PropTypes.func,
+    fs: PropTypes.object
 };
 
 export default ConnectArchiveDialog;
