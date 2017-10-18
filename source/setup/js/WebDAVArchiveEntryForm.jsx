@@ -1,7 +1,6 @@
 import React from "react";
 import createWebDAVFS from "webdav-fs";
 import anyFs from "any-fs";
-import { isNil } from "lodash";
 
 import BaseFSArchiveEntryForm from "./BaseFSArchiveEntryForm";
 import ConnectArchiveDialog from "./ConnectArchiveDialog";
@@ -46,7 +45,7 @@ class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
     }
 
     renderFormContents() {
-        let fsReady = isNil(this.fs);
+        let fsReady = this.fs === null;
         return <div>
             {super.renderFormContents()}
             <div className="row">
