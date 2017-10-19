@@ -91,15 +91,15 @@ const archives = {
                 let dropboxCreds = createCredentials("dropbox");
                 dropboxCreds.setValue("datasource", JSON.stringify({
                     type: "dropbox",
-                    token: request.dropbox_token,
-                    path: request.dropbox_path
+                    token: request.dropboxToken,
+                    path: request.dropboxPath
                 }));
                 return dropboxCreds;
             })
             .then(function(credentials) {
                 let datasource = new DropboxDatasource(
-                    request.dropbox_token,
-                    request.dropbox_path
+                    request.dropboxToken,
+                    request.dropboxPath
                 );
                 if (request.connect === "new") {
                     let workspace = new Workspace();
@@ -128,22 +128,22 @@ const archives = {
             .resolve(request)
             .then(function() {
                 let owncloudCreds = createCredentials("owncloud");
-                owncloudCreds.username = request.owncloud_username;
-                owncloudCreds.password = request.owncloud_password;
+                owncloudCreds.username = request.owncloudUsername;
+                owncloudCreds.password = request.owncloudPassword;
                 owncloudCreds.setValue("datasource", JSON.stringify({
                     type: "owncloud",
-                    endpoint: request.owncloud_address,
-                    path: request.owncloud_path
+                    endpoint: request.owncloudAddress,
+                    path: request.owncloudPath
                 }));
                 return owncloudCreds;
             })
             .then(function(credentials) {
                 let datasource = new OwnCloudDatasource(
-                    request.owncloud_address,
-                    request.owncloud_path,
+                    request.owncloudAddress,
+                    request.owncloudPath,
                     createCredentials({
-                        username: request.owncloud_username,
-                        password: request.owncloud_password
+                        username: request.owncloudUsername,
+                        password: request.owncloudPassword
                     })
                 );
                 if (request.connect === "new") {
@@ -173,22 +173,22 @@ const archives = {
             .resolve(request)
             .then(function() {
                 let webdavCreds = createCredentials("webdav");
-                webdavCreds.username = request.webdav_username;
-                webdavCreds.password = request.webdav_password;
+                webdavCreds.username = request.webdavUsername;
+                webdavCreds.password = request.webdavPassword;
                 webdavCreds.setValue("datasource", JSON.stringify({
                     type: "webdav",
-                    endpoint: request.webdav_address,
-                    path: request.webdav_path
+                    endpoint: request.webdavAddress,
+                    path: request.webdavPath
                 }));
                 return webdavCreds;
             })
             .then(function(credentials) {
                 let datasource = new WebDAVDatasource(
-                    request.webdav_address,
-                    request.webdav_path,
+                    request.webdavAddress,
+                    request.webdavPath,
                     createCredentials({
-                        username: request.webdav_username,
-                        password: request.webdav_password
+                        username: request.webdavUsername,
+                        password: request.webdavPassword
                     })
                 );
                 if (request.connect === "new") {

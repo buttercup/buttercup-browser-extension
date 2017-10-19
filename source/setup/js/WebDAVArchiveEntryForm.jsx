@@ -11,26 +11,26 @@ class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
         super(props);
         Object.assign(this.state, {
             type: "webdav",
-            webdav_address: "",
-            webdav_username: "",
-            webdav_password: "",
-            webdav_path: ""
+            webdavAddress: "",
+            webdavUsername: "",
+            webdavPassword: "",
+            webdavPath: ""
         });
     }
 
     createFS() {
-        if (this.state.webdav_address.trim().length <= 0) {
+        if (this.state.webdavAddress.trim().length <= 0) {
             return null;
         }
         let wfs;
-        if (this.state.webdav_username && this.state.webdav_username.trim().length > 0) {
-            if (this.state.webdav_password.trim().length <= 0) {
+        if (this.state.webdavUsername && this.state.webdavUsername.trim().length > 0) {
+            if (this.state.webdavPassword.trim().length <= 0) {
                 return null;
             }
             wfs = createWebDAVFS(
-                this.state.webdav_address,
-                this.state.webdav_username,
-                this.state.webdav_password
+                this.state.webdavAddress,
+                this.state.webdavUsername,
+                this.state.webdavPassword
             );
             return anyFs(wfs);
         }
@@ -40,19 +40,19 @@ class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
     onArchiveSelected(filePath, createNew) {
         this.setState({
             connect: createNew ? "new" : "existing",
-            webdav_path: filePath
+            webdavPath: filePath
         });
     }
 
     renderFormContents() {
-        let fsReady = !!this.fs;
+        let fsReady = this.fs === null;
         return <div>
             {super.renderFormContents()}
             <div className="row">
                 <input
                     type="text"
-                    name="webdav_address"
-                    value={this.state.webdav_address}
+                    name="webdavAddress"
+                    value={this.state.webdavAddress}
                     onChange={this.handleChange}
                     onBlur={() => this.checkFS()}
                     />
@@ -61,8 +61,8 @@ class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
             <div className="row">
                 <input
                     type="text"
-                    name="webdav_username"
-                    value={this.state.webdav_username}
+                    name="webdavUsername"
+                    value={this.state.webdavUsername}
                     onChange={this.handleChange}
                     onBlur={() => this.checkFS()}
                     />
@@ -71,8 +71,8 @@ class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
             <div className="row">
                 <input
                     type="password"
-                    name="webdav_password"
-                    value={this.state.webdav_password}
+                    name="webdavPassword"
+                    value={this.state.webdavPassword}
                     onChange={this.handleChange}
                     onBlur={() => this.checkFS()}
                     />
@@ -81,8 +81,8 @@ class WebDAVArchiveEntryForm extends BaseFSArchiveEntryForm {
             <div className="row remotePath">
                 <input
                     type="text"
-                    name="webdav_path"
-                    value={this.state.webdav_path}
+                    name="webdavPath"
+                    value={this.state.webdavPath}
                     onChange={this.handleChange}
                     disabled={!fsReady}
                     />

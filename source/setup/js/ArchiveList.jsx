@@ -36,7 +36,7 @@ class ArchiveList extends React.Component {
 
     onRemoveArchiveClicked(e, archive) {
         e.preventDefault();
-        if (window.confirm(`Are you sure you want to remove "${archive.name}"?`)) { 
+        if (window.confirm(`Are you sure you want to remove "${archive.name}"?`)) {
             chrome.runtime.sendMessage({ command: "remove-archive", name: archive.name }, (response) => {
                 if (response && response.ok) {
                     this.fetchArchives();

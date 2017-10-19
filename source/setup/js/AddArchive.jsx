@@ -1,4 +1,5 @@
 import React from "react";
+
 import { hashHistory } from "react-router";
 
 import HeaderBar from "./HeaderBar";
@@ -23,9 +24,6 @@ class AddArchive extends React.Component {
                     <li className="owncloud" onClick={browseTo("owncloud")}>ownCloud</li>
                     <li className="webdav" onClick={browseTo("webdav")}>WebDAV</li>
                 </ul>
-                <div>
-                    {this.props.children}
-                </div>
             </div>
         );
     }
