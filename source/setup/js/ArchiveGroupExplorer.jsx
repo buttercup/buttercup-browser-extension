@@ -103,7 +103,7 @@ class ArchiveGroupExplorer extends React.Component {
 }
 
 ArchiveGroupExplorer.propTypes = {
-    onSelect:       PropTypes.func.isRequired
+    onSelect: PropTypes.func.isRequired
 };
 
 export default ArchiveGroupExplorer;

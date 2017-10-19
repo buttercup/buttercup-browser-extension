@@ -4,7 +4,9 @@ import { hashHistory } from "react-router";
 import UnlockArchiveForm from "./UnlockArchiveForm";
 import HeaderBar from "./HeaderBar";
 
-const NOPE = function() {};
+const { PropTypes } = React;
+
+const NOPE = () => {};
 
 class UnlockArchive extends React.Component {
 
@@ -34,5 +36,12 @@ class UnlockArchive extends React.Component {
     }
 
 }
+
+UnlockArchive.propTypes = {
+    params: PropTypes.shape({
+        action: PropTypes.string,
+        name: PropTypes.string
+    })
+};
 
 export default UnlockArchive;

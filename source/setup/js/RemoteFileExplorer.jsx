@@ -157,10 +157,11 @@ class RemoteFileExplorer extends Component {
 }
 
 RemoteFileExplorer.propTypes = {
-    allowSelectArchive:     PropTypes.bool,
-    fs:                     PropTypes.object,
-    onChoosePath:           PropTypes.func,
-    onError:                PropTypes.func
+    allowSelectArchive: PropTypes.bool,
+    active: PropTypes.bool,
+    fs: PropTypes.object,
+    onChoosePath: PropTypes.func,
+    onError: PropTypes.func
 };
 
 export default RemoteFileExplorer;

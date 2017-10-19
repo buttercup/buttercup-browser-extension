@@ -1,5 +1,7 @@
 import React from "react";
 
+const { PropTypes } = React;
+
 import HeaderBar from "./HeaderBar";
 import WebDAVArchiveEntryForm from "./WebDAVArchiveEntryForm";
 import DropboxArchiveEntryForm from "./DropboxArchiveEntryForm";
@@ -13,7 +15,7 @@ class AddArchiveEntry extends React.Component {
 
     render() {
         let FormClass;
-        switch(this.props.params.type) {
+        switch (this.props.params.type) {
             case "webdav": {
                 FormClass = WebDAVArchiveEntryForm;
                 break;
@@ -40,5 +42,11 @@ class AddArchiveEntry extends React.Component {
     }
 
 }
+
+AddArchiveEntry.propTypes = {
+    params: PropTypes.shape({
+        type: PropTypes.string
+    })
+};
 
 export default AddArchiveEntry;

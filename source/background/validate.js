@@ -13,18 +13,18 @@ let validate = {
         validate.validateObjectString(request, "masterPassword");
         switch (request.type) {
             case "dropbox": {
-                validate.validateObjectString(request, "dropbox_path");
-                validate.validateObjectString(request, "dropbox_token");
+                validate.validateObjectString(request, "dropboxPath");
+                validate.validateObjectString(request, "dropboxToken");
                 break;
             }
 
             case "webdav": {
-                validate.validateObjectString(request, "webdav_path");
+                validate.validateObjectString(request, "webdavPath");
                 break;
             }
 
             case "owncloud": {
-                validate.validateObjectString(request, "owncloud_path");
+                validate.validateObjectString(request, "owncloudPath");
                 break;
             }
 
