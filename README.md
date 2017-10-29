@@ -25,6 +25,9 @@ The extension can remotely connect to archives via Buttercup's common communicat
 
 Other browsers will be supported in order of request/popularity.
 
+#### Supported platforms
+The browsers listed above, running on Windows, Mac or Linux on a desktop platform. This extension is not supported on any mobile or tablet devices.
+
 ### Adding to Chrome
 You can load an **unpacked extension** in Chrome by navigating to [chrome://extensions/](chrome://extensions/). Simply locate the project's directory and use **dist/** as the extension directory.
 
