@@ -5,6 +5,7 @@ import { Route } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
+import { connectToBackground } from "./library/messaging.js";
 import MainPage from "./containers/MainPage.js";
 
 import "./styles/base.sass";
@@ -22,3 +23,7 @@ ReactDOM.render(
     </Provider>,
     document.getElementById("root")
 );
+
+setTimeout(() => {
+    connectToBackground();
+}, 0);
