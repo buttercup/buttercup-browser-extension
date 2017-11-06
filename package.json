@@ -4,7 +4,8 @@
   "description": "Buttercup browser extension for Chrome and Firefox.",
   "main": "source/background/index.js",
   "scripts": {
-      "build": "webpack"
+      "build": "webpack",
+      "test": "echo \"None yet...\" && exit 0"
   },
   "repository": {
     "type": "git",
