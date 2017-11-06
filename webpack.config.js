@@ -58,7 +58,7 @@ const backgroundConfig = Object.assign({}, baseConfig, {
     entry: path.resolve(SRC_BACKGROUND, "./index.js"),
 
     output: {
-        filename: "background",
+        filename: "background.js",
         path: DIST
     }
 });
@@ -67,7 +67,7 @@ const popupConfig = Object.assign({}, baseConfig, {
     entry: path.resolve(SRC_POPUP, "./index.js"),
 
     output: {
-        filename: "popup",
+        filename: "popup.js",
         path: DIST
     },
 
@@ -87,7 +87,7 @@ const setupConfig = Object.assign({}, baseConfig, {
     entry: path.resolve(SRC_SETUP, "./index.js"),
 
     output: {
-        filename: "setup",
+        filename: "setup.js",
         path: DIST
     },
 
@@ -107,7 +107,7 @@ const tabConfig = Object.assign({}, baseConfig, {
     entry: path.resolve(SRC_TAB, "./index.js"),
 
     output: {
-        filename: "tab",
+        filename: "tab.js",
         path: DIST
     }
 });
