@@ -19,7 +19,6 @@
 
 	"background": {
 		"scripts": [
-            "buttercup.js",
 			"background.js"
 		]
 	},

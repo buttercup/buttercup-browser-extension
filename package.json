@@ -4,8 +4,8 @@
   "description": "Buttercup browser extension for Chrome and Firefox.",
   "main": "source/background/index.js",
   "scripts": {
-      "build": "webpack",
-      "test": "echo \"None yet...\" && exit 0"
+    "build": "webpack",
+    "test": "echo \"None yet...\" && exit 0"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,8 @@
     "babel-plugin-jsx-control-statements": "^3.2.8",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "buttercup": "^1.0.0",
+    "copy-webpack-plugin": "^4.2.0",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.5",
     "history": "^4.7.2",
@@ -44,7 +46,7 @@
     "react-fontawesome": "^1.6.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
-    "react-router-redux": "^4.0.8",
+    "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",

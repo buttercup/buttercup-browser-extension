@@ -1,11 +1,14 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { version } = require("./package.json");
 
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
-const INDEX_TEMPLATE = path.resolve(__dirname, "./resources/template.pug");
+const RESOURCES = path.resolve(__dirname, "./resources");
+const INDEX_TEMPLATE = path.resolve(RESOURCES, "./template.pug");
+const MANIFEST = path.resolve(RESOURCES, "./manifest.json");
 
 const SRC_BACKGROUND = path.resolve(SOURCE, "background");
 const SRC_POPUP = path.resolve(SOURCE, "popup");
@@ -60,7 +63,23 @@ const backgroundConfig = Object.assign({}, baseConfig, {
     output: {
         filename: "background.js",
         path: DIST
-    }
+    },
+
+    plugins: [
+        new CopyWebpackPlugin([
+            {
+                from: MANIFEST,
+                transform: contents => {
+                    const manifest = JSON.parse(contents.toString());
+                    manifest.version = version;
+                    return JSON.stringify(manifest, undefined, 4);
+                }
+            },
+            {
+                from: path.join(RESOURCES, "buttercup-*.png")
+            }
+        ])
+    ]
 });
 
 const popupConfig = Object.assign({}, baseConfig, {
