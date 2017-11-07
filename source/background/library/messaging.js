@@ -1,7 +1,15 @@
-import { getState } from "../redux/index.js";
+import { dispatch, getState } from "../redux/index.js";
 
 function handleStateMessage(message) {
-
+    switch (message.type) {
+        case "action": {
+            const { action } = message;
+            dispatch(action);
+            break;
+        }
+        default:
+            throw new Error(`Unknown state message received: ${message.type}`);
+    }
 }
 
 export function startStateListener() {

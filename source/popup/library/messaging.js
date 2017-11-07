@@ -10,6 +10,11 @@ export function connectToBackground() {
 
 function handleBackgroundMessage(message) {
     switch (message.type) {
+        case "action": {
+            const { action } = message;
+            dispatch(action);
+            break;
+        }
         case "full-state":
             dispatch(setEntireState(message.state));
             break;
