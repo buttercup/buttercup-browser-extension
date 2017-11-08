@@ -1,3 +1,3 @@
-import createHistory from "history/createBrowserHistory";
+import createHistory from "history/createMemoryHistory";
 
 export default createHistory();

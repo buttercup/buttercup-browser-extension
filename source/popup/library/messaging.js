@@ -4,8 +4,8 @@ import { setEntireState } from "../../shared/actions/app.js";
 let __backgroundPort;
 
 export function connectToBackground() {
-    __backgroundPort = chrome.runtime.connect({name: "buttercup-state"});
-    __backgroundPort.onMessage.addListener(handleBackgroundMessage);
+    // __backgroundPort = chrome.runtime.connect({name: "buttercup-state"});
+    // __backgroundPort.onMessage.addListener(handleBackgroundMessage);
 }
 
 function handleBackgroundMessage(message) {

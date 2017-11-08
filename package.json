@@ -5,6 +5,7 @@
   "main": "source/background/index.js",
   "scripts": {
     "build": "webpack",
+    "dev": "webpack -w --progress",
     "test": "echo \"None yet...\" && exit 0"
   },
   "repository": {
