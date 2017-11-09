@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import FontAwesome from "react-fontawesome";
 import HeaderBar from "../containers/HeaderBar.js";
 import styled from "styled-components";
 import { MenuStateShape } from "./HeaderBar.js";
@@ -93,6 +94,39 @@ const Avatar = styled.div`
         }
     }}
 `;
+const OptionsList = styled.div`
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+`;
+const OptionsItem = styled.div`
+    width: 44%;
+    height: 100px;
+    border: 1px solid rgba(200, 200, 200, 0.2);
+    margin: 6px 0px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: rgb(150, 150, 150);
+
+    > .fa {
+        margin-top: 20px;
+        font-size: 34px;
+    }
+
+    > div {
+        margin-top: 6px;
+        font-size: 18px;
+    }
+
+    &:hover {
+        border: 1px solid rgba(0, 183, 172, 0.5);
+        color: rgba(0, 183, 172, 1.0);
+    }
+`;
 
 function getProviderImage(archiveSourceType) {
     const imageSrc = ARCHIVE_IMAGES[archiveSourceType];
@@ -118,7 +152,24 @@ class MainPage extends Component {
                 <ListContainer>
                     <Choose>
                         <When condition={this.props.menuState === "options"}>
-
+                            <OptionsList>
+                                <OptionsItem>
+                                    <FontAwesome name="plus" />
+                                    <div>Add Archive</div>
+                                </OptionsItem>
+                                <OptionsItem>
+                                    <FontAwesome name="lock" />
+                                    <div>Lock All</div>
+                                </OptionsItem>
+                                <OptionsItem>
+                                    <FontAwesome name="cog" />
+                                    <div>Settings</div>
+                                </OptionsItem>
+                                <OptionsItem>
+                                    <FontAwesome name="cloud-download" />
+                                    <div>Other Apps</div>
+                                </OptionsItem>
+                            </OptionsList>
                         </When>
                         <Otherwise>
                             <ArchiveList>
