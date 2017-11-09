@@ -1,5 +1,7 @@
 import { connect } from "react-redux";
 import MainPage from "../components/MainPage.js";
+import { toggleMenu } from "../actions/popupMenu.js";
+import { getMenuState } from "../selectors/popupMenu.js";
 
 function getArchives(state) {
     return [
@@ -22,37 +24,37 @@ function getArchives(state) {
             state: "locked"
         },
         {
-            id: "1",
+            id: "4",
             title: "Perry's archive",
             type: "owncloud",
             state: "unlocked"
         },
         {
-            id: "2",
+            id: "5",
             title: "Sallar's archive",
             type: "dropbox",
             state: "pending"
         },
         {
-            id: "3",
+            id: "6",
             title: "Testing",
             type: "nextcloud",
             state: "locked"
         },
         {
-            id: "1",
+            id: "7",
             title: "Perry's archive",
             type: "owncloud",
             state: "unlocked"
         },
         {
-            id: "2",
+            id: "8",
             title: "Sallar's archive",
             type: "dropbox",
             state: "pending"
         },
         {
-            id: "3",
+            id: "9",
             title: "Testing",
             type: "nextcloud",
             state: "locked"
@@ -61,5 +63,10 @@ function getArchives(state) {
 }
 
 export default connect((state, ownProps) => ({
-    archives: getArchives(state)
-}), {})(MainPage);
+    archives: getArchives(state),
+    menuState: getMenuState(state)
+}), {
+    onMenuClick: () => dispatch => {
+        dispatch(toggleMenu());
+    }
+})(MainPage);

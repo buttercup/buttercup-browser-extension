@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import HeaderBar from "../containers/HeaderBar.js";
 import styled from "styled-components";
+import { MenuStateShape } from "./HeaderBar.js";
 
 const ARCHIVE_IMAGES = {
     dropbox: require("../../../resources/providers/dropbox-256.png"),
@@ -105,28 +106,37 @@ function getProviderImage(archiveSourceType) {
 
 class MainPage extends Component {
     static propTypes = {
-        archives: PropTypes.arrayOf(ArchiveShape).isRequired
+        archives: PropTypes.arrayOf(ArchiveShape).isRequired,
+        menuState: MenuStateShape.isRequired,
+        onMenuClick: PropTypes.func.isRequired
     };
 
     render() {
         return (
             <div>
-                <HeaderBar />
+                <HeaderBar menuState={this.props.menuState} onMenuClick={() => this.props.onMenuClick()} />
                 <ListContainer>
-                    <ArchiveList>
-                        {this.props.archives.map(archive =>
-                            <ListItem key={archive.id}>
-                                <Avatar state={archive.state}>{archive.title.substr(0, 2)}</Avatar>
-                                <TitleContainer>
-                                    <ArchiveTitle>{archive.title}</ArchiveTitle>
-                                    <ArchiveSubtitle>
-                                        {getProviderImage(archive.type)}
-                                        {archive.type}
-                                    </ArchiveSubtitle>
-                                </TitleContainer>
-                            </ListItem>
-                        )}
-                    </ArchiveList>
+                    <Choose>
+                        <When condition={this.props.menuState === "options"}>
+
+                        </When>
+                        <Otherwise>
+                            <ArchiveList>
+                                {this.props.archives.map(archive =>
+                                    <ListItem key={archive.id}>
+                                        <Avatar state={archive.state}>{archive.title.substr(0, 2)}</Avatar>
+                                        <TitleContainer>
+                                            <ArchiveTitle>{archive.title}</ArchiveTitle>
+                                            <ArchiveSubtitle>
+                                                {getProviderImage(archive.type)}
+                                                {archive.type}
+                                            </ArchiveSubtitle>
+                                        </TitleContainer>
+                                    </ListItem>
+                                )}
+                            </ArchiveList>
+                        </Otherwise>
+                    </Choose>
                 </ListContainer>
             </div>
         );

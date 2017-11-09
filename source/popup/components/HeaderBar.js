@@ -12,12 +12,7 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 1px solid rgba(80, 80, 80, 1);
-
     background-color: rgba(10, 10, 10, 1.0);
-
-    // background: #141E30;  /* fallback for old browsers */
-    // background: -webkit-linear-gradient(to bottom, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
-    // background: linear-gradient(to bottom, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 `;
 const Logo = styled.div`
     padding-left: 8px;
@@ -37,6 +32,7 @@ const MenuButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     > .fa {
         font-size: 26px;
@@ -44,14 +40,27 @@ const MenuButton = styled.div`
     }
 `;
 
+export const MenuStateShape = PropTypes.oneOf(["archives", "options"]);
+
 class HeaderBar extends Component {
+    static propTypes = {
+        menuState: MenuStateShape.isRequired,
+        onMenuClick: PropTypes.func.isRequired
+    };
+
+    static defaultProps = {
+        onMenuClick: () => {}
+    };
+
     render() {
         return (
             <Container>
-                <Logo>
-                    <h1>Buttercup</h1>
-                </Logo>
-                <MenuButton>
+                <If condition={this.props.menuState === "archives"}>
+                    <Logo>
+                        <h1>Buttercup</h1>
+                    </Logo>
+                </If>
+                <MenuButton onClick={() => this.props.onMenuClick()} key="menu">
                     <FontAwesome name="bars" />
                 </MenuButton>
             </Container>
