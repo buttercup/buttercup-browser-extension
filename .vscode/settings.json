@@ -1,0 +1,7 @@
+{
+    "vsicons.presets.angular": false,
+    "eslint.enable": false,
+    "files.associations": {
+        "**/*.js": "javascriptreact"
+    }
+}
