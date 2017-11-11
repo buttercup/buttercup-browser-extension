@@ -11,6 +11,8 @@ import MainPage from "./containers/MainPage.js";
 import "./styles/base.sass";
 import "../../resources/fontawesome/font-awesome.scss";
 
+connectToBackground();
+
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
@@ -23,7 +25,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById("root")
 );
-
-setTimeout(() => {
-    connectToBackground();
-}, 0);
