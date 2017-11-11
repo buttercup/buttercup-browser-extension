@@ -112,7 +112,7 @@ const setupConfig = Object.assign({}, baseConfig, {
 
     plugins: [
         new HtmlWebpackPlugin({
-            title: `Buttercup for Browsers v${version}`,
+            title: `Buttercup v${version}`,
             // baseURL: "http://domain/",
             template: INDEX_TEMPLATE,
             // favicon: FAVICON,
