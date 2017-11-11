@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack -w --progress",
-    "test": "echo \"None yet...\" && exit 0"
+    "test": "echo \"None yet...\" && exit 0",
+    "test:ci": "echo \"None yet...\" && exit 0"
   },
   "repository": {
     "type": "git",
