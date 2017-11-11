@@ -142,6 +142,7 @@ class MainPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
         menuState: MenuStateShape.isRequired,
+        onAddArchiveClick: PropTypes.func.isRequired,
         onMenuClick: PropTypes.func.isRequired
     };
 
@@ -153,7 +154,7 @@ class MainPage extends Component {
                     <Choose>
                         <When condition={this.props.menuState === "options"}>
                             <OptionsList>
-                                <OptionsItem>
+                                <OptionsItem onClick={() => this.props.onAddArchiveClick()}>
                                     <FontAwesome name="plus" />
                                     <div>Add Archive</div>
                                 </OptionsItem>

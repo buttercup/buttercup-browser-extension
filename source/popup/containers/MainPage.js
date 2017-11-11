@@ -4,6 +4,8 @@ import { toggleMenu } from "../actions/popupMenu.js";
 import { getMenuState } from "../selectors/popupMenu.js";
 import { getArchives } from "../../shared/selectors/archives.js";
 
+const NOOP = () => {};
+
 // function getArchives(state) {
     // return [
     //     {
@@ -63,10 +65,21 @@ import { getArchives } from "../../shared/selectors/archives.js";
     // ];
 // }
 
+// chrome.tabs.create(
+//     { url: chrome.extension.getURL("setup.html#/unlockArchive/" + encodeURIComponent(this.props.name)) },
+//     NOPE
+// );
+
 export default connect((state, ownProps) => ({
     archives: getArchives(state),
     menuState: getMenuState(state)
 }), {
+    onAddArchiveClick: () => () => {
+        chrome.tabs.create(
+            { url: chrome.extension.getURL("setup.html#/add-archive/") },
+            NOOP
+        );
+    },
     onMenuClick: () => dispatch => {
         dispatch(toggleMenu());
     }

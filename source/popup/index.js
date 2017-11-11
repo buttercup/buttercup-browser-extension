@@ -8,7 +8,7 @@ import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
 import MainPage from "./containers/MainPage.js";
 
-import "./styles/base.sass";
+import "../shared/styles/base.sass";
 import "../../resources/fontawesome/font-awesome.scss";
 
 connectToBackground();
