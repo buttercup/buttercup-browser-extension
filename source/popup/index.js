@@ -9,6 +9,7 @@ import { connectToBackground } from "./library/messaging.js";
 import MainPage from "./containers/MainPage.js";
 
 import "../shared/styles/base.sass";
+import "./styles/popup.sass";
 import "../../resources/fontawesome/font-awesome.scss";
 
 connectToBackground();

@@ -9,6 +9,7 @@ import { connectToBackground } from "./library/messaging.js";
 import AddArchivePage from "./containers/AddArchivePage.js";
 
 import "../shared/styles/base.sass";
+import "./styles/setup.sass";
 import "../../resources/fontawesome/font-awesome.scss";
 
 connectToBackground();
@@ -18,8 +19,6 @@ ReactDOM.render(
         <ConnectedRouter history={history}>
             <div>
                 <Route path="/add-archive" component={AddArchivePage} />
-                {/*<Route path="/publisher/:id/scripts" component={ScriptsPage} />
-                <Route path="/publisher/:pubid/script/:scriptid/templates" component={TemplatesPage} />*/}
             </div>
         </ConnectedRouter>
     </Provider>,
