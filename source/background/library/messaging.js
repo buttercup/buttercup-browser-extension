@@ -6,6 +6,7 @@ function handleStateMessage(message) {
     switch (message.type) {
         case "action": {
             const { action } = message;
+            log.info(`Received state update action: ${action.type}`);
             dispatch(action);
             break;
         }
@@ -23,7 +24,6 @@ function handleStatePortDisconnect(port) {
 }
 
 export function startStateListener() {
-    console.log("SP", this);
     chrome.runtime.onConnect.addListener(port => {
         log.info(`Port connected: ${port.name}`);
         if (port.name === "buttercup-state") {

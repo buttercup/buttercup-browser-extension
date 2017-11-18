@@ -2,9 +2,10 @@ import { combineReducers } from "redux";
 import { APP_MASTER_SET } from "../../shared/actions/types.js";
 import setupRouting from "./routing.js";
 import archives from "../../shared/reducers/archives.js";
-// import popupMenu from "./popupMenu.js";
+import addArchive from "./addArchive.js";
 
 const appReducer = combineReducers({
+    addArchive,
     archives,
     setupRouting
 });
