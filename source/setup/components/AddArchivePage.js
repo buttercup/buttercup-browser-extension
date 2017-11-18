@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
+import WebDAVExplorer from "../containers/WebDAVExplorer.js";
 
 const SubSection = styled.div`
     width: 100%;
@@ -60,6 +61,10 @@ class AddArchivePage extends Component {
                 <ArchiveTypeChooser />
                 <If condition={this.props.selectedArchiveType}>
                     {this.renderConnectionInfo()}
+                </If>
+                <If condition={this.props.selectedArchiveType === "webdav" && true}>
+                    <h3>Choose or Create Archive</h3>
+                    <WebDAVExplorer />
                 </If>
             </LayoutMain>
         );
