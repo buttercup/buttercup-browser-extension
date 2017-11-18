@@ -33,6 +33,10 @@ const TitleImage = styled.img`
     margin-bottom: 3px;
     margin-right: 6px;
 `;
+const ContentContainer = styled.div`
+    width: 90%;
+    text-align: left;
+`;
 
 class LayoutMain extends Component {
     static propTypes = {
@@ -46,9 +50,9 @@ class LayoutMain extends Component {
                     <TitleImage src={BUTTERCUP_LOGO} />
                     <Title>{this.props.title}</Title>
                 </Header>
-                <div>
+                <ContentContainer>
                     {this.props.children}
-                </div>
+                </ContentContainer>
             </MainContent>
         );
     }

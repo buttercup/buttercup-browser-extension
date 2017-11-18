@@ -7,7 +7,7 @@ class AddArchivePage extends Component {
     render() {
         return (
             <LayoutMain title="Add Archive">
-                Heya
+                <h3>Choose Archive Type</h3>
             </LayoutMain>
         );
     }
