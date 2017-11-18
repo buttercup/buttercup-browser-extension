@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Input as ButtercupInput } from "@buttercup/ui";
+import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
 
@@ -40,6 +40,12 @@ const FormInputItem = styled.div`
     width: 100%;
     border-left: 1px solid #eee;
     height: 56px;
+`;
+const ButtonContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 `;
 
 class AddArchivePage extends Component {
@@ -92,6 +98,9 @@ class AddArchivePage extends Component {
                                 </FormInputItem>
                             </FormRow>
                         </FormContainer>
+                        <ButtonContainer>
+                            <ButtercupButton>Connect</ButtercupButton>
+                        </ButtonContainer>
                     </When>
                     <Otherwise>
                         <i>Unsupported archive type.</i>
