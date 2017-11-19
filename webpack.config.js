@@ -4,6 +4,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { version } = require("./package.json");
 
+const { NormalModuleReplacementPlugin } = webpack;
+
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
 const RESOURCES = path.resolve(__dirname, "./resources");
@@ -111,7 +113,8 @@ const setupConfig = Object.assign({}, baseConfig, {
             // favicon: FAVICON,
             filename: "setup.html",
             inject: "body"
-        })
+        }),
+        new NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop")
     ]
 });
 
