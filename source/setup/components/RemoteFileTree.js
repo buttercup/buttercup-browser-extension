@@ -42,10 +42,10 @@ const ExpandBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 183, 172, 1);
+    background-color: ${props => props.isFile ? "#ddd" : "rgba(0, 183, 172, 1)"};
     color: #fff;
     margin-right: 4px;
-    cursor: pointer;
+    cursor: ${props => props.isFile ? "default" : "pointer"};
 `;
 const ItemIcon = styled.div`
     width: ${ROW_SIZE_UNIT}px;
@@ -95,7 +95,16 @@ class RemoteFileTree extends Component {
                     files: []
                 }
             ],
-            files: []
+            files: [
+                {
+                    path: "/some-file.txt",
+                    name: "some-file.txt"
+                },
+                {
+                    path: "/photo.jpg",
+                    name: "photo.jpg"
+                }
+            ]
         }
     };
 
@@ -111,12 +120,12 @@ class RemoteFileTree extends Component {
         return (
             <Container>
                 {this.renderDirectory(this.props.root)}
+                {this.renderFiles(this.props.root, 1)}
             </Container>
         );
     }
 
     renderDirectory(dir, depth = 0) {
-        console.log(this.state.openDirectories, dir.path);
         const isOpen = this.state.openDirectories.includes(dir.path);
         const thisItem = (
             <ItemRow depth={depth} key={dir.path}>
@@ -150,6 +159,20 @@ class RemoteFileTree extends Component {
                         {this.renderDirectory(directory, depth + 1)}
                     </Otherwise>
                 </Choose>
+            </For>
+        );
+    }
+
+    renderFiles(dir, depth = 0) {
+        return (
+            <For each="file" of={dir.files}>
+                <ItemRow depth={depth} key={file.path}>
+                    <ExpandBox isFile={true} />
+                    <ItemIcon isFile={true}>
+                        <FontAwesome name="file" />
+                    </ItemIcon>
+                    <ItemText>{file.name}</ItemText>
+                </ItemRow>
             </For>
         );
     }
