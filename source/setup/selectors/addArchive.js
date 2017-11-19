@@ -1,5 +1,13 @@
-const STATE_KEY = "addArchive";
+const KEY = "addArchive";
 
 export function getSelectedArchiveType(state) {
-    return state[STATE_KEY].selectedArchiveType;
+    return state[KEY].selectedArchiveType;
+}
+
+export function isConnected(state) {
+    return state[KEY].connected;
+}
+
+export function isConnecting(state) {
+    return state[KEY].connecting;
 }

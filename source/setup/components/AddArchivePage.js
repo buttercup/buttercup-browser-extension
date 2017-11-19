@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
+import Spinner from "react-spinkit";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
 import WebDAVExplorer from "../containers/WebDAVExplorer.js";
@@ -48,11 +49,47 @@ const ButtonContainer = styled.div`
     justify-content: flex-end;
     align-items: center;
 `;
+const LoaderContainer = styled.div`
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 class AddArchivePage extends Component {
     static propTypes = {
+        isConnected: PropTypes.bool.isRequired,
+        isConnecting: PropTypes.bool.isRequired,
+        onConnectWebDAV: PropTypes.func.isRequired,
         selectedArchiveType: PropTypes.string
     };
+
+    constructor(props) {
+        super(props);
+        // We store some details in the state, because they're sensitive. No point
+        // storing them globally..
+        this.state = {
+            remoteURL: "",
+            remoteUsername: "",
+            remotePassword: ""
+        };
+    }
+
+    handleConnectWebDAV(event) {
+        event.preventDefault();
+        this.props.onConnectWebDAV(
+            this.state.remoteURL,
+            this.state.remoteUsername,
+            this.state.remotePassword
+        );
+    }
+
+    handleUpdateForm(property, event) {
+        this.setState({
+            [property]: event.target.value
+        });
+    }
 
     render() {
         return (
@@ -62,7 +99,12 @@ class AddArchivePage extends Component {
                 <If condition={this.props.selectedArchiveType}>
                     {this.renderConnectionInfo()}
                 </If>
-                <If condition={this.props.selectedArchiveType === "webdav" && true}>
+                <If condition={this.props.isConnecting}>
+                    <LoaderContainer>
+                        <Spinner color="rgba(0, 183, 172, 1)" name="ball-grid-pulse" />
+                    </LoaderContainer>
+                </If>
+                <If condition={this.props.selectedArchiveType === "webdav" && this.props.isConnected}>
                     <h3>Choose or Create Archive</h3>
                     <WebDAVExplorer />
                 </If>
@@ -71,6 +113,7 @@ class AddArchivePage extends Component {
     }
 
     renderConnectionInfo() {
+        const connectionOptionsDisabled = this.props.isConnecting || this.props.isConnected;
         return (
             <SubSection>
                 <h3>Enter Connection Details</h3>
@@ -82,6 +125,9 @@ class AddArchivePage extends Component {
                                 <FormInputItem>
                                     <ButtercupInput
                                         placeholder="Enter remote URL..."
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remoteURL", event)}
+                                        value={this.state.remoteURL}
                                     />
                                 </FormInputItem>
                             </FormRow>
@@ -90,6 +136,9 @@ class AddArchivePage extends Component {
                                 <FormInputItem>
                                     <ButtercupInput
                                         placeholder="Enter WebDAV username..."
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remoteUsername", event)}
+                                        value={this.state.remoteUsername}
                                     />
                                 </FormInputItem>
                             </FormRow>
@@ -99,12 +148,20 @@ class AddArchivePage extends Component {
                                     <ButtercupInput
                                         placeholder="Enter WebDAV password..."
                                         type="password"
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remotePassword", event)}
+                                        value={this.state.remotePassword}
                                     />
                                 </FormInputItem>
                             </FormRow>
                         </FormContainer>
                         <ButtonContainer>
-                            <ButtercupButton>Connect</ButtercupButton>
+                            <ButtercupButton
+                                onClick={event => this.handleConnectWebDAV(event)}
+                                disabled={connectionOptionsDisabled}
+                            >
+                                Connect
+                            </ButtercupButton>
                         </ButtonContainer>
                     </When>
                     <Otherwise>
