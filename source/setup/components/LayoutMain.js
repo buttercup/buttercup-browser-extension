@@ -54,9 +54,7 @@ class LayoutMain extends Component {
                     <TitleImage src={BUTTERCUP_LOGO} />
                     <Title>{this.props.title}</Title>
                 </Header>
-                <ContentContainer>
-                    {this.props.children}
-                </ContentContainer>
+                <ContentContainer>{this.props.children}</ContentContainer>
             </MainContent>
         );
     }

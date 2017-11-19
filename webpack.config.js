@@ -25,18 +25,11 @@ const baseConfig = {
             },
             {
                 test: /\.s[ac]ss$/,
-                use: [
-                    "style-loader",
-                    "css-loader",
-                    "sass-loader"
-                ]
+                use: ["style-loader", "css-loader", "sass-loader"]
             },
             {
                 test: /\.css$/,
-                use: [
-                    "style-loader",
-                    "css-loader"
-                ]
+                use: ["style-loader", "css-loader"]
             },
             {
                 test: /\.pug$/,
@@ -46,14 +39,14 @@ const baseConfig = {
                 test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
                 loader: "file-loader",
                 options: {
-                    name: "[path][name].[hash].[ext]",
-                },
+                    name: "[path][name].[hash].[ext]"
+                }
             }
         ]
     },
 
     resolve: {
-        extensions: [ ".js", ".jsx", ".json" ]
+        extensions: [".js", ".jsx", ".json"]
     }
 };
 
@@ -131,9 +124,4 @@ const tabConfig = Object.assign({}, baseConfig, {
     }
 });
 
-module.exports = [
-    backgroundConfig,
-    popupConfig,
-    setupConfig,
-    tabConfig
-];
+module.exports = [backgroundConfig, popupConfig, setupConfig, tabConfig];

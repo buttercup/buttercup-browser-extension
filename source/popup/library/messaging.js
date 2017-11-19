@@ -30,7 +30,7 @@ export function sendStateUpdate(action) {
             type: "action",
             action
         });
-    } catch(err) {
+    } catch (err) {
         log.error(`Failed sending action to port: ${err.message}`);
         console.error(err);
     }

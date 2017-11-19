@@ -6,16 +6,15 @@ let __webdavClient = null;
 export function connectWebDAV(url, username, password) {
     const client = createWebDAVClient(url, username, password);
     log.info(`Creating WebDAV connection to: ${url}`);
-    return testWebDAVConnection(client)
-        .then(succeeded => {
-            if (succeeded) {
-                log.info("Connection to WebDAV service succeeded");
-                __webdavClient = client;
-                return;
-            }
-            log.error(`Failed establishing WebDAV connection: ${url}`);
-            throw new Error(`Connection failed to WebDAV service: ${url}`);
-        });
+    return testWebDAVConnection(client).then(succeeded => {
+        if (succeeded) {
+            log.info("Connection to WebDAV service succeeded");
+            __webdavClient = client;
+            return;
+        }
+        log.error(`Failed establishing WebDAV connection: ${url}`);
+        throw new Error(`Connection failed to WebDAV service: ${url}`);
+    });
 }
 
 export function disposeWebDAVConnection() {

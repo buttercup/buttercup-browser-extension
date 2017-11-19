@@ -11,5 +11,5 @@ export function createSyncMiddleware() {
         }
         // continue with the next middleware
         next(action);
-    }
+    };
 }

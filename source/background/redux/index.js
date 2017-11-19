@@ -20,10 +20,12 @@ export default store;
 export { dispatch, getState };
 
 setTimeout(() => {
-    dispatch(addArchive({
-        id: "1",
-        title: "Perry's archive",
-        type: "owncloud",
-        state: "unlocked"
-    }));
+    dispatch(
+        addArchive({
+            id: "1",
+            title: "Perry's archive",
+            type: "owncloud",
+            state: "unlocked"
+        })
+    );
 }, 1000);

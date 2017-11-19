@@ -30,7 +30,7 @@ const Container = styled.div`
     align-content: stretch;
 `;
 const ItemRow = styled.div`
-    margin-left: ${props => props.depth ? (props.depth * ROW_SIZE_UNIT) : 0}px;
+    margin-left: ${props => (props.depth ? props.depth * ROW_SIZE_UNIT : 0)}px;
     height: ${ROW_SIZE_UNIT}px;
     display: flex;
     flex-direction: row;
@@ -42,17 +42,17 @@ const ExpandBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.isFile ? "#ddd" : "rgba(0, 183, 172, 1)"};
+    background-color: ${props => (props.isFile ? "#ddd" : "rgba(0, 183, 172, 1)")};
     color: #fff;
     margin-right: 4px;
-    cursor: ${props => props.isFile ? "default" : "pointer"};
+    cursor: ${props => (props.isFile ? "default" : "pointer")};
 `;
 const ItemIcon = styled.div`
     width: ${ROW_SIZE_UNIT}px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${props => props.isFile ? "#b2b2b2" : "#f2ac09"};
+    color: ${props => (props.isFile ? "#b2b2b2" : "#f2ac09")};
     font-size: 18px;
     margin-right: 4px;
 `;
@@ -152,12 +152,8 @@ class RemoteFileTree extends Component {
         return (
             <For each="directory" of={allItems}>
                 <Choose>
-                    <When condition={directory === null}>
-                        {thisItem}
-                    </When>
-                    <Otherwise>
-                        {this.renderDirectory(directory, depth + 1)}
-                    </Otherwise>
+                    <When condition={directory === null}>{thisItem}</When>
+                    <Otherwise>{this.renderDirectory(directory, depth + 1)}</Otherwise>
                 </Choose>
             </For>
         );

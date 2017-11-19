@@ -4,9 +4,7 @@ import styled from "styled-components";
 import RemoteFileTree from "./RemoteFileTree.js";
 
 class WebDAVExplorer extends Component {
-    static propTypes = {
-        
-    };
+    static propTypes = {};
 
     render() {
         return (

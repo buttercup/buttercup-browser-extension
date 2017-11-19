@@ -12,14 +12,14 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 1px solid rgba(80, 80, 80, 1);
-    background-color: rgba(10, 10, 10, 1.0);
+    background-color: rgba(10, 10, 10, 1);
 `;
 const Logo = styled.div`
     padding-left: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    
+
     h1 {
         color: rgb(0, 183, 172);
         text-shadow: 2px 2px 2px rgba(0, 183, 172, 0.25);

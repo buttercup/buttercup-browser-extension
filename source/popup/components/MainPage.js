@@ -30,7 +30,7 @@ const ArchiveTitle = styled.span`
 `;
 const ArchiveSubtitle = styled.span`
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.50);
+    color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     display: flex;
     direction: row;
@@ -88,11 +88,11 @@ const Avatar = styled.div`
             case "pending":
                 return "#dbcd53";
             case "locked":
-                /* falls through */
+            /* falls through */
             default:
                 return "#f15c5c";
         }
-    }}
+    }};
 `;
 const OptionsList = styled.div`
     width: 100%;
@@ -124,7 +124,7 @@ const OptionsItem = styled.div`
 
     &:hover {
         border: 1px solid rgba(0, 183, 172, 0.5);
-        color: rgba(0, 183, 172, 1.0);
+        color: rgba(0, 183, 172, 1);
     }
 `;
 
@@ -133,9 +133,7 @@ function getProviderImage(archiveSourceType) {
     if (!imageSrc) {
         throw new Error(`No image asset for archive type: ${archiveSourceType}`);
     }
-    return (
-        <ArchiveTypeImage src={imageSrc} />
-    );
+    return <ArchiveTypeImage src={imageSrc} />;
 }
 
 class MainPage extends Component {
@@ -174,7 +172,7 @@ class MainPage extends Component {
                         </When>
                         <Otherwise>
                             <ArchiveList>
-                                {this.props.archives.map(archive =>
+                                {this.props.archives.map(archive => (
                                     <ListItem key={archive.id}>
                                         <Avatar state={archive.state}>{archive.title.substr(0, 2)}</Avatar>
                                         <TitleContainer>
@@ -185,7 +183,7 @@ class MainPage extends Component {
                                             </ArchiveSubtitle>
                                         </TitleContainer>
                                     </ListItem>
-                                )}
+                                ))}
                             </ArchiveList>
                         </Otherwise>
                     </Choose>

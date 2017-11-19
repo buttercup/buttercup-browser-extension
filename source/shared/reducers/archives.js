@@ -1,6 +1,4 @@
-import {
-    ARCHIVES_ADD
-} from "../actions/types.js";
+import { ARCHIVES_ADD } from "../actions/types.js";
 
 const INITIAL = {
     archives: []
@@ -11,10 +9,7 @@ export default function archivesReducer(state = INITIAL, action = {}) {
         case ARCHIVES_ADD:
             return {
                 ...state,
-                archives: [
-                    ...state.archives,
-                    action.payload
-                ]
+                archives: [...state.archives, action.payload]
             };
 
         default:

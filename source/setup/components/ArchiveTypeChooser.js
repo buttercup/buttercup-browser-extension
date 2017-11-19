@@ -42,7 +42,7 @@ const ArchiveItemContainer = styled.div`
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
-    background-color: ${props => props.selected ? "rgba(0, 183, 172, 0.2)" : "none"};
+    background-color: ${props => (props.selected ? "rgba(0, 183, 172, 0.2)" : "none")};
 
     &:hover {
         background-color: rgba(0, 183, 172, 0.3);
@@ -76,7 +76,7 @@ class ArchiveTypeChooser extends Component {
                         <ArchiveTypeTitle>{provider.title}</ArchiveTypeTitle>
                     </ArchiveItemContainer>
                 </For>
-            </Container>  
+            </Container>
         );
     }
 }
