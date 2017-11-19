@@ -78,11 +78,7 @@ class AddArchivePage extends Component {
 
     handleConnectWebDAV(event) {
         event.preventDefault();
-        this.props.onConnectWebDAV(
-            this.state.remoteURL,
-            this.state.remoteUsername,
-            this.state.remotePassword
-        );
+        this.props.onConnectWebDAV(this.state.remoteURL, this.state.remoteUsername, this.state.remotePassword);
     }
 
     handleUpdateForm(property, event) {
@@ -96,9 +92,7 @@ class AddArchivePage extends Component {
             <LayoutMain title="Add Archive">
                 <h3>Choose Archive Type</h3>
                 <ArchiveTypeChooser />
-                <If condition={this.props.selectedArchiveType}>
-                    {this.renderConnectionInfo()}
-                </If>
+                <If condition={this.props.selectedArchiveType}>{this.renderConnectionInfo()}</If>
                 <If condition={this.props.isConnecting}>
                     <LoaderContainer>
                         <Spinner color="rgba(0, 183, 172, 1)" name="ball-grid-pulse" />
