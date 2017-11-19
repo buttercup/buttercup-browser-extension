@@ -7,6 +7,7 @@
     "build": "webpack",
     "dev": "webpack -w --progress",
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
+    "precommit": "lint-staged",
     "test": "run-s test:format",
     "test:ci": "echo \"None yet...\" && exit 0",
     "test:format": "prettier-check '{{source,test}/**/*.js,webpack.config.js}'"
