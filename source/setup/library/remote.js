@@ -21,6 +21,10 @@ export function disposeWebDAVConnection() {
     __webdavClient = null;
 }
 
+export function getWebDAVClient() {
+    return __webdavClient;
+}
+
 export function testWebDAVConnection(client) {
     log.info("Testing WebDAV connection...");
     return client

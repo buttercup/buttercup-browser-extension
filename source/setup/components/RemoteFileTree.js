@@ -67,51 +67,50 @@ const ItemText = styled.div`
 
 class RemoteFileTree extends Component {
     static propTypes = {
-        root: DirectoryShape.isRequired
+        rootDirectory: DirectoryShape
     };
 
     // removeThis:
-    static defaultProps = {
-        root: {
-            path: "/",
-            name: "/",
-            directories: [
-                {
-                    path: "/Documents",
-                    name: "Documents",
-                    directories: [],
-                    files: []
-                },
-                {
-                    path: "/Photos",
-                    name: "Photos",
-                    directories: [],
-                    files: []
-                },
-                {
-                    path: "/Public",
-                    name: "Public",
-                    directories: [],
-                    files: []
-                }
-            ],
-            files: [
-                {
-                    path: "/some-file.txt",
-                    name: "some-file.txt"
-                },
-                {
-                    path: "/photo.jpg",
-                    name: "photo.jpg"
-                }
-            ]
-        }
-    };
+    // static defaultProps = {
+    //     root: {
+    //         path: "/",
+    //         name: "/",
+    //         directories: [
+    //             {
+    //                 path: "/Documents",
+    //                 name: "Documents",
+    //                 directories: [],
+    //                 files: []
+    //             },
+    //             {
+    //                 path: "/Photos",
+    //                 name: "Photos",
+    //                 directories: [],
+    //                 files: []
+    //             },
+    //             {
+    //                 path: "/Public",
+    //                 name: "Public",
+    //                 directories: [],
+    //                 files: []
+    //             }
+    //         ],
+    //         files: [
+    //             {
+    //                 path: "/some-file.txt",
+    //                 name: "some-file.txt"
+    //             },
+    //             {
+    //                 path: "/photo.jpg",
+    //                 name: "photo.jpg"
+    //             }
+    //         ]
+    //     }
+    // };
 
     constructor(props) {
         super(props);
         this.state = {
-            loadedDirectories: ["/"],
             openDirectories: ["/"]
         };
     }
@@ -119,8 +118,10 @@ class RemoteFileTree extends Component {
     render() {
         return (
             <Container>
-                {this.renderDirectory(this.props.root)}
-                {this.renderFiles(this.props.root, 1)}
+                <If condition={!!this.props.rootDirectory}>
+                    {this.renderDirectory(this.props.rootDirectory)}
+                    {this.renderFiles(this.props.rootDirectory, 1)}
+                </If>
             </Container>
         );
     }
