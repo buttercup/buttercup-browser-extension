@@ -28,6 +28,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-content: stretch;
+    margin-bottom: 50px;
 `;
 const ItemRow = styled.div`
     margin-left: ${props => (props.depth ? props.depth * ROW_SIZE_UNIT : 0)}px;
@@ -69,44 +70,6 @@ class RemoteFileTree extends Component {
     static propTypes = {
         rootDirectory: DirectoryShape
     };
-
-    // removeThis:
-    // static defaultProps = {
-    //     root: {
-    //         path: "/",
-    //         name: "/",
-    //         directories: [
-    //             {
-    //                 path: "/Documents",
-    //                 name: "Documents",
-    //                 directories: [],
-    //                 files: []
-    //             },
-    //             {
-    //                 path: "/Photos",
-    //                 name: "Photos",
-    //                 directories: [],
-    //                 files: []
-    //             },
-    //             {
-    //                 path: "/Public",
-    //                 name: "Public",
-    //                 directories: [],
-    //                 files: []
-    //             }
-    //         ],
-    //         files: [
-    //             {
-    //                 path: "/some-file.txt",
-    //                 name: "some-file.txt"
-    //             },
-    //             {
-    //                 path: "/photo.jpg",
-    //                 name: "photo.jpg"
-    //             }
-    //         ]
-    //     }
-    // };
 
     constructor(props) {
         super(props);
