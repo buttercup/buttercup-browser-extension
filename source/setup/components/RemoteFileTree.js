@@ -68,7 +68,12 @@ const ItemText = styled.div`
 
 class RemoteFileTree extends Component {
     static propTypes = {
+        onOpenDirectory: PropTypes.func.isRequired,
         rootDirectory: DirectoryShape
+    };
+
+    static defaultProps = {
+        onOpenDirectory: () => {}
     };
 
     constructor(props) {
@@ -76,6 +81,22 @@ class RemoteFileTree extends Component {
         this.state = {
             openDirectories: ["/"]
         };
+    }
+
+    handleExpansionClick(item) {
+        const { path } = item;
+        if (this.state.openDirectories.includes(path)) {
+            // close
+            this.setState({
+                openDirectories: this.state.openDirectories.filter(dir => dir !== path)
+            });
+        } else {
+            // open
+            this.setState({
+                openDirectories: [...this.state.openDirectories, path]
+            });
+            this.props.onOpenDirectory(path);
+        }
     }
 
     render() {
@@ -93,7 +114,7 @@ class RemoteFileTree extends Component {
         const isOpen = this.state.openDirectories.includes(dir.path);
         const thisItem = (
             <ItemRow depth={depth} key={dir.path}>
-                <ExpandBox>
+                <ExpandBox onClick={() => this.handleExpansionClick(dir)}>
                     <Choose>
                         <When condition={isOpen}>
                             <FontAwesome name="minus" />

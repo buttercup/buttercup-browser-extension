@@ -5,6 +5,7 @@ import RemoteFileTree from "./RemoteFileTree.js";
 
 class WebDAVExplorer extends Component {
     static propTypes = {
+        onOpenDirectory: PropTypes.func.isRequired,
         onReady: PropTypes.func.isRequired,
         rootDirectory: PropTypes.object
     };
@@ -16,7 +17,10 @@ class WebDAVExplorer extends Component {
     render() {
         return (
             <div>
-                <RemoteFileTree rootDirectory={this.props.rootDirectory} />
+                <RemoteFileTree
+                    onOpenDirectory={dir => this.props.onOpenDirectory(dir)}
+                    rootDirectory={this.props.rootDirectory}
+                />
             </div>
         );
     }

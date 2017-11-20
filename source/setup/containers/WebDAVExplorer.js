@@ -5,7 +5,7 @@ import { getWebDAVClient } from "../library/remote.js";
 import { notifyError } from "../library/notify.js";
 import log from "../../shared/library/log.js";
 import { webdavContentsToTree } from "../library/webdav.js";
-import { getAllDirectoryContents } from "../selectors/webdav.js";
+import { getAllDirectoryContents, getDirectoryContents } from "../selectors/webdav.js";
 
 function fetchRemoteDirectory(dispatch, directory) {
     const webdav = getWebDAVClient();
@@ -53,6 +53,13 @@ export default connect(
         rootDirectory: webdavContentsToTree(getAllDirectoryContents(state))
     }),
     {
+        onOpenDirectory: directory => (dispatch, getState) => {
+            const state = getState();
+            const dirContents = getDirectoryContents(state, directory);
+            if (!dirContents) {
+                fetchRemoteDirectory(dispatch, directory);
+            }
+        },
         onReady: () => dispatch => {
             fetchRemoteDirectory(dispatch, "/");
         }
