@@ -1,6 +1,10 @@
 import { basename } from "path";
 
 export function webdavContentsToTree(allItems) {
+    const itemToFile = item => ({
+        path: item.filename,
+        name: item.basename
+    });
     const buildItem = (directory, items) => {
         return {
             path: directory,
@@ -16,10 +20,7 @@ export function webdavContentsToTree(allItems) {
                               files: []
                           }
             ),
-            files: (items || []).filter(item => item.type === "file").map(item => ({
-                path: item.filename,
-                name: basename(item.filename)
-            }))
+            files: (items || []).filter(item => item.type === "file").map(itemToFile)
         };
     };
     return buildItem("/", allItems["/"]);
