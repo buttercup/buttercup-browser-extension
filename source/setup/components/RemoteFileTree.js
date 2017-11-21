@@ -134,14 +134,15 @@ class RemoteFileTree extends Component {
         if (isOpen) {
             allItems.push(...dir.directories);
         }
-        return (
+        return [
             <For each="directory" of={allItems}>
                 <Choose>
                     <When condition={directory === null}>{thisItem}</When>
                     <Otherwise>{this.renderDirectory(directory, depth + 1)}</Otherwise>
                 </Choose>
-            </For>
-        );
+            </For>,
+            this.renderFiles(dir, depth + 1)
+        ];
     }
 
     renderFiles(dir, depth = 0) {
