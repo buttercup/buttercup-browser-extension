@@ -4,6 +4,7 @@ import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
 
 const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");
+const EXPAND_SPACE_AFTER = 4;
 const NOOP = () => {};
 const ROW_SIZE_UNIT = 26;
 
@@ -31,6 +32,7 @@ const Container = styled.div`
     flex-direction: column;
     align-content: stretch;
     margin-bottom: 50px;
+    overflow-y: scroll;
 `;
 const ItemRow = styled.div`
     margin-left: ${props => (props.depth ? props.depth * ROW_SIZE_UNIT : 0)}px;
@@ -48,7 +50,7 @@ const ExpandBox = styled.div`
     align-items: center;
     background-color: ${props => (props.isFile ? "#ddd" : "rgba(0, 183, 172, 1)")};
     color: #fff;
-    margin-right: 4px;
+    margin-right: ${EXPAND_SPACE_AFTER}px;
     cursor: ${props => (props.isFile ? "default" : "pointer")};
 `;
 const ExpandBoxBCUP = styled(ExpandBox)`
@@ -75,9 +77,19 @@ const ItemText = styled.div`
     color: rgb(72, 72, 72);
     cursor: pointer;
 `;
+const LoaderIconContainer = styled.div`
+    width: ${ROW_SIZE_UNIT}px;
+    height: ${ROW_SIZE_UNIT}px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    margin-left: ${EXPAND_SPACE_AFTER}px;
+`;
 
 class RemoteFileTree extends Component {
     static propTypes = {
+        directoriesLoading: PropTypes.arrayOf(PropTypes.string).isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
         onOpenDirectory: PropTypes.func.isRequired,
         onSelectRemotePath: PropTypes.func.isRequired,
@@ -123,16 +135,22 @@ class RemoteFileTree extends Component {
     render() {
         return (
             <Container>
-                <If condition={!!this.props.rootDirectory}>
-                    {this.renderDirectory(this.props.rootDirectory)}
-                    {this.renderFiles(this.props.rootDirectory, 1)}
-                </If>
+                <Choose>
+                    <When condition={!!this.props.rootDirectory}>
+                        {this.renderDirectory(this.props.rootDirectory)}
+                        {this.renderFiles(this.props.rootDirectory, 1)}
+                    </When>
+                    <Otherwise>
+                        <If condition={this.props.directoriesLoading.includes("/")}>{this.renderLoader("/", 1)}</If>
+                    </Otherwise>
+                </Choose>
             </Container>
         );
     }
 
     renderDirectory(dir, depth = 0) {
         const isOpen = this.state.openDirectories.includes(dir.path);
+        const isLoading = this.props.directoriesLoading.includes(dir.path);
         const thisItem = (
             <ItemRow depth={depth} key={dir.path}>
                 <ExpandBox onClick={() => this.handleExpansionClick(dir)}>
@@ -153,6 +171,7 @@ class RemoteFileTree extends Component {
         );
         const allItems = [null];
         if (isOpen) {
+            // Directory is open, so add children
             allItems.push(...dir.directories);
         }
         return [
@@ -162,7 +181,8 @@ class RemoteFileTree extends Component {
                     <Otherwise>{this.renderDirectory(directory, depth + 1)}</Otherwise>
                 </Choose>
             </For>,
-            isOpen ? this.renderFiles(dir, depth + 1) : null
+            isOpen ? this.renderFiles(dir, depth + 1) : null,
+            isOpen && isLoading ? this.renderLoader(dir.path, depth + 1) : null
         ];
     }
 
@@ -189,6 +209,16 @@ class RemoteFileTree extends Component {
                     </ItemText>
                 </ItemRow>
             </For>
+        );
+    }
+
+    renderLoader(parentPath, depth = 0) {
+        return (
+            <ItemRow depth={depth} key={`loader:${parentPath}`}>
+                <LoaderIconContainer>
+                    <FontAwesome name="repeat" spin />
+                </LoaderIconContainer>
+            </ItemRow>
         );
     }
 }

@@ -5,8 +5,13 @@ import RemoteFileTree from "./RemoteFileTree.js";
 
 const NOOP = () => {};
 
+const Container = styled.div`
+    width: 100%;
+`;
+
 class WebDAVExplorer extends Component {
     static propTypes = {
+        directoriesLoading: PropTypes.arrayOf(PropTypes.string).isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
         onOpenDirectory: PropTypes.func.isRequired,
         onReady: PropTypes.func.isRequired,
@@ -28,8 +33,9 @@ class WebDAVExplorer extends Component {
 
     render() {
         return (
-            <div>
+            <Container>
                 <RemoteFileTree
+                    directoriesLoading={this.props.directoriesLoading}
                     onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
                     onOpenDirectory={dir => this.props.onOpenDirectory(dir)}
                     onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
@@ -37,7 +43,7 @@ class WebDAVExplorer extends Component {
                     selectedFilename={this.props.selectedFilename}
                     selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
                 />
-            </div>
+            </Container>
         );
     }
 }
