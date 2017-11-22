@@ -4,6 +4,7 @@ import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
 
 const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");
+const NOOP = () => {};
 const ROW_SIZE_UNIT = 26;
 
 function LazyType(f) {
@@ -38,6 +39,7 @@ const ItemRow = styled.div`
     flex-direction: row;
     justify-content: flex-start;
     align-items: stretch;
+    background-color: ${props => (props.selected ? "rgba(0, 183, 172, 0.2)" : "inherit")};
 `;
 const ExpandBox = styled.div`
     width: ${ROW_SIZE_UNIT}px;
@@ -69,17 +71,26 @@ const ItemText = styled.div`
     align-items: center;
     font-size: 16px;
     font-weight: bold;
+    font-style: ${props => (props.selected ? "italic" : "normal")};
     color: rgb(72, 72, 72);
+    cursor: pointer;
 `;
 
 class RemoteFileTree extends Component {
     static propTypes = {
+        onCreateRemotePath: PropTypes.func.isRequired,
         onOpenDirectory: PropTypes.func.isRequired,
-        rootDirectory: DirectoryShape
+        onSelectRemotePath: PropTypes.func.isRequired,
+        rootDirectory: DirectoryShape,
+        selectedFilename: PropTypes.string,
+        selectedFilenameNeedsCreation: PropTypes.bool.isRequired
     };
 
     static defaultProps = {
-        onOpenDirectory: () => {}
+        onCreateRemotePath: NOOP,
+        onOpenDirectory: NOOP,
+        onSelectRemotePath: NOOP,
+        selectedFilenameNeedsCreation: false
     };
 
     constructor(props) {
@@ -103,6 +114,10 @@ class RemoteFileTree extends Component {
             });
             this.props.onOpenDirectory(path);
         }
+    }
+
+    handleFileClick(fileItem) {
+        this.props.onSelectRemotePath(fileItem.path);
     }
 
     render() {
@@ -133,7 +148,7 @@ class RemoteFileTree extends Component {
                 <ItemIcon isFile={false}>
                     <FontAwesome name="folder" />
                 </ItemIcon>
-                <ItemText>{dir.name}</ItemText>
+                <ItemText onClick={() => this.handleExpansionClick(dir)}>{dir.name}</ItemText>
             </ItemRow>
         );
         const allItems = [null];
@@ -147,14 +162,14 @@ class RemoteFileTree extends Component {
                     <Otherwise>{this.renderDirectory(directory, depth + 1)}</Otherwise>
                 </Choose>
             </For>,
-            this.renderFiles(dir, depth + 1)
+            isOpen ? this.renderFiles(dir, depth + 1) : null
         ];
     }
 
     renderFiles(dir, depth = 0) {
         return (
             <For each="file" of={dir.files}>
-                <ItemRow depth={depth} key={file.path}>
+                <ItemRow depth={depth} key={file.path} selected={file.path === this.props.selectedFilename}>
                     <Choose>
                         <When condition={/\.bcup$/i.test(file.name)}>
                             <ExpandBoxBCUP isFile={true} />
@@ -166,7 +181,12 @@ class RemoteFileTree extends Component {
                     <ItemIcon isFile={true}>
                         <FontAwesome name="file" />
                     </ItemIcon>
-                    <ItemText>{file.name}</ItemText>
+                    <ItemText
+                        onClick={() => this.handleFileClick(file)}
+                        selected={file.path === this.props.selectedFilename}
+                    >
+                        {file.name}
+                    </ItemText>
                 </ItemRow>
             </For>
         );

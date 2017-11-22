@@ -1,4 +1,6 @@
 import {
+    ADD_ARCHIVE_CREATE_REMOTE_FILE,
+    ADD_ARCHIVE_SELECT_REMOTE_FILE,
     ADD_ARCHIVE_SET_CONNECTED,
     ADD_ARCHIVE_SET_CONNECTING,
     ADD_ARCHIVE_SET_SELECTED_TYPE
@@ -7,7 +9,9 @@ import {
 const INITIAL = {
     connected: false,
     connecting: false,
-    selectedArchiveType: null
+    selectedArchiveType: null,
+    selectedRemoteFile: null,
+    shouldCreateRemoteFile: false
 };
 
 export default function addArchiveReducer(state = INITIAL, action = {}) {
@@ -26,6 +30,18 @@ export default function addArchiveReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 connected: !!action.payload
+            };
+        case ADD_ARCHIVE_CREATE_REMOTE_FILE:
+            return {
+                ...state,
+                selectedRemoteFile: action.payload,
+                shouldCreateRemoteFile: true
+            };
+        case ADD_ARCHIVE_SELECT_REMOTE_FILE:
+            return {
+                ...state,
+                selectedRemoteFile: action.payload,
+                shouldCreateRemoteFile: false
             };
 
         default:

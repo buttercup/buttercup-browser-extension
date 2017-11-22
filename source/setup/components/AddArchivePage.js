@@ -62,7 +62,11 @@ class AddArchivePage extends Component {
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
         onConnectWebDAV: PropTypes.func.isRequired,
-        selectedArchiveType: PropTypes.string
+        onCreateRemotePath: PropTypes.func.isRequired,
+        onSelectRemotePath: PropTypes.func.isRequired,
+        selectedArchiveType: PropTypes.string,
+        selectedFilename: PropTypes.string,
+        selectedFilenameNeedsCreation: PropTypes.bool.isRequired
     };
 
     constructor(props) {
@@ -100,7 +104,12 @@ class AddArchivePage extends Component {
                 </If>
                 <If condition={this.props.selectedArchiveType === "webdav" && this.props.isConnected}>
                     <h3>Choose or Create Archive</h3>
-                    <WebDAVExplorer />
+                    <WebDAVExplorer
+                        onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
+                        onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
+                        selectedFilename={this.props.selectedFilename}
+                        selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
+                    />
                 </If>
             </LayoutMain>
         );
