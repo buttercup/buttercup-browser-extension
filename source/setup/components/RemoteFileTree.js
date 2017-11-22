@@ -151,7 +151,7 @@ class RemoteFileTree extends Component {
     renderDirectory(dir, depth = 0) {
         const isOpen = this.state.openDirectories.includes(dir.path);
         const isLoading = this.props.directoriesLoading.includes(dir.path);
-        const name = dir.name || "/";
+        const name = dir.name.trim().length > 0 ? dir.name : "/";
         const thisItem = (
             <ItemRow depth={depth} key={dir.path}>
                 <ExpandBox onClick={() => this.handleExpansionClick(dir)}>
