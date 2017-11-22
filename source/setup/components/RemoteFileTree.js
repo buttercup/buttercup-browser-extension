@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
 
+const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");
 const ROW_SIZE_UNIT = 26;
 
 function LazyType(f) {
@@ -47,6 +48,11 @@ const ExpandBox = styled.div`
     color: #fff;
     margin-right: 4px;
     cursor: ${props => (props.isFile ? "default" : "pointer")};
+`;
+const ExpandBoxBCUP = styled(ExpandBox)`
+    background-image: url(${BUTTERCUP_LOGO_SMALL});
+    background-size: 26px;
+    background-position: 50% 50%;
 `;
 const ItemIcon = styled.div`
     width: ${ROW_SIZE_UNIT}px;
@@ -149,7 +155,14 @@ class RemoteFileTree extends Component {
         return (
             <For each="file" of={dir.files}>
                 <ItemRow depth={depth} key={file.path}>
-                    <ExpandBox isFile={true} />
+                    <Choose>
+                        <When condition={/\.bcup$/i.test(file.name)}>
+                            <ExpandBoxBCUP isFile={true} />
+                        </When>
+                        <Otherwise>
+                            <ExpandBox isFile={true} />
+                        </Otherwise>
+                    </Choose>
                     <ItemIcon isFile={true}>
                         <FontAwesome name="file" />
                     </ItemIcon>
