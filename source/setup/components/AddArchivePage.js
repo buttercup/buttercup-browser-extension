@@ -95,7 +95,7 @@ class AddArchivePage extends Component {
         return (
             <LayoutMain title="Add Archive">
                 <h3>Choose Archive Type</h3>
-                <ArchiveTypeChooser />
+                <ArchiveTypeChooser disabled={this.props.isConnecting || this.props.isConnected} />
                 <If condition={this.props.selectedArchiveType}>{this.renderConnectionInfo()}</If>
                 <If condition={this.props.isConnecting}>
                     <LoaderContainer>
