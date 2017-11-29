@@ -1,12 +1,14 @@
 import {
     ADD_ARCHIVE_CREATE_REMOTE_FILE,
     ADD_ARCHIVE_SELECT_REMOTE_FILE,
+    ADD_ARCHIVE_SET_ADDING,
     ADD_ARCHIVE_SET_CONNECTED,
     ADD_ARCHIVE_SET_CONNECTING,
     ADD_ARCHIVE_SET_SELECTED_TYPE
 } from "../actions/types.js";
 
 const INITIAL = {
+    adding: false,
     connected: false,
     connecting: false,
     selectedArchiveType: null,
@@ -30,6 +32,11 @@ export default function addArchiveReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 connected: !!action.payload
+            };
+        case ADD_ARCHIVE_SET_ADDING:
+            return {
+                ...state,
+                adding: !!action.payload
             };
         case ADD_ARCHIVE_CREATE_REMOTE_FILE:
             return {

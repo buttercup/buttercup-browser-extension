@@ -20,7 +20,23 @@ function handleBackgroundMessage(message) {
             log.info("Received full state update from background", message.state);
             dispatch(setEntireState(message.state));
             break;
+        default:
+            log.error(`Unknown message received: ${JSON.stringify(message)}`);
+            break;
     }
+}
+
+export function makeArchiveAdditionRequest(payload) {
+    log.info("Making request to background for storing a new archive");
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "add-archive", payload }, response => {
+            const { ok, error } = response;
+            if (ok) {
+                return resolve();
+            }
+            return reject(new Error(`Adding archive failed: ${error}`));
+        });
+    });
 }
 
 export function sendStateUpdate(action) {

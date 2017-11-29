@@ -1,10 +1,10 @@
-import { startStateListener } from "./library/messaging.js";
+import { startMessageListener } from "./library/messaging.js";
 import { initialise as initialiseCore } from "./library/core.js";
 import log from "../shared/library/log.js";
 
 log.info("Starting...");
 
 initialiseCore();
-startStateListener();
+startMessageListener();
 
 log.info("Started successfully");

@@ -1,6 +1,7 @@
 import { dispatch } from "../redux/index.js";
 import { setEntireState } from "../../shared/actions/app.js";
 import log from "../../shared/library/log.js";
+// import { addArchiveByRequest } from "./archives.js";
 
 let __backgroundPort = null;
 
@@ -16,6 +17,16 @@ function handleBackgroundMessage(message) {
             dispatch(action);
             break;
         }
+        // case "add-archive":
+        //     const { id, payload } = message;
+        //     addArchiveByRequest(payload)
+        //         .then(() => {
+
+        //         })
+        //         .catch(err => {
+
+        //         });
+        //     break;
         case "full-state":
             log.info("Received full state update from background", message.state);
             dispatch(setEntireState(message.state));

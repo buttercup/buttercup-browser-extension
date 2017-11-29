@@ -61,6 +61,7 @@ class AddArchivePage extends Component {
     static propTypes = {
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
+        onChooseWebDAVArchive: PropTypes.func.isRequired,
         onConnectWebDAV: PropTypes.func.isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
         onSelectRemotePath: PropTypes.func.isRequired,
@@ -74,10 +75,24 @@ class AddArchivePage extends Component {
         // We store some details in the state, because they're sensitive. No point
         // storing them globally..
         this.state = {
+            archiveName: "",
+            masterPassword: "",
             remoteURL: "",
             remoteUsername: "",
             remotePassword: ""
         };
+    }
+
+    handleChooseWebDAVFile(event) {
+        event.preventDefault();
+        // We send the remote credentials as these should never touch Redux
+        this.props.onChooseWebDAVArchive(
+            this.state.archiveName,
+            this.state.masterPassword,
+            this.state.remoteURL,
+            this.state.remoteUsername,
+            this.state.remotePassword
+        );
     }
 
     handleConnectWebDAV(event) {
@@ -110,8 +125,45 @@ class AddArchivePage extends Component {
                         selectedFilename={this.props.selectedFilename}
                         selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
                     />
+                    <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
                 </If>
             </LayoutMain>
+        );
+    }
+
+    renderArchiveNameInput() {
+        return (
+            <SubSection key="archiveNameInput">
+                <h3>Enter Archive Name</h3>
+                <FormContainer>
+                    <FormRow>
+                        <FormLegendItem>Name</FormLegendItem>
+                        <FormInputItem>
+                            <ButtercupInput
+                                placeholder="Enter archive name..."
+                                onChange={event => this.handleUpdateForm("archiveName", event)}
+                                value={this.state.archiveName}
+                            />
+                        </FormInputItem>
+                    </FormRow>
+                    <FormRow>
+                        <FormLegendItem>Master Password</FormLegendItem>
+                        <FormInputItem>
+                            <ButtercupInput
+                                placeholder="Enter archive password..."
+                                onChange={event => this.handleUpdateForm("masterPassword", event)}
+                                type="password"
+                                value={this.state.masterPassword}
+                            />
+                        </FormInputItem>
+                    </FormRow>
+                </FormContainer>
+                <ButtonContainer>
+                    <ButtercupButton onClick={event => this.handleChooseWebDAVFile(event)}>
+                        Save Archive
+                    </ButtercupButton>
+                </ButtonContainer>
+            </SubSection>
         );
     }
 

@@ -9,3 +9,12 @@ export function notifyError(title, message) {
         level: "error"
     });
 }
+
+export function notifySuccess(title, message) {
+    const notifications = getNotificationSystem();
+    notifications.addNotification({
+        title,
+        message,
+        level: "success"
+    });
+}

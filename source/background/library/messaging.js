@@ -1,6 +1,27 @@
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import { addPort, getPorts } from "./ports.js";
+import { addArchiveByRequest } from "./archives.js";
+
+function handleMessage(request, sender, sendResponse) {
+    switch (request.type) {
+        case "add-archive": {
+            const { payload } = request;
+            addArchiveByRequest(payload)
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            // Async
+            return true;
+        }
+        default:
+            throw new Error(`Unknown message received: ${request.type}`);
+    }
+}
 
 function handleStateMessage(message) {
     switch (message.type) {
@@ -23,7 +44,7 @@ function handleStatePortDisconnect(port) {
     ports.splice(ports.indexOf(port), 1);
 }
 
-export function startStateListener() {
+export function startMessageListener() {
     chrome.runtime.onConnect.addListener(port => {
         log.info(`Port connected: ${port.name}`);
         if (port.name === "buttercup-state") {
@@ -41,4 +62,5 @@ export function startStateListener() {
             port.onDisconnect.addListener(handleStatePortDisconnect);
         }
     });
+    chrome.runtime.onMessage.addListener(handleMessage);
 }

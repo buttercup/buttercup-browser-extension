@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/buttercup/buttercup-browser-extension#readme",
   "devDependencies": {
+    "@buttercup/channel-queue": "^0.2.2",
     "@buttercup/ui": "^0.6.2",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -73,6 +74,7 @@
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
     "sass-loader": "^6.0.6",
+    "striptags": "^3.1.0",
     "style-loader": "^0.19.0",
     "styled-components": "^2.2.3",
     "uglifyjs-webpack-plugin": "^1.0.1",
