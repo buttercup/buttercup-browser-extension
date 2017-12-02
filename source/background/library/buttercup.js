@@ -25,6 +25,17 @@ function attachArchiveManagerListeners(archiveManager) {
             })
         );
     });
+    archiveManager.on("sourceAdded", sourceInfo => {
+        log.info(`Added source: '${sourceInfo.name}' (${sourceInfo.id})`);
+        dispatch(
+            addArchive({
+                id: sourceInfo.id,
+                title: sourceInfo.name,
+                type: sourceInfo.type,
+                state: sourceInfo.status
+            })
+        );
+    });
 }
 
 function createArchiveManager() {

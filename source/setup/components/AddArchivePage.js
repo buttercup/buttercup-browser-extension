@@ -56,13 +56,17 @@ const LoaderContainer = styled.div`
     justify-content: center;
     align-items: center;
 `;
+const Spacer = styled.div`
+    width: 100%;
+    height: 30px;
+`;
 
 class AddArchivePage extends Component {
     static propTypes = {
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
-        onChooseWebDAVArchive: PropTypes.func.isRequired,
-        onConnectWebDAV: PropTypes.func.isRequired,
+        onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
+        onConnectWebDAVBasedSource: PropTypes.func.isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
         onSelectRemotePath: PropTypes.func.isRequired,
         selectedArchiveType: PropTypes.string,
@@ -83,10 +87,11 @@ class AddArchivePage extends Component {
         };
     }
 
-    handleChooseWebDAVFile(event) {
+    handleChooseWebDAVBasedFile(event) {
         event.preventDefault();
         // We send the remote credentials as these should never touch Redux
-        this.props.onChooseWebDAVArchive(
+        this.props.onChooseWebDAVBasedArchive(
+            this.props.selectedArchiveType,
             this.state.archiveName,
             this.state.masterPassword,
             this.state.remoteURL,
@@ -95,9 +100,24 @@ class AddArchivePage extends Component {
         );
     }
 
+    handleConnectOwnCloud(event) {
+        event.preventDefault();
+        this.props.onConnectWebDAVBasedSource(
+            "owncloud",
+            this.state.remoteURL,
+            this.state.remoteUsername,
+            this.state.remotePassword
+        );
+    }
+
     handleConnectWebDAV(event) {
         event.preventDefault();
-        this.props.onConnectWebDAV(this.state.remoteURL, this.state.remoteUsername, this.state.remotePassword);
+        this.props.onConnectWebDAVBasedSource(
+            "webdav",
+            this.state.remoteURL,
+            this.state.remoteUsername,
+            this.state.remotePassword
+        );
     }
 
     handleUpdateForm(property, event) {
@@ -107,6 +127,7 @@ class AddArchivePage extends Component {
     }
 
     render() {
+        const canShowWebDAVExplorer = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
         return (
             <LayoutMain title="Add Archive">
                 <h3>Choose Archive Type</h3>
@@ -117,7 +138,7 @@ class AddArchivePage extends Component {
                         <Spinner color="rgba(0, 183, 172, 1)" name="ball-grid-pulse" />
                     </LoaderContainer>
                 </If>
-                <If condition={this.props.selectedArchiveType === "webdav" && this.props.isConnected}>
+                <If condition={canShowWebDAVExplorer && this.props.isConnected}>
                     <h3>Choose or Create Archive</h3>
                     <WebDAVExplorer
                         onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
@@ -159,10 +180,11 @@ class AddArchivePage extends Component {
                     </FormRow>
                 </FormContainer>
                 <ButtonContainer>
-                    <ButtercupButton onClick={event => this.handleChooseWebDAVFile(event)}>
+                    <ButtercupButton onClick={event => this.handleChooseWebDAVBasedFile(event)}>
                         Save Archive
                     </ButtercupButton>
                 </ButtonContainer>
+                <Spacer />
             </SubSection>
         );
     }
@@ -213,6 +235,52 @@ class AddArchivePage extends Component {
                         <ButtonContainer>
                             <ButtercupButton
                                 onClick={event => this.handleConnectWebDAV(event)}
+                                disabled={connectionOptionsDisabled}
+                            >
+                                Connect
+                            </ButtercupButton>
+                        </ButtonContainer>
+                    </When>
+                    <When condition={this.props.selectedArchiveType === "owncloud"}>
+                        <FormContainer>
+                            <FormRow>
+                                <FormLegendItem>ownCloud URL</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter ownCloud URL..."
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remoteURL", event)}
+                                        value={this.state.remoteURL}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                            <FormRow>
+                                <FormLegendItem>ownCloud Username</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter ownCloud username..."
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remoteUsername", event)}
+                                        value={this.state.remoteUsername}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                            <FormRow>
+                                <FormLegendItem>ownCloud Password</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter ownCloud password..."
+                                        type="password"
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remotePassword", event)}
+                                        value={this.state.remotePassword}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                        </FormContainer>
+                        <ButtonContainer>
+                            <ButtercupButton
+                                onClick={event => this.handleConnectOwnCloud(event)}
                                 disabled={connectionOptionsDisabled}
                             >
                                 Connect

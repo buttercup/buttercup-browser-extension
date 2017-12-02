@@ -78,6 +78,7 @@
     "style-loader": "^0.19.0",
     "styled-components": "^2.2.3",
     "uglifyjs-webpack-plugin": "^1.0.1",
+    "url-join": "^2.0.2",
     "webdav": "^1.1.1",
     "webpack": "^3.8.1"
   }

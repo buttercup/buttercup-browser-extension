@@ -31,7 +31,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-content: stretch;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     overflow-y: scroll;
 `;
 const ItemRow = styled.div`
