@@ -21,6 +21,10 @@ const INPUT_QUERY = {
         "input[name*=user]",
         "input[id*=user]",
         "input[name*=email]",
+        "input[name=login]",
+        "input[id=login]",
+        "input[name*=login]",
+        "input[id*=login]",
         "input.username",
         "input.email"
     ],
