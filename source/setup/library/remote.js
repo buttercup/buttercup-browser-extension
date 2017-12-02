@@ -1,5 +1,7 @@
-import createWebDAVClient from "webdav";
+import createWebDAVClient, { setFetchMethod } from "webdav";
 import log from "../../shared/library/log.js";
+
+setFetchMethod(window.fetch);
 
 let __webdavClient = null;
 

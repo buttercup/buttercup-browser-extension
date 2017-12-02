@@ -100,6 +100,16 @@ class AddArchivePage extends Component {
         );
     }
 
+    handleConnectNextcloud(event) {
+        event.preventDefault();
+        this.props.onConnectWebDAVBasedSource(
+            "nextcloud",
+            this.state.remoteURL,
+            this.state.remoteUsername,
+            this.state.remotePassword
+        );
+    }
+
     handleConnectOwnCloud(event) {
         event.preventDefault();
         this.props.onConnectWebDAVBasedSource(
@@ -281,6 +291,52 @@ class AddArchivePage extends Component {
                         <ButtonContainer>
                             <ButtercupButton
                                 onClick={event => this.handleConnectOwnCloud(event)}
+                                disabled={connectionOptionsDisabled}
+                            >
+                                Connect
+                            </ButtercupButton>
+                        </ButtonContainer>
+                    </When>
+                    <When condition={this.props.selectedArchiveType === "nextcloud"}>
+                        <FormContainer>
+                            <FormRow>
+                                <FormLegendItem>Nextcloud URL</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter Nextcloud URL..."
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remoteURL", event)}
+                                        value={this.state.remoteURL}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                            <FormRow>
+                                <FormLegendItem>Nextcloud Username</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter Nextcloud username..."
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remoteUsername", event)}
+                                        value={this.state.remoteUsername}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                            <FormRow>
+                                <FormLegendItem>Nextcloud Password</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter Nextcloud password..."
+                                        type="password"
+                                        disabled={connectionOptionsDisabled}
+                                        onChange={event => this.handleUpdateForm("remotePassword", event)}
+                                        value={this.state.remotePassword}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                        </FormContainer>
+                        <ButtonContainer>
+                            <ButtercupButton
+                                onClick={event => this.handleConnectNextcloud(event)}
                                 disabled={connectionOptionsDisabled}
                             >
                                 Connect

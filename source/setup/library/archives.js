@@ -1,5 +1,17 @@
 import { makeArchiveAdditionRequest } from "./messaging.js";
 
+export function addNextcloudArchive(name, masterPassword, filename, url, username, password) {
+    return makeArchiveAdditionRequest({
+        type: "nextcloud",
+        name,
+        masterPassword,
+        filename,
+        url,
+        username,
+        password
+    });
+}
+
 export function addOwnCloudArchive(name, masterPassword, filename, url, username, password) {
     return makeArchiveAdditionRequest({
         type: "owncloud",

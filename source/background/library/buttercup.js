@@ -2,7 +2,8 @@ import {
     ArchiveManager,
     createCredentials,
     WebDAVDatasource,
-    Web as ButtercupWeb
+    Web as ButtercupWeb,
+    vendor as ButtercupVendor
 } from "buttercup/dist/buttercup-web.min.js";
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
 import log from "../../shared/library/log.js";
@@ -10,8 +11,9 @@ import { dispatch } from "../redux/index.js";
 import { addArchive } from "../../shared/actions/archives.js";
 
 const { LocalStorageInterface } = ButtercupWeb;
-
 let __archiveManager, __queue;
+
+ButtercupVendor.webdavFS.setFetchMethod(window.fetch);
 
 function attachArchiveManagerListeners(archiveManager) {
     archiveManager.on("sourceRehydrated", sourceInfo => {

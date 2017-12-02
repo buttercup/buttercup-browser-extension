@@ -4,6 +4,8 @@ import log from "../../shared/library/log.js";
 
 export function addArchiveByRequest(payload) {
     switch (payload.type) {
+        case "nextcloud":
+            return addNextcloudArchive(payload);
         case "owncloud":
             return addOwnCloudArchive(payload);
         case "webdav":
@@ -11,6 +13,29 @@ export function addArchiveByRequest(payload) {
         default:
             return Promise.reject(new Error(`Unable to add archive: Unknown type: ${payload.type}`));
     }
+}
+
+export function addNextcloudArchive(payload) {
+    const { name, masterPassword, filename, url, username, password } = payload;
+    log.info(`Attempting to connect Nextcloud archive '${filename}' from: ${url}`);
+    return getArchiveManager()
+        .then(archiveManager => {
+            const nextcloudCreds = createCredentials("nextcloud");
+            nextcloudCreds.username = username;
+            nextcloudCreds.password = password;
+            nextcloudCreds.setValue(
+                "datasource",
+                JSON.stringify({
+                    type: "nextcloud",
+                    endpoint: url,
+                    path: filename
+                })
+            );
+            return [archiveManager, nextcloudCreds, createCredentials.fromPassword(masterPassword)];
+        })
+        .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
+            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, false);
+        });
 }
 
 export function addOwnCloudArchive(payload) {

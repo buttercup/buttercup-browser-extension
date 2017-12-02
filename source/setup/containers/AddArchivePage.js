@@ -12,7 +12,7 @@ import {
 import { createRemoteFile, selectRemoteFile, setAdding, setConnected, setConnecting } from "../actions/addArchive.js";
 import { connectWebDAV } from "../library/remote.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
-import { addOwnCloudArchive, addWebDAVArchive } from "../library/archives.js";
+import { addNextcloudArchive, addOwnCloudArchive, addWebDAVArchive } from "../library/archives.js";
 
 export default connect(
     (state, ownProps) => ({
@@ -37,6 +37,9 @@ export default connect(
             const shouldCreate = selectedFileNeedsCreation(state);
             let addArchive;
             switch (type) {
+                case "nextcloud":
+                    addArchive = addNextcloudArchive;
+                    break;
                 case "owncloud":
                     addArchive = addOwnCloudArchive;
                     break;
@@ -73,6 +76,9 @@ export default connect(
         onConnectWebDAVBasedSource: (type, url, username, password) => dispatch => {
             let webdavURL;
             switch (type) {
+                case "nextcloud":
+                    webdavURL = joinURL(url, "remote.php/dav/files/admin");
+                    break;
                 case "owncloud":
                 /* falls-through */
                 case "nextcloud":
