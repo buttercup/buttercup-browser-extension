@@ -138,7 +138,7 @@ class RemoteFileTree extends Component {
                 <Choose>
                     <When condition={!!this.props.rootDirectory}>
                         {this.renderDirectory(this.props.rootDirectory)}
-                        {this.renderFiles(this.props.rootDirectory, 1)}
+                        {/*this.renderFiles(this.props.rootDirectory, 1)*/}
                     </When>
                     <Otherwise>
                         <If condition={this.props.directoriesLoading.includes("/")}>{this.renderLoader("/", 1)}</If>
