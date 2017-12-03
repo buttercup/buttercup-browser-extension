@@ -56,7 +56,6 @@ const ListContainer = styled.div`
 `;
 const ListItem = styled.li`
     background-color: rgba(20, 20, 20, 0.4);
-    // padding: 16px 16px 16px 16px;
     padding: 0px 16px;
     height: 60px;
     border-bottom: 1px solid rgba(120, 120, 120, 0.2);
@@ -141,6 +140,7 @@ class MainPage extends Component {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
         menuState: MenuStateShape.isRequired,
         onAddArchiveClick: PropTypes.func.isRequired,
+        onArchiveClick: PropTypes.func.isRequired,
         onMenuClick: PropTypes.func.isRequired
     };
 
@@ -173,7 +173,7 @@ class MainPage extends Component {
                         <Otherwise>
                             <ArchiveList>
                                 {this.props.archives.map(archive => (
-                                    <ListItem key={archive.id}>
+                                    <ListItem key={archive.id} onClick={() => this.props.onArchiveClick(archive.id)}>
                                         <Avatar state={archive.state}>{archive.title.substr(0, 2)}</Avatar>
                                         <TitleContainer>
                                             <ArchiveTitle>{archive.title}</ArchiveTitle>

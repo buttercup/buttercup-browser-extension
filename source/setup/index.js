@@ -7,6 +7,7 @@ import store from "./redux/index.js";
 import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
 import AddArchivePage from "./containers/AddArchivePage.js";
+import ArchiveUnlockPage from "./containers/ArchiveUnlockPage.js";
 import Notifier from "./components/Notifier.js";
 
 import "../shared/styles/base.sass";
@@ -20,6 +21,7 @@ ReactDOM.render(
         <ConnectedRouter history={history}>
             <div>
                 <Route path="/add-archive" component={AddArchivePage} />
+                <Route path="/access-archive/:id" component={ArchiveUnlockPage} />
                 <Notifier />
             </div>
         </ConnectedRouter>

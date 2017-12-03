@@ -6,70 +6,6 @@ import { getArchives } from "../../shared/selectors/archives.js";
 
 const NOOP = () => {};
 
-// function getArchives(state) {
-// return [
-//     {
-//         id: "1",
-//         title: "Perry's archive",
-//         type: "owncloud",
-//         state: "unlocked"
-//     },
-//     {
-//         id: "2",
-//         title: "Sallar's archive",
-//         type: "dropbox",
-//         state: "pending"
-//     },
-//     {
-//         id: "3",
-//         title: "Testing",
-//         type: "nextcloud",
-//         state: "locked"
-//     },
-//     {
-//         id: "4",
-//         title: "Perry's archive",
-//         type: "owncloud",
-//         state: "unlocked"
-//     },
-//     {
-//         id: "5",
-//         title: "Sallar's archive",
-//         type: "dropbox",
-//         state: "pending"
-//     },
-//     {
-//         id: "6",
-//         title: "Testing",
-//         type: "nextcloud",
-//         state: "locked"
-//     },
-//     {
-//         id: "7",
-//         title: "Perry's archive",
-//         type: "owncloud",
-//         state: "unlocked"
-//     },
-//     {
-//         id: "8",
-//         title: "Sallar's archive",
-//         type: "dropbox",
-//         state: "pending"
-//     },
-//     {
-//         id: "9",
-//         title: "Testing",
-//         type: "nextcloud",
-//         state: "locked"
-//     }
-// ];
-// }
-
-// chrome.tabs.create(
-//     { url: chrome.extension.getURL("setup.html#/unlockArchive/" + encodeURIComponent(this.props.name)) },
-//     NOPE
-// );
-
 export default connect(
     (state, ownProps) => ({
         archives: getArchives(state),
@@ -78,6 +14,9 @@ export default connect(
     {
         onAddArchiveClick: () => () => {
             chrome.tabs.create({ url: chrome.extension.getURL("setup.html#/add-archive/") }, NOOP);
+        },
+        onArchiveClick: archiveID => () => {
+            chrome.tabs.create({ url: chrome.extension.getURL(`setup.html#/access-archive/${archiveID}`) }, NOOP);
         },
         onMenuClick: () => dispatch => {
             dispatch(toggleMenu());
