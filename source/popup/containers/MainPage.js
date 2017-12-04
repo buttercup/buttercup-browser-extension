@@ -3,6 +3,7 @@ import MainPage from "../components/MainPage.js";
 import { toggleMenu } from "../actions/popupMenu.js";
 import { getMenuState } from "../selectors/popupMenu.js";
 import { getArchives } from "../../shared/selectors/archives.js";
+import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
 const NOOP = () => {};
 
@@ -13,16 +14,16 @@ export default connect(
     }),
     {
         onAddArchiveClick: () => () => {
-            chrome.tabs.create({ url: chrome.extension.getURL("setup.html#/add-archive/") }, NOOP);
+            createNewTab(getExtensionURL("setup.html#/add-archive/"));
         },
         onArchiveClick: archiveID => () => {
-            chrome.tabs.create({ url: chrome.extension.getURL(`setup.html#/access-archive/${archiveID}`) }, NOOP);
+            createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}`));
         },
         onMenuClick: () => dispatch => {
             dispatch(toggleMenu());
         },
         onOtherSoftwareClick: () => () => {
-            chrome.tabs.create({ url: "https://buttercup.pw" }, NOOP);
+            createNewTab("https://buttercup.pw");
         }
     }
 )(MainPage);
