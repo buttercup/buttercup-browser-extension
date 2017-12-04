@@ -13,6 +13,7 @@ import { createRemoteFile, selectRemoteFile, setAdding, setConnected, setConnect
 import { connectWebDAV } from "../library/remote.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
 import { addNextcloudArchive, addOwnCloudArchive, addWebDAVArchive } from "../library/archives.js";
+import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 
 export default connect(
     (state, ownProps) => ({
@@ -55,15 +56,20 @@ export default connect(
                 notifyError(`Failed selecting ${type} archive`, "Not implemented: Creation");
             } else {
                 dispatch(setAdding(true));
+                dispatch(setBusy("Adding archive..."));
                 return addArchive(name, masterPassword, remoteFilename, url, username, password)
                     .then(() => {
+                        dispatch(unsetBusy());
                         notifySuccess(
                             "Successfully added archive",
                             `The archive '${archiveName}' was successfully added.`
                         );
-                        // todo: auto close
+                        setTimeout(() => {
+                            window.close();
+                        }, 2000);
                     })
                     .catch(err => {
+                        dispatch(unsetBusy());
                         console.error(err);
                         notifyError(
                             `Failed selecting ${type} archive`,
