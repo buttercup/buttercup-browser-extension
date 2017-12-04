@@ -20,6 +20,9 @@ export default connect(
         },
         onMenuClick: () => dispatch => {
             dispatch(toggleMenu());
+        },
+        onOtherSoftwareClick: () => () => {
+            chrome.tabs.create({ url: "https://buttercup.pw" }, NOOP);
         }
     }
 )(MainPage);

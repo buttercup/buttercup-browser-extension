@@ -141,7 +141,8 @@ class MainPage extends Component {
         menuState: MenuStateShape.isRequired,
         onAddArchiveClick: PropTypes.func.isRequired,
         onArchiveClick: PropTypes.func.isRequired,
-        onMenuClick: PropTypes.func.isRequired
+        onMenuClick: PropTypes.func.isRequired,
+        onOtherSoftwareClick: PropTypes.func.isRequired
     };
 
     render() {
@@ -164,7 +165,7 @@ class MainPage extends Component {
                                     <FontAwesome name="cog" />
                                     <div>Settings</div>
                                 </OptionsItem>
-                                <OptionsItem>
+                                <OptionsItem onClick={() => this.props.onOtherSoftwareClick()}>
                                     <FontAwesome name="cloud-download" />
                                     <div>Other Apps</div>
                                 </OptionsItem>
