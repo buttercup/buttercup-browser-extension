@@ -51,3 +51,16 @@ export function sendStateUpdate(action) {
         console.error(err);
     }
 }
+
+export function unlockArchive(sourceID, masterPassword) {
+    log.info(`Making request to background to unlock archive source: ${sourceID}`);
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "unlock-archive", sourceID, masterPassword }, response => {
+            const { ok, error } = response;
+            if (ok) {
+                return resolve();
+            }
+            return reject(new Error(`Unlocking archive source (${sourceID}) failed: ${error}`));
+        });
+    });
+}

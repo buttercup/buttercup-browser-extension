@@ -8,7 +8,7 @@ import {
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
-import { addArchive } from "../../shared/actions/archives.js";
+import { addArchive, removeArchive, setArchiveLocked, setArchiveUnlocked } from "../../shared/actions/archives.js";
 
 const { LocalStorageInterface } = ButtercupWeb;
 let __archiveManager, __queue;
@@ -37,6 +37,18 @@ function attachArchiveManagerListeners(archiveManager) {
                 state: sourceInfo.status
             })
         );
+    });
+    archiveManager.on("sourceRemoved", sourceInfo => {
+        const { id } = sourceInfo;
+        dispatch(removeArchive(id));
+    });
+    archiveManager.on("sourceUnlocked", sourceInfo => {
+        const { id } = sourceInfo;
+        dispatch(setArchiveUnlocked(id));
+    });
+    archiveManager.on("sourceLocked", sourceInfo => {
+        const { id } = sourceInfo;
+        dispatch(setArchiveLocked(id));
     });
 }
 

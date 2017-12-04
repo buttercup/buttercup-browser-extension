@@ -83,3 +83,7 @@ export function addWebDAVArchive(payload) {
             return archiveManager.addSource(name, sourceCredentials, archiveCredentials, false);
         });
 }
+
+export function unlockSource(sourceID, masterPassword) {
+    return getArchiveManager().then(archiveManager => archiveManager.unlock(sourceID, masterPassword));
+}
