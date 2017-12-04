@@ -65,6 +65,12 @@ class ArchiveUnlockPage extends Component {
         });
     }
 
+    onInputKeyPress(event) {
+        if (event.key === "Enter") {
+            this.props.onUnlockArchive(this.props.sourceID, this.state.masterPassword);
+        }
+    }
+
     render() {
         return (
             <LayoutMain title="Unlock Archive">
@@ -77,6 +83,7 @@ class ArchiveUnlockPage extends Component {
                         disabled={false}
                         onChange={event => this.handleUpdateForm("masterPassword", event)}
                         value={this.state.masterPassword}
+                        onKeyPress={event => this.onInputKeyPress(event)}
                         innerRef={input => {
                             this._passwordInput = input;
                         }}
