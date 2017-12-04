@@ -1,4 +1,6 @@
 export const APP_MASTER_SET = "app/masterSetState";
+export const APP_SET_BUSY = "app/setBusy";
+export const APP_UNSET_BUSY = "app/unsetBusy";
 
 export const ARCHIVES_ADD = "archives/add";
 export const ARCHIVES_REMOVE = "archives/remove";

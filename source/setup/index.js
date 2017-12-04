@@ -9,6 +9,7 @@ import { connectToBackground } from "./library/messaging.js";
 import AddArchivePage from "./containers/AddArchivePage.js";
 import ArchiveUnlockPage from "./containers/ArchiveUnlockPage.js";
 import Notifier from "./components/Notifier.js";
+import LoadingModal from "./containers/LoadingModal.js";
 
 import "../shared/styles/base.sass";
 import "./styles/setup.sass";
@@ -22,6 +23,7 @@ ReactDOM.render(
             <div>
                 <Route path="/add-archive" component={AddArchivePage} />
                 <Route path="/access-archive/:id" component={ArchiveUnlockPage} />
+                <LoadingModal />
                 <Notifier />
             </div>
         </ConnectedRouter>
