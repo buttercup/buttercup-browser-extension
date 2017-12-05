@@ -3,6 +3,7 @@
   "plugins": [
     "jsx-control-statements",
     "transform-class-properties",
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
+    "transform-function-bind"
   ]
 }
