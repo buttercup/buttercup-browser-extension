@@ -39,6 +39,19 @@ export function makeArchiveAdditionRequest(payload) {
     });
 }
 
+export function removeArchive(sourceID) {
+    log.info(`Sending request to background for the removal of archive source: ${sourceID}`);
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "remove-archive", sourceID }, response => {
+            const { ok, error } = response;
+            if (ok) {
+                return resolve();
+            }
+            return reject(new Error(`Adding removal failed: ${error}`));
+        });
+    });
+}
+
 export function sendStateUpdate(action) {
     log.info("Sending state update to background", action);
     try {

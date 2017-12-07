@@ -4,12 +4,14 @@ import setupRouting from "./routing.js";
 import archives from "../../shared/reducers/archives.js";
 import app from "../../shared/reducers/app.js";
 import addArchive from "./addArchive.js";
+import manageArchive from "./manageArchive.js";
 import webdav from "./webdav.js";
 
 const appReducer = combineReducers({
     app,
     addArchive,
     archives,
+    manageArchive,
     setupRouting,
     webdav
 });

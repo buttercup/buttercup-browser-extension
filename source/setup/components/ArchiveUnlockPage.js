@@ -31,6 +31,8 @@ const ButtonsRow = styled.div`
 class ArchiveUnlockPage extends Component {
     static propTypes = {
         archiveTitle: PropTypes.string.isRequired,
+        isEditing: PropTypes.bool.isRequired,
+        onRemoveArchive: PropTypes.func.isRequired,
         onUnlockArchive: PropTypes.func.isRequired,
         sourceID: PropTypes.string.isRequired
     };
@@ -54,6 +56,11 @@ class ArchiveUnlockPage extends Component {
         window.close();
     }
 
+    handleRemoveArchive(event) {
+        event.preventDefault();
+        this.props.onRemoveArchive(this.props.sourceID);
+    }
+
     handleUnlockArchive(event) {
         event.preventDefault();
         this.props.onUnlockArchive(this.props.sourceID, this.state.masterPassword);
@@ -72,6 +79,7 @@ class ArchiveUnlockPage extends Component {
     }
 
     render() {
+        const disableForm = this.props.isEditing;
         return (
             <LayoutMain title="Unlock Archive">
                 <h3>Unlock '{this.props.archiveTitle}'</h3>
@@ -80,7 +88,7 @@ class ArchiveUnlockPage extends Component {
                     <ButtercupInput
                         placeholder="Enter master password..."
                         type="password"
-                        disabled={false}
+                        disabled={disableForm}
                         onChange={event => this.handleUpdateForm("masterPassword", event)}
                         value={this.state.masterPassword}
                         onKeyPress={event => this.onInputKeyPress(event)}
@@ -90,13 +98,13 @@ class ArchiveUnlockPage extends Component {
                     />
                 </PasswordRow>
                 <ButtonsRow>
-                    <ButtercupButton onClick={() => {}} disabled={false}>
+                    <ButtercupButton onClick={event => this.handleRemoveArchive(event)} disabled={disableForm}>
                         Remove Archive
                     </ButtercupButton>
-                    <ButtercupButton onClick={event => this.handleCancelUnlock(event)} disabled={false}>
+                    <ButtercupButton onClick={event => this.handleCancelUnlock(event)} disabled={disableForm}>
                         Cancel
                     </ButtercupButton>
-                    <ButtercupButton onClick={event => this.handleUnlockArchive(event)} disabled={false}>
+                    <ButtercupButton onClick={event => this.handleUnlockArchive(event)} disabled={disableForm}>
                         Unlock
                     </ButtercupButton>
                 </ButtonsRow>
