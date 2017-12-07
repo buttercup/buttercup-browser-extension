@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
+import { directionalProperty } from "polished";
 
+const BCUP_EXTENSION = /\.bcup$/i;
 const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");
 const EXPAND_SPACE_AFTER = 4;
 const NOOP = () => {};
@@ -67,6 +69,9 @@ const ItemIcon = styled.div`
     font-size: 18px;
     margin-right: 4px;
 `;
+const ItemIconNewFile = ItemIcon.extend`
+    color: ${props => (props.highlight === true ? "rgba(0, 183, 172, 1)" : "rgb(120, 120, 120)")};
+`;
 const ItemText = styled.div`
     display: flex;
     justify-content: flex-start;
@@ -77,6 +82,11 @@ const ItemText = styled.div`
     color: rgb(72, 72, 72);
     cursor: pointer;
 `;
+const ItemNewText = ItemText.extend`
+    font-style: italic;
+    color: rgb(120, 120, 120);
+    cursor: text;
+`;
 const LoaderIconContainer = styled.div`
     width: ${ROW_SIZE_UNIT}px;
     height: ${ROW_SIZE_UNIT}px;
@@ -86,6 +96,20 @@ const LoaderIconContainer = styled.div`
     color: #888;
     margin-left: ${EXPAND_SPACE_AFTER}px;
 `;
+const NewFilenameInput = styled.input`
+    border: none;
+    height: ${ROW_SIZE_UNIT}px;
+    width: 200px;
+    backgroundcolor: #ddd;
+`;
+
+function sanitiseFilename(filename) {
+    let output = filename.trim();
+    if (BCUP_EXTENSION.test(output) !== true) {
+        output += ".bcup";
+    }
+    return output;
+}
 
 class RemoteFileTree extends Component {
     static propTypes = {
@@ -108,6 +132,9 @@ class RemoteFileTree extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            editingNewFile: false,
+            editingNewFileDirectory: null,
+            editingNewFileName: "",
             openDirectories: ["/"]
         };
     }
@@ -129,7 +156,58 @@ class RemoteFileTree extends Component {
     }
 
     handleFileClick(fileItem) {
+        this.setState({
+            editingNewFile: false,
+            editingNewFileDirectory: null,
+            editingNewFileName: ""
+        });
         this.props.onSelectRemotePath(fileItem.path);
+    }
+
+    handleNewItemFinishedEditing() {
+        const { editingNewFileName } = this.state;
+        const filename = sanitiseFilename(editingNewFileName);
+        this.setState({
+            editingNewFile: false,
+            editingNewFileName: filename
+        });
+        this.props.onCreateRemotePath(filename);
+    }
+
+    onNewFilenameChange(event) {
+        const { value } = event.target;
+        this.setState({
+            editingNewFileName: value
+        });
+    }
+
+    onBlurNewItem() {
+        this.handleNewItemFinishedEditing();
+    }
+
+    onEditNewItem(directoryParent) {
+        const { editingNewFileDirectory } = this.state;
+        const resetState =
+            editingNewFileDirectory === directoryParent
+                ? {}
+                : // Directories not the same, so clear the filename:
+                  { editingNewFileName: "" };
+        this.setState({
+            ...resetState,
+            editingNewFile: true,
+            editingNewFileDirectory: directoryParent
+        });
+        setTimeout(() => {
+            if (this._newFilenameInput) {
+                this._newFilenameInput.focus();
+            }
+        }, 200);
+    }
+
+    onNewItemKeyPress(event) {
+        if (event.key === "Enter") {
+            this.handleNewItemFinishedEditing();
+        }
     }
 
     render() {
@@ -183,7 +261,8 @@ class RemoteFileTree extends Component {
                 </Choose>
             </For>,
             isOpen ? this.renderFiles(dir, depth + 1) : null,
-            isOpen && isLoading ? this.renderLoader(dir.path, depth + 1) : null
+            isOpen && isLoading ? this.renderLoader(dir.path, depth + 1) : null,
+            isOpen ? this.renderNewItem(dir.path, depth + 1) : null
         ];
     }
 
@@ -219,6 +298,42 @@ class RemoteFileTree extends Component {
                 <LoaderIconContainer>
                     <FontAwesome name="repeat" spin />
                 </LoaderIconContainer>
+            </ItemRow>
+        );
+    }
+
+    renderNewItem(parentPath, depth = 0) {
+        const { editingNewFile, editingNewFileDirectory, editingNewFileName } = this.state;
+        const currentlyEditingThis = editingNewFileDirectory === parentPath && editingNewFileName.length > 0;
+        const selectedThis = currentlyEditingThis && editingNewFileName === this.props.selectedFilename;
+        return (
+            <ItemRow depth={depth} key={`new:${parentPath}`} selected={selectedThis}>
+                <ExpandBox isFile={true} />
+                <ItemIconNewFile highlight={editingNewFileDirectory === parentPath}>
+                    <FontAwesome name="plus-square" />
+                </ItemIconNewFile>
+                <Choose>
+                    <When condition={editingNewFileDirectory === parentPath && editingNewFile}>
+                        <NewFilenameInput
+                            type="text"
+                            value={editingNewFileName}
+                            onChange={::this.onNewFilenameChange}
+                            onBlur={::this.onBlurNewItem}
+                            onKeyPress={::this.onNewItemKeyPress}
+                            innerRef={input => {
+                                this._newFilenameInput = input;
+                            }}
+                        />
+                    </When>
+                    <Otherwise>
+                        <ItemNewText onClick={() => this.onEditNewItem(parentPath)} selected={selectedThis}>
+                            <Choose>
+                                <When condition={currentlyEditingThis}>{editingNewFileName}</When>
+                                <Otherwise>Enter new archive name...</Otherwise>
+                            </Choose>
+                        </ItemNewText>
+                    </Otherwise>
+                </Choose>
             </ItemRow>
         );
     }
