@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
-import { directionalProperty } from "polished";
+import joinPath from "path.join";
 
 const BCUP_EXTENSION = /\.bcup$/i;
 const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");
@@ -171,7 +171,7 @@ class RemoteFileTree extends Component {
             editingNewFile: false,
             editingNewFileName: filename
         });
-        this.props.onCreateRemotePath(filename);
+        this.props.onCreateRemotePath(joinPath(this.state.editingNewFileDirectory, filename));
     }
 
     onNewFilenameChange(event) {
@@ -305,7 +305,9 @@ class RemoteFileTree extends Component {
     renderNewItem(parentPath, depth = 0) {
         const { editingNewFile, editingNewFileDirectory, editingNewFileName } = this.state;
         const currentlyEditingThis = editingNewFileDirectory === parentPath && editingNewFileName.length > 0;
-        const selectedThis = currentlyEditingThis && editingNewFileName === this.props.selectedFilename;
+        const selectedThis =
+            currentlyEditingThis &&
+            joinPath(editingNewFileDirectory, editingNewFileName) === this.props.selectedFilename;
         return (
             <ItemRow depth={depth} key={`new:${parentPath}`} selected={selectedThis}>
                 <ExpandBox isFile={true} />
