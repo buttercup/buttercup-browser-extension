@@ -16,8 +16,9 @@ export function addArchiveByRequest(payload) {
 }
 
 export function addNextcloudArchive(payload) {
-    const { name, masterPassword, filename, url, username, password } = payload;
+    const { name, masterPassword, filename, url, username, password, create } = payload;
     log.info(`Attempting to connect Nextcloud archive '${filename}' from: ${url}`);
+    log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
             const nextcloudCreds = createCredentials("nextcloud");
@@ -34,13 +35,14 @@ export function addNextcloudArchive(payload) {
             return [archiveManager, nextcloudCreds, createCredentials.fromPassword(masterPassword)];
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, false);
+            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
         });
 }
 
 export function addOwnCloudArchive(payload) {
-    const { name, masterPassword, filename, url, username, password } = payload;
+    const { name, masterPassword, filename, url, username, password, create } = payload;
     log.info(`Attempting to connect ownCloud archive '${filename}' from: ${url}`);
+    log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
             const owncloudCreds = createCredentials("owncloud");
@@ -57,13 +59,14 @@ export function addOwnCloudArchive(payload) {
             return [archiveManager, owncloudCreds, createCredentials.fromPassword(masterPassword)];
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, false);
+            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
         });
 }
 
 export function addWebDAVArchive(payload) {
-    const { name, masterPassword, filename, url, username, password } = payload;
+    const { name, masterPassword, filename, url, username, password, create } = payload;
     log.info(`Attempting to connect WebDAV archive '${filename}' from: ${url}`);
+    log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
             const webdavCreds = createCredentials("webdav");
@@ -80,7 +83,7 @@ export function addWebDAVArchive(payload) {
             return [archiveManager, webdavCreds, createCredentials.fromPassword(masterPassword)];
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, false);
+            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
         });
 }
 

@@ -1,6 +1,6 @@
 import { makeArchiveAdditionRequest } from "./messaging.js";
 
-export function addNextcloudArchive(name, masterPassword, filename, url, username, password) {
+export function addNextcloudArchive(name, masterPassword, filename, url, username, password, shouldCreate = false) {
     return makeArchiveAdditionRequest({
         type: "nextcloud",
         name,
@@ -8,11 +8,12 @@ export function addNextcloudArchive(name, masterPassword, filename, url, usernam
         filename,
         url,
         username,
-        password
+        password,
+        create: shouldCreate
     });
 }
 
-export function addOwnCloudArchive(name, masterPassword, filename, url, username, password) {
+export function addOwnCloudArchive(name, masterPassword, filename, url, username, password, shouldCreate = false) {
     return makeArchiveAdditionRequest({
         type: "owncloud",
         name,
@@ -20,11 +21,12 @@ export function addOwnCloudArchive(name, masterPassword, filename, url, username
         filename,
         url,
         username,
-        password
+        password,
+        create: shouldCreate
     });
 }
 
-export function addWebDAVArchive(name, masterPassword, filename, url, username, password) {
+export function addWebDAVArchive(name, masterPassword, filename, url, username, password, shouldCreate = false) {
     return makeArchiveAdditionRequest({
         type: "webdav",
         name,
@@ -32,6 +34,7 @@ export function addWebDAVArchive(name, masterPassword, filename, url, username, 
         filename,
         url,
         username,
-        password
+        password,
+        create: shouldCreate
     });
 }

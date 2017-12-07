@@ -52,32 +52,25 @@ export default connect(
                     notifyError("Failed adding archive", `An error occurred when adding the archive: ${err.message}`);
                     return;
             }
-            if (shouldCreate) {
-                notifyError(`Failed selecting ${type} archive`, "Not implemented: Creation");
-            } else {
-                dispatch(setAdding(true));
-                dispatch(setBusy("Adding archive..."));
-                return addArchive(name, masterPassword, remoteFilename, url, username, password)
-                    .then(() => {
-                        dispatch(unsetBusy());
-                        notifySuccess(
-                            "Successfully added archive",
-                            `The archive '${archiveName}' was successfully added.`
-                        );
-                        setTimeout(() => {
-                            window.close();
-                        }, 2000);
-                    })
-                    .catch(err => {
-                        dispatch(unsetBusy());
-                        console.error(err);
-                        notifyError(
-                            `Failed selecting ${type} archive`,
-                            `An error occurred when adding the archive: ${err.message}`
-                        );
-                        dispatch(setAdding(false));
-                    });
-            }
+            dispatch(setAdding(true));
+            dispatch(setBusy(shouldCreate ? "Adding new archive..." : "Adding existing archive..."));
+            return addArchive(name, masterPassword, remoteFilename, url, username, password, shouldCreate)
+                .then(() => {
+                    dispatch(unsetBusy());
+                    notifySuccess("Successfully added archive", `The archive '${archiveName}' was successfully added.`);
+                    setTimeout(() => {
+                        window.close();
+                    }, 2000);
+                })
+                .catch(err => {
+                    dispatch(unsetBusy());
+                    console.error(err);
+                    notifyError(
+                        `Failed selecting ${type} archive`,
+                        `An error occurred when adding the archive: ${err.message}`
+                    );
+                    dispatch(setAdding(false));
+                });
         },
         onConnectWebDAVBasedSource: (type, url, username, password) => dispatch => {
             let webdavURL;
