@@ -87,6 +87,11 @@ export function addWebDAVArchive(payload) {
         });
 }
 
+export function lockSource(sourceID) {
+    log.info(`Locking source: ${sourceID}`);
+    return getArchiveManager().then(archiveManager => archiveManager.lock(sourceID));
+}
+
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
     return getArchiveManager().then(archiveManager => archiveManager.remove(sourceID));

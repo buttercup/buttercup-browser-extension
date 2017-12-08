@@ -22,7 +22,7 @@ ReactDOM.render(
         <ConnectedRouter history={history}>
             <div>
                 <Route path="/add-archive" component={AddArchivePage} />
-                <Route path="/access-archive/:id" component={ArchiveUnlockPage} />
+                <Route path="/access-archive/:id/:state" component={ArchiveUnlockPage} />
                 <LoadingModal />
                 <Notifier />
             </div>

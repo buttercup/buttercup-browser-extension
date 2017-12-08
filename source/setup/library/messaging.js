@@ -26,6 +26,19 @@ function handleBackgroundMessage(message) {
     }
 }
 
+export function lockArchive(sourceID) {
+    log.info(`Sending request to background to lock archive source: ${sourceID}`);
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "lock-archive", sourceID }, response => {
+            const { ok, error } = response;
+            if (ok) {
+                return resolve();
+            }
+            return reject(new Error(`Locking archive failed: ${error}`));
+        });
+    });
+}
+
 export function makeArchiveAdditionRequest(payload) {
     log.info("Making request to background for storing a new archive");
     return new Promise((resolve, reject) => {
