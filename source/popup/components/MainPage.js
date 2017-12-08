@@ -174,7 +174,10 @@ class MainPage extends Component {
                         <Otherwise>
                             <ArchiveList>
                                 {this.props.archives.map(archive => (
-                                    <ListItem key={archive.id} onClick={() => this.props.onArchiveClick(archive.id)}>
+                                    <ListItem
+                                        key={archive.id}
+                                        onClick={() => this.props.onArchiveClick(archive.id, archive.state)}
+                                    >
                                         <Avatar state={archive.state}>{archive.title.substr(0, 2)}</Avatar>
                                         <TitleContainer>
                                             <ArchiveTitle>{archive.title}</ArchiveTitle>

@@ -16,8 +16,8 @@ export default connect(
         onAddArchiveClick: () => () => {
             createNewTab(getExtensionURL("setup.html#/add-archive/"));
         },
-        onArchiveClick: archiveID => () => {
-            createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}`));
+        onArchiveClick: (archiveID, state) => () => {
+            createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}/${state}`));
         },
         onMenuClick: () => dispatch => {
             dispatch(toggleMenu());
