@@ -141,6 +141,7 @@ class MainPage extends Component {
         menuState: MenuStateShape.isRequired,
         onAddArchiveClick: PropTypes.func.isRequired,
         onArchiveClick: PropTypes.func.isRequired,
+        onLockAllClick: PropTypes.func.isRequired,
         onMenuClick: PropTypes.func.isRequired,
         onOtherSoftwareClick: PropTypes.func.isRequired
     };
@@ -157,7 +158,7 @@ class MainPage extends Component {
                                     <FontAwesome name="plus" />
                                     <div>Add Archive</div>
                                 </OptionsItem>
-                                <OptionsItem>
+                                <OptionsItem onClick={() => this.props.onLockAllClick()}>
                                     <FontAwesome name="lock" />
                                     <div>Lock All</div>
                                 </OptionsItem>

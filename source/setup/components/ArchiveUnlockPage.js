@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
-import Spinner from "react-spinkit";
 import LayoutMain from "./LayoutMain.js";
 
 const PasswordRow = styled.div`

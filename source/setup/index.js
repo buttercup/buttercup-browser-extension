@@ -8,6 +8,7 @@ import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
 import AddArchivePage from "./containers/AddArchivePage.js";
 import ArchiveUnlockPage from "./containers/ArchiveUnlockPage.js";
+import ArchivesLockPage from "./containers/ArchivesLockPage.js";
 import Notifier from "./components/Notifier.js";
 import LoadingModal from "./containers/LoadingModal.js";
 
@@ -23,6 +24,7 @@ ReactDOM.render(
             <div>
                 <Route path="/add-archive" component={AddArchivePage} />
                 <Route path="/access-archive/:id/:state" component={ArchiveUnlockPage} />
+                <Route path="/lock-archives" component={ArchivesLockPage} />
                 <LoadingModal />
                 <Notifier />
             </div>

@@ -92,6 +92,16 @@ export function lockSource(sourceID) {
     return getArchiveManager().then(archiveManager => archiveManager.lock(sourceID));
 }
 
+export function lockSources() {
+    log.info("Locking all sources");
+    return getArchiveManager().then(archiveManager => {
+        const { unlockedSources } = archiveManager;
+        return unlockedSources.length > 0
+            ? Promise.all(unlockedSources.map(source => archiveManager.lock(source.id)))
+            : Promise.resolve();
+    });
+}
+
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
     return getArchiveManager().then(archiveManager => archiveManager.remove(sourceID));

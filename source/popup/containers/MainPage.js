@@ -14,10 +14,13 @@ export default connect(
     }),
     {
         onAddArchiveClick: () => () => {
-            createNewTab(getExtensionURL("setup.html#/add-archive/"));
+            createNewTab(getExtensionURL("setup.html#/add-archive"));
         },
         onArchiveClick: (archiveID, state) => () => {
             createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}/${state}`));
+        },
+        onLockAllClick: () => () => {
+            createNewTab(getExtensionURL("setup.html#/lock-archives"));
         },
         onMenuClick: () => dispatch => {
             dispatch(toggleMenu());

@@ -1,7 +1,7 @@
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import { addPort, getPorts } from "./ports.js";
-import { addArchiveByRequest, lockSource, removeSource, unlockSource } from "./archives.js";
+import { addArchiveByRequest, lockSource, lockSources, removeSource, unlockSource } from "./archives.js";
 
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
@@ -16,6 +16,17 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             // Async
+            return true;
+        }
+        case "lock-all-archives": {
+            lockSources()
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
             return true;
         }
         case "lock-archive": {
