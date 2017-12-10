@@ -14,9 +14,14 @@ import { connectWebDAV } from "../library/remote.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
 import { addNextcloudArchive, addOwnCloudArchive, addWebDAVArchive } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
+import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
+import { setAuthID } from "../../shared/actions/dropbox.js";
+import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
 
 export default connect(
     (state, ownProps) => ({
+        dropboxAuthID: getDropboxAuthID(state),
+        dropboxAuthToken: getDropboxAuthToken(state),
         isConnected: isConnected(state),
         isConnecting: isConnecting(state),
         selectedArchiveType: getSelectedArchiveType(state),
@@ -24,6 +29,10 @@ export default connect(
         selectedFilenameNeedsCreation: selectedFileNeedsCreation(state)
     }),
     {
+        onAuthenticateDropbox: dropboxAuthID => dispatch => {
+            dispatch(setAuthID(dropboxAuthID));
+            performDropboxAuthentication();
+        },
         onChooseWebDAVBasedArchive: (type, archiveName, masterPassword, url, username, password) => (
             dispatch,
             getState

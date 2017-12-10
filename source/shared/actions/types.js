@@ -6,3 +6,7 @@ export const ARCHIVES_ADD = "archives/add";
 export const ARCHIVES_REMOVE = "archives/remove";
 export const ARCHIVES_SET_LOCKED = "archives/setLocked";
 export const ARCHIVES_SET_UNLOCKED = "archives/setUnlocked";
+
+export const DROPBOX_CLEAR_STATE = "dropbox/clear";
+export const DROPBOX_SET_AUTH_ID = "dropbox/setAuthenticationID";
+export const DROPBOX_SET_AUTH_TOKEN = "dropbox/setAuthToken";

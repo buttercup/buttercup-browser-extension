@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import uuid from "uuid/v4";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
 import Spinner from "react-spinkit";
 import LayoutMain from "./LayoutMain.js";
@@ -63,8 +64,11 @@ const Spacer = styled.div`
 
 class AddArchivePage extends Component {
     static propTypes = {
+        dropboxAuthID: PropTypes.string,
+        dropboxAuthToken: PropTypes.string,
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
+        onAuthenticateDropbox: PropTypes.func.isRequired,
         onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
         onConnectWebDAVBasedSource: PropTypes.func.isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
@@ -80,11 +84,23 @@ class AddArchivePage extends Component {
         // storing them globally..
         this.state = {
             archiveName: "",
+            dropboxAuthenticationID: "",
             masterPassword: "",
             remoteURL: "",
             remoteUsername: "",
             remotePassword: ""
         };
+    }
+
+    componentDidMount() {
+        this.setState({
+            dropboxAuthenticationID: uuid()
+        });
+    }
+
+    handleDropboxAuth(event) {
+        event.preventDefault();
+        this.props.onAuthenticateDropbox(this.state.dropboxAuthenticationID);
     }
 
     handleChooseWebDAVBasedFile(event) {
@@ -138,6 +154,9 @@ class AddArchivePage extends Component {
 
     render() {
         const canShowWebDAVExplorer = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
+        const isTargetingDropbox = this.props.selectedArchiveType === "dropbox";
+        const hasAuthenticatedDropbox =
+            this.props.dropboxAuthID === this.state.dropboxAuthenticationID && this.props.dropboxAuthToken;
         return (
             <LayoutMain title="Add Archive">
                 <h3>Choose Archive Type</h3>
@@ -158,6 +177,7 @@ class AddArchivePage extends Component {
                     />
                     <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
                 </If>
+                <If condition={isTargetingDropbox && hasAuthenticatedDropbox}>Dropbox yay!</If>
             </LayoutMain>
         );
     }
@@ -201,9 +221,12 @@ class AddArchivePage extends Component {
 
     renderConnectionInfo() {
         const connectionOptionsDisabled = this.props.isConnecting || this.props.isConnected;
+        const title =
+            this.props.selectedArchiveType === "dropbox" ? "Authenticate Cloud Source" : "Enter Connection Details";
+        const isAuthenticatingDropbox = this.props.dropboxAuthID === this.state.dropboxAuthenticationID;
         return (
             <SubSection>
-                <h3>Enter Connection Details</h3>
+                <h3>{title}</h3>
                 <Choose>
                     <When condition={this.props.selectedArchiveType === "webdav"}>
                         <FormContainer>
@@ -243,10 +266,7 @@ class AddArchivePage extends Component {
                             </FormRow>
                         </FormContainer>
                         <ButtonContainer>
-                            <ButtercupButton
-                                onClick={event => this.handleConnectWebDAV(event)}
-                                disabled={connectionOptionsDisabled}
-                            >
+                            <ButtercupButton onClick={::this.handleConnectWebDAV} disabled={connectionOptionsDisabled}>
                                 Connect
                             </ButtercupButton>
                         </ButtonContainer>
@@ -290,7 +310,7 @@ class AddArchivePage extends Component {
                         </FormContainer>
                         <ButtonContainer>
                             <ButtercupButton
-                                onClick={event => this.handleConnectOwnCloud(event)}
+                                onClick={::this.handleConnectOwnCloud}
                                 disabled={connectionOptionsDisabled}
                             >
                                 Connect
@@ -336,10 +356,17 @@ class AddArchivePage extends Component {
                         </FormContainer>
                         <ButtonContainer>
                             <ButtercupButton
-                                onClick={event => this.handleConnectNextcloud(event)}
+                                onClick={::this.handleConnectNextcloud}
                                 disabled={connectionOptionsDisabled}
                             >
                                 Connect
+                            </ButtercupButton>
+                        </ButtonContainer>
+                    </When>
+                    <When condition={this.props.selectedArchiveType === "dropbox"}>
+                        <ButtonContainer>
+                            <ButtercupButton onClick={::this.handleDropboxAuth} disabled={isAuthenticatingDropbox}>
+                                Grant Dropbox Access
                             </ButtercupButton>
                         </ButtonContainer>
                     </When>
