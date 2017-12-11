@@ -7,6 +7,6 @@ export const ADD_ARCHIVE_SET_SELECTED_TYPE = "addArchive/setSelectedArchiveType"
 
 export const MANAGE_ARCHIVE_SET_EDITING = "manageArchive/setEditing";
 
-export const WEBDAV_DIRECTORY_SET_CONTENTS = "webdav/directory/setContents";
-export const WEBDAV_DIRECTORY_SET_LOADING = "webdav/directory/setLoading";
-export const WEBDAV_RESET = "webdav/reset";
+export const REMOTE_FILES_RESET = "remoteFiles/reset";
+export const REMOTE_FILES_SET_CONTENTS = "remoteFiles/directory/setContents";
+export const REMOTE_FILES_SET_LOADING = "remoteFiles/directory/setLoading";

@@ -9,9 +9,10 @@ const Container = styled.div`
     width: 100%;
 `;
 
-class WebDAVExplorer extends Component {
+class RemoteExplorer extends Component {
     static propTypes = {
         directoriesLoading: PropTypes.arrayOf(PropTypes.string).isRequired,
+        fetchType: PropTypes.oneOf(["webdav", "dropbox"]).isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
         onOpenDirectory: PropTypes.func.isRequired,
         onReady: PropTypes.func.isRequired,
@@ -28,7 +29,7 @@ class WebDAVExplorer extends Component {
     };
 
     componentDidMount() {
-        this.props.onReady();
+        this.props.onReady(this.props.fetchType);
     }
 
     render() {
@@ -37,7 +38,7 @@ class WebDAVExplorer extends Component {
                 <RemoteFileTree
                     directoriesLoading={this.props.directoriesLoading}
                     onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
-                    onOpenDirectory={dir => this.props.onOpenDirectory(dir)}
+                    onOpenDirectory={dir => this.props.onOpenDirectory(dir, this.props.fetchType)}
                     onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
                     rootDirectory={this.props.rootDirectory}
                     selectedFilename={this.props.selectedFilename}
@@ -48,4 +49,4 @@ class WebDAVExplorer extends Component {
     }
 }
 
-export default WebDAVExplorer;
+export default RemoteExplorer;

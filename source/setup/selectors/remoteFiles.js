@@ -1,4 +1,4 @@
-const KEY = "webdav";
+const KEY = "remoteFiles";
 
 export function getAllDirectoryContents(state) {
     return state[KEY].directoryContents;

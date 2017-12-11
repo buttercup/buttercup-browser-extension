@@ -1,24 +1,35 @@
 import { connect } from "react-redux";
-import WebDAVExplorer from "../components/WebDAVExplorer.js";
-import { setDirectoryContents, setDirectoryLoading } from "../actions/webdav.js";
+import RemoteExplorer from "../components/RemoteExplorer.js";
+import { setDirectoryContents, setDirectoryLoading } from "../actions/remoteFiles.js";
 import { getWebDAVClient } from "../library/remote.js";
 import { notifyError } from "../library/notify.js";
 import log from "../../shared/library/log.js";
 import { webdavContentsToTree } from "../library/webdav.js";
-import { getAllDirectoryContents, getDirectoryContents, getDirectoriesLoading } from "../selectors/webdav.js";
+import { getAllDirectoryContents, getDirectoryContents, getDirectoriesLoading } from "../selectors/remoteFiles.js";
 
-function fetchRemoteDirectory(dispatch, directory) {
+function fetchRemoteDirectory(dispatch, directory, fetchType) {
     const webdav = getWebDAVClient();
+    let fetchRemoteContents;
+    switch (fetchType) {
+        case "webdav":
+            fetchRemoteContents = dir => webdav.getDirectoryContents(dir);
+            break;
+        default:
+            notifyError(
+                "Failed fetching directory contents",
+                "The remote source type was invalid for making requests against"
+            );
+            throw new Error(`Unknown remote fetch type: ${fetchType}`);
+    }
     dispatch(
         setDirectoryLoading({
             directory,
             isLoading: true
         })
     );
-    return webdav
-        .getDirectoryContents(directory)
+    return fetchRemoteContents(directory)
         .then(contents => {
-            log.info(`Received WebDAV directory contents: ${directory}`, contents);
+            log.info(`Received ${fetchType} directory contents: ${directory}`, contents);
             dispatch(
                 setDirectoryContents({
                     directory,
@@ -37,7 +48,7 @@ function fetchRemoteDirectory(dispatch, directory) {
                 "Failed fetching directory contents",
                 `Failed fetching the remote contents of '${directory}': ${err.message}`
             );
-            log.error(`Failed fetching WebDAV contents of '${directory}': ${err.message}`);
+            log.error(`Failed fetching ${fetchType} contents of '${directory}': ${err.message}`);
             dispatch(
                 setDirectoryLoading({
                     directory,
@@ -54,15 +65,15 @@ export default connect(
         rootDirectory: webdavContentsToTree(getAllDirectoryContents(state))
     }),
     {
-        onOpenDirectory: directory => (dispatch, getState) => {
+        onOpenDirectory: (directory, fetchType) => (dispatch, getState) => {
             const state = getState();
             const dirContents = getDirectoryContents(state, directory);
             if (!dirContents) {
-                fetchRemoteDirectory(dispatch, directory);
+                fetchRemoteDirectory(dispatch, directory, fetchType);
             }
         },
-        onReady: () => dispatch => {
-            fetchRemoteDirectory(dispatch, "/");
+        onReady: fetchType => dispatch => {
+            fetchRemoteDirectory(dispatch, "/", fetchType);
         }
     }
-)(WebDAVExplorer);
+)(RemoteExplorer);

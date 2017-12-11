@@ -6,7 +6,7 @@ import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/u
 import Spinner from "react-spinkit";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
-import WebDAVExplorer from "../containers/WebDAVExplorer.js";
+import RemoteExplorer from "../containers/RemoteExplorer.js";
 
 const SubSection = styled.div`
     width: 100%;
@@ -169,11 +169,12 @@ class AddArchivePage extends Component {
                 </If>
                 <If condition={canShowWebDAVExplorer && this.props.isConnected}>
                     <h3>Choose or Create Archive</h3>
-                    <WebDAVExplorer
+                    <RemoteExplorer
                         onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
                         onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
                         selectedFilename={this.props.selectedFilename}
                         selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
+                        fetchType="webdav"
                     />
                     <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
                 </If>

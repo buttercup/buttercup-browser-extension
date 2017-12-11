@@ -6,7 +6,7 @@ import app from "../../shared/reducers/app.js";
 import addArchive from "./addArchive.js";
 import dropbox from "../../shared/reducers/dropbox.js";
 import manageArchive from "./manageArchive.js";
-import webdav from "./webdav.js";
+import remoteFiles from "./remoteFiles.js";
 
 const appReducer = combineReducers({
     app,
@@ -14,8 +14,8 @@ const appReducer = combineReducers({
     archives,
     dropbox,
     manageArchive,
-    setupRouting,
-    webdav
+    remoteFiles,
+    setupRouting
 });
 
 const rootReducer = (state, action) => {

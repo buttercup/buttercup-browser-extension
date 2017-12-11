@@ -1,13 +1,13 @@
-import { WEBDAV_DIRECTORY_SET_CONTENTS, WEBDAV_DIRECTORY_SET_LOADING, WEBDAV_RESET } from "../actions/types.js";
+import { REMOTE_FILES_RESET, REMOTE_FILES_SET_CONTENTS, REMOTE_FILES_SET_LOADING } from "../actions/types.js";
 
 const INITIAL = {
     directoryContents: {},
     directoriesLoading: []
 };
 
-export default function webdavReducer(state = INITIAL, action = {}) {
+export default function remoteFilesReducer(state = INITIAL, action = {}) {
     switch (action.type) {
-        case WEBDAV_DIRECTORY_SET_CONTENTS:
+        case REMOTE_FILES_SET_CONTENTS:
             return {
                 ...state,
                 directoryContents: {
@@ -15,7 +15,7 @@ export default function webdavReducer(state = INITIAL, action = {}) {
                     [action.payload.directory]: action.payload.contents
                 }
             };
-        case WEBDAV_DIRECTORY_SET_LOADING: {
+        case REMOTE_FILES_SET_LOADING: {
             const { directory, isLoading } = action.payload;
             if (isLoading) {
                 return {
@@ -29,7 +29,7 @@ export default function webdavReducer(state = INITIAL, action = {}) {
                 };
             }
         }
-        case WEBDAV_RESET:
+        case REMOTE_FILES_RESET:
             return {
                 ...state,
                 directoryContents: {},
