@@ -1,18 +1,36 @@
 import { connect } from "react-redux";
 import RemoteExplorer from "../components/RemoteExplorer.js";
 import { setDirectoryContents, setDirectoryLoading } from "../actions/remoteFiles.js";
-import { getWebDAVClient } from "../library/remote.js";
+import { getDropboxDirectoryContents, getWebDAVClient } from "../library/remote.js";
 import { notifyError } from "../library/notify.js";
 import log from "../../shared/library/log.js";
 import { webdavContentsToTree } from "../library/webdav.js";
+import { dropboxContentsToTree } from "../library/dropbox.js";
 import { getAllDirectoryContents, getDirectoryContents, getDirectoriesLoading } from "../selectors/remoteFiles.js";
 
+function contentsToTree(contents, fetchType) {
+    switch (fetchType) {
+        case "webdav":
+            return webdavContentsToTree(contents);
+        case "dropbox":
+            return dropboxContentsToTree(contents);
+        default:
+            notifyError(
+                "Failed processing directory contents",
+                "The remote source type was invalid for processing directory contents"
+            );
+            throw new Error(`Unknown remote fetch type: ${fetchType}`);
+    }
+}
+
 function fetchRemoteDirectory(dispatch, directory, fetchType) {
-    const webdav = getWebDAVClient();
     let fetchRemoteContents;
     switch (fetchType) {
         case "webdav":
-            fetchRemoteContents = dir => webdav.getDirectoryContents(dir);
+            fetchRemoteContents = dir => getWebDAVClient().getDirectoryContents(dir);
+            break;
+        case "dropbox":
+            fetchRemoteContents = dir => getDropboxDirectoryContents(dir);
             break;
         default:
             notifyError(
@@ -62,7 +80,8 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
 export default connect(
     (state, ownProps) => ({
         directoriesLoading: getDirectoriesLoading(state),
-        rootDirectory: webdavContentsToTree(getAllDirectoryContents(state))
+        rootDirectory: contentsToTree(getAllDirectoryContents(state), ownProps.fetchType)
+        // rootDirectory: webdavContentsToTree(getAllDirectoryContents(state))
     }),
     {
         onOpenDirectory: (directory, fetchType) => (dispatch, getState) => {

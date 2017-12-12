@@ -1,9 +1,15 @@
 import createWebDAVClient, { setFetchMethod } from "webdav";
+import createDropboxFSClient from "dropbox-fs";
+import joinPath from "path.join";
+import pify from "pify";
 import log from "../../shared/library/log.js";
+import { getState } from "../redux/index.js";
+import { getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
 
 setFetchMethod(window.fetch);
 
-let __webdavClient = null;
+let __webdavClient = null,
+    __dropboxFSClient = null;
 
 export function connectWebDAV(url, username, password) {
     const client = createWebDAVClient(url, username, password);
@@ -21,6 +27,35 @@ export function connectWebDAV(url, username, password) {
 
 export function disposeWebDAVConnection() {
     __webdavClient = null;
+}
+
+export function getDropboxFSClient() {
+    if (!__dropboxFSClient) {
+        const state = getState();
+        const authToken = getDropboxAuthToken(state);
+        if (!authToken) {
+            throw new Error("Unable to create Dropbox-fs client: No token found");
+        }
+        __dropboxFSClient = createDropboxFSClient({
+            apiKey: authToken
+        });
+    }
+    return __dropboxFSClient;
+}
+
+export function getDropboxDirectoryContents(directory, dropboxClient = getDropboxFSClient()) {
+    const readDir = pify(::dropboxClient.readdir);
+    const stat = pify(::dropboxClient.stat);
+    return readDir(directory)
+        .then(contents => Promise.all(contents.map(item => stat(joinPath(directory, item)))))
+        .then(contents =>
+            contents.map(item => ({
+                filename: item.path_display,
+                basename: item.name,
+                type: item.isDirectory() ? "directory" : "file",
+                size: item.isDirectory() ? 0 : item.size
+            }))
+        );
 }
 
 export function getWebDAVClient() {

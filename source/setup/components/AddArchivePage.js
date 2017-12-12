@@ -178,7 +178,16 @@ class AddArchivePage extends Component {
                     />
                     <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
                 </If>
-                <If condition={isTargetingDropbox && hasAuthenticatedDropbox}>Dropbox yay!</If>
+                <If condition={isTargetingDropbox && hasAuthenticatedDropbox}>
+                    <h3>Choose or Create Archive</h3>
+                    <RemoteExplorer
+                        onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
+                        onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
+                        selectedFilename={this.props.selectedFilename}
+                        selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
+                        fetchType="dropbox"
+                    />
+                </If>
             </LayoutMain>
         );
     }
