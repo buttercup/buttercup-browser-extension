@@ -1,5 +1,16 @@
 import { makeArchiveAdditionRequest } from "./messaging.js";
 
+export function addDropboxArchive(name, masterPassword, filename, dropboxToken, shouldCreate = false) {
+    return makeArchiveAdditionRequest({
+        type: "dropbox",
+        name,
+        masterPassword,
+        filename,
+        dropboxToken,
+        create: shouldCreate
+    });
+}
+
 export function addNextcloudArchive(name, masterPassword, filename, url, username, password, shouldCreate = false) {
     return makeArchiveAdditionRequest({
         type: "nextcloud",

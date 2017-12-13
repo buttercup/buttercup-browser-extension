@@ -12,11 +12,13 @@ import {
 import { createRemoteFile, selectRemoteFile, setAdding, setConnected, setConnecting } from "../actions/addArchive.js";
 import { connectWebDAV } from "../library/remote.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
-import { addNextcloudArchive, addOwnCloudArchive, addWebDAVArchive } from "../library/archives.js";
+import { addDropboxArchive, addNextcloudArchive, addOwnCloudArchive, addWebDAVArchive } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
 import { setAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
+
+const ADD_ARCHIVE_WINDOW_CLOSE_DELAY = 2000;
 
 export default connect(
     (state, ownProps) => ({
@@ -32,6 +34,36 @@ export default connect(
         onAuthenticateDropbox: dropboxAuthID => dispatch => {
             dispatch(setAuthID(dropboxAuthID));
             performDropboxAuthentication();
+        },
+        onChooseDropboxBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
+            const name = stripTags(archiveName);
+            if (/^[^\s]/.test(name) !== true) {
+                notifyError(`Failed selecting ${type} archive`, `Archive name is invalid: ${name}`);
+                return;
+            }
+            const state = getState();
+            const remoteFilename = getSelectedFilename(state);
+            const shouldCreate = selectedFileNeedsCreation(state);
+            const dropboxToken = getDropboxAuthToken(state);
+            dispatch(setAdding(true));
+            dispatch(setBusy(shouldCreate ? "Adding new archive..." : "Adding existing archive..."));
+            return addDropboxArchive(name, masterPassword, remoteFilename, dropboxToken, shouldCreate)
+                .then(() => {
+                    dispatch(unsetBusy());
+                    notifySuccess("Successfully added archive", `The archive '${archiveName}' was successfully added.`);
+                    setTimeout(() => {
+                        window.close();
+                    }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
+                })
+                .catch(err => {
+                    dispatch(unsetBusy());
+                    console.error(err);
+                    notifyError(
+                        "Failed selecting Dropbox archive",
+                        `An error occurred when adding the archive: ${err.message}`
+                    );
+                    dispatch(setAdding(false));
+                });
         },
         onChooseWebDAVBasedArchive: (type, archiveName, masterPassword, url, username, password) => (
             dispatch,
@@ -69,7 +101,7 @@ export default connect(
                     notifySuccess("Successfully added archive", `The archive '${archiveName}' was successfully added.`);
                     setTimeout(() => {
                         window.close();
-                    }, 2000);
+                    }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
                 })
                 .catch(err => {
                     dispatch(unsetBusy());

@@ -69,6 +69,7 @@ class AddArchivePage extends Component {
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
         onAuthenticateDropbox: PropTypes.func.isRequired,
+        onChooseDropboxBasedArchive: PropTypes.func.isRequired,
         onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
         onConnectWebDAVBasedSource: PropTypes.func.isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
@@ -101,6 +102,12 @@ class AddArchivePage extends Component {
     handleDropboxAuth(event) {
         event.preventDefault();
         this.props.onAuthenticateDropbox(this.state.dropboxAuthenticationID);
+    }
+
+    handleChooseDropboxBasedFile(event) {
+        event.preventDefault();
+        // We send the remote credentials as these should never touch Redux
+        this.props.onChooseDropboxBasedArchive(this.state.archiveName, this.state.masterPassword);
     }
 
     handleChooseWebDAVBasedFile(event) {
@@ -187,6 +194,7 @@ class AddArchivePage extends Component {
                         selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
                         fetchType="dropbox"
                     />
+                    <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
                 </If>
             </LayoutMain>
         );
@@ -220,9 +228,18 @@ class AddArchivePage extends Component {
                     </FormRow>
                 </FormContainer>
                 <ButtonContainer>
-                    <ButtercupButton onClick={event => this.handleChooseWebDAVBasedFile(event)}>
-                        Save Archive
-                    </ButtercupButton>
+                    <Choose>
+                        <When condition={this.props.selectedArchiveType === "dropbox"}>
+                            <ButtercupButton onClick={event => this.handleChooseDropboxBasedFile(event)}>
+                                Save Archive
+                            </ButtercupButton>
+                        </When>
+                        <Otherwise>
+                            <ButtercupButton onClick={event => this.handleChooseWebDAVBasedFile(event)}>
+                                Save Archive
+                            </ButtercupButton>
+                        </Otherwise>
+                    </Choose>
                 </ButtonContainer>
                 <Spacer />
             </SubSection>

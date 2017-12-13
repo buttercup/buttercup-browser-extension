@@ -4,6 +4,8 @@ import log from "../../shared/library/log.js";
 
 export function addArchiveByRequest(payload) {
     switch (payload.type) {
+        case "dropbox":
+            return addDropboxArchive(payload);
         case "nextcloud":
             return addNextcloudArchive(payload);
         case "owncloud":
@@ -13,6 +15,28 @@ export function addArchiveByRequest(payload) {
         default:
             return Promise.reject(new Error(`Unable to add archive: Unknown type: ${payload.type}`));
     }
+}
+
+export function addDropboxArchive(payload) {
+    const { name, masterPassword, filename, dropboxToken, create } = payload;
+    log.info(`Attempting to connect Dropbox archive '${filename}'`);
+    log.info(`New archive will be created for request: ${create}`);
+    return getArchiveManager()
+        .then(archiveManager => {
+            const dropboxCreds = createCredentials("dropbox");
+            dropboxCreds.setValue(
+                "datasource",
+                JSON.stringify({
+                    type: "dropbox",
+                    token: dropboxToken,
+                    path: filename
+                })
+            );
+            return [archiveManager, dropboxCreds, createCredentials.fromPassword(masterPassword)];
+        })
+        .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
+            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
+        });
 }
 
 export function addNextcloudArchive(payload) {
