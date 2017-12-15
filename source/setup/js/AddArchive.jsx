@@ -23,6 +23,7 @@ class AddArchive extends React.Component {
                     <li className="dropbox" onClick={browseTo("dropbox")}>Dropbox</li>
                     <li className="owncloud" onClick={browseTo("owncloud")}>ownCloud</li>
                     <li className="webdav" onClick={browseTo("webdav")}>WebDAV</li>
+                    <li className="local-archive-upload" onClick={browseTo("local-archive-upload")}>Local archive upload</li>
                 </ul>
             </div>
         );

@@ -89,7 +89,7 @@ form.buttercup
         transform: translateZ(0) translateX(-100%)
     textarea:focus + label
         transform: translateZ(0) translateY(-100%)
-    button
+    button, .label-button
         position: relative
         overflow: hidden
         height: 40px
@@ -131,3 +131,8 @@ form.buttercup
             &:before
                 transform: scale(1)
                 transition: all 0.3s $custom-easing
+    .label-button
+        display: inline-block
+        padding: 0 25px
+        input[type="file"]
+            display: none

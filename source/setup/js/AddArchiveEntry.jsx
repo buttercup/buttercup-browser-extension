@@ -6,6 +6,7 @@ import HeaderBar from "./HeaderBar";
 import WebDAVArchiveEntryForm from "./WebDAVArchiveEntryForm";
 import DropboxArchiveEntryForm from "./DropboxArchiveEntryForm";
 import OwnCloudArchiveEntryForm from "./OwnCloudArchiveEntryForm";
+import LocalArchiveUploadForm from "./LocalArchiveUploadForm";
 
 class AddArchiveEntry extends React.Component {
 
@@ -26,6 +27,10 @@ class AddArchiveEntry extends React.Component {
             }
             case "owncloud": {
                 FormClass = OwnCloudArchiveEntryForm;
+                break;
+            }
+            case "local-archive-upload": {
+                FormClass = LocalArchiveUploadForm;
                 break;
             }
 

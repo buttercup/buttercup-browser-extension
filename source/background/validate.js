@@ -28,6 +28,11 @@ let validate = {
                 break;
             }
 
+            case "local-archive-upload": {
+                validate.validateObjectString(request, "localArchiveContent");
+                break;
+            }
+
             default:
                 throw new Error(`Unknown archive type: ${request.type}`);
         }
