@@ -16,6 +16,7 @@ const SRC_BACKGROUND = path.resolve(SOURCE, "background");
 const SRC_POPUP = path.resolve(SOURCE, "popup");
 const SRC_SETUP = path.resolve(SOURCE, "setup");
 const SRC_TAB = path.resolve(SOURCE, "tab");
+const SRC_DIALOG = path.resolve(SOURCE, "dialog");
 
 const BASE_CONFIG_DEFAULTS = {
     imageLoader: "file-loader"
@@ -132,6 +133,25 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
     ]
 });
 
+const dialogConfig = Object.assign({}, getBaseConfig(), {
+    entry: path.resolve(SRC_DIALOG, "./index.js"),
+
+    output: {
+        filename: "dialog.js",
+        path: DIST
+    },
+
+    plugins: [
+        new HtmlWebpackPlugin({
+            title: `Buttercup v${version}`,
+            template: INDEX_TEMPLATE,
+            filename: "dialog.html",
+            inject: "body"
+        }),
+        new NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop")
+    ]
+});
+
 const tabConfig = Object.assign({}, getBaseConfig({ imageLoader: "url-loader" }), {
     entry: path.resolve(SRC_TAB, "./index.js"),
 
@@ -141,4 +161,4 @@ const tabConfig = Object.assign({}, getBaseConfig({ imageLoader: "url-loader" })
     }
 });
 
-module.exports = [backgroundConfig, popupConfig, setupConfig, tabConfig];
+module.exports = [backgroundConfig, popupConfig, setupConfig, tabConfig, dialogConfig];
