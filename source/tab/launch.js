@@ -1,43 +1,10 @@
 import { el, mount, setStyle } from "redom";
 import { CLEAR_STYLES, findBestZIndexInContainer } from "./styles.js";
+import { toggleSearchDialog } from "./dialog.js";
 
 const BUTTON_BACKGROUND_IMAGE = require("../../resources/content-button-background.png");
 
-// const TRANSPARENT_BG = /(rgba\(\d+, ?\d+, ?\d+, ?0\)|transparent)/;
-
 export function attachLaunchButton(input) {
-    console.log("ATTACH", input);
-    // const { height: rawHeight, width: rawWidth, zIndex: zIndexRaw, backgroundColor } = window.getComputedStyle(input, null);
-    // const height = Math.max(parseInt(rawHeight, 10), 14);
-    // const buttonSize = height * 2;
-    // const width = parseInt(rawWidth, 10);
-    // const zIndex = parseInt(zIndexRaw, 10) || 1;
-    // const targetZIndex = zIndex <= 1 ? 1 : zIndex - 1;
-    // if (targetZIndex === 1) {
-    //     input.style.zIndex = targetZIndex + 1;
-    // }
-    // console.log("WTF", backgroundColor);
-    // if (backgroundColor && TRANSPARENT_BG.test(backgroundColor)) {
-    //     input.style.backgroundColor = "#fff";
-    // }
-    // const left = input.offsetLeft + width - (buttonSize / 2);
-    // const top = input.offsetTop - (height / 2);
-    // const button = el(
-    //     "div",
-    //     {
-    //         style: {
-    //             width: `${buttonSize}px`,
-    //             height: `${buttonSize}px`,
-    //             borderRadius: `${buttonSize}px`,
-    //             backgroundColor: "rgb(0, 183, 172)",
-    //             position: "absolute",
-    //             left: `${left}px`,
-    //             top: `${top}px`,
-    //             zIndex: targetZIndex
-    //         }
-    //     }
-    // );
-    // mount(input.parentNode, button);
     const { height: rawHeight, width: rawWidth, zIndex: zIndexRaw, backgroundColor } = window.getComputedStyle(
         input,
         null
@@ -69,8 +36,14 @@ export function attachLaunchButton(input) {
             backgroundPosition: "50% 50%",
             border: "1px solid rgb(0, 155, 145)",
             cursor: "pointer",
-            zIndex: buttonZ
+            zIndex: buttonZ,
+            outline: "none"
         }
     });
+    button.onclick = event => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleSearchDialog(input);
+    };
     mount(input.offsetParent, button);
 }
