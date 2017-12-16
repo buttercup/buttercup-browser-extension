@@ -17,42 +17,56 @@ const SRC_POPUP = path.resolve(SOURCE, "popup");
 const SRC_SETUP = path.resolve(SOURCE, "setup");
 const SRC_TAB = path.resolve(SOURCE, "tab");
 
-const baseConfig = {
-    module: {
-        rules: [
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                use: "babel-loader"
-            },
-            {
-                test: /\.s[ac]ss$/,
-                use: ["style-loader", "css-loader", "sass-loader"]
-            },
-            {
-                test: /\.css$/,
-                use: ["style-loader", "css-loader"]
-            },
-            {
-                test: /\.pug$/,
-                use: "pug-loader"
-            },
-            {
-                test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
-                loader: "file-loader",
-                options: {
-                    name: "[path][name].[hash].[ext]"
-                }
-            }
-        ]
-    },
-
-    resolve: {
-        extensions: [".js", ".jsx", ".json"]
-    }
+const BASE_CONFIG_DEFAULTS = {
+    imageLoader: "file-loader"
 };
 
-const backgroundConfig = Object.assign({}, baseConfig, {
+function getBaseConfig({ imageLoader } = BASE_CONFIG_DEFAULTS) {
+    const config = {
+        module: {
+            rules: [
+                {
+                    test: /\.jsx?$/,
+                    exclude: /node_modules/,
+                    use: "babel-loader"
+                },
+                {
+                    test: /\.s[ac]ss$/,
+                    use: ["style-loader", "css-loader", "sass-loader"]
+                },
+                {
+                    test: /\.css$/,
+                    use: ["style-loader", "css-loader"]
+                },
+                {
+                    test: /\.pug$/,
+                    use: "pug-loader"
+                }
+            ]
+        },
+
+        resolve: {
+            extensions: [".js", ".jsx", ".json"]
+        }
+    };
+    if (imageLoader === "file-loader") {
+        config.module.rules.push({
+            test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
+            loader: "file-loader",
+            options: {
+                name: "[path][name].[hash].[ext]"
+            }
+        });
+    } else if (imageLoader === "url-loader") {
+        config.module.rules.push({
+            test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
+            loader: "url-loader"
+        });
+    }
+    return config;
+}
+
+const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: path.resolve(SRC_BACKGROUND, "./index.js"),
 
     output: {
@@ -77,7 +91,7 @@ const backgroundConfig = Object.assign({}, baseConfig, {
     ]
 });
 
-const popupConfig = Object.assign({}, baseConfig, {
+const popupConfig = Object.assign({}, getBaseConfig(), {
     entry: path.resolve(SRC_POPUP, "./index.js"),
 
     output: {
@@ -97,7 +111,7 @@ const popupConfig = Object.assign({}, baseConfig, {
     ]
 });
 
-const setupConfig = Object.assign({}, baseConfig, {
+const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: path.resolve(SRC_SETUP, "./index.js"),
 
     output: {
@@ -118,7 +132,7 @@ const setupConfig = Object.assign({}, baseConfig, {
     ]
 });
 
-const tabConfig = Object.assign({}, baseConfig, {
+const tabConfig = Object.assign({}, getBaseConfig({ imageLoader: "url-loader" }), {
     entry: path.resolve(SRC_TAB, "./index.js"),
 
     output: {
