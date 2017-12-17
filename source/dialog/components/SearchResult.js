@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
+import { getIconForURL } from "../library/icons.js";
+
+const KEY_ICON = require("../../../resources/key.png");
 
 const ROW_HEIGHT = 64;
 
@@ -18,14 +21,19 @@ const EntryImage = styled.div`
     width: 52px;
     height: 52px;
     margin: 0px 8px;
-    background-color: green;
+    background: url(${props => props.data});
+    background-size: 52px 52px;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
 `;
 const DetailsContainer = styled.div`
     flex-grow: 2;
+    flex-shrink: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    overflow: auto;
 `;
 const DetailRow = styled.div`
     width: calc(100% - 16px);
@@ -57,6 +65,7 @@ const EnterDetailsAndLoginButton = styled.div`
     align-items: center;
     font-size: 28px;
     cursor: pointer;
+    flex-shrink: 0;
 
     &:hover {
         background-color: rgba(0, 183, 172, 0.5);
@@ -67,13 +76,33 @@ class SearchResult extends Component {
     static propTypes = {
         id: PropTypes.string.isRequired,
         sourceID: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired
+        title: PropTypes.string.isRequired,
+        url: PropTypes.string
     };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            icon: KEY_ICON
+        };
+    }
+
+    componentWillMount() {
+        if (this.props.url) {
+            getIconForURL(this.props.url).then(icon => {
+                if (icon) {
+                    this.setState({
+                        icon
+                    });
+                }
+            });
+        }
+    }
 
     render() {
         return (
             <Container>
-                <EntryImage />
+                <EntryImage data={this.state.icon} />
                 <DetailsContainer>
                     <DetailRow>
                         <Title>{this.props.title}</Title>
