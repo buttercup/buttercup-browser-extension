@@ -62,7 +62,7 @@ function createDialog() {
                 ...CLEAR_STYLES,
                 width: "320px",
                 height: "280px",
-                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                backgroundColor: "rgba(0, 0, 0, 0.85)",
                 position: "absolute",
                 zIndex: 9999999
             }
