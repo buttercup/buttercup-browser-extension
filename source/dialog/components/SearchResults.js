@@ -14,15 +14,29 @@ const Container = styled.div`
     overflow-y: scroll;
 `;
 
+const EntryShape = PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    url: PropTypes.string
+});
+
 class SearchResults extends Component {
+    static propTypes = {
+        entries: PropTypes.arrayOf(EntryShape),
+        onPrepareFirstResults: PropTypes.func.isRequired,
+        sourcesUnlocked: PropTypes.number.isRequired
+    };
+
+    componentWillMount() {
+        this.props.onPrepareFirstResults();
+    }
+
     render() {
         return (
             <Container>
-                <SearchResult />
-                <SearchResult />
-                <SearchResult />
-                <SearchResult />
-                <SearchResult />
+                <For each="entry" of={this.props.entries}>
+                    <SearchResult key={entry.id} />
+                </For>
             </Container>
         );
     }

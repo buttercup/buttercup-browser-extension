@@ -1,7 +1,16 @@
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import { addPort, getPorts } from "./ports.js";
-import { addArchiveByRequest, lockSource, lockSources, removeSource, unlockSource } from "./archives.js";
+import {
+    addArchiveByRequest,
+    getMatchingEntriesForURL,
+    getUnlockedSourcesCount,
+    lockSource,
+    lockSources,
+    removeSource,
+    unlockSource
+} from "./archives.js";
+import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
@@ -52,6 +61,26 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             return true;
+        }
+        case "search-entries-for-url": {
+            const { url } = request;
+            Promise.all([getMatchingEntriesForURL(url), getUnlockedSourcesCount()])
+                .then(([entries, sources]) => {
+                    dispatch(
+                        setEntrySearchResults(
+                            entries.map(entry => ({
+                                title: entry.getProperty("title"),
+                                id: entry.getID(),
+                                url: entry.getMeta("url") || entry.getMeta("icon")
+                            }))
+                        )
+                    );
+                    dispatch(setSourcesCount(sources));
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+            return false;
         }
         case "unlock-archive": {
             const { sourceID, masterPassword } = request;

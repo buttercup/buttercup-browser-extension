@@ -1,3 +1,4 @@
+import extractDomain from "extract-domain";
 import { Archive, createCredentials, WebDAVDatasource, Workspace } from "buttercup/dist/buttercup-web.min.js";
 import { getArchiveManager } from "./buttercup.js";
 import log from "../../shared/library/log.js";
@@ -109,6 +110,27 @@ export function addWebDAVArchive(payload) {
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
         });
+}
+
+export function getMatchingEntriesForURL(url) {
+    return getArchiveManager().then(archiveManager => {
+        const unlockedSources = archiveManager.unlockedSources;
+        const entries = [];
+        unlockedSources.forEach(source => {
+            const archive = source.workspace.primary.archive;
+            const newEntries = archive.findEntriesByMeta("url", /.+/).filter(entry => {
+                const entryURL = entry.getMeta("url");
+                const entryDomain = extractDomain(entryURL);
+                return entryDomain.length > 0 && entryDomain === extractDomain(url) && entry.isInTrash() === false;
+            });
+            entries.push(...newEntries);
+        });
+        return entries;
+    });
+}
+
+export function getUnlockedSourcesCount() {
+    return getArchiveManager().then(archiveManager => archiveManager.unlockedSources.length);
 }
 
 export function lockSource(sourceID) {

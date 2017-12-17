@@ -53,6 +53,7 @@
     "css-loader": "^0.28.7",
     "dropbox": "^2.5.12",
     "dropbox-fs": "^0.1.0",
+    "extract-domain": "^2.0.0",
     "file-loader": "^1.1.5",
     "history": "^4.7.2",
     "html-webpack-plugin": "^2.30.1",

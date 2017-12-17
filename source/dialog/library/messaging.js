@@ -9,6 +9,23 @@ export function connectToBackground() {
     __backgroundPort.onMessage.addListener(handleBackgroundMessage);
 }
 
+export function searchEntriesForURL(url) {
+    // log.info("Sending request to background to lock all archives");
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
+        // chrome.runtime.sendMessage({ type: "entries-for-url", url }, response => {
+        //     const { ok, error, entries, sources } = response;
+        //     if (ok) {
+        //         return resolve({
+        //             entries,
+        //             numSources: sources
+        //         });
+        //     }
+        //     return reject(new Error(`Locking archives failed: ${error}`));
+        // });
+    });
+}
+
 function handleBackgroundMessage(message) {
     switch (message.type) {
         case "action": {
@@ -17,14 +34,14 @@ function handleBackgroundMessage(message) {
             break;
         }
         case "full-state":
-            log.info("Received full state update from background", message.state);
+            // log.info("Received full state update from background", message.state);
             dispatch(setEntireState(message.state));
             break;
     }
 }
 
 export function sendStateUpdate(action) {
-    log.info("Sending state update to background", action);
+    // log.info("Sending state update to background", action);
     try {
         __backgroundPort.postMessage({
             type: "action",
