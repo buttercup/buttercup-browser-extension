@@ -1,9 +1,14 @@
 import { combineReducers } from "redux";
 import { APP_MASTER_SET } from "../../shared/actions/types.js";
+import { emptyReducer } from "../../shared/library/reducers.js";
+import app from "../../shared/reducers/app.js";
 import dialogRouting from "./routing.js";
 
 const appReducer = combineReducers({
-    dialogRouting
+    app,
+    archives: emptyReducer,
+    dialogRouting,
+    dropbox: emptyReducer
 });
 
 const rootReducer = (state, action) => {
