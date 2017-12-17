@@ -17,7 +17,7 @@ connectToBackground();
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <div>
+            <div className="rootContainer">
                 <Route exact path="/" component={SearchPage} />
             </div>
         </ConnectedRouter>

@@ -11,10 +11,10 @@ const Container = styled.div`
     align-items: center;
 `;
 
-class LayoutMain extends Component {
+class SearchResults extends Component {
     render() {
-        return <Container>{this.props.children}</Container>;
+        return <Container />;
     }
 }
 
-export default LayoutMain;
+export default SearchResults;
