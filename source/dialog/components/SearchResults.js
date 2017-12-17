@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import SearchResult from "../containers/SearchResult.js";
 
 const Container = styled.div`
     width: 100%;
@@ -9,11 +10,21 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    overflow-x: hidden;
+    overflow-y: scroll;
 `;
 
 class SearchResults extends Component {
     render() {
-        return <Container />;
+        return (
+            <Container>
+                <SearchResult />
+                <SearchResult />
+                <SearchResult />
+                <SearchResult />
+                <SearchResult />
+            </Container>
+        );
     }
 }
 
