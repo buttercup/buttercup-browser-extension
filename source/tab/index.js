@@ -12,7 +12,7 @@ waitForTarget().then(loginTarget => {
     const { usernameFields, passwordFields } = loginTarget;
     const [passwordField] = passwordFields;
     const [usernameField] = usernameFields;
-    console.log("PASS", passwordField, isVisible(passwordField));
+    // console.log("PASS", passwordField, isVisible(passwordField));
     if (passwordField && isVisible(passwordField)) {
         attachLaunchButton(passwordField);
     } else if (usernameField) {

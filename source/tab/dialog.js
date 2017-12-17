@@ -50,7 +50,7 @@ class SearchDialog {
 
 function createDialog() {
     const dialogURL = getExtensionURL("dialog.html");
-    console.log("URL", dialogURL);
+    // console.log("URL", dialogURL);
     const frame = el("iframe", {
         style: {
             width: "100%",
