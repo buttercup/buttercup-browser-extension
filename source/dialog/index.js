@@ -9,6 +9,7 @@ import { connectToBackground } from "./library/messaging.js";
 import SearchPage from "./containers/SearchPage.js";
 
 import "../shared/styles/base.sass";
+import "./styles/dialog.sass";
 import "../../resources/fontawesome/font-awesome.scss";
 
 connectToBackground();
