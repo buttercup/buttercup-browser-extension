@@ -1,6 +1,7 @@
 import { el, mount, setStyle } from "redom";
 import { CLEAR_STYLES, findBestZIndexInContainer } from "./styles.js";
 import { toggleSearchDialog } from "./dialog.js";
+import { onBodyWidthResize } from "./resize.js";
 
 const BUTTON_BACKGROUND_IMAGE = require("../../resources/content-button-background.png");
 
@@ -9,12 +10,14 @@ export function attachLaunchButton(input) {
         input,
         null
     );
-    const height = Math.max(parseInt(rawHeight, 10), 14);
-    const width = parseInt(rawWidth, 10);
+    const bounds = input.getBoundingClientRect();
+    // const height = Math.max(parseInt(rawHeight, 10), 14);
+    // const width = parseInt(rawWidth, 10);
+    const { width, height } = bounds;
     const buttonWidth = 0.8 * height;
     const newInputWidth = width - buttonWidth;
-    const left = input.offsetLeft + newInputWidth;
-    const top = input.offsetTop;
+    let left = input.offsetLeft + newInputWidth;
+    let top = input.offsetTop;
     const buttonZ = findBestZIndexInContainer(input.offsetParent);
     // Update input style
     setStyle(input, {
@@ -46,4 +49,12 @@ export function attachLaunchButton(input) {
         toggleSearchDialog(input);
     };
     mount(input.offsetParent, button);
+    onBodyWidthResize(() => {
+        left = input.offsetLeft + newInputWidth;
+        top = input.offsetTop;
+        setStyle(button, {
+            top: `${top}px`,
+            left: `${left}px`
+        });
+    });
 }
