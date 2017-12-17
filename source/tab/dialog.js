@@ -2,6 +2,7 @@ import { el, mount, setStyle, unmount } from "redom";
 import scrolling from "scrolling";
 import { getExtensionURL } from "../shared/library/extension.js";
 import { CLEAR_STYLES } from "./styles.js";
+import { onBodyResize } from "./resize.js";
 
 let __sharedInstance;
 
@@ -14,6 +15,8 @@ class SearchDialog {
         scrolling(document.body, this._onScroll);
         this._onBodyClick = hideSearchDialog;
         document.body.addEventListener("click", this._onBodyClick, false);
+        const { remove: removeBodyResizeListener } = onBodyResize(::this.updatePosition);
+        this._removeBodyResizeListener = removeBodyResizeListener;
     }
 
     get dialog() {
@@ -33,6 +36,7 @@ class SearchDialog {
         scrolling.remove(document.body, this._onScroll);
         document.body.removeEventListener("click", this._onBodyClick, false);
         unmount(document.body, this._dialog);
+        this._removeBodyResizeListener();
     }
 
     updatePosition() {
