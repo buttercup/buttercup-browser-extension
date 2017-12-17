@@ -13,9 +13,6 @@ export default connect(
         onPrepareFirstResults: () => () => {
             getTopURL()
                 .then(url => searchEntriesForURL(url))
-                // .then(() => {
-
-                // })
                 .catch(err => {
                     console.error(err);
                 });

@@ -68,9 +68,10 @@ function handleMessage(request, sender, sendResponse) {
                 .then(([entries, sources]) => {
                     dispatch(
                         setEntrySearchResults(
-                            entries.map(entry => ({
+                            entries.map(({ entry, sourceID }) => ({
                                 title: entry.getProperty("title"),
                                 id: entry.getID(),
+                                sourceID,
                                 url: entry.getMeta("url") || entry.getMeta("icon")
                             }))
                         )

@@ -123,7 +123,12 @@ export function getMatchingEntriesForURL(url) {
                 const entryDomain = extractDomain(entryURL);
                 return entryDomain.length > 0 && entryDomain === extractDomain(url) && entry.isInTrash() === false;
             });
-            entries.push(...newEntries);
+            entries.push(
+                ...newEntries.map(entry => ({
+                    entry,
+                    sourceID: source.id
+                }))
+            );
         });
         return entries;
     });

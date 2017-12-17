@@ -41,10 +41,12 @@ const DetailRow = styled.div`
 const Title = styled.span`
     font-size: 16px;
     text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 const Subtitle = styled.span`
     color: rgb(180, 180, 180);
     text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 const EnterDetailsAndLoginButton = styled.div`
     width: ${ROW_HEIGHT}px;
@@ -62,13 +64,19 @@ const EnterDetailsAndLoginButton = styled.div`
 `;
 
 class SearchResult extends Component {
+    static propTypes = {
+        id: PropTypes.string.isRequired,
+        sourceID: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired
+    };
+
     render() {
         return (
             <Container>
                 <EntryImage />
                 <DetailsContainer>
                     <DetailRow>
-                        <Title>Title</Title>
+                        <Title>{this.props.title}</Title>
                     </DetailRow>
                     <DetailRow>
                         <Subtitle>
