@@ -6,6 +6,8 @@ import { getIconForURL } from "../library/icons.js";
 
 const KEY_ICON = require("../../../resources/key.png");
 
+const ICON_CONTAINER_SIZE = 52;
+const ICON_SIZE = ICON_CONTAINER_SIZE - 8;
 const ROW_HEIGHT = 64;
 
 const Container = styled.div`
@@ -17,14 +19,23 @@ const Container = styled.div`
     align-items: center;
     flex-shrink: 0;
 `;
-const EntryImage = styled.div`
-    width: 52px;
-    height: 52px;
+const EntryImageContainer = styled.div`
+    width: ${ICON_CONTAINER_SIZE}px;
+    height: ${ICON_CONTAINER_SIZE}px;
     margin: 0px 8px;
-    background: url(${props => props.data});
-    background-size: 52px 52px;
-    background-repeat: no-repeat;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-shrink: 0;
+    border-radius: 3px;
+`;
+const EntryImage = styled.div`
+    width: ${ICON_SIZE}px;
+    height: ${ICON_SIZE}px;
+    background: url(${props => props.data});
+    background-size: ${ICON_SIZE}px ${ICON_SIZE}px;
+    background-repeat: no-repeat;
 `;
 const DetailsContainer = styled.div`
     flex-grow: 2;
@@ -102,7 +113,9 @@ class SearchResult extends Component {
     render() {
         return (
             <Container>
-                <EntryImage data={this.state.icon} />
+                <EntryImageContainer>
+                    <EntryImage data={this.state.icon} />
+                </EntryImageContainer>
                 <DetailsContainer>
                     <DetailRow>
                         <Title>{this.props.title}</Title>
