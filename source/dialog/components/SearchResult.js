@@ -20,14 +20,23 @@ const Container = styled.div`
     flex-shrink: 0;
 `;
 const EntryImageContainer = styled.div`
+    background-color: ${props => (props.hovering ? "rgba(0, 183, 172, 0.5)" : "rgba(0,0,0,0)")};
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: ${ROW_HEIGHT}px;
+    height: ${ROW_HEIGHT}px;
+    flex-shrink: 0;
+`;
+const EntryImageBackground = styled.div`
     width: ${ICON_CONTAINER_SIZE}px;
     height: ${ICON_CONTAINER_SIZE}px;
-    margin: 0px 8px;
+    /*margin: 0px 8px; */
     background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-shrink: 0;
     border-radius: 3px;
 `;
 const EntryImage = styled.div`
@@ -45,6 +54,9 @@ const DetailsContainer = styled.div`
     justify-content: center;
     align-items: flex-start;
     overflow: auto;
+    height: 100%;
+    cursor: pointer;
+    background-color: ${props => (props.hovering ? "rgba(0, 183, 172, 0.5)" : "rgba(0,0,0,0)")};
 `;
 const DetailRow = styled.div`
     width: calc(100% - 16px);
@@ -94,6 +106,7 @@ class SearchResult extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            hoveringDetail: false,
             icon: KEY_ICON
         };
     }
@@ -110,13 +123,35 @@ class SearchResult extends Component {
         }
     }
 
+    onMouseEnterDetail() {
+        this.setState({
+            hoveringDetail: true
+        });
+    }
+
+    onMouseLeaveDetail() {
+        this.setState({
+            hoveringDetail: false
+        });
+    }
+
     render() {
         return (
             <Container>
-                <EntryImageContainer>
-                    <EntryImage data={this.state.icon} />
+                <EntryImageContainer
+                    hovering={this.state.hoveringDetail}
+                    onMouseEnter={::this.onMouseEnterDetail}
+                    onMouseLeave={::this.onMouseLeaveDetail}
+                >
+                    <EntryImageBackground>
+                        <EntryImage data={this.state.icon} />
+                    </EntryImageBackground>
                 </EntryImageContainer>
-                <DetailsContainer>
+                <DetailsContainer
+                    hovering={this.state.hoveringDetail}
+                    onMouseEnter={::this.onMouseEnterDetail}
+                    onMouseLeave={::this.onMouseLeaveDetail}
+                >
                     <DetailRow>
                         <Title>{this.props.title}</Title>
                     </DetailRow>
