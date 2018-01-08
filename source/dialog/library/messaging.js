@@ -9,20 +9,17 @@ export function connectToBackground() {
     __backgroundPort.onMessage.addListener(handleBackgroundMessage);
 }
 
+export function searchEntriesForTerm(searchTerm) {
+    // log.info(`Searching entries for term: ${searchTerm}`);
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "search-entries-for-term", term: searchTerm });
+    });
+}
+
 export function searchEntriesForURL(url) {
-    // log.info("Sending request to background to lock all archives");
+    // log.info(`Searching entries for URL: ${url}`);
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
-        // chrome.runtime.sendMessage({ type: "entries-for-url", url }, response => {
-        //     const { ok, error, entries, sources } = response;
-        //     if (ok) {
-        //         return resolve({
-        //             entries,
-        //             numSources: sources
-        //         });
-        //     }
-        //     return reject(new Error(`Locking archives failed: ${error}`));
-        // });
     });
 }
 

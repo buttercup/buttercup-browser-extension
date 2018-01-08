@@ -32,7 +32,6 @@ const EntryImageContainer = styled.div`
 const EntryImageBackground = styled.div`
     width: ${ICON_CONTAINER_SIZE}px;
     height: ${ICON_CONTAINER_SIZE}px;
-    /*margin: 0px 8px; */
     background-color: #fff;
     display: flex;
     justify-content: center;
@@ -112,15 +111,20 @@ class SearchResult extends Component {
     }
 
     componentWillMount() {
+        this.mounted = true;
         if (this.props.url) {
             getIconForURL(this.props.url).then(icon => {
-                if (icon) {
+                if (icon && this.mounted) {
                     this.setState({
                         icon
                     });
                 }
             });
         }
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     onMouseEnterDetail() {

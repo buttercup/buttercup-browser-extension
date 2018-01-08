@@ -35,6 +35,10 @@ const SearchInput = styled.input`
 `;
 
 class SearchBar extends Component {
+    static propTypes = {
+        onSearchTermChange: PropTypes.func.isRequired
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -53,6 +57,7 @@ class SearchBar extends Component {
         this.setState({
             searchTerm: value
         });
+        this.props.onSearchTermChange(value);
     }
 
     render() {

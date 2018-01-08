@@ -3,6 +3,7 @@ import log from "../../shared/library/log.js";
 import { addPort, getPorts } from "./ports.js";
 import {
     addArchiveByRequest,
+    getMatchingEntriesForSearchTerm,
     getMatchingEntriesForURL,
     getUnlockedSourcesCount,
     lockSource,
@@ -62,22 +63,19 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
+        case "search-entries-for-term": {
+            const { term } = request;
+            Promise.all([getMatchingEntriesForSearchTerm(term), getUnlockedSourcesCount()])
+                .then(processSearchResults)
+                .catch(err => {
+                    console.error(err);
+                });
+            return false;
+        }
         case "search-entries-for-url": {
             const { url } = request;
             Promise.all([getMatchingEntriesForURL(url), getUnlockedSourcesCount()])
-                .then(([entries, sources]) => {
-                    dispatch(
-                        setEntrySearchResults(
-                            entries.map(({ entry, sourceID }) => ({
-                                title: entry.getProperty("title"),
-                                id: entry.getID(),
-                                sourceID,
-                                url: entry.getMeta("url") || entry.getMeta("icon")
-                            }))
-                        )
-                    );
-                    dispatch(setSourcesCount(sources));
-                })
+                .then(processSearchResults)
                 .catch(err => {
                     console.error(err);
                 });
@@ -119,6 +117,20 @@ function handleStatePortDisconnect(port) {
     port.onDisconnect.removeListener(handleStatePortDisconnect);
     const ports = getPorts("state");
     ports.splice(ports.indexOf(port), 1);
+}
+
+function processSearchResults([entries, sources]) {
+    dispatch(
+        setEntrySearchResults(
+            entries.map(({ entry, sourceID }) => ({
+                title: entry.getProperty("title"),
+                id: entry.getID(),
+                sourceID,
+                url: entry.getMeta("url") || entry.getMeta("icon")
+            }))
+        )
+    );
+    dispatch(setSourcesCount(sources));
 }
 
 export function startMessageListener() {
