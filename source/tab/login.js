@@ -4,6 +4,16 @@ const { getLoginTarget } = Locust;
 
 const TARGET_SEARCH_INTERVAL = 1500;
 
+export function enterLoginDetails(username, password, login = false) {
+    return waitForTarget().then(loginTarget => {
+        if (login) {
+            loginTarget.login(username, password);
+        } else {
+            loginTarget.enterDetails(username, password);
+        }
+    });
+}
+
 export function identifySelectedInput(inputElement) {
     const target = getLoginTarget();
     const { usernameFields, passwordFields } = target;
@@ -17,12 +27,18 @@ export function identifySelectedInput(inputElement) {
 
 export function waitForTarget() {
     return new Promise(resolve => {
-        const check = setInterval(() => {
+        let check;
+        const findTarget = () => {
             const target = getLoginTarget();
             if (target) {
                 clearInterval(check);
                 resolve(target);
+                return true;
             }
-        }, TARGET_SEARCH_INTERVAL);
+        };
+        const alreadyFound = findTarget();
+        if (!alreadyFound) {
+            check = setInterval(findTarget, TARGET_SEARCH_INTERVAL);
+        }
     });
 }
