@@ -11,16 +11,16 @@ export function connectToBackground() {
 
 export function searchEntriesForTerm(searchTerm) {
     // log.info(`Searching entries for term: ${searchTerm}`);
-    return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ type: "search-entries-for-term", term: searchTerm });
-    });
+    // return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({ type: "search-entries-for-term", term: searchTerm });
+    // });
 }
 
 export function searchEntriesForURL(url) {
     // log.info(`Searching entries for URL: ${url}`);
-    return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
-    });
+    // return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
+    // });
 }
 
 function handleBackgroundMessage(message) {
@@ -35,6 +35,23 @@ function handleBackgroundMessage(message) {
             dispatch(setEntireState(message.state));
             break;
     }
+}
+
+export function sendCredentialsToTab(sourceID, entryID, signIn) {
+    chrome.runtime.sendMessage(
+        {
+            type: "send-credentials-to-current-tab",
+            sourceID,
+            entryID,
+            signIn
+        },
+        response => {
+            if (!response.ok) {
+                log.error(`Failed sending credentials to tab: ${response.error}`);
+                alert(`An error occurred while trying to fetch credentials: ${response.error}`);
+            }
+        }
+    );
 }
 
 export function sendStateUpdate(action) {

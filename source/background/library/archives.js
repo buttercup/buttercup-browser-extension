@@ -8,6 +8,7 @@ import {
 } from "buttercup/dist/buttercup-web.min.js";
 import { getArchiveManager } from "./buttercup.js";
 import log from "../../shared/library/log.js";
+import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 
 export function addArchiveByRequest(payload) {
     switch (payload.type) {
@@ -118,6 +119,26 @@ export function addWebDAVArchive(payload) {
         });
 }
 
+export function getArchive(sourceID) {
+    return getArchiveManager().then(archiveManager => {
+        const sourceIndex = archiveManager.indexOfSource(sourceID);
+        const source = archiveManager.sources[sourceIndex];
+        if (!source) {
+            throw new Error(`Unable to fetch archive: No source found for ID: ${sourceID}`);
+        }
+        if (source.status !== "unlocked") {
+            throw new Error(
+                `Unable fetch archive: Invalid source state (should be unlocked: ${sourceID}): ${source.status}`
+            );
+        }
+        return source.workspace.primary.archive;
+    });
+}
+
+export function getEntry(sourceID, entryID) {
+    return getArchive(sourceID).then(archive => archive.findEntryByID(entryID));
+}
+
 export function getMatchingEntriesForSearchTerm(term) {
     return getArchiveManager().then(archiveManager => {
         const unlockedSources = archiveManager.unlockedSources;
@@ -181,6 +202,20 @@ export function lockSources() {
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
     return getArchiveManager().then(archiveManager => archiveManager.remove(sourceID));
+}
+
+export function sendCredentialsToTab(sourceID, entryID, signIn) {
+    return getEntry(sourceID, entryID)
+        .then(entry => entry.toObject())
+        .then(entryData => {
+            return getCurrentTab().then(tab => {
+                return sendTabMessage(tab.id, {
+                    type: "enter-details",
+                    signIn,
+                    entry: entryData
+                });
+            });
+        });
 }
 
 export function unlockSource(sourceID, masterPassword) {

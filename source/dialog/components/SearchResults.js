@@ -35,7 +35,7 @@ class SearchResults extends Component {
         return (
             <Container>
                 <For each="entry" of={this.props.entries}>
-                    <SearchResult key={entry.id} sourceID={entry.sourceID} id={entry.id} />
+                    <SearchResult key={entry.id} sourceID={entry.sourceID} entryID={entry.id} />
                 </For>
             </Container>
         );

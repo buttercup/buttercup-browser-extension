@@ -9,6 +9,7 @@ import {
     lockSource,
     lockSources,
     removeSource,
+    sendCredentialsToTab,
     unlockSource
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
@@ -80,6 +81,18 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             return false;
+        }
+        case "send-credentials-to-current-tab": {
+            const { sourceID, entryID, signIn } = request;
+            sendCredentialsToTab(sourceID, entryID, signIn)
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
         }
         case "unlock-archive": {
             const { sourceID, masterPassword } = request;

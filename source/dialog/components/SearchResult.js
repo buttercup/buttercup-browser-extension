@@ -96,7 +96,8 @@ const EnterDetailsAndLoginButton = styled.div`
 
 class SearchResult extends Component {
     static propTypes = {
-        id: PropTypes.string.isRequired,
+        entryID: PropTypes.string.isRequired,
+        onEnterDetailsRequest: PropTypes.func.isRequired,
         sourceID: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         url: PropTypes.string
@@ -127,6 +128,16 @@ class SearchResult extends Component {
         this.mounted = false;
     }
 
+    handleMouseClickEnterDetails(event) {
+        event.preventDefault();
+        this.props.onEnterDetailsRequest(this.props.sourceID, this.props.entryID, /* auto sign in: */ false);
+    }
+
+    handleMouseClickSignIn(event) {
+        event.preventDefault();
+        this.props.onEnterDetailsRequest(this.props.sourceID, this.props.entryID, /* auto sign in: */ true);
+    }
+
     onMouseEnterDetail() {
         this.setState({
             hoveringDetail: true
@@ -146,6 +157,7 @@ class SearchResult extends Component {
                     hovering={this.state.hoveringDetail}
                     onMouseEnter={::this.onMouseEnterDetail}
                     onMouseLeave={::this.onMouseLeaveDetail}
+                    onClick={::this.handleMouseClickEnterDetails}
                 >
                     <EntryImageBackground>
                         <EntryImage data={this.state.icon} />
@@ -155,6 +167,7 @@ class SearchResult extends Component {
                     hovering={this.state.hoveringDetail}
                     onMouseEnter={::this.onMouseEnterDetail}
                     onMouseLeave={::this.onMouseLeaveDetail}
+                    onClick={::this.handleMouseClickEnterDetails}
                 >
                     <DetailRow>
                         <Title>{this.props.title}</Title>
@@ -165,7 +178,7 @@ class SearchResult extends Component {
                         </Subtitle>
                     </DetailRow>
                 </DetailsContainer>
-                <EnterDetailsAndLoginButton>
+                <EnterDetailsAndLoginButton onClick={::this.handleMouseClickSignIn}>
                     <FontAwesome name="sign-in" />
                 </EnterDetailsAndLoginButton>
             </Container>
