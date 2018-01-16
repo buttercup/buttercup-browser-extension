@@ -113,6 +113,17 @@ export function addWebDAVArchive(payload) {
         });
 }
 
+export function generateEntryPath(entry) {
+    let group = entry.getGroup(),
+        entryPath = [group];
+    let parent;
+    while ((parent = group.getGroup()) !== null) {
+        entryPath.unshift(parent);
+        group = parent;
+    }
+    return entryPath.map(pathGroup => pathGroup.getTitle());
+}
+
 export function getArchive(sourceID) {
     return getArchiveManager().then(archiveManager => {
         const sourceIndex = archiveManager.indexOfSource(sourceID);
@@ -171,6 +182,17 @@ export function getMatchingEntriesForURL(url) {
             );
         });
         return entries;
+    });
+}
+
+export function getNameForSource(sourceID) {
+    return getArchiveManager().then(archiveManager => {
+        const sourceIndex = archiveManager.indexOfSource(sourceID);
+        const source = archiveManager.sources[sourceIndex];
+        if (!source) {
+            throw new Error(`Unable to fetch source information: No source found for ID: ${sourceID}`);
+        }
+        return source.name;
     });
 }
 

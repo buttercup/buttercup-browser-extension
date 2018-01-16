@@ -3,8 +3,10 @@ import log from "../../shared/library/log.js";
 import { addPort, getPorts } from "./ports.js";
 import {
     addArchiveByRequest,
+    generateEntryPath,
     getMatchingEntriesForSearchTerm,
     getMatchingEntriesForURL,
+    getNameForSource,
     getUnlockedSourcesCount,
     lockSource,
     lockSources,
@@ -133,17 +135,28 @@ function handleStatePortDisconnect(port) {
 }
 
 function processSearchResults([entries, sources]) {
-    dispatch(
-        setEntrySearchResults(
-            entries.map(({ entry, sourceID }) => ({
-                title: entry.getProperty("title"),
-                id: entry.getID(),
-                sourceID,
-                url: entry.getMeta("url") || entry.getMeta("icon")
+    return Promise.all(
+        entries.map(info =>
+            getNameForSource(info.sourceID).then(name => ({
+                ...info,
+                sourceName: name
             }))
         )
-    );
-    dispatch(setSourcesCount(sources));
+    ).then(entries => {
+        dispatch(
+            setEntrySearchResults(
+                entries.map(({ entry, sourceID, sourceName }) => ({
+                    title: entry.getProperty("title"),
+                    id: entry.getID(),
+                    entryPath: generateEntryPath(entry),
+                    sourceID,
+                    sourceName,
+                    url: entry.getMeta("url") || entry.getMeta("icon")
+                }))
+            )
+        );
+        dispatch(setSourcesCount(sources));
+    });
 }
 
 export function startMessageListener() {

@@ -4,15 +4,23 @@ export function getEntryResults(state) {
     return state[KEY].entryResults;
 }
 
-export function getEntryResultTitle(state, sourceID, entryID) {
+function getEntryResult(state, sourceID, entryID) {
     const results = getEntryResults(state);
-    const result = results.find(result => result.sourceID === sourceID && result.id === entryID);
+    return results.find(result => result.sourceID === sourceID && result.id === entryID);
+}
+
+export function getEntryResultPath(state, sourceID, entryID) {
+    const result = getEntryResult(state, sourceID, entryID);
+    return [result.sourceName, ...result.entryPath];
+}
+
+export function getEntryResultTitle(state, sourceID, entryID) {
+    const result = getEntryResult(state, sourceID, entryID);
     return (result && result.title) || "";
 }
 
 export function getEntryResultURL(state, sourceID, entryID) {
-    const results = getEntryResults(state);
-    const result = results.find(result => result.sourceID === sourceID && result.id === entryID);
+    const result = getEntryResult(state, sourceID, entryID);
     return result && result.url;
 }
 

@@ -151,6 +151,7 @@ class SearchResult extends Component {
     }
 
     render() {
+        const [sourceName, ...groups] = this.props.path;
         return (
             <Container>
                 <EntryImageContainer
@@ -174,7 +175,11 @@ class SearchResult extends Component {
                     </DetailRow>
                     <DetailRow>
                         <Subtitle>
-                            <FontAwesome name="cube" /> Some details
+                            <FontAwesome name="cube" /> <strong>{sourceName}</strong> »{" "}
+                            <For each="group" index="index" of={groups}>
+                                <If condition={index > 0}> › </If>
+                                {group}
+                            </For>
                         </Subtitle>
                     </DetailRow>
                 </DetailsContainer>
