@@ -4,15 +4,26 @@ import { attachLaunchButton } from "./launch.js";
 import { startMessageListener } from "./messaging.js";
 
 // Wait for a target
-waitForTarget().then(loginTarget => {
-    const { usernameFields, passwordFields } = loginTarget;
-    const [passwordField] = passwordFields;
-    const [usernameField] = usernameFields;
-    if (passwordField && isVisible(passwordField)) {
-        attachLaunchButton(passwordField);
-    } else if (usernameField) {
-        attachLaunchButton(usernameField);
-    }
-});
+const waitAndAttachLaunchButtons = () => {
+    return waitForTarget()
+        .then(loginTarget => {
+            const { usernameFields, passwordFields } = loginTarget;
+            const [passwordField] = passwordFields;
+            const [usernameField] = usernameFields;
+            if (passwordField && isVisible(passwordField)) {
+                attachLaunchButton(passwordField);
+            }
+            if (usernameField) {
+                attachLaunchButton(usernameField);
+            }
+        })
+        .then(() => {
+            setTimeout(() => {
+                waitAndAttachLaunchButtons();
+            }, 500);
+        });
+};
+
+waitAndAttachLaunchButtons();
 
 startMessageListener();

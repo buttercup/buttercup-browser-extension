@@ -6,19 +6,22 @@ import { onBodyWidthResize } from "./resize.js";
 const BUTTON_BACKGROUND_IMAGE = require("../../resources/content-button-background.png");
 
 export function attachLaunchButton(input) {
+    if (input.dataset.bcup === "attached") {
+        return;
+    }
     const { height: rawHeight, width: rawWidth, zIndex: zIndexRaw, backgroundColor } = window.getComputedStyle(
         input,
         null
     );
     const bounds = input.getBoundingClientRect();
-    // const height = Math.max(parseInt(rawHeight, 10), 14);
-    // const width = parseInt(rawWidth, 10);
     const { width, height } = bounds;
     const buttonWidth = 0.8 * height;
     const newInputWidth = width - buttonWidth;
     let left = input.offsetLeft + newInputWidth;
     let top = input.offsetTop;
     const buttonZ = findBestZIndexInContainer(input.offsetParent);
+    // Flag has having been attached
+    input.dataset.bcup = "attached";
     // Update input style
     setStyle(input, {
         width: `${newInputWidth}px`
