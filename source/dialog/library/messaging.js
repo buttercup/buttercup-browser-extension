@@ -1,8 +1,17 @@
 import { dispatch } from "../redux/index.js";
 import { setEntireState } from "../../shared/actions/app.js";
 import log from "../../shared/library/log.js";
+import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 
 let __backgroundPort = null;
+
+export function closeDialog() {
+    return getCurrentTab().then(tab => {
+        sendTabMessage(tab.id, {
+            type: "close-dialog"
+        });
+    });
+}
 
 export function connectToBackground() {
     __backgroundPort = chrome.runtime.connect({ name: "buttercup-state" });
