@@ -1,11 +1,5 @@
 import extractDomain from "extract-domain";
-import {
-    Archive,
-    createCredentials,
-    EntryFinder,
-    WebDAVDatasource,
-    Workspace
-} from "buttercup/dist/buttercup-web.min.js";
+import { Archive, createCredentials, EntryFinder, WebDAVDatasource, Workspace } from "buttercup/dist/buttercup-web.js";
 import { getArchiveManager } from "./buttercup.js";
 import log from "../../shared/library/log.js";
 import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
