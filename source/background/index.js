@@ -1,26 +1,12 @@
-import addMessagingListeners from "./messaging";
-import addHotkeyListeners from "./hotkeys";
-import { updateAll } from "./archives";
+import { startMessageListener } from "./library/messaging.js";
+import { initialise as initialiseCore } from "./library/core.js";
+import log from "../shared/library/log.js";
+import { attachBrowserStateListeners } from "./library/browserEvents.js";
 
-const UPDATE_EVERY_MINUTES = 5;
+log.info("Starting...");
 
-// init
-window.Buttercup.Web.HashingTools.patchCorePBKDF();
-addMessagingListeners();
-addHotkeyListeners();
+initialiseCore();
+startMessageListener();
+attachBrowserStateListeners();
 
-// automatic archive updating
-(function autoUpdate() {
-    setTimeout(function() {
-        console.log("Updating...");
-        updateAll()
-            .then(function() {
-                console.log("Done.");
-                autoUpdate();
-            })
-            .catch(function(err) {
-                console.error(`An error occurred while updating: ${err.message}`);
-                autoUpdate();
-            });
-    }, UPDATE_EVERY_MINUTES * 60 * 1000);
-})();
+log.info("Started successfully");

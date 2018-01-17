@@ -1,281 +1,197 @@
 const path = require("path");
 const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const { version } = require("./package.json");
 
-const BUILD = path.resolve(__dirname, "./build");
+const { NormalModuleReplacementPlugin } = webpack;
+
+const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
-const NODE_MODULES = path.resolve(__dirname, "./node_modules");
+const RESOURCES = path.resolve(__dirname, "./resources");
+const INDEX_TEMPLATE = path.resolve(RESOURCES, "./template.pug");
+const MANIFEST = path.resolve(RESOURCES, "./manifest.json");
 
 const SRC_BACKGROUND = path.resolve(SOURCE, "background");
 const SRC_POPUP = path.resolve(SOURCE, "popup");
 const SRC_SETUP = path.resolve(SOURCE, "setup");
 const SRC_TAB = path.resolve(SOURCE, "tab");
-const SRC_COMMON = path.resolve(SOURCE, "common");
+const SRC_DIALOG = path.resolve(SOURCE, "dialog");
 
-const LOADER_IMAGE = {
-    loader: "image-webpack-loader",
-    query: {
-        mozjpeg: {
-            progressive: true
-        },
-        gifsicle: {
-            interlaced: false
-        },
-        optipng: {
-            optimizationLevel: 7
-        },
-        pngquant: {
-            quality: "75-90",
-            speed: 4
-        }
-    }
+const BASE_CONFIG_DEFAULTS = {
+    imageLoader: "file-loader"
 };
 
-const additionalPlugins = process.env.NODE_ENV === "production" ? [
-    new webpack.optimize.UglifyJsPlugin({
-        compress: {
-            warnings: false
-        }
-    }),
-    new webpack.DefinePlugin({
-        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
-    })
-] : [];
-
-module.exports = [
-
-    // Background
-    {
-        entry: path.resolve(SRC_BACKGROUND, "index.js"),
-        output: {
-            filename: "background.js",
-            path: BUILD
-        },
+function getBaseConfig({ imageLoader } = BASE_CONFIG_DEFAULTS) {
+    const config = {
         module: {
             rules: [
                 {
-                    test: /\.js$/,
-                    exclude: [
-                        NODE_MODULES
-                    ],
-                    use: [
-                        { loader: "babel-loader" }
-                    ]
-                }
-            ]
-        },
-        plugins: [
-            ...additionalPlugins
-        ],
-        resolve: {
-            extensions: [".js"],
-            modules: [
-                SRC_BACKGROUND,
-                NODE_MODULES
-            ]
-        }
-    },
-
-    // Tab
-    {
-        entry: path.resolve(SRC_TAB, "index.js"),
-        output: {
-            filename: "tab.js",
-            path: BUILD
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.js$/,
-                    exclude: [
-                        NODE_MODULES
-                    ],
-                    use: [
-                        { loader: "babel-loader" }
-                    ]
+                    test: /\.jsx?$/,
+                    exclude: /node_modules/,
+                    use: "babel-loader"
                 },
                 {
-                    test: /\.png$/i,
-                    use: [
-                        { loader: "url-loader" },
-                        LOADER_IMAGE
-                    ]
-                },
-                {
-                    test: /\.[ot]tf$/,
-                    use: [
-                        { loader: "url-loader" }
-                    ]
-                }
-            ]
-        },
-        plugins: [
-            ...additionalPlugins
-        ],
-        resolve: {
-            extensions: [".js"],
-            modules: [
-                SRC_TAB,
-                SRC_COMMON,
-                NODE_MODULES
-            ]
-        }
-    },
-
-    // Setup / Admin
-    {
-        entry: {
-            lib: path.resolve(SRC_SETUP, "./js/index.js"),
-            views: path.resolve(SRC_SETUP, "./js/index.jsx")
-        },
-        output: {
-            filename: "setup.[name].js",
-            path: BUILD,
-            // make sure port 8090 is used when launching webpack-dev-server
-            publicPath: "http://localhost:8090/assets"
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.js$/,
-                    include: [
-                        SRC_SETUP,
-                        SRC_COMMON,
-                        path.resolve(NODE_MODULES, "./any-fs"),
-                        path.resolve(NODE_MODULES, "./webdav-fs"),
-                        path.resolve(NODE_MODULES, "./dropbox-fs")
-                    ],
-                    use: [
-                        { loader: "babel-loader" }
-                    ]
-                },
-                {
-                    test: /\.jsx$/,
-                    exclude: [
-                        NODE_MODULES
-                    ],
-                    use: [
-                        { loader: "babel-loader" }
-                    ]
-                },
-                {
-                    test: /\.json$/i,
-                    use: [
-                        { loader: "json-loader" }
-                    ]
-                },
-                {
-                    test: /\.sass$/,
-                    use: [
-                        { loader: "style-loader" },
-                        { loader: "css-loader" },
-                        { loader: "sass-loader" }
-                    ]
+                    test: /\.s[ac]ss$/,
+                    use: ["style-loader", "css-loader", "sass-loader"]
                 },
                 {
                     test: /\.css$/,
-                    use: [
-                        { loader: "style-loader" },
-                        { loader: "css-loader" }
-                    ]
+                    use: ["style-loader", "css-loader"]
                 },
                 {
-                    test: /\.[ot]tf$/,
-                    use: [
-                        { loader: "url-loader" }
-                    ]
-                },
-                {
-                    test: /\.png$/i,
-                    use: [
-                        { loader: "url-loader" },
-                        LOADER_IMAGE
-                    ]
+                    test: /\.pug$/,
+                    use: "pug-loader"
                 }
             ]
         },
-        node: {
-            fs: "empty"
-        },
-        plugins: [
-            new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop"),
-            ...additionalPlugins
-        ],
+
         resolve: {
-            extensions: [".js", ".jsx"],
-            modules: [
-                path.resolve(SRC_SETUP, "js"),
-                path.resolve(SRC_SETUP, "sass"),
-                SRC_COMMON,
-                NODE_MODULES
-            ]
-        },
-        resolveLoader: {
-            modules: [
-                NODE_MODULES
-            ]
+            extensions: [".js", ".jsx", ".json"]
         }
+    };
+    if (imageLoader === "file-loader") {
+        config.module.rules.push({
+            test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
+            loader: "file-loader",
+            options: {
+                name: "[path][name].[hash].[ext]"
+            }
+        });
+    } else if (imageLoader === "url-loader") {
+        config.module.rules.push({
+            test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
+            loader: "url-loader"
+        });
+    }
+    return config;
+}
+
+function getBasePlugins() {
+    if (process.env.NODE_ENV === "production") {
+        return [
+            new UglifyJsPlugin({
+                test: /\.js($|\?)/i,
+                uglifyOptions: {
+                    ie8: false,
+                    ecma: 7,
+                    warnings: false,
+                    compress: {
+                        warnings: false,
+                        conditionals: true,
+                        unused: true,
+                        comparisons: true,
+                        sequences: true,
+                        dead_code: true,
+                        evaluate: true,
+                        if_return: true,
+                        join_vars: true
+                    },
+                    output: {
+                        comments: false
+                    }
+                }
+            })
+        ];
+    }
+    return [];
+}
+
+const backgroundConfig = Object.assign({}, getBaseConfig(), {
+    entry: path.resolve(SRC_BACKGROUND, "./index.js"),
+
+    output: {
+        filename: "background.js",
+        path: DIST
     },
 
-    // Popup
-    {
-        entry: {
-            lib: path.resolve(SRC_POPUP, "./js/index.js"),
-            views: path.resolve(SRC_POPUP, "./js/index.jsx")
-        },
-        output: {
-            filename: "popup.[name].js",
-            path: BUILD,
-            // make sure port 8090 is used when launching webpack-dev-server
-            publicPath: "http://localhost:8090/assets"
-        },
-        module: {
-            loaders: [
-                {
-                    test: /\.js$/,
-                    exclude: [
-                        NODE_MODULES
-                    ],
-                    use: [
-                        { loader: "babel-loader" }
-                    ]
-                },
-                {
-                    test: /\.jsx$/,
-                    exclude: [
-                        NODE_MODULES
-                    ],
-                    use: [
-                        { loader: "babel-loader" }
-                    ]
-                },
-                {
-                    test: /\.sass$/,
-                    use: [
-                        { loader: "style-loader" },
-                        { loader: "css-loader" },
-                        { loader: "sass-loader" }
-                    ]
-                },
-                {
-                    test: /\.[ot]tf$/,
-                    use: [
-                        { loader: "url-loader" }
-                    ]
+    plugins: [
+        ...getBasePlugins(),
+        new CopyWebpackPlugin([
+            {
+                from: MANIFEST,
+                transform: contents => {
+                    const manifest = JSON.parse(contents.toString());
+                    manifest.version = version;
+                    return JSON.stringify(manifest, undefined, 4);
                 }
-            ]
-        },
-        plugins: [
-            ...additionalPlugins
-        ],
-        resolve: {
-            extensions: [".js", ".jsx", ".sass"],
-            modules: [
-                path.resolve(SRC_POPUP, "js"),
-                path.resolve(SRC_POPUP, "sass"),
-                SRC_COMMON,
-                NODE_MODULES
-            ]
-        }
-    }
+            },
+            {
+                from: path.join(RESOURCES, "buttercup-*.png")
+            }
+        ])
+    ]
+});
 
-];
+const popupConfig = Object.assign({}, getBaseConfig(), {
+    entry: path.resolve(SRC_POPUP, "./index.js"),
+
+    output: {
+        filename: "popup.js",
+        path: DIST
+    },
+
+    plugins: [
+        ...getBasePlugins(),
+        new HtmlWebpackPlugin({
+            title: "Buttercup",
+            template: INDEX_TEMPLATE,
+            filename: "popup.html",
+            inject: "body"
+        })
+    ]
+});
+
+const setupConfig = Object.assign({}, getBaseConfig(), {
+    entry: path.resolve(SRC_SETUP, "./index.js"),
+
+    output: {
+        filename: "setup.js",
+        path: DIST
+    },
+
+    plugins: [
+        ...getBasePlugins(),
+        new HtmlWebpackPlugin({
+            title: `Buttercup v${version}`,
+            template: INDEX_TEMPLATE,
+            filename: "setup.html",
+            inject: "body"
+        }),
+        new NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop")
+    ]
+});
+
+const dialogConfig = Object.assign({}, getBaseConfig(), {
+    entry: path.resolve(SRC_DIALOG, "./index.js"),
+
+    output: {
+        filename: "dialog.js",
+        path: DIST
+    },
+
+    plugins: [
+        ...getBasePlugins(),
+        new HtmlWebpackPlugin({
+            title: `Buttercup v${version}`,
+            template: INDEX_TEMPLATE,
+            filename: "dialog.html",
+            inject: "body"
+        }),
+        new NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop")
+    ]
+});
+
+const tabConfig = Object.assign({}, getBaseConfig({ imageLoader: "url-loader" }), {
+    entry: path.resolve(SRC_TAB, "./index.js"),
+
+    output: {
+        filename: "tab.js",
+        path: DIST
+    },
+
+    plugins: [...getBasePlugins()]
+});
+
+module.exports = [backgroundConfig, popupConfig, setupConfig, tabConfig, dialogConfig];

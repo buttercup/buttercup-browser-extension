@@ -1,9 +1,9 @@
 {
-    "presets": [
-        ["es2015", { "modules": false }],
-        "react"
-    ],
-    "plugins": [
-        ["transform-object-rest-spread", { "useBuiltIns": true }]
-    ]
+  "presets": ["env", "react"],
+  "plugins": [
+    "jsx-control-statements",
+    "transform-class-properties",
+    "transform-object-rest-spread",
+    "transform-function-bind"
+  ]
 }

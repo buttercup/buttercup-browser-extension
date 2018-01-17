@@ -1,13 +1,10 @@
+root = true
+
 [*]
 end_of_line = lf
 insert_final_newline = true
-
-[*.{js,json,sass}]
 indent_style = space
 indent_size = 4
 
-[package.json]
+[{.prettierrc,package.json,package-lock.json,.babelrc}]
 indent_size = 2
-
-[.babelrc]
-indent_size = 4
