@@ -129,15 +129,12 @@ class RemoteFileTree extends Component {
         selectedFilenameNeedsCreation: false
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            editingNewFile: false,
-            editingNewFileDirectory: null,
-            editingNewFileName: "",
-            openDirectories: ["/"]
-        };
-    }
+    state = {
+        editingNewFile: false,
+        editingNewFileDirectory: null,
+        editingNewFileName: "",
+        openDirectories: ["/"]
+    };
 
     handleExpansionClick(item) {
         const { path } = item;
@@ -214,10 +211,7 @@ class RemoteFileTree extends Component {
         return (
             <Container>
                 <Choose>
-                    <When condition={!!this.props.rootDirectory}>
-                        {this.renderDirectory(this.props.rootDirectory)}
-                        {/*this.renderFiles(this.props.rootDirectory, 1)*/}
-                    </When>
+                    <When condition={!!this.props.rootDirectory}>{this.renderDirectory(this.props.rootDirectory)}</When>
                     <Otherwise>
                         <If condition={this.props.directoriesLoading.includes("/")}>{this.renderLoader("/", 1)}</If>
                     </Otherwise>

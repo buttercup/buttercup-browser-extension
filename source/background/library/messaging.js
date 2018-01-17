@@ -163,7 +163,6 @@ export function startMessageListener() {
     chrome.runtime.onConnect.addListener(port => {
         log.info(`Port connected: ${port.name}`);
         if (port.name === "buttercup-state") {
-            // __statePorts.push(port);
             addPort("state", port);
             // first, sync state straight away
             const state = getState();

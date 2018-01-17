@@ -39,12 +39,9 @@ class SearchBar extends Component {
         onSearchTermChange: PropTypes.func.isRequired
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchTerm: ""
-        };
-    }
+    state = {
+        searchTerm: ""
+    };
 
     componentDidMount() {
         setTimeout(() => {

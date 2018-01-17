@@ -79,19 +79,16 @@ class AddArchivePage extends Component {
         selectedFilenameNeedsCreation: PropTypes.bool.isRequired
     };
 
-    constructor(props) {
-        super(props);
-        // We store some details in the state, because they're sensitive. No point
-        // storing them globally..
-        this.state = {
-            archiveName: "",
-            dropboxAuthenticationID: "",
-            masterPassword: "",
-            remoteURL: "",
-            remoteUsername: "",
-            remotePassword: ""
-        };
-    }
+    // We store some details in the state, because they're sensitive. No point
+    // storing them globally..
+    state = {
+        archiveName: "",
+        dropboxAuthenticationID: "",
+        masterPassword: "",
+        remoteURL: "",
+        remoteUsername: "",
+        remotePassword: ""
+    };
 
     componentDidMount() {
         this.setState({

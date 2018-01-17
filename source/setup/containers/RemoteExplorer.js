@@ -73,7 +73,6 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
                     isLoading: false
                 })
             );
-            // @todo set errored?
         });
 }
 
@@ -81,7 +80,6 @@ export default connect(
     (state, ownProps) => ({
         directoriesLoading: getDirectoriesLoading(state),
         rootDirectory: contentsToTree(getAllDirectoryContents(state), ownProps.fetchType)
-        // rootDirectory: webdavContentsToTree(getAllDirectoryContents(state))
     }),
     {
         onOpenDirectory: (directory, fetchType) => (dispatch, getState) => {

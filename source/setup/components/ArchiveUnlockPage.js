@@ -38,13 +38,10 @@ class ArchiveUnlockPage extends Component {
         state: PropTypes.oneOf(["locked", "unlocked"]).isRequired
     };
 
-    constructor(props) {
-        super(props);
-        // We store some details in the state, because they're sensitive:
-        this.state = {
-            masterPassword: ""
-        };
-    }
+    // We store some details in the state, because they're sensitive:
+    state = {
+        masterPassword: ""
+    };
 
     componentDidMount() {
         setTimeout(() => {

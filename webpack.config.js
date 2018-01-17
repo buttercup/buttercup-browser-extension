@@ -103,9 +103,7 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
     plugins: [
         new HtmlWebpackPlugin({
             title: "Buttercup",
-            // baseURL: "http://domain/",
             template: INDEX_TEMPLATE,
-            // favicon: FAVICON,
             filename: "popup.html",
             inject: "body"
         })
@@ -123,9 +121,7 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
     plugins: [
         new HtmlWebpackPlugin({
             title: `Buttercup v${version}`,
-            // baseURL: "http://domain/",
             template: INDEX_TEMPLATE,
-            // favicon: FAVICON,
             filename: "setup.html",
             inject: "body"
         }),

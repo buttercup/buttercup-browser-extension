@@ -19,17 +19,11 @@ export function connectToBackground() {
 }
 
 export function searchEntriesForTerm(searchTerm) {
-    // log.info(`Searching entries for term: ${searchTerm}`);
-    // return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage({ type: "search-entries-for-term", term: searchTerm });
-    // });
 }
 
 export function searchEntriesForURL(url) {
-    // log.info(`Searching entries for URL: ${url}`);
-    // return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
-    // });
 }
 
 function handleBackgroundMessage(message) {
@@ -40,7 +34,6 @@ function handleBackgroundMessage(message) {
             break;
         }
         case "full-state":
-            // log.info("Received full state update from background", message.state);
             dispatch(setEntireState(message.state));
             break;
     }
@@ -64,7 +57,6 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
 }
 
 export function sendStateUpdate(action) {
-    // log.info("Sending state update to background", action);
     try {
         __backgroundPort.postMessage({
             type: "action",

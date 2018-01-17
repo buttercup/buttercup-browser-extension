@@ -103,13 +103,10 @@ class SearchResult extends Component {
         url: PropTypes.string
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            hoveringDetail: false,
-            icon: KEY_ICON
-        };
-    }
+    state = {
+        hoveringDetail: false,
+        icon: KEY_ICON
+    };
 
     componentWillMount() {
         this.mounted = true;

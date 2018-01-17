@@ -7,7 +7,7 @@ export const CLEAR_STYLES = {
 
 export function findBestZIndexInContainer(parentElement) {
     let highest = 0;
-    Array.prototype.slice.call(parentElement.children).forEach(child => {
+    [...parentElement.children].forEach(child => {
         const { zIndex } = window.getComputedStyle(child);
         if (zIndex) {
             const num = parseInt(zIndex, 10);
