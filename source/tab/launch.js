@@ -28,6 +28,7 @@ export function attachLaunchButton(input) {
     });
     // Create and add button
     const button = el("button", {
+        type: "button",
         style: {
             ...CLEAR_STYLES,
             position: "absolute",
