@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { version } = require("./package.json");
 
 const { NormalModuleReplacementPlugin } = webpack;
@@ -67,6 +68,36 @@ function getBaseConfig({ imageLoader } = BASE_CONFIG_DEFAULTS) {
     return config;
 }
 
+function getBasePlugins() {
+    if (process.env.NODE_ENV === "production") {
+        return [
+            new UglifyJsPlugin({
+                test: /\.js($|\?)/i,
+                uglifyOptions: {
+                    ie8: false,
+                    ecma: 7,
+                    warnings: false,
+                    compress: {
+                        warnings: false,
+                        conditionals: true,
+                        unused: true,
+                        comparisons: true,
+                        sequences: true,
+                        dead_code: true,
+                        evaluate: true,
+                        if_return: true,
+                        join_vars: true
+                    },
+                    output: {
+                        comments: false
+                    }
+                }
+            })
+        ];
+    }
+    return [];
+}
+
 const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: path.resolve(SRC_BACKGROUND, "./index.js"),
 
@@ -76,6 +107,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
     },
 
     plugins: [
+        ...getBasePlugins(),
         new CopyWebpackPlugin([
             {
                 from: MANIFEST,
@@ -101,6 +133,7 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
     },
 
     plugins: [
+        ...getBasePlugins(),
         new HtmlWebpackPlugin({
             title: "Buttercup",
             template: INDEX_TEMPLATE,
@@ -119,6 +152,7 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
     },
 
     plugins: [
+        ...getBasePlugins(),
         new HtmlWebpackPlugin({
             title: `Buttercup v${version}`,
             template: INDEX_TEMPLATE,
@@ -138,6 +172,7 @@ const dialogConfig = Object.assign({}, getBaseConfig(), {
     },
 
     plugins: [
+        ...getBasePlugins(),
         new HtmlWebpackPlugin({
             title: `Buttercup v${version}`,
             template: INDEX_TEMPLATE,
@@ -154,7 +189,9 @@ const tabConfig = Object.assign({}, getBaseConfig({ imageLoader: "url-loader" })
     output: {
         filename: "tab.js",
         path: DIST
-    }
+    },
+
+    plugins: [...getBasePlugins()]
 });
 
 module.exports = [backgroundConfig, popupConfig, setupConfig, tabConfig, dialogConfig];
