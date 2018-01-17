@@ -10,7 +10,7 @@
 Buttercup credentials manager extension for the browser.
 
 <p align="center">
-    <img src="chrome-extension.jpg" />
+    <img src="https://github.com/buttercup/buttercup-browser-extension/raw/master/chrome-extension.png" />
 </p>
 
 [![Buttercup](https://cdn.rawgit.com/buttercup-pw/buttercup-assets/6582a033/badge/buttercup-slim.svg)](https://buttercup.pw) [![Build Status](https://travis-ci.org/buttercup/buttercup-browser-extension.svg?branch=master)](https://travis-ci.org/buttercup/buttercup-browser-extension) [![Chrome Web Store](https://img.shields.io/chrome-web-store/d/heflipieckodmcppbnembejjmabajjjj.svg?label=Chrome%20downloads)](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) [![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/buttercup)
