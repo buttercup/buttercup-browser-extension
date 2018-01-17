@@ -23,13 +23,8 @@ const EntryShape = PropTypes.shape({
 class SearchResults extends Component {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
-        onPrepareFirstResults: PropTypes.func.isRequired,
         sourcesUnlocked: PropTypes.number.isRequired
     };
-
-    componentWillMount() {
-        this.props.onPrepareFirstResults();
-    }
 
     render() {
         return (
