@@ -4,6 +4,10 @@ import { getExtensionURL } from "../shared/library/extension.js";
 import { CLEAR_STYLES } from "./styles.js";
 import { onBodyResize } from "./resize.js";
 
+const DIALOG_MARGIN = 10;
+const DIALOG_WIDTH = 320;
+const DIALOG_HEIGHT = 280;
+
 let __sharedInstance;
 
 class SearchDialog {
@@ -64,8 +68,8 @@ function createDialog() {
         {
             style: {
                 ...CLEAR_STYLES,
-                width: "320px",
-                height: "280px",
+                width: `${DIALOG_WIDTH}px`,
+                height: `${DIALOG_HEIGHT}px`,
                 backgroundColor: "rgba(0, 0, 0, 0.85)",
                 position: "absolute",
                 zIndex: 9999999
