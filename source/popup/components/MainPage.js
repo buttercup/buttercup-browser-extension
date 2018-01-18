@@ -11,6 +11,7 @@ const ARCHIVE_IMAGES = {
     nextcloud: require("../../../resources/providers/nextcloud-256.png"),
     webdav: require("../../../resources/providers/webdav-white-256.png")
 };
+const MENU_ARROW = require("../../../resources/arrow-up.png");
 
 const ArchiveShape = PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -126,6 +127,60 @@ const OptionsItem = styled.div`
         color: rgba(0, 183, 172, 1);
     }
 `;
+const NoArchivesContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const NoArchivesInner = styled.div`
+    width: 95%;
+    height: 95%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @keyframes topMove {
+        from {
+            top: 0px;
+        }
+
+        to {
+            top: 10px;
+        }
+    }
+`;
+const MenuArrowContainer = styled.div`
+    width: 40px;
+    height: 40px;
+    background: url(${MENU_ARROW});
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    opacity: 0.7;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    animation-duration: 1s;
+    animation-name: topMove;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+`;
+const MessageHeader = styled.div`
+    font-size: 18px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 16px;
+`;
+const Message = styled.div`
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    width: 80%;
+    text-align: center;
+`;
 
 function getProviderImage(archiveSourceType) {
     const imageSrc = ARCHIVE_IMAGES[archiveSourceType];
@@ -173,27 +228,45 @@ class MainPage extends Component {
                             </OptionsList>
                         </When>
                         <Otherwise>
-                            <ArchiveList>
-                                {this.props.archives.map(archive => (
-                                    <ListItem
-                                        key={archive.id}
-                                        onClick={() => this.props.onArchiveClick(archive.id, archive.state)}
-                                    >
-                                        <Avatar state={archive.state}>{archive.title.substr(0, 2)}</Avatar>
-                                        <TitleContainer>
-                                            <ArchiveTitle>{archive.title}</ArchiveTitle>
-                                            <ArchiveSubtitle>
-                                                {getProviderImage(archive.type)}
-                                                {archive.type}
-                                            </ArchiveSubtitle>
-                                        </TitleContainer>
-                                    </ListItem>
-                                ))}
-                            </ArchiveList>
+                            <Choose>
+                                <When condition={this.props.archives.length > 0}>{this.renderArchivesList()}</When>
+                                <Otherwise>{this.renderNoArchives()}</Otherwise>
+                            </Choose>
                         </Otherwise>
                     </Choose>
                 </ListContainer>
             </div>
+        );
+    }
+
+    renderArchivesList() {
+        return (
+            <ArchiveList>
+                {this.props.archives.map(archive => (
+                    <ListItem key={archive.id} onClick={() => this.props.onArchiveClick(archive.id, archive.state)}>
+                        <Avatar state={archive.state}>{archive.title.substr(0, 2)}</Avatar>
+                        <TitleContainer>
+                            <ArchiveTitle>{archive.title}</ArchiveTitle>
+                            <ArchiveSubtitle>
+                                {getProviderImage(archive.type)}
+                                {archive.type}
+                            </ArchiveSubtitle>
+                        </TitleContainer>
+                    </ListItem>
+                ))}
+            </ArchiveList>
+        );
+    }
+
+    renderNoArchives() {
+        return (
+            <NoArchivesContainer>
+                <NoArchivesInner>
+                    <MenuArrowContainer />
+                    <MessageHeader>No Archives</MessageHeader>
+                    <Message>Hmm.. There aren't any archives yet. Why not add one by using the menu?</Message>
+                </NoArchivesInner>
+            </NoArchivesContainer>
         );
     }
 }
