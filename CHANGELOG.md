@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## **v1.0.1**
+_2018-01-18_
+
+ * Full re-work of the entire extension
+ * **Nextcloud** official support
+ * ([#92](https://github.com/buttercup/buttercup-browser-extension/issues/92)) Fixed security vulnerability
+
 ## v0.14.2
 _2017-07-15_
 
