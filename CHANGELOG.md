@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v1.0.2
+_2018-01-18_
+
+ * ([#97](https://github.com/buttercup/buttercup-browser-extension/issues/97)) Fixed Twitter login bug
+
 ## **v1.0.1**
 _2018-01-18_
 
