@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { version } = require("./package.json");
 
-const { NormalModuleReplacementPlugin } = webpack;
+const { NormalModuleReplacementPlugin, DefinePlugin } = webpack;
 
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
@@ -71,26 +71,19 @@ function getBaseConfig({ imageLoader } = BASE_CONFIG_DEFAULTS) {
 function getBasePlugins() {
     if (process.env.NODE_ENV === "production") {
         return [
+            new DefinePlugin({
+                "process.env": {
+                    NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+                }
+            }),
             new UglifyJsPlugin({
                 test: /\.js($|\?)/i,
                 uglifyOptions: {
                     ie8: false,
                     ecma: 7,
                     warnings: false,
-                    compress: {
-                        warnings: false,
-                        conditionals: true,
-                        unused: true,
-                        comparisons: true,
-                        sequences: true,
-                        dead_code: true,
-                        evaluate: true,
-                        if_return: true,
-                        join_vars: true
-                    },
-                    output: {
-                        comments: false
-                    }
+                    mangle: false,
+                    compress: true
                 }
             })
         ];
