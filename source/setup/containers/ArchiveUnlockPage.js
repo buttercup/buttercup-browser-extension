@@ -7,6 +7,7 @@ import { notifyError, notifySuccess } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { isEditing } from "../selectors/manageArchive.js";
 import { setEditing } from "../actions/manageArchive.js";
+import { closeCurrentTab } from "../../shared/library/extension.js";
 
 export default connect(
     (state, ownProps) => ({
@@ -24,7 +25,7 @@ export default connect(
                     dispatch(unsetBusy());
                     notifySuccess("Archive locked", "Successfully locked archive");
                     setTimeout(() => {
-                        window.close();
+                        closeCurrentTab();
                     }, 1250);
                 })
                 .catch(err => {
@@ -47,7 +48,7 @@ export default connect(
                         dispatch(unsetBusy());
                         notifySuccess("Archive removed", "Successfully removed archive");
                         setTimeout(() => {
-                            window.close();
+                            closeCurrentTab();
                         }, 1250);
                     })
                     .catch(err => {
@@ -67,9 +68,9 @@ export default connect(
             unlockArchive(sourceID, masterPassword)
                 .then(() => {
                     dispatch(unsetBusy());
-                    notifySuccess("Archive unlocked", "Successfully locked archive");
+                    notifySuccess("Archive unlocked", "Successfully unlocked archive");
                     setTimeout(() => {
-                        window.close();
+                        closeCurrentTab();
                     }, 1250);
                 })
                 .catch(err => {

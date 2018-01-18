@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import ArchivesLockPage from "../components/ArchivesLockPage.js";
 import { lockAllArchives } from "../library/messaging.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
+import { closeCurrentTab } from "../../shared/library/extension.js";
 
 export default connect((state, ownProps) => ({}), {
     onReadyToLock: () => () => {
@@ -9,7 +10,7 @@ export default connect((state, ownProps) => ({}), {
             .then(() => {
                 notifySuccess("Archives locked", "Successfully locked archives");
                 setTimeout(() => {
-                    window.close();
+                    closeCurrentTab();
                 }, 1250);
             })
             .catch(err => {

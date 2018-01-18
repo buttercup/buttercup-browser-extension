@@ -4,6 +4,12 @@ export function createNewTab(url) {
     chrome.tabs.create({ url }, NOOP);
 }
 
+export function closeCurrentTab() {
+    chrome.tabs.getCurrent(tab => {
+        chrome.tabs.remove(tab.id, NOOP);
+    });
+}
+
 export function getCurrentTab() {
     return new Promise(resolve => {
         chrome.tabs.query({ active: true, currentWindow: true }, tabs => {

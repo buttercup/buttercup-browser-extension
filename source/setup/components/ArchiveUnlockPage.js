@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
 import LayoutMain from "./LayoutMain.js";
+import { closeCurrentTab } from "../../shared/library/extension.js";
 
 const PasswordRow = styled.div`
     width: 100%;
@@ -51,7 +52,7 @@ class ArchiveUnlockPage extends Component {
 
     handleCancelUnlock(event) {
         event.preventDefault();
-        window.close();
+        closeCurrentTab();
     }
 
     handleLockArchive(event) {

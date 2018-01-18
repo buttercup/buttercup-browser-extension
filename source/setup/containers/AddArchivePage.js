@@ -17,6 +17,7 @@ import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
 import { setAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
+import { closeCurrentTab } from "../../shared/library/extension.js";
 
 const ADD_ARCHIVE_WINDOW_CLOSE_DELAY = 2000;
 
@@ -52,7 +53,7 @@ export default connect(
                     dispatch(unsetBusy());
                     notifySuccess("Successfully added archive", `The archive '${archiveName}' was successfully added.`);
                     setTimeout(() => {
-                        window.close();
+                        closeCurrentTab();
                     }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
                 })
                 .catch(err => {
@@ -100,7 +101,7 @@ export default connect(
                     dispatch(unsetBusy());
                     notifySuccess("Successfully added archive", `The archive '${archiveName}' was successfully added.`);
                     setTimeout(() => {
-                        window.close();
+                        closeCurrentTab();
                     }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
                 })
                 .catch(err => {
