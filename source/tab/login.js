@@ -1,6 +1,4 @@
-import Locust from "@buttercup/locust";
-
-const { getLoginTarget } = Locust;
+import { getLoginTarget } from "@buttercup/locust";
 
 const TARGET_SEARCH_INTERVAL = 1500;
 
