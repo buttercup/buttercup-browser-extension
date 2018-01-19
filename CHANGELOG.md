@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v1.0.3
+_2017-01-19_
+
+ * Fix GitHub login
+ * Fix logins that have multiple detected inputs
+
 ## v1.0.2
 _2018-01-18_
 
