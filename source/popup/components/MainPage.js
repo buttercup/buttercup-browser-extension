@@ -20,6 +20,11 @@ const ArchiveShape = PropTypes.shape({
     state: PropTypes.oneOf(["locked", "unlocked", "pending"]).isRequired
 });
 
+const Container = styled.div`
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+`;
 const ArchiveList = styled.ul`
     list-style-type: none;
     margin: 0;
@@ -53,7 +58,7 @@ const ListContainer = styled.div`
     width: 100%;
     height: 300px;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 `;
 const ListItem = styled.li`
     background-color: rgba(20, 20, 20, 0.4);
@@ -203,7 +208,7 @@ class MainPage extends Component {
 
     render() {
         return (
-            <div>
+            <Container>
                 <HeaderBar menuState={this.props.menuState} onMenuClick={() => this.props.onMenuClick()} />
                 <ListContainer>
                     <Choose>
@@ -235,7 +240,7 @@ class MainPage extends Component {
                         </Otherwise>
                     </Choose>
                 </ListContainer>
-            </div>
+            </Container>
         );
     }
 
