@@ -1,7 +1,15 @@
 # Buttercup browser extension changelog
 
+## v1.0.4
+_2018-01-20_
+
+ * First 1.* release for Firefox
+ * Fix character encoding
+ * Fix button icon not showing on some sites
+ * Fix scrollbars in popup
+
 ## v1.0.3
-_2017-01-19_
+_2018-01-19_
 
  * Fix GitHub login
  * Fix logins that have multiple detected inputs
