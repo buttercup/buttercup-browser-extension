@@ -2,8 +2,9 @@ import { el, mount, setStyle } from "redom";
 import { CLEAR_STYLES, findBestZIndexInContainer } from "./styles.js";
 import { toggleSearchDialog } from "./dialog.js";
 import { onBodyWidthResize } from "./resize.js";
+import { getExtensionURL } from "../shared/library/extension.js";
 
-const BUTTON_BACKGROUND_IMAGE = require("../../resources/content-button-background.png");
+const BUTTON_BACKGROUND_IMAGE = getExtensionURL(require("../../resources/content-button-background.png"));
 
 export function attachLaunchButton(input) {
     if (input.dataset.bcup === "attached") {

@@ -20,10 +20,11 @@ const SRC_TAB = path.resolve(SOURCE, "tab");
 const SRC_DIALOG = path.resolve(SOURCE, "dialog");
 
 const BASE_CONFIG_DEFAULTS = {
+    addFileHash: true,
     imageLoader: "file-loader"
 };
 
-function getBaseConfig({ imageLoader } = BASE_CONFIG_DEFAULTS) {
+function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
     const config = {
         module: {
             rules: [
@@ -56,7 +57,7 @@ function getBaseConfig({ imageLoader } = BASE_CONFIG_DEFAULTS) {
             test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
             loader: "file-loader",
             options: {
-                name: "[path][name].[hash].[ext]"
+                name: addFileHash ? "[path][name].[hash].[ext]" : "[path][name].[ext]"
             }
         });
     } else if (imageLoader === "url-loader") {
@@ -180,7 +181,7 @@ const dialogConfig = Object.assign({}, getBaseConfig(), {
     ]
 });
 
-const tabConfig = Object.assign({}, getBaseConfig({ imageLoader: "url-loader" }), {
+const tabConfig = Object.assign({}, getBaseConfig({ addFileHash: false, imageLoader: "file-loader" }), {
     entry: path.resolve(SRC_TAB, "./index.js"),
 
     output: {
