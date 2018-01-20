@@ -83,7 +83,11 @@ function getBasePlugins() {
                     ecma: 7,
                     warnings: false,
                     mangle: false,
-                    compress: true
+                    compress: true,
+                    output: {
+                        ascii_only: true,
+                        beautify: false
+                    }
                 }
             })
         ];
