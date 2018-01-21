@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v1.0.6
+_2018-01-21_
+
+ * Fix component communication in Firefox
+ * Add storage permission
+
 ## v1.0.5
 _2018-01-21_
 
