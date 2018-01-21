@@ -1,3 +1,4 @@
+import postRobot from "post-robot";
 import { enterLoginDetails, submitLoginForm } from "./login.js";
 import { hideSearchDialog } from "./dialog.js";
 
@@ -17,6 +18,11 @@ function handleMessage(request, sender, sendResponse) {
     }
 }
 
-export function startMessageListener() {
+export function startMessageListeners() {
     chrome.runtime.onMessage.addListener(handleMessage);
+    startPostMessageListener();
+}
+
+function startPostMessageListener() {
+    postRobot.on("bcup-get-url", () => window.location.href);
 }

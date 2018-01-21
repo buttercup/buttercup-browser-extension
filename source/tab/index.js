@@ -1,7 +1,7 @@
 import isVisible from "isvisible";
 import { waitForTarget } from "./login.js";
 import { attachLaunchButton } from "./launch.js";
-import { startMessageListener } from "./messaging.js";
+import { startMessageListeners } from "./messaging.js";
 
 // Wait for a target
 const waitAndAttachLaunchButtons = () => {
@@ -26,4 +26,4 @@ const waitAndAttachLaunchButtons = () => {
 
 waitAndAttachLaunchButtons();
 
-startMessageListener();
+startMessageListeners();

@@ -67,6 +67,7 @@
     "npm-run-all": "^4.1.2",
     "path.join": "^1.0.0",
     "pify": "^3.0.0",
+    "post-robot": "^8.0.15",
     "prettier": "^1.8.2",
     "prettier-check": "^2.0.0",
     "prop-types": "^15.6.0",
