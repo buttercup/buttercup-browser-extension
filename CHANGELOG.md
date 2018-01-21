@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v1.0.5
+_2018-01-21_
+
+ * ([#106](https://github.com/buttercup/buttercup-browser-extension/issues/106)) Fix Nextcloud archive searching
+
 ## v1.0.4
 _2018-01-20_
 
