@@ -31,11 +31,12 @@
 	],
 
 	"permissions": [
-		"activeTab",
+        "activeTab",
+        "contextMenus",
 		"http://*/*",
-		"https://*/*",
-		"tabs",
-        "contextMenus"
+        "https://*/*",
+        "storage",
+		"tabs"
 	],
 
 	"commands": {
