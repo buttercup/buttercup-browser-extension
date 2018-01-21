@@ -1,7 +1,8 @@
 import { connect } from "react-redux";
 import SearchResult from "../components/SearchResult.js";
 import { getEntryResultPath, getEntryResultTitle, getEntryResultURL } from "../../shared/selectors/searching.js";
-import { closeDialog, sendCredentialsToTab } from "../library/messaging.js";
+import { sendCredentialsToTab } from "../library/messaging.js";
+import { closeDialog } from "../library/context.js";
 
 export default connect(
     (state, ownProps) => ({

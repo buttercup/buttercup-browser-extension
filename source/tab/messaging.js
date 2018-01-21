@@ -4,10 +4,6 @@ import { hideSearchDialog } from "./dialog.js";
 
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
-        case "close-dialog": {
-            hideSearchDialog();
-            return false;
-        }
         case "enter-details": {
             const { signIn, entry } = request;
             enterLoginDetails(entry.properties.username, entry.properties.password, signIn);
@@ -24,5 +20,8 @@ export function startMessageListeners() {
 }
 
 function startPostMessageListener() {
+    postRobot.on("bcup-close-dialog", () => {
+        hideSearchDialog();
+    });
     postRobot.on("bcup-get-url", () => window.location.href);
 }

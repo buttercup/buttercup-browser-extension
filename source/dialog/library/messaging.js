@@ -5,14 +5,6 @@ import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js
 
 let __backgroundPort = null;
 
-export function closeDialog() {
-    return getCurrentTab().then(tab => {
-        sendTabMessage(tab.id, {
-            type: "close-dialog"
-        });
-    });
-}
-
 export function connectToBackground() {
     __backgroundPort = chrome.runtime.connect({ name: "buttercup-state" });
     __backgroundPort.onMessage.addListener(handleBackgroundMessage);
