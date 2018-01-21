@@ -117,9 +117,6 @@ export default connect(
         onConnectWebDAVBasedSource: (type, url, username, password) => dispatch => {
             let webdavURL;
             switch (type) {
-                case "nextcloud":
-                    webdavURL = joinURL(url, "remote.php/dav/files/admin");
-                    break;
                 case "owncloud":
                 /* falls-through */
                 case "nextcloud":
