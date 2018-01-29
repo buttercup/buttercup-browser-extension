@@ -3,6 +3,7 @@ import { waitForTarget, watchLogin } from "./login.js";
 import { attachLaunchButton } from "./launch.js";
 import { getLastLoginStatus, startMessageListeners, transferLoginCredentials } from "./messaging.js";
 import { getSharedTracker } from "./LoginTracker.js";
+import { showSaveDialog } from "./saveDialog.js";
 
 const watchedTargets = [];
 
@@ -60,7 +61,7 @@ startMessageListeners();
 getLastLoginStatus()
     .then(result => {
         if (result.credentials) {
-            console.log("Available:", result.title);
+            showSaveDialog();
         }
     })
     .catch(err => {

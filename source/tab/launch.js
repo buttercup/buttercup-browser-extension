@@ -1,6 +1,6 @@
 import { el, mount, setStyle } from "redom";
 import { CLEAR_STYLES, findBestZIndexInContainer } from "./styles.js";
-import { toggleSearchDialog } from "./dialog.js";
+import { toggleSearchDialog } from "./searchDialog.js";
 import { onBodyWidthResize } from "./resize.js";
 import { getExtensionURL } from "../shared/library/extension.js";
 
