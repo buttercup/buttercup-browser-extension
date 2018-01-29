@@ -15,7 +15,9 @@ import {
     unlockSource
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
-import { saveLastLogin } from "./lastLogin.js";
+import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
+
+const LAST_LOGIN_MAX_AGE = 5 * 60 * 1000; // 5 minutes
 
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
@@ -31,6 +33,24 @@ function handleMessage(request, sender, sendResponse) {
                 });
             // Async
             return true;
+        }
+        case "clear-used-credentials":
+            clearLastLogin();
+            return false;
+        case "get-used-credentials": {
+            const currentID = sender.tab.id;
+            const lastLogin = getLastLogin();
+            if (lastLogin && lastLogin.tabID === currentID) {
+                const now = new Date();
+                const lastLoginAge = now - lastLogin.timestamp;
+                if (lastLoginAge <= LAST_LOGIN_MAX_AGE) {
+                    sendResponse({ ok: true, credentials: lastLogin });
+                } else {
+                    clearLastLogin();
+                }
+            }
+            sendResponse({ ok: true, credentials: null });
+            return false;
         }
         case "lock-all-archives": {
             lockSources()
@@ -69,8 +89,11 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "save-used-credentials": {
             const { credentials } = request;
-            saveLastLogin(credentials);
-            log.info("Saved login credentials");
+            saveLastLogin({
+                ...credentials,
+                tabID: sender.tab.id
+            });
+            log.info(`Saved login credentials from tab: ${sender.tab.id}`);
             return false;
         }
         case "search-entries-for-term": {

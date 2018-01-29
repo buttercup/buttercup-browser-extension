@@ -1,7 +1,7 @@
 import isVisible from "isvisible";
 import { waitForTarget, watchLogin } from "./login.js";
 import { attachLaunchButton } from "./launch.js";
-import { startMessageListeners, transferLoginCredentials } from "./messaging.js";
+import { getLastLoginStatus, startMessageListeners, transferLoginCredentials } from "./messaging.js";
 import { getSharedTracker } from "./LoginTracker.js";
 
 const watchedTargets = [];
@@ -50,6 +50,20 @@ const waitAndAttachLaunchButtons = () => {
         });
 };
 
+// Manage login form detection
 waitAndAttachLaunchButtons();
 
+// Handle app communication
 startMessageListeners();
+
+// Check to see if any logins were recorded
+getLastLoginStatus()
+    .then(result => {
+        if (result.credentials) {
+            console.log("Available:", result.title);
+        }
+    })
+    .catch(err => {
+        console.error("An error occurred while communicating with the Buttercup extension");
+        console.error(err);
+    });
