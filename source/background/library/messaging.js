@@ -15,6 +15,7 @@ import {
     unlockSource
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
+import { saveLastLogin } from "./lastLogin.js";
 
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
@@ -65,6 +66,12 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             return true;
+        }
+        case "save-used-credentials": {
+            const { credentials } = request;
+            saveLastLogin(credentials);
+            log.info("Saved login credentials");
+            return false;
         }
         case "search-entries-for-term": {
             const { term } = request;
