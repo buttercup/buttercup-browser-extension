@@ -25,3 +25,7 @@ function startPostMessageListener() {
     });
     postRobot.on("bcup-get-url", () => window.location.href);
 }
+
+export function transferLoginCredentials(details) {
+    chrome.runtime.sendMessage({ type: "save-used-credentials", credentials: details });
+}

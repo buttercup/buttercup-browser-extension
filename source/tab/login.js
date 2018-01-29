@@ -40,3 +40,18 @@ export function waitForTarget() {
         }
     });
 }
+
+export function watchLogin(target, usernameUpdate, passwordUpdate, onSubmit) {
+    target.on("valueChanged", info => {
+        if (info.type === "username") {
+            usernameUpdate(info.value);
+        } else if (info.type === "password") {
+            passwordUpdate(info.value);
+        }
+    });
+    target.on("formSubmitted", info => {
+        if (info.source === "form") {
+            onSubmit();
+        }
+    });
+}
