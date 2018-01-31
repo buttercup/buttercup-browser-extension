@@ -3,8 +3,8 @@ import { getExtensionURL } from "../shared/library/extension.js";
 import { CLEAR_STYLES } from "./styles.js";
 
 const DIALOG_MARGIN = 10;
-const DIALOG_WIDTH = 320;
-const DIALOG_HEIGHT = 280;
+const DIALOG_WIDTH = 260;
+const DIALOG_HEIGHT = 160;
 
 let __dialog;
 
