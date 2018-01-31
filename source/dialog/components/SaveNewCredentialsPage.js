@@ -34,20 +34,42 @@ const ButtonsContainer = styled.div`
 
 class SaveNewCredentialsPage extends Component {
     static propTypes = {
-        credentialsTitle: PropTypes.string.isRequired
+        cancelSavingCredentials: PropTypes.func.isRequired,
+        fetchCredentials: PropTypes.func.isRequired
     };
+
+    state = {
+        credentialsTitle: "\u2026"
+    };
+
+    componentDidMount() {
+        this.props.fetchCredentials().then(details => {
+            this.setState({
+                credentialsTitle: details.title
+            });
+        });
+    }
+
+    handleCancelClick(event) {
+        event.preventDefault();
+        this.props.cancelSavingCredentials();
+    }
+
+    handleSaveClick(event) {
+        event.preventDefault();
+    }
 
     render() {
         return (
             <LayoutMain>
                 <Container>
                     <SaveHeading>Save new login?</SaveHeading>
-                    <ItemTitle>"Developer Dashboard - Chrome Web Store"</ItemTitle>
+                    <ItemTitle>"{this.state.credentialsTitle}"</ItemTitle>
                     <ButtonsContainer>
-                        <Button>
+                        <Button onClick={::this.handleSaveClick}>
                             <FontAwesome name="save" /> Save
                         </Button>
-                        <Button>Cancel</Button>
+                        <Button onClick={::this.handleCancelClick}>Cancel</Button>
                     </ButtonsContainer>
                 </Container>
             </LayoutMain>

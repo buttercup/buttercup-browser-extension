@@ -39,7 +39,7 @@ function createDialog() {
 
 export function hideSaveDialog() {
     if (__dialog) {
-        unmount(__dialog);
+        unmount(document.body, __dialog);
         __dialog = null;
     }
 }
