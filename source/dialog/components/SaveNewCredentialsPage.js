@@ -35,7 +35,8 @@ const ButtonsContainer = styled.div`
 class SaveNewCredentialsPage extends Component {
     static propTypes = {
         cancelSavingCredentials: PropTypes.func.isRequired,
-        fetchCredentials: PropTypes.func.isRequired
+        fetchCredentials: PropTypes.func.isRequired,
+        openSaveForm: PropTypes.func.isRequired
     };
 
     state = {
@@ -57,6 +58,7 @@ class SaveNewCredentialsPage extends Component {
 
     handleSaveClick(event) {
         event.preventDefault();
+        this.props.openSaveForm();
     }
 
     render() {
