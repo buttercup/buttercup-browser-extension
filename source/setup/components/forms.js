@@ -5,6 +5,10 @@ export const FormButtonContainer = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
+
+    > * {
+        margin-left: 12px;
+    }
 `;
 
 export const FormContainer = styled.div`

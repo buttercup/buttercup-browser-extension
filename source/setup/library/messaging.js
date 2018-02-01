@@ -9,6 +9,18 @@ export function connectToBackground() {
     __backgroundPort.onMessage.addListener(handleBackgroundMessage);
 }
 
+export function getLastLogin() {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-used-credentials", force: true }, resp => {
+            if (resp && resp.credentials.title) {
+                resolve(resp.credentials);
+            } else {
+                reject(new Error("Failed getting last login details"));
+            }
+        });
+    });
+}
+
 function handleBackgroundMessage(message) {
     switch (message.type) {
         case "action": {

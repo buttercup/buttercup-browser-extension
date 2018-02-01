@@ -6,88 +6,91 @@ import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
 
-// const PasswordRow = styled.div`
-//     width: 100%;
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: flex-start;
-//     align-items: center;
-//     margin-bottom: 30px;
-// `;
-// const PasswordLabel = styled.label`
-//     margin-right: 6px;
-// `;
-// const ButtonsRow = styled.div`
-//     width: 100%;
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: flex-end;
-//     align-items: center;
-
-//     > * {
-//         margin-left: 12px;
-//     }
-// `;
-
 class SaveCredentialsPage extends Component {
     static propTypes = {
-        // archiveTitle: PropTypes.string.isRequired,
-        // isEditing: PropTypes.bool.isRequired,
-        // onLockArchive: PropTypes.func.isRequired,
-        // onRemoveArchive: PropTypes.func.isRequired,
-        // onUnlockArchive: PropTypes.func.isRequired,
-        // sourceID: PropTypes.string.isRequired,
-        // state: PropTypes.oneOf(["locked", "unlocked"]).isRequired
+        fetchLoginDetails: PropTypes.func.isRequired
     };
 
     // We store some details in the state, because they're sensitive:
     state = {
-        // masterPassword: ""
+        password: "",
+        passwordConfirm: "",
+        title: "",
+        url: "",
+        username: ""
     };
 
     componentDidMount() {
-        // setTimeout(() => {
-        //     this._passwordInput.focus();
-        // }, 100);
+        this.props.fetchLoginDetails().then(details => {
+            console.log("DEETS", details);
+            const { username, password, url, title } = details;
+            this.setState({
+                username,
+                password,
+                url,
+                title
+            });
+        });
     }
 
     render() {
         return (
             <LayoutMain title={"Save New Credentials"}>
-                <h3>Test</h3>
+                <h3>New Entry Details</h3>
                 <FormContainer>
                     <FormRow>
-                        <FormLegendItem>Name</FormLegendItem>
+                        <FormLegendItem>Title</FormLegendItem>
                         <FormInputItem>
-                            <ButtercupInput placeholder="Enter archive name..." onChange={event => {}} value={""} />
+                            <ButtercupInput
+                                placeholder="Enter entry title..."
+                                onChange={event => {}}
+                                value={this.state.title}
+                            />
+                        </FormInputItem>
+                    </FormRow>
+                    <FormRow>
+                        <FormLegendItem>Username</FormLegendItem>
+                        <FormInputItem>
+                            <ButtercupInput
+                                placeholder="Enter username..."
+                                onChange={event => {}}
+                                value={this.state.username}
+                            />
+                        </FormInputItem>
+                    </FormRow>
+                    <FormRow>
+                        <FormLegendItem>Password</FormLegendItem>
+                        <FormInputItem>
+                            <ButtercupInput
+                                placeholder="Enter password..."
+                                onChange={event => {}}
+                                value={this.state.password}
+                                type="password"
+                            />
+                        </FormInputItem>
+                    </FormRow>
+                    <FormRow>
+                        <FormLegendItem>Confirm Password</FormLegendItem>
+                        <FormInputItem>
+                            <ButtercupInput
+                                placeholder="Enter password again..."
+                                onChange={event => {}}
+                                value={this.state.passwordConfirm}
+                                type="password"
+                            />
+                        </FormInputItem>
+                    </FormRow>
+                    <FormRow>
+                        <FormLegendItem>URL</FormLegendItem>
+                        <FormInputItem>
+                            <ButtercupInput placeholder="Enter URL..." onChange={event => {}} value={this.state.url} />
                         </FormInputItem>
                     </FormRow>
                 </FormContainer>
-                {/*<PasswordRow>
-                    <PasswordLabel>Password:</PasswordLabel>
-                    <ButtercupInput
-                        placeholder="Enter master password..."
-                        type="password"
-                        disabled={disableForm}
-                        onChange={event => this.handleUpdateForm("masterPassword", event)}
-                        value={this.state.masterPassword}
-                        onKeyPress={::this.onInputKeyPress}
-                        innerRef={input => {
-                            this._passwordInput = input;
-                        }}
-                    />
-                </PasswordRow>
-                <ButtonsRow>
-                    <ButtercupButton onClick={::this.handleRemoveArchive} disabled={disableForm}>
-                        Remove Archive
-                    </ButtercupButton>
-                    <ButtercupButton onClick={::this.handleCancelUnlock} disabled={disableForm}>
-                        Cancel
-                    </ButtercupButton>
-                    <ButtercupButton onClick={::this.handleUnlockArchive} disabled={disableForm}>
-                        Unlock
-                    </ButtercupButton>
-                </ButtonsRow>*/}
+                <FormButtonContainer>
+                    <ButtercupButton onClick={event => {}}>Save New Entry</ButtercupButton>
+                    <ButtercupButton onClick={event => {}}>Cancel</ButtercupButton>
+                </FormButtonContainer>
             </LayoutMain>
         );
     }

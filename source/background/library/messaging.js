@@ -38,18 +38,21 @@ function handleMessage(request, sender, sendResponse) {
             clearLastLogin();
             return false;
         case "get-used-credentials": {
+            const force = !!request.force;
             const currentID = sender.tab.id;
             const lastLogin = getLastLogin();
-            if (lastLogin && lastLogin.tabID === currentID) {
+            if (lastLogin && (lastLogin.tabID === currentID || force)) {
                 const now = new Date();
                 const lastLoginAge = now - lastLogin.timestamp;
-                if (lastLoginAge <= LAST_LOGIN_MAX_AGE) {
+                if (lastLoginAge <= LAST_LOGIN_MAX_AGE || force) {
                     sendResponse({ ok: true, credentials: lastLogin });
                 } else {
                     clearLastLogin();
+                    sendResponse({ ok: true, credentials: null });
                 }
+            } else {
+                sendResponse({ ok: true, credentials: null });
             }
-            sendResponse({ ok: true, credentials: null });
             return false;
         }
         case "lock-all-archives": {
