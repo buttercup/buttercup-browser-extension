@@ -80,6 +80,7 @@
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-redux": "^5.0.0-alpha.6",
+    "react-select": "^1.2.1",
     "react-spinkit": "^3.0.0",
     "redom": "^3.8.8",
     "redux": "^3.7.2",

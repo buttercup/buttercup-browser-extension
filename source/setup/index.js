@@ -13,6 +13,8 @@ import Notifier from "./components/Notifier.js";
 import LoadingModal from "./containers/LoadingModal.js";
 import SaveCredentialsPage from "./containers/SaveCredentialsPage.js";
 
+import "react-select/dist/react-select.css";
+
 import "../shared/styles/base.sass";
 import "./styles/setup.sass";
 import "../../resources/fontawesome/font-awesome.scss";
