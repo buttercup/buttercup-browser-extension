@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Select from "react-select";
+import { Async as Select } from "react-select";
 import styled from "styled-components";
 import Spinner from "react-spinkit";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
@@ -17,15 +17,21 @@ const LoaderContainer = styled.div`
     justify-content: center;
     align-items: center;
 `;
-const LoaderHint = styled.span`
-    margin-top: 24px;
+const SelectArchiveHint = styled.span`
     font-style: italic;
     font-color: #444;
     font-size: 13px;
 `;
 
+const ArchiveShape = PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired
+});
+
 class SaveCredentialsPage extends Component {
     static propTypes = {
+        archives: PropTypes.arrayOf(ArchiveShape).isRequired,
         fetchLoginDetails: PropTypes.func.isRequired
     };
 
@@ -50,7 +56,8 @@ class SaveCredentialsPage extends Component {
                     username,
                     password,
                     url,
-                    title
+                    title,
+                    loading: false
                 });
             })
             .catch(err => {
@@ -62,7 +69,27 @@ class SaveCredentialsPage extends Component {
             });
     }
 
+    fetchArchiveOptions(input) {
+        // console.log(this.props.archives.map(archive => ({
+        //     value: archive.id,
+        //     label: archive.title
+        // })));
+        return Promise.resolve({
+            options: this.props.archives.map(archive => ({
+                value: archive.id,
+                label: archive.title
+            }))
+        });
+    }
+
+    handleArchiveSourceChange(sourceID) {
+        this.setState({
+            sourceID
+        });
+    }
+
     render() {
+        const selectedArchive = this.state.sourceID && this.state.sourceID.length > 0;
         return (
             <LayoutMain title={"Save New Credentials"}>
                 <h3>New Entry Details</h3>
@@ -132,21 +159,28 @@ class SaveCredentialsPage extends Component {
                                     <Select
                                         name="sourceID"
                                         value={this.state.sourceID}
-                                        onChange={() => {}}
+                                        onChange={::this.handleArchiveSourceChange}
                                         style={{
                                             width: "280px"
                                         }}
-                                        options={[
-                                            { value: "1", label: "Perry's Archive" },
-                                            { value: "2", label: "Someone's Archive" }
-                                        ]}
+                                        autoload={true}
+                                        cache={false}
+                                        placeholder="Select archive..."
+                                        loadingPlaceholder="Fetching archives..."
+                                        loadOptions={::this.fetchArchiveOptions}
                                     />
                                 </FormInputItem>
                             </FormRow>
                             <FormRow>
                                 <FormLegendItem>Group</FormLegendItem>
                                 <FormInputItem>
-                                    <Select
+                                    <Choose>
+                                        <When condition={selectedArchive} />
+                                        <Otherwise>
+                                            <SelectArchiveHint>Select an archive to continue...</SelectArchiveHint>
+                                        </Otherwise>
+                                    </Choose>
+                                    {/*<Select
                                         name="groupID"
                                         value={this.state.groupID}
                                         onChange={() => {}}
@@ -154,7 +188,7 @@ class SaveCredentialsPage extends Component {
                                             width: "280px"
                                         }}
                                         options={[{ value: "1", label: "General" }, { value: "2", label: "Trash" }]}
-                                    />
+                                    />*/}
                                 </FormInputItem>
                             </FormRow>
                         </FormContainer>
