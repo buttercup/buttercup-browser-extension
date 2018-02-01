@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
 import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
+import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
 
 // const PasswordRow = styled.div`
 //     width: 100%;
@@ -54,6 +55,14 @@ class SaveCredentialsPage extends Component {
         return (
             <LayoutMain title={"Save New Credentials"}>
                 <h3>Test</h3>
+                <FormContainer>
+                    <FormRow>
+                        <FormLegendItem>Name</FormLegendItem>
+                        <FormInputItem>
+                            <ButtercupInput placeholder="Enter archive name..." onChange={event => {}} value={""} />
+                        </FormInputItem>
+                    </FormRow>
+                </FormContainer>
                 {/*<PasswordRow>
                     <PasswordLabel>Password:</PasswordLabel>
                     <ButtercupInput

@@ -7,48 +7,11 @@ import Spinner from "react-spinkit";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
+import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
 
 const SubSection = styled.div`
     width: 100%;
     margin-top: 30px;
-`;
-const FormContainer = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-`;
-const FormRow = styled.div`
-    margin-left: 30px;
-    width: calc(100% - 40px);
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-content: stretch;
-    align-items: center;
-    height: 56px;
-`;
-const FormLegendItem = styled.div`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 250px;
-`;
-const FormInputItem = styled.div`
-    flex-grow: 2;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-left: 10px;
-    width: 100%;
-    border-left: 1px solid #eee;
-    height: 56px;
-`;
-const ButtonContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
 `;
 const LoaderContainer = styled.div`
     width: 100%;
@@ -224,7 +187,7 @@ class AddArchivePage extends Component {
                         </FormInputItem>
                     </FormRow>
                 </FormContainer>
-                <ButtonContainer>
+                <FormButtonContainer>
                     <Choose>
                         <When condition={this.props.selectedArchiveType === "dropbox"}>
                             <ButtercupButton onClick={event => this.handleChooseDropboxBasedFile(event)}>
@@ -237,7 +200,7 @@ class AddArchivePage extends Component {
                             </ButtercupButton>
                         </Otherwise>
                     </Choose>
-                </ButtonContainer>
+                </FormButtonContainer>
                 <Spacer />
             </SubSection>
         );
@@ -289,11 +252,11 @@ class AddArchivePage extends Component {
                                 </FormInputItem>
                             </FormRow>
                         </FormContainer>
-                        <ButtonContainer>
+                        <FormButtonContainer>
                             <ButtercupButton onClick={::this.handleConnectWebDAV} disabled={connectionOptionsDisabled}>
                                 Connect
                             </ButtercupButton>
-                        </ButtonContainer>
+                        </FormButtonContainer>
                     </When>
                     <When condition={this.props.selectedArchiveType === "owncloud"}>
                         <FormContainer>
@@ -332,14 +295,14 @@ class AddArchivePage extends Component {
                                 </FormInputItem>
                             </FormRow>
                         </FormContainer>
-                        <ButtonContainer>
+                        <FormButtonContainer>
                             <ButtercupButton
                                 onClick={::this.handleConnectOwnCloud}
                                 disabled={connectionOptionsDisabled}
                             >
                                 Connect
                             </ButtercupButton>
-                        </ButtonContainer>
+                        </FormButtonContainer>
                     </When>
                     <When condition={this.props.selectedArchiveType === "nextcloud"}>
                         <FormContainer>
@@ -378,21 +341,21 @@ class AddArchivePage extends Component {
                                 </FormInputItem>
                             </FormRow>
                         </FormContainer>
-                        <ButtonContainer>
+                        <FormButtonContainer>
                             <ButtercupButton
                                 onClick={::this.handleConnectNextcloud}
                                 disabled={connectionOptionsDisabled}
                             >
                                 Connect
                             </ButtercupButton>
-                        </ButtonContainer>
+                        </FormButtonContainer>
                     </When>
                     <When condition={this.props.selectedArchiveType === "dropbox"}>
-                        <ButtonContainer>
+                        <FormButtonContainer>
                             <ButtercupButton onClick={::this.handleDropboxAuth} disabled={isAuthenticatingDropbox}>
                                 Grant Dropbox Access
                             </ButtercupButton>
-                        </ButtonContainer>
+                        </FormButtonContainer>
                     </When>
                     <Otherwise>
                         <i>Unsupported archive type.</i>
