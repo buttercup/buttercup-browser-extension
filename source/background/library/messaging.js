@@ -3,7 +3,9 @@ import log from "../../shared/library/log.js";
 import { addPort, getPorts } from "./ports.js";
 import {
     addArchiveByRequest,
+    archiveToObjectGroupsOnly,
     generateEntryPath,
+    getArchive,
     getMatchingEntriesForSearchTerm,
     getMatchingEntriesForURL,
     getNameForSource,
@@ -37,6 +39,19 @@ function handleMessage(request, sender, sendResponse) {
         case "clear-used-credentials":
             clearLastLogin();
             return false;
+        case "get-groups-tree": {
+            const { sourceID } = request;
+            getArchive(sourceID)
+                .then(archive => {
+                    const obj = archiveToObjectGroupsOnly(archive);
+                    sendResponse({ ok: true, groups: obj.groups });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
+        }
         case "get-used-credentials": {
             const force = !!request.force;
             const currentID = sender.tab.id;

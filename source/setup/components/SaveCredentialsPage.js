@@ -9,6 +9,19 @@ import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
 
+function flattenGroups(groups) {
+    const processed = [];
+    const nestGroup = (group, level = 0) => {
+        processed.push({
+            ...group,
+            level
+        });
+        group.groups.forEach(child => nestGroup(child, level + 1));
+    };
+    groups.forEach(group => nestGroup(group));
+    return processed;
+}
+
 const LoaderContainer = styled.div`
     width: 100%;
     height: 300px;
@@ -32,6 +45,7 @@ const ArchiveShape = PropTypes.shape({
 class SaveCredentialsPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
+        fetchGroupsForArchive: PropTypes.func.isRequired,
         fetchLoginDetails: PropTypes.func.isRequired
     };
 
@@ -70,10 +84,6 @@ class SaveCredentialsPage extends Component {
     }
 
     fetchArchiveOptions(input) {
-        // console.log(this.props.archives.map(archive => ({
-        //     value: archive.id,
-        //     label: archive.title
-        // })));
         return Promise.resolve({
             options: this.props.archives.map(archive => ({
                 value: archive.id,
@@ -82,16 +92,46 @@ class SaveCredentialsPage extends Component {
         });
     }
 
-    handleArchiveSourceChange(sourceID) {
+    fetchGroupOptions(input) {
+        const nestTitle = (title, level = 0) => {
+            let indent = level,
+                spacing = "";
+            while (indent > 0) {
+                spacing += "\u00A0\u00A0\u00A0";
+                indent -= 1;
+            }
+            return level > 0 ? `${spacing}\u21B3 ${title}` : title;
+        };
+        return this.props
+            .fetchGroupsForArchive(this.state.sourceID)
+            .then(flattenGroups)
+            .then(groups => ({
+                options: groups.map(group => ({
+                    value: group.id,
+                    label: nestTitle(group.title, group.level)
+                }))
+            }));
+    }
+
+    handleArchiveGroupChange(groupID) {
         this.setState({
-            sourceID
+            groupID
+        });
+    }
+
+    handleArchiveSourceChange(selected) {
+        const { value } = selected;
+        this.setState({
+            groupID: "",
+            groups: [],
+            sourceID: value
         });
     }
 
     render() {
         const selectedArchive = this.state.sourceID && this.state.sourceID.length > 0;
         return (
-            <LayoutMain title={"Save New Credentials"}>
+            <LayoutMain title="Save New Credentials">
                 <h3>New Entry Details</h3>
                 <Choose>
                     <When condition={this.state.loading}>
@@ -165,6 +205,7 @@ class SaveCredentialsPage extends Component {
                                         }}
                                         autoload={true}
                                         cache={false}
+                                        searchable={false}
                                         placeholder="Select archive..."
                                         loadingPlaceholder="Fetching archives..."
                                         loadOptions={::this.fetchArchiveOptions}
@@ -175,20 +216,26 @@ class SaveCredentialsPage extends Component {
                                 <FormLegendItem>Group</FormLegendItem>
                                 <FormInputItem>
                                     <Choose>
-                                        <When condition={selectedArchive} />
+                                        <When condition={selectedArchive}>
+                                            <Select
+                                                name="groupID"
+                                                value={this.state.groupID}
+                                                onChange={::this.handleArchiveGroupChange}
+                                                style={{
+                                                    width: "280px"
+                                                }}
+                                                autoload={true}
+                                                cache={false}
+                                                searchable={false}
+                                                placeholder="Select group..."
+                                                loadingPlaceholder="Fetching groups..."
+                                                loadOptions={::this.fetchGroupOptions}
+                                            />
+                                        </When>
                                         <Otherwise>
                                             <SelectArchiveHint>Select an archive to continue...</SelectArchiveHint>
                                         </Otherwise>
                                     </Choose>
-                                    {/*<Select
-                                        name="groupID"
-                                        value={this.state.groupID}
-                                        onChange={() => {}}
-                                        style={{
-                                            width: "280px"
-                                        }}
-                                        options={[{ value: "1", label: "General" }, { value: "2", label: "Trash" }]}
-                                    />*/}
                                 </FormInputItem>
                             </FormRow>
                         </FormContainer>

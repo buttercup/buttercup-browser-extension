@@ -1,5 +1,12 @@
 import extractDomain from "extract-domain";
-import { Archive, createCredentials, EntryFinder, WebDAVDatasource, Workspace } from "buttercup/dist/buttercup-web.js";
+import {
+    Archive,
+    createCredentials,
+    EntryFinder,
+    WebDAVDatasource,
+    Workspace,
+    Group
+} from "buttercup/dist/buttercup-web.js";
 import { getArchiveManager } from "./buttercup.js";
 import log from "../../shared/library/log.js";
 import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
@@ -111,6 +118,10 @@ export function addWebDAVArchive(payload) {
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
         });
+}
+
+export function archiveToObjectGroupsOnly(archive) {
+    return archive.toObject(Group.OutputFlag.Groups);
 }
 
 export function generateEntryPath(entry) {

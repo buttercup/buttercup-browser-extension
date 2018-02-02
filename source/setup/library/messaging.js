@@ -9,6 +9,18 @@ export function connectToBackground() {
     __backgroundPort.onMessage.addListener(handleBackgroundMessage);
 }
 
+export function getArchivesGroupTree(sourceID) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-groups-tree", sourceID }, resp => {
+            if (resp && resp.ok) {
+                resolve(resp.groups);
+            } else {
+                reject(new Error(`Failed getting archive contents: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
+}
+
 export function getLastLogin() {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "get-used-credentials", force: true }, resp => {
