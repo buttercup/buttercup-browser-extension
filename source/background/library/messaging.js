@@ -19,7 +19,7 @@ import {
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 
-const LAST_LOGIN_MAX_AGE = 5 * 60 * 1000; // 5 minutes
+const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
