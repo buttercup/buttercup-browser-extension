@@ -6,6 +6,7 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { version } = require("./package.json");
 
 const { NormalModuleReplacementPlugin, DefinePlugin } = webpack;
+const { CommonsChunkPlugin } = webpack.optimize;
 
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
@@ -46,6 +47,10 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
                     use: "pug-loader"
                 }
             ]
+        },
+
+        node: {
+            fs: "empty"
         },
 
         resolve: {
@@ -142,10 +147,13 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
 });
 
 const setupConfig = Object.assign({}, getBaseConfig(), {
-    entry: path.resolve(SRC_SETUP, "./index.js"),
+    entry: {
+        setup: path.resolve(SRC_SETUP, "./index.js"),
+        "setup-buttercup": ["buttercup", "@buttercup/ui", "@buttercup/channel-queue"]
+    },
 
     output: {
-        filename: "setup.js",
+        filename: "[name].js",
         path: DIST
     },
 
@@ -157,7 +165,8 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
             filename: "setup.html",
             inject: "body"
         }),
-        new NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop")
+        new NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop"),
+        new CommonsChunkPlugin("setup-common")
     ]
 });
 
