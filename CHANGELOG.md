@@ -1,11 +1,16 @@
 # Buttercup browser extension changelog
 
-## 1.1.0
+## v1.1.1
+_2018-02-04_
+
+ * Improve URL filtering for new credentials saving
+
+## v1.1.0
 _2018-02-04_
 
  * ([#112](https://github.com/buttercup/buttercup-browser-extension/issues/106)) Save newly-entered credentials
 
-## 1.0.7
+## v1.0.7
 _2018-01-22_
 
  * Add data collection event listeners for form attachments
