@@ -3,12 +3,10 @@ import { getCurrentTitle, getCurrentURL } from "./page.js";
 let __sharedTracker = null;
 
 export default class LoginTracker {
-    constructor() {
-        this.username = "";
-        this.password = "";
-        this._url = getCurrentURL();
-        this._title = getCurrentTitle();
-    }
+    username = "";
+    password = "";
+    _url = getCurrentTitle();
+    _title = getCurrentTitle();
 
     get title() {
         return this._title;

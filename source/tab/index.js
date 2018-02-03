@@ -32,13 +32,12 @@ const waitAndAttachLaunchButtons = () => {
                     },
                     () => {
                         const tracker = getSharedTracker();
-                        const now = new Date();
                         transferLoginCredentials({
                             username: tracker.username,
                             password: tracker.password,
                             url: tracker.url,
                             title: tracker.title,
-                            timestamp: now.getTime()
+                            timestamp: Date.now()
                         });
                     }
                 );
