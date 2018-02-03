@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Async as Select } from "react-select";
+import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
 import Spinner from "react-spinkit";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
@@ -8,6 +9,12 @@ import { notifyError } from "../library/notify.js";
 import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
+
+const FormInputItemColumnLayout = styled(FormInputItem)`
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+`;
 
 function flattenGroups(groups) {
     const processed = [];
@@ -30,6 +37,10 @@ const LoaderContainer = styled.div`
     justify-content: center;
     align-items: center;
 `;
+const NoArchivesNotice = styled.span`
+    font-size: 13px;
+    color: rgb(242, 159, 4);
+`;
 const SelectArchiveHint = styled.span`
     font-style: italic;
     font-color: #444;
@@ -49,7 +60,6 @@ class SaveCredentialsPage extends Component {
         fetchLoginDetails: PropTypes.func.isRequired
     };
 
-    // We store some details in the state, because they're sensitive:
     state = {
         groupID: "",
         loading: true,
@@ -84,6 +94,15 @@ class SaveCredentialsPage extends Component {
     }
 
     fetchArchiveOptions(input) {
+        if (this.state.sourceID && this.state.sourceID.length > 0) {
+            const sourceItem = this.props.archives.find(archive => archive.id === this.state.sourceID);
+            if (!sourceItem) {
+                this.setState({
+                    groupID: "",
+                    sourceID: ""
+                });
+            }
+        }
         return Promise.resolve({
             options: this.props.archives.map(archive => ({
                 value: archive.id,
@@ -195,7 +214,7 @@ class SaveCredentialsPage extends Component {
                             </FormRow>
                             <FormRow>
                                 <FormLegendItem>Archive</FormLegendItem>
-                                <FormInputItem>
+                                <FormInputItemColumnLayout>
                                     <Select
                                         name="sourceID"
                                         value={this.state.sourceID}
@@ -210,7 +229,14 @@ class SaveCredentialsPage extends Component {
                                         loadingPlaceholder="Fetching archives..."
                                         loadOptions={::this.fetchArchiveOptions}
                                     />
-                                </FormInputItem>
+                                    <If condition={this.props.archives.length <= 0}>
+                                        <NoArchivesNotice>
+                                            <FontAwesome name="exclamation-circle" /> No <strong>unlocked</strong>{" "}
+                                            archives were found. You must unlock at least one archive to be able to save
+                                            new credentials.
+                                        </NoArchivesNotice>
+                                    </If>
+                                </FormInputItemColumnLayout>
                             </FormRow>
                             <FormRow>
                                 <FormLegendItem>Group</FormLegendItem>

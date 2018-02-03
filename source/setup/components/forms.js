@@ -33,7 +33,7 @@ export const FormRow = styled.div`
     justify-content: flex-start;
     align-content: stretch;
     align-items: center;
-    height: 56px;
+    min-height: 56px;
 `;
 
 export const FormInputItem = styled.div`
@@ -44,5 +44,5 @@ export const FormInputItem = styled.div`
     padding-left: 10px;
     width: 100%;
     border-left: 1px solid #eee;
-    height: 56px;
+    min-height: 56px;
 `;
