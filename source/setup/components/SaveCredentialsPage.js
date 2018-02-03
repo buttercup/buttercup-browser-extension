@@ -57,7 +57,8 @@ class SaveCredentialsPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
         fetchGroupsForArchive: PropTypes.func.isRequired,
-        fetchLoginDetails: PropTypes.func.isRequired
+        fetchLoginDetails: PropTypes.func.isRequired,
+        saveNewCredentials: PropTypes.func.isRequired
     };
 
     state = {
@@ -144,6 +145,17 @@ class SaveCredentialsPage extends Component {
             groupID: "",
             groups: [],
             sourceID: value
+        });
+    }
+
+    handleSaveClicked(event) {
+        event.preventDefault();
+        this.props.saveNewCredentials(this.state.sourceID, this.state.groupID, {
+            username: this.state.username,
+            password: this.state.password,
+            confirmPassword: this.state.passwordConfirm,
+            title: this.state.title,
+            url: this.state.url
         });
     }
 
@@ -266,7 +278,7 @@ class SaveCredentialsPage extends Component {
                             </FormRow>
                         </FormContainer>
                         <FormButtonContainer>
-                            <ButtercupButton onClick={event => {}}>Save New Entry</ButtercupButton>
+                            <ButtercupButton onClick={::this.handleSaveClicked}>Save New Entry</ButtercupButton>
                             <ButtercupButton onClick={event => {}}>Cancel</ButtercupButton>
                         </FormButtonContainer>
                     </Otherwise>
