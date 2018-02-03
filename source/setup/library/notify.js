@@ -18,3 +18,13 @@ export function notifySuccess(title, message) {
         level: "success"
     });
 }
+
+export function notifyWarning(title, message) {
+    const notifications = getNotificationSystem();
+    notifications.addNotification({
+        title,
+        message,
+        autoDismiss: 10,
+        level: "warning"
+    });
+}

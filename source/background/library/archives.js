@@ -1,5 +1,12 @@
 import extractDomain from "extract-domain";
-import { Archive, createCredentials, EntryFinder, WebDAVDatasource, Workspace } from "buttercup/dist/buttercup-web.js";
+import {
+    Archive,
+    createCredentials,
+    EntryFinder,
+    WebDAVDatasource,
+    Workspace,
+    Group
+} from "../../shared/library/buttercup.js";
 import { getArchiveManager } from "./buttercup.js";
 import log from "../../shared/library/log.js";
 import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
@@ -39,6 +46,23 @@ export function addDropboxArchive(payload) {
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
         });
+}
+
+export function addNewEntry(sourceID, groupID, title, username, password, url) {
+    log.info(`Adding new login credentials: ${title} (${url})`);
+    return getArchive(sourceID)
+        .then(archive => {
+            const targetGroup = archive.findGroupByID(groupID);
+            if (!targetGroup) {
+                throw new Error(`Failed adding new entry: No group found for ID: ${groupID}`);
+            }
+            const entry = targetGroup.createEntry(title);
+            entry.setProperty("username", username).setProperty("password", password);
+            if (url && url.length > 0) {
+                entry.setMeta("URL", url);
+            }
+        })
+        .then(() => saveSource(sourceID));
 }
 
 export function addNextcloudArchive(payload) {
@@ -111,6 +135,10 @@ export function addWebDAVArchive(payload) {
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
         });
+}
+
+export function archiveToObjectGroupsOnly(archive) {
+    return archive.toObject(Group.OutputFlag.Groups);
 }
 
 export function generateEntryPath(entry) {
@@ -218,6 +246,21 @@ export function lockSources() {
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
     return getArchiveManager().then(archiveManager => archiveManager.remove(sourceID));
+}
+
+export function saveSource(sourceID) {
+    return getArchiveManager().then(archiveManager => {
+        const sourceIndex = archiveManager.indexOfSource(sourceID);
+        const source = archiveManager.unlockedSources[sourceIndex];
+        if (!source) {
+            throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
+        }
+        const { workspace } = source;
+        return workspace
+            .localDiffersFromRemote()
+            .then(differs => (differs ? workspace.mergeSaveablesFromRemote().then(() => true) : false))
+            .then(shouldSave => (shouldSave ? workspace.save() : null));
+    });
 }
 
 export function sendCredentialsToTab(sourceID, entryID, signIn) {

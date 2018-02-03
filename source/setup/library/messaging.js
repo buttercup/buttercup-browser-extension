@@ -4,9 +4,54 @@ import log from "../../shared/library/log.js";
 
 let __backgroundPort = null;
 
+export function addNewEntry(sourceID, groupID, details) {
+    const payload = {
+        sourceID,
+        groupID,
+        ...details
+    };
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "add-new-entry", payload }, resp => {
+            if (resp && resp.ok) {
+                resolve();
+            } else {
+                reject(new Error(`Failed adding new entry: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
+}
+
+export function clearLastLogin() {
+    chrome.runtime.sendMessage({ type: "clear-used-credentials" });
+}
+
 export function connectToBackground() {
     __backgroundPort = chrome.runtime.connect({ name: "buttercup-state" });
     __backgroundPort.onMessage.addListener(handleBackgroundMessage);
+}
+
+export function getArchivesGroupTree(sourceID) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-groups-tree", sourceID }, resp => {
+            if (resp && resp.ok) {
+                resolve(resp.groups);
+            } else {
+                reject(new Error(`Failed getting archive contents: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
+}
+
+export function getLastLogin() {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-used-credentials", force: true }, resp => {
+            if (resp && resp.credentials && resp.credentials.title) {
+                resolve(resp.credentials);
+            } else {
+                reject(new Error("Failed getting last login details"));
+            }
+        });
+    });
 }
 
 function handleBackgroundMessage(message) {

@@ -39,7 +39,7 @@
   "devDependencies": {
     "@buttercup/channel-queue": "^0.2.2",
     "@buttercup/iconographer": "^0.2.1",
-    "@buttercup/locust": "^0.3.0",
+    "@buttercup/locust": "^0.5.0",
     "@buttercup/ui": "^0.6.2",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -80,6 +80,7 @@
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-redux": "^5.0.0-alpha.6",
+    "react-select": "^1.2.1",
     "react-spinkit": "^3.0.0",
     "redom": "^3.8.8",
     "redux": "^3.7.2",

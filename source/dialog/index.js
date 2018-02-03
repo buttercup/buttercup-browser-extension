@@ -7,6 +7,7 @@ import store from "./redux/index.js";
 import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
 import SearchPage from "./containers/SearchPage.js";
+import SaveNewCredentialsPage from "./containers/SaveNewCredentialsPage.js";
 
 import "../shared/styles/base.sass";
 import "./styles/dialog.sass";
@@ -19,6 +20,7 @@ ReactDOM.render(
         <ConnectedRouter history={history}>
             <div className="rootContainer">
                 <Route exact path="/" component={SearchPage} />
+                <Route path="/save-new-credentials" component={SaveNewCredentialsPage} />
             </div>
         </ConnectedRouter>
     </Provider>,
