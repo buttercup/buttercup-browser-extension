@@ -121,11 +121,22 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "save-used-credentials": {
             const { credentials } = request;
-            saveLastLogin({
-                ...credentials,
-                tabID: sender.tab.id
-            });
-            log.info(`Saved login credentials from tab: ${sender.tab.id}`);
+            const { url, username } = credentials;
+            getMatchingEntriesForURL(url)
+                .then(entries => entries.filter(entryResult => entryResult.entry.getProperty("username") === username))
+                .then(entries => {
+                    if (entries.length > 0) {
+                        log.info("Provided login details already exist for URL that was requested to be saved.");
+                        log.info(`Will not save login credentials from tab: ${sender.tab.id}`);
+                    } else {
+                        // No existing entries, ok to save
+                        log.info(`Saved login credentials from tab: ${sender.tab.id}`);
+                        saveLastLogin({
+                            ...credentials,
+                            tabID: sender.tab.id
+                        });
+                    }
+                });
             return false;
         }
         case "search-entries-for-term": {
