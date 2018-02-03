@@ -5,7 +5,7 @@ let __sharedTracker = null;
 export default class LoginTracker {
     username = "";
     password = "";
-    _url = getCurrentTitle();
+    _url = getCurrentURL();
     _title = getCurrentTitle();
 
     get title() {
