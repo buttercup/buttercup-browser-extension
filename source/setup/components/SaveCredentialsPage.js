@@ -148,6 +148,12 @@ class SaveCredentialsPage extends Component {
         });
     }
 
+    handleEditProperty(property, event) {
+        this.setState({
+            [property]: event.target.value
+        });
+    }
+
     handleSaveClicked(event) {
         event.preventDefault();
         this.props.saveNewCredentials(this.state.sourceID, this.state.groupID, {
@@ -177,7 +183,7 @@ class SaveCredentialsPage extends Component {
                                 <FormInputItem>
                                     <ButtercupInput
                                         placeholder="Enter entry title..."
-                                        onChange={event => {}}
+                                        onChange={event => this.handleEditProperty("title", event)}
                                         value={this.state.title}
                                     />
                                 </FormInputItem>
@@ -187,7 +193,7 @@ class SaveCredentialsPage extends Component {
                                 <FormInputItem>
                                     <ButtercupInput
                                         placeholder="Enter username..."
-                                        onChange={event => {}}
+                                        onChange={event => this.handleEditProperty("username", event)}
                                         value={this.state.username}
                                     />
                                 </FormInputItem>
@@ -197,7 +203,7 @@ class SaveCredentialsPage extends Component {
                                 <FormInputItem>
                                     <ButtercupInput
                                         placeholder="Enter password..."
-                                        onChange={event => {}}
+                                        onChange={event => this.handleEditProperty("password", event)}
                                         value={this.state.password}
                                         type="password"
                                     />
@@ -208,7 +214,7 @@ class SaveCredentialsPage extends Component {
                                 <FormInputItem>
                                     <ButtercupInput
                                         placeholder="Enter password again..."
-                                        onChange={event => {}}
+                                        onChange={event => this.handleEditProperty("passwordConfirm", event)}
                                         value={this.state.passwordConfirm}
                                         type="password"
                                     />
@@ -219,7 +225,7 @@ class SaveCredentialsPage extends Component {
                                 <FormInputItem>
                                     <ButtercupInput
                                         placeholder="Enter URL..."
-                                        onChange={event => {}}
+                                        onChange={event => this.handleEditProperty("url", event)}
                                         value={this.state.url}
                                     />
                                 </FormInputItem>
