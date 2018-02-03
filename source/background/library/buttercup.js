@@ -4,7 +4,7 @@ import {
     WebDAVDatasource,
     Web as ButtercupWeb,
     vendor as ButtercupVendor
-} from "buttercup/dist/buttercup-web.js";
+} from "../../shared/library/buttercup.js";
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";

@@ -6,7 +6,7 @@ import {
     WebDAVDatasource,
     Workspace,
     Group
-} from "buttercup/dist/buttercup-web.js";
+} from "../../shared/library/buttercup.js";
 import { getArchiveManager } from "./buttercup.js";
 import log from "../../shared/library/log.js";
 import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";

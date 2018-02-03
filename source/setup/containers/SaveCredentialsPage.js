@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import { Group } from "../../shared/library/buttercup.js";
 import SaveCredentialsPage from "../components/SaveCredentialsPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
 import { getArchivesGroupTree, getLastLogin } from "../library/messaging.js";
@@ -11,7 +12,11 @@ function processArchives(state) {
 }
 
 function processGroups(groups) {
-    return groups.map(group => ({
+    const groupIsTrash = group => {
+        const attributes = group.attributes || {};
+        return attributes[Group.Attributes.Role] === "trash";
+    };
+    return groups.filter(group => !groupIsTrash(group)).map(group => ({
         id: group.id,
         title: group.title,
         groups: processGroups(group.groups || [])

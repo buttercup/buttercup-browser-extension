@@ -1,5 +1,5 @@
-import Buttercup from "buttercup/dist/buttercup-web.js";
+import { Web } from "../../shared/library/buttercup.js";
 
 export function initialise() {
-    Buttercup.Web.HashingTools.patchCorePBKDF();
+    Web.HashingTools.patchCorePBKDF();
 }
