@@ -134,9 +134,10 @@ class SaveCredentialsPage extends Component {
             }));
     }
 
-    handleArchiveGroupChange(groupID) {
+    handleArchiveGroupChange(selected) {
+        const { value } = selected;
         this.setState({
-            groupID
+            groupID: value
         });
     }
 

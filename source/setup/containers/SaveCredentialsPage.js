@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { Group } from "../../shared/library/buttercup.js";
 import SaveCredentialsPage from "../components/SaveCredentialsPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
-import { clearLastLogin, getArchivesGroupTree, getLastLogin } from "../library/messaging.js";
+import { addNewEntry, clearLastLogin, getArchivesGroupTree, getLastLogin } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
@@ -51,8 +51,21 @@ export default connect(
                 const { username, password, confirmPassword, title, url } = entryDetails;
                 if (stringsAreSet(username, password, title)) {
                     if (confirmPassword === password) {
-                        // dispatch(setBusy("Saving credentials..."));
-                        console.log("YAY!");
+                        dispatch(setBusy("Saving credentials..."));
+                        addNewEntry(sourceID, groupID, entryDetails)
+                            .then(() => {
+                                notifySuccess("Save successful", "Successfully saved new credentials.");
+                                clearLastLogin();
+                                dispatch(unsetBusy());
+                                setTimeout(() => {
+                                    closeCurrentTab();
+                                }, 1000);
+                            })
+                            .catch(err => {
+                                dispatch(unsetBusy());
+                                notifyError("Failed saving credentials", err.message);
+                                console.error(err);
+                            });
                     } else {
                         notifyWarning("Unable to save credentials", "Passwords must match.");
                     }

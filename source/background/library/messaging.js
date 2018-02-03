@@ -3,6 +3,7 @@ import log from "../../shared/library/log.js";
 import { addPort, getPorts } from "./ports.js";
 import {
     addArchiveByRequest,
+    addNewEntry,
     archiveToObjectGroupsOnly,
     generateEntryPath,
     getArchive,
@@ -34,6 +35,19 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             // Async
+            return true;
+        }
+        case "add-new-entry": {
+            const { payload } = request;
+            const { username, password, url, title, sourceID, groupID } = payload;
+            addNewEntry(sourceID, groupID, title, username, password, url)
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
             return true;
         }
         case "clear-used-credentials":

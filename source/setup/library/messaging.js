@@ -4,6 +4,23 @@ import log from "../../shared/library/log.js";
 
 let __backgroundPort = null;
 
+export function addNewEntry(sourceID, groupID, details) {
+    const payload = {
+        sourceID,
+        groupID,
+        ...details
+    };
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "add-new-entry", payload }, resp => {
+            if (resp && resp.ok) {
+                resolve();
+            } else {
+                reject(new Error(`Failed adding new entry: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
+}
+
 export function clearLastLogin() {
     chrome.runtime.sendMessage({ type: "clear-used-credentials" });
 }

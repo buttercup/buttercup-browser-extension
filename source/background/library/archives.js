@@ -48,6 +48,23 @@ export function addDropboxArchive(payload) {
         });
 }
 
+export function addNewEntry(sourceID, groupID, title, username, password, url) {
+    log.info(`Adding new login credentials: ${title} (${url})`);
+    return getArchive(sourceID)
+        .then(archive => {
+            const targetGroup = archive.findGroupByID(groupID);
+            if (!targetGroup) {
+                throw new Error(`Failed adding new entry: No group found for ID: ${groupID}`);
+            }
+            const entry = targetGroup.createEntry(title);
+            entry.setProperty("username", username).setProperty("password", password);
+            if (url && url.length > 0) {
+                entry.setMeta("URL", url);
+            }
+        })
+        .then(() => saveSource(sourceID));
+}
+
 export function addNextcloudArchive(payload) {
     const { name, masterPassword, filename, url, username, password, create } = payload;
     log.info(`Attempting to connect Nextcloud archive '${filename}' from: ${url}`);
@@ -229,6 +246,21 @@ export function lockSources() {
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
     return getArchiveManager().then(archiveManager => archiveManager.remove(sourceID));
+}
+
+export function saveSource(sourceID) {
+    return getArchiveManager().then(archiveManager => {
+        const sourceIndex = archiveManager.indexOfSource(sourceID);
+        const source = archiveManager.unlockedSources[sourceIndex];
+        if (!source) {
+            throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
+        }
+        const { workspace } = source;
+        return workspace
+            .localDiffersFromRemote()
+            .then(differs => (differs ? workspace.mergeSaveablesFromRemote().then(() => true) : false))
+            .then(shouldSave => (shouldSave ? workspace.save() : null));
+    });
 }
 
 export function sendCredentialsToTab(sourceID, entryID, signIn) {
