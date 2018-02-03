@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { Group } from "../../shared/library/buttercup.js";
 import SaveCredentialsPage from "../components/SaveCredentialsPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
-import { getArchivesGroupTree, getLastLogin } from "../library/messaging.js";
+import { clearLastLogin, getArchivesGroupTree, getLastLogin } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
@@ -32,6 +32,10 @@ export default connect(
         archives: processArchives(state)
     }),
     {
+        cancel: () => () => {
+            clearLastLogin();
+            setTimeout(closeCurrentTab, 100);
+        },
         fetchGroupsForArchive: sourceID => () => {
             return getArchivesGroupTree(sourceID)
                 .then(processGroups)

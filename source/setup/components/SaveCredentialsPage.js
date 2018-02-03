@@ -56,6 +56,7 @@ const ArchiveShape = PropTypes.shape({
 class SaveCredentialsPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
+        cancel: PropTypes.func.isRequired,
         fetchGroupsForArchive: PropTypes.func.isRequired,
         fetchLoginDetails: PropTypes.func.isRequired,
         saveNewCredentials: PropTypes.func.isRequired
@@ -146,6 +147,11 @@ class SaveCredentialsPage extends Component {
             groups: [],
             sourceID: value
         });
+    }
+
+    handleCancelClick(event) {
+        event.preventDefault();
+        this.props.cancel();
     }
 
     handleEditProperty(property, event) {
@@ -285,7 +291,7 @@ class SaveCredentialsPage extends Component {
                         </FormContainer>
                         <FormButtonContainer>
                             <ButtercupButton onClick={::this.handleSaveClicked}>Save New Entry</ButtercupButton>
-                            <ButtercupButton onClick={event => {}}>Cancel</ButtercupButton>
+                            <ButtercupButton onClick={::this.handleCancelClick}>Cancel</ButtercupButton>
                         </FormButtonContainer>
                     </Otherwise>
                 </Choose>

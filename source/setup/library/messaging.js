@@ -4,6 +4,10 @@ import log from "../../shared/library/log.js";
 
 let __backgroundPort = null;
 
+export function clearLastLogin() {
+    chrome.runtime.sendMessage({ type: "clear-used-credentials" });
+}
+
 export function connectToBackground() {
     __backgroundPort = chrome.runtime.connect({ name: "buttercup-state" });
     __backgroundPort.onMessage.addListener(handleBackgroundMessage);
