@@ -4,7 +4,9 @@
   "description": "Buttercup browser extension for Chrome and Firefox.",
   "main": "source/background/index.js",
   "scripts": {
-    "build": "NODE_ENV=production webpack --progress",
+    "build": "run-s clean build:production",
+    "build:production": "NODE_ENV=production webpack --progress",
+    "clean": "rimraf dist/*",
     "dev": "webpack -w --progress",
     "dev:prod": "NODE_ENV=production webpack -w --progress",
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
@@ -87,6 +89,7 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
+    "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "scrolling": "^0.1.1",
     "striptags": "^3.1.0",
