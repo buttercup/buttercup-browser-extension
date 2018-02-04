@@ -18,10 +18,14 @@ export function migrateLocalStorageToChromeStorage(queue) {
             );
             log.info("(Migration)", `Migrating ${keys.length} keys`);
             return new Promise(resolve => {
-                browserStorage.set(payload, resolve);
+                browserStorage.set(payload, () => resolve(keys));
             });
         }, TASK_TYPE_HIGH_PRIORITY)
-        .then(() => {
+        .then(keys => {
+            log.info("(Migration)", "Removing original items");
+            keys.forEach(key => {
+                window.localStorage.removeItem(key);
+            });
             log.info("(Migration)", "Migration complete");
         });
 }
