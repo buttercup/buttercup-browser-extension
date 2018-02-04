@@ -19,6 +19,7 @@
 
 	"background": {
 		"scripts": [
+            "background-common.js",
 			"background.js"
 		]
 	},
