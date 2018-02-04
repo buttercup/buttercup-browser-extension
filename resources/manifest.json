@@ -19,8 +19,9 @@
 
 	"background": {
 		"scripts": [
-            "background-common.js",
-			"background.js"
+            "background-buttercup.js",
+            "background-vendor.js",
+            "background-index.js"
 		]
 	},
 
