@@ -2,7 +2,6 @@ import {
     ArchiveManager,
     createCredentials,
     WebDAVDatasource,
-    // Web as ButtercupWeb,
     vendor as ButtercupVendor
 } from "../../shared/library/buttercup.js";
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
@@ -12,7 +11,6 @@ import { addArchive, removeArchive, setArchiveLocked, setArchiveUnlocked } from 
 import BrowserStorageInterface from "./BrowserStorageInterface.js";
 import { migrateLocalStorageToChromeStorage } from "./storageMigration.js";
 
-// const { LocalStorageInterface } = ButtercupWeb;
 let __archiveManager, __queue;
 
 ButtercupVendor.webdavFS.setFetchMethod(window.fetch);
@@ -57,7 +55,6 @@ function attachArchiveManagerListeners(archiveManager) {
 function createArchiveManager() {
     const queue = getQueue();
     return queue.channel("archiveManager").enqueue(() => {
-        // const am = new ArchiveManager(new LocalStorageInterface());
         const am = new ArchiveManager(new BrowserStorageInterface());
         attachArchiveManagerListeners(am);
         return am.rehydrate().then(() => {
