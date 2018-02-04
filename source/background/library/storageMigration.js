@@ -8,14 +8,15 @@ export function migrateLocalStorageToChromeStorage(queue) {
         .channel("archiveManager")
         .enqueue(() => {
             const browserStorage = getDefaultStorageAdapter();
-            const payload = Object.keys(window.localStorage).reduce(
+            const keys = Object.keys(window.localStorage).filter(key => /^bcup_archivemgr/.test(key));
+            const payload = keys.reduce(
                 (current, key) => ({
                     ...current,
                     [key]: window.localStorage[key]
                 }),
                 {}
             );
-            log.info("(Migration)", `Migrating ${Object.keys(payload).length} keys`);
+            log.info("(Migration)", `Migrating ${keys.length} keys`);
             return new Promise(resolve => {
                 browserStorage.set(payload, resolve);
             });
