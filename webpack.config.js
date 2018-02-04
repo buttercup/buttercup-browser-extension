@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { version } = require("./package.json");
 
-const { NormalModuleReplacementPlugin, DefinePlugin } = webpack;
+const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
 const { CommonsChunkPlugin } = webpack.optimize;
 
 const DIST = path.resolve(__dirname, "./dist");
@@ -33,6 +33,10 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
                     test: /\.jsx?$/,
                     exclude: /node_modules/,
                     use: "babel-loader"
+                },
+                {
+                    test: /\.json$/i,
+                    use: "json-loader"
                 },
                 {
                     test: /\.s[ac]ss$/,
@@ -75,8 +79,10 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
 }
 
 function getBasePlugins() {
+    const common = [new NormalModuleReplacementPlugin(/\/iconv-loader/, "node-noop")];
     if (process.env.NODE_ENV === "production") {
         return [
+            ...common,
             new DefinePlugin({
                 "process.env": {
                     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
@@ -98,14 +104,17 @@ function getBasePlugins() {
             })
         ];
     }
-    return [];
+    return [...common];
 }
 
 const backgroundConfig = Object.assign({}, getBaseConfig(), {
-    entry: path.resolve(SRC_BACKGROUND, "./index.js"),
+    entry: {
+        background: path.resolve(SRC_BACKGROUND, "./index.js"),
+        "background-common": ["buttercup", "@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
+    },
 
     output: {
-        filename: "background.js",
+        filename: "[name].js",
         path: DIST
     },
 
@@ -123,15 +132,21 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
             {
                 from: path.join(RESOURCES, "buttercup-*.png")
             }
-        ])
+        ]),
+        new CommonsChunkPlugin({
+            name: "background-common",
+            minChunks: Infinity
+        })
     ]
 });
 
 const popupConfig = Object.assign({}, getBaseConfig(), {
-    entry: path.resolve(SRC_POPUP, "./index.js"),
+    entry: {
+        popup: path.resolve(SRC_POPUP, "./index.js")
+    },
 
     output: {
-        filename: "popup.js",
+        filename: "[name].js",
         path: DIST
     },
 
@@ -149,7 +164,7 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
 const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         setup: path.resolve(SRC_SETUP, "./index.js"),
-        "setup-buttercup": ["buttercup", "@buttercup/ui", "@buttercup/channel-queue"]
+        "setup-common": ["buttercup", "@buttercup/ui", "@buttercup/channel-queue"]
     },
 
     output: {
@@ -165,16 +180,21 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
             filename: "setup.html",
             inject: "body"
         }),
-        new NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop"),
-        new CommonsChunkPlugin("setup-common")
+        new CommonsChunkPlugin({
+            name: "setup-common",
+            minChunks: Infinity
+        })
     ]
 });
 
 const dialogConfig = Object.assign({}, getBaseConfig(), {
-    entry: path.resolve(SRC_DIALOG, "./index.js"),
+    entry: {
+        dialog: path.resolve(SRC_DIALOG, "./index.js"),
+        "dialog-common": ["buttercup", "@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
+    },
 
     output: {
-        filename: "dialog.js",
+        filename: "[name].js",
         path: DIST
     },
 
@@ -186,7 +206,10 @@ const dialogConfig = Object.assign({}, getBaseConfig(), {
             filename: "dialog.html",
             inject: "body"
         }),
-        new NormalModuleReplacementPlugin(/\/iconv-loader$/, "node-noop")
+        new CommonsChunkPlugin({
+            name: "dialog-common",
+            minChunks: Infinity
+        })
     ]
 });
 
