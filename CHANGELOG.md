@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v1.2.0
+_2018-02-04_
+
+ * Update code splitting configuration (Firefox submission fixes)
+
 ## v1.1.1
 _2018-02-04_
 
