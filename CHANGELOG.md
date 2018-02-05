@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v1.3.0
+_2018-02-05_
+
+ * Use `chrome.storage` for better data persistence
+
 ## v1.2.1
 _2018-02-04_
 
