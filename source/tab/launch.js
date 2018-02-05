@@ -36,6 +36,7 @@ export function attachLaunchButton(input) {
         // Create and add button
         const button = el("button", {
             type: "button",
+            tabIndex: -1,
             style: {
                 ...CLEAR_STYLES,
                 position: "absolute",
