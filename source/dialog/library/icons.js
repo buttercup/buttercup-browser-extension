@@ -1,5 +1,5 @@
 const { Iconographer, setDataFetcher, setTextFetcher } = require("@buttercup/iconographer");
-import IconLocalStorageInterface from "./IconLocalStorageInterface.js";
+import IconBrowserStorageInterface from "./IconBrowserStorageInterface.js";
 
 let __ic;
 
@@ -28,7 +28,7 @@ export function getIconForURL(url) {
 function getSharedInstance() {
     if (!__ic) {
         __ic = new Iconographer();
-        __ic.storageInterface = new IconLocalStorageInterface();
+        __ic.storageInterface = new IconBrowserStorageInterface();
         setTextFetcher(url => {
             return window.fetch(url).then(res => res.text());
         });
