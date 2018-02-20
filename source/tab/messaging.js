@@ -43,6 +43,10 @@ function startPostMessageListener() {
         hideSaveDialog();
     });
     postRobot.on("bcup-get-url", () => window.location.href);
+    postRobot.on("bcup-open-url", event => {
+        const { url } = event.data;
+        chrome.runtime.sendMessage({ type: "open-tab", url });
+    });
 }
 
 export function transferLoginCredentials(details) {
