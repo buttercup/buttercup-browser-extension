@@ -9,3 +9,7 @@ export function getTopURL() {
         return response.data;
     });
 }
+
+export function openURL(url) {
+    return postRobot.send(window.top, "bcup-open-url", { url });
+}
