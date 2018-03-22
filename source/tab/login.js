@@ -20,7 +20,7 @@ export function onIdentifiedTarget(callback) {
         getLoginTargets()
             .filter(target => locatedForms.includes(target.form) === false)
             .forEach(target => {
-                locatedForms.push(target);
+                locatedForms.push(target.form);
                 setTimeout(() => {
                     callback(target);
                 }, 0);

@@ -1,4 +1,3 @@
-import isVisible from "isvisible";
 import { onIdentifiedTarget, watchLogin } from "./login.js";
 import { attachLaunchButton } from "./launch.js";
 import { getLastLoginStatus, startMessageListeners, transferLoginCredentials } from "./messaging.js";
@@ -9,7 +8,7 @@ import { showSaveDialog } from "./saveDialog.js";
 function waitAndAttachLaunchButtons() {
     onIdentifiedTarget(loginTarget => {
         const { usernameField, passwordField } = loginTarget;
-        if (passwordField && isVisible(passwordField)) {
+        if (passwordField) {
             attachLaunchButton(passwordField);
         }
         if (usernameField) {
