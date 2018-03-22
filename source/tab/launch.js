@@ -61,14 +61,16 @@ export function attachLaunchButton(input) {
             toggleSearchDialog(input);
         };
         mount(input.offsetParent, button);
-        onBodyWidthResize(() => {
+        const reprocessButton = () => {
             left = input.offsetLeft + newInputWidth;
             top = input.offsetTop;
             setStyle(button, {
                 top: `${top}px`,
                 left: `${left}px`
             });
-        });
+        };
+        onBodyWidthResize(reprocessButton);
+        reprocessButton();
     };
     tryToAttach();
 }
