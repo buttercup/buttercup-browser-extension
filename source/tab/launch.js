@@ -3,11 +3,12 @@ import { CLEAR_STYLES, findBestZIndexInContainer } from "./styles.js";
 import { toggleSearchDialog } from "./searchDialog.js";
 import { onBodyWidthResize } from "./resize.js";
 import { getExtensionURL } from "../shared/library/extension.js";
+import { itemIsIgnored } from "./disable.js";
 
 const BUTTON_BACKGROUND_IMAGE = getExtensionURL(require("../../resources/content-button-background.png"));
 
 export function attachLaunchButton(input) {
-    if (input.dataset.bcup === "attached") {
+    if (input.dataset.bcup === "attached" || itemIsIgnored(input)) {
         return;
     }
     const { height: rawHeight, width: rawWidth, zIndex: zIndexRaw, backgroundColor } = window.getComputedStyle(

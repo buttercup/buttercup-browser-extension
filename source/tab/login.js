@@ -1,4 +1,5 @@
 import { getLoginTarget } from "@buttercup/locust";
+import { itemIsIgnored } from "./disable.js";
 
 const TARGET_SEARCH_INTERVAL = 1500;
 
@@ -28,7 +29,7 @@ export function waitForTarget() {
         let check;
         const findTarget = () => {
             const target = getLoginTarget();
-            if (target) {
+            if (target && itemIsIgnored(target.form) === false) {
                 clearInterval(check);
                 resolve(target);
                 return true;
