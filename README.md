@@ -20,6 +20,19 @@ This browser extension allows users to interface with password archives authored
 
 The extension can remotely connect to archives via Buttercup's common communication protocols (WebDAV, Dropbox etc.).
 
+### Usage
+The browser extension can be controlled from the **popup menu**, which is launched by pressing the Buttercup button in the browser menu. This menu displays a list of archives as well as settings and other items.
+
+When viewing pages that contain login forms, Buttercup can assist logging in when you interact with the login buttons (displayed beside detected login inputs).
+
+Buttercup can also remember new logins, which are detected as they occur.
+
+You can **block** Buttercup from detecting forms and inputs by applying the attribute `data-bcupignore=true`:
+
+```html
+<input type="email" data-bcupignore="true" />
+```
+
 ### Supported browsers
 [Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), Firefox and [Opera](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) (with the ["Download Chrome Extension"](https://addons.opera.com/en-gb/extensions/details/download-chrome-extension-9/) installed) are supported.
 

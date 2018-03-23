@@ -41,7 +41,7 @@
   "devDependencies": {
     "@buttercup/channel-queue": "^0.2.2",
     "@buttercup/iconographer": "^0.5.0",
-    "@buttercup/locust": "^0.5.0",
+    "@buttercup/locust": "^0.8.0",
     "@buttercup/ui": "^0.6.2",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -62,7 +62,6 @@
     "history": "^4.7.2",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
-    "isvisible": "^1.0.6",
     "json-loader": "^0.5.7",
     "lint-staged": "^5.0.0",
     "node-noop": "^1.0.0",

@@ -1,44 +1,39 @@
-import { getLoginTarget } from "@buttercup/locust";
+import { getLoginTarget, getLoginTargets } from "@buttercup/locust";
+import { itemIsIgnored } from "./disable.js";
 
 const TARGET_SEARCH_INTERVAL = 1500;
 
 export function enterLoginDetails(username, password, login = false) {
-    return waitForTarget().then(loginTarget => {
+    const loginTarget = getLoginTarget();
+    if (loginTarget) {
         if (login) {
             loginTarget.login(username, password);
         } else {
             loginTarget.enterDetails(username, password);
         }
-    });
-}
-
-export function identifySelectedInput(inputElement) {
-    const target = getLoginTarget();
-    const { usernameFields, passwordFields } = target;
-    if (usernameFields.includes(inputElement)) {
-        return "username";
-    } else if (passwordFields.includes(inputElement)) {
-        return "password";
     }
-    return null;
 }
 
-export function waitForTarget() {
-    return new Promise(resolve => {
-        let check;
-        const findTarget = () => {
-            const target = getLoginTarget();
-            if (target) {
-                clearInterval(check);
-                resolve(target);
-                return true;
-            }
-        };
-        const alreadyFound = findTarget();
-        if (!alreadyFound) {
-            check = setInterval(findTarget, TARGET_SEARCH_INTERVAL);
+export function onIdentifiedTarget(callback) {
+    const locatedForms = [];
+    const findTargets = () => {
+        getLoginTargets()
+            .filter(target => locatedForms.includes(target.form) === false)
+            .forEach(target => {
+                locatedForms.push(target.form);
+                setTimeout(() => {
+                    callback(target);
+                }, 0);
+            });
+    };
+    const checkInterval = setInterval(findTargets, TARGET_SEARCH_INTERVAL);
+    setTimeout(findTargets, 0);
+    return {
+        remove: () => {
+            clearInterval(checkInterval);
+            locatedForms.splice(0, locatedForms.length);
         }
-    });
+    };
 }
 
 export function watchLogin(target, usernameUpdate, passwordUpdate, onSubmit) {
