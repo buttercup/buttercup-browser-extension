@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v1.4.0
+_2018-03-23_
+
+ * ([#126](https://github.com/buttercup/buttercup-browser-extension/issues/126)) Add an attribute to allow inputs and forms to be ignored by Buttercup
+ * Support new login forms
+ * Update login form detection priorities
+
 ## v1.3.1
 _2018-02-20_
 
