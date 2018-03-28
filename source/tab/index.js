@@ -3,6 +3,7 @@ import { attachLaunchButton } from "./launch.js";
 import { getLastLoginStatus, startMessageListeners, transferLoginCredentials } from "./messaging.js";
 import { getSharedTracker } from "./LoginTracker.js";
 import { showSaveDialog } from "./saveDialog.js";
+import { watchInputs } from "./generator.js";
 
 // Wait for a target
 function waitAndAttachLaunchButtons() {
@@ -40,6 +41,9 @@ function waitAndAttachLaunchButtons() {
 
 // Manage login form detection
 waitAndAttachLaunchButtons();
+
+// Watch for inputs that can be used with password generation
+watchInputs();
 
 // Handle app communication
 startMessageListeners();

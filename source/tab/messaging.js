@@ -2,6 +2,7 @@ import postRobot from "post-robot";
 import { enterLoginDetails, submitLoginForm } from "./login.js";
 import { hideSearchDialog } from "./searchDialog.js";
 import { hideSaveDialog } from "./saveDialog.js";
+import { openGeneratorForCurrentInput } from "./generator.js";
 
 export function getLastLoginStatus() {
     return new Promise(resolve => {
@@ -27,6 +28,9 @@ function handleMessage(request, sender, sendResponse) {
             enterLoginDetails(entry.properties.username, entry.properties.password, signIn);
             return false;
         }
+        case "open-generator":
+            openGeneratorForCurrentInput();
+            break;
         default:
             throw new Error(`Unknown message received: ${request.type}`);
     }

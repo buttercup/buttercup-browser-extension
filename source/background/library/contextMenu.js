@@ -1,4 +1,4 @@
-import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
+import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 
 const CONTEXT_SHARED_ALL = {
     contexts: ["all"]
@@ -55,7 +55,13 @@ export function updateContextMenu() {
         title: "Generate password",
         parentId: __menu,
         onclick: () => {
-            // todo
+            getCurrentTab()
+                .then(tab => tab.id)
+                .then(tabID => {
+                    sendTabMessage(tabID, {
+                        type: "open-generator"
+                    });
+                });
         },
         ...CONTEXT_SHARED_EDITABLE
     });
