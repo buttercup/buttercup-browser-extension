@@ -10,14 +10,14 @@ let __currentInput, __stopTracking;
 
 export function openGeneratorForCurrentInput() {
     if (!__currentInput) {
-        console.error("Tried opening password generator, but no input marked as current");
+        throw new Error("Tried opening password generator, but no input marked as current");
     }
     showInputDialog(__currentInput, DIALOG_TYPE_PASSWORD_GENERATOR);
 }
 
 export function setPasswordForCurrentInput(password) {
     if (!__currentInput) {
-        console.error("Tried setting password, but no input marked as current");
+        throw new Error("Tried setting password, but no input marked as current");
     }
     setInputValue(__currentInput, password);
     hideInputDialog();
@@ -25,6 +25,7 @@ export function setPasswordForCurrentInput(password) {
 
 function stopTrackingInputs() {
     __stopTracking();
+    __stopTracking = null;
     __trackedInputs.splice(0, __trackedInputs.length);
     __trackingListeners.forEach(tracker => {
         try {
@@ -39,7 +40,7 @@ function trackInput(input) {
         return;
     }
     const inputType = input.getAttribute("type");
-    if (inputType && (inputType !== "text" && inputType !== "password")) {
+    if (inputType && /^(text|password|email)$/.test(inputType) === false) {
         return;
     }
     __trackedInputs.push(input);
@@ -53,10 +54,15 @@ export function watchInputs() {
     if (__stopTracking) {
         stopTrackingInputs();
     }
-    // check existing
-    [...document.getElementsByTagName("input")].forEach(input => trackInput(input));
+    // todo: debounce
+    const searchInputs = () => {
+        [...document.body.getElementsByTagName("input")].forEach(input => trackInput(input));
+    };
     // watch for new ones
     __stopTracking = mucus(document.body, function(changes) {
-        changes.added.filter(item => item instanceof HTMLInputElement).forEach(input => trackInput(input));
+        // changes.added.filter(item => item.tagName.toLowerCase() === "input").forEach(input => trackInput(input));
+        searchInputs();
     });
+    // check existing
+    searchInputs();
 }
