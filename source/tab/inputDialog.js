@@ -9,7 +9,13 @@ export const DIALOG_TYPE_PASSWORD_GENERATOR = "/generate-password";
 
 const DIALOG_SIZES = {
     [DIALOG_TYPE_ENTRY_PICKER]: [320, 280],
-    [DIALOG_TYPE_PASSWORD_GENERATOR]: [320, 340]
+    [DIALOG_TYPE_PASSWORD_GENERATOR]: [320, 330]
+};
+const DIALOG_STYLING = {
+    [DIALOG_TYPE_ENTRY_PICKER]: {},
+    [DIALOG_TYPE_PASSWORD_GENERATOR]: {
+        padding: "6px"
+    }
 };
 
 let __sharedInstance;
@@ -59,6 +65,7 @@ class InputDialog {
 function createDialog(dialogType) {
     const dialogURL = getExtensionURL(`dialog.html#${dialogType}`);
     const [width, height] = DIALOG_SIZES[dialogType];
+    const specificStyles = DIALOG_STYLING[dialogType];
     const frame = el("iframe", {
         style: {
             width: "100%",
@@ -76,7 +83,8 @@ function createDialog(dialogType) {
                 height: `${height}px`,
                 backgroundColor: "rgba(0, 0, 0, 0.85)",
                 position: "absolute",
-                zIndex: 9999999
+                zIndex: 9999999,
+                ...specificStyles
             }
         },
         frame
