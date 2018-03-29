@@ -34,6 +34,16 @@ export function searchEntriesForURL(url) {
     chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
 }
 
+export function setGeneratedPassword(password) {
+    // chrome.runtime.sendMessage({ type: "set-generated-password", password });
+    return getCurrentTab().then(tab => {
+        return sendTabMessage(tab.id, {
+            type: "set-generated-password",
+            password
+        });
+    });
+}
+
 function handleBackgroundMessage(message) {
     switch (message.type) {
         case "action": {

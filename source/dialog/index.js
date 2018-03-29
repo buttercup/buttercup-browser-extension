@@ -8,7 +8,7 @@ import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
 import SearchPage from "./containers/SearchPage.js";
 import SaveNewCredentialsPage from "./containers/SaveNewCredentialsPage.js";
-import PasswordGeneratorPage from "./components/PasswordGeneratorPage.js";
+import PasswordGeneratorPage from "./containers/PasswordGeneratorPage.js";
 
 import "../shared/styles/base.sass";
 import "./styles/dialog.sass";

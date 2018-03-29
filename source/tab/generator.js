@@ -1,6 +1,7 @@
 import mucus from "mucus";
 import listen from "event-listener";
-import { DIALOG_TYPE_PASSWORD_GENERATOR, showInputDialog } from "./inputDialog.js";
+import { DIALOG_TYPE_PASSWORD_GENERATOR, showInputDialog, hideInputDialog } from "./inputDialog.js";
+import { setInputValue } from "./input.js";
 
 const __trackedInputs = [];
 const __trackingListeners = [];
@@ -12,6 +13,14 @@ export function openGeneratorForCurrentInput() {
         console.error("Tried opening password generator, but no input marked as current");
     }
     showInputDialog(__currentInput, DIALOG_TYPE_PASSWORD_GENERATOR);
+}
+
+export function setPasswordForCurrentInput(password) {
+    if (!__currentInput) {
+        console.error("Tried setting password, but no input marked as current");
+    }
+    setInputValue(__currentInput, password);
+    hideInputDialog();
 }
 
 function stopTrackingInputs() {

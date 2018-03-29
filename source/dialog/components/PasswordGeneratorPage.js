@@ -19,10 +19,14 @@ const Generator = styled(GeneratorUserInterface)`
 `;
 
 class PasswordGeneratorPage extends Component {
+    static propTypes = {
+        onSetPassword: PropTypes.func.isRequired
+    };
+
     render() {
         return (
             <Background>
-                <Generator />
+                <Generator onGenerate={password => this.props.onSetPassword(password)} />
             </Background>
         );
     }
