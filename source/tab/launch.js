@@ -1,6 +1,6 @@
 import { el, mount, setStyle } from "redom";
 import { CLEAR_STYLES, findBestZIndexInContainer } from "./styles.js";
-import { toggleSearchDialog } from "./searchDialog.js";
+import { DIALOG_TYPE_ENTRY_PICKER, toggleInputDialog } from "./inputDialog.js";
 import { onBodyWidthResize } from "./resize.js";
 import { getExtensionURL } from "../shared/library/extension.js";
 import { itemIsIgnored } from "./disable.js";
@@ -59,7 +59,7 @@ export function attachLaunchButton(input) {
         button.onclick = event => {
             event.preventDefault();
             event.stopPropagation();
-            toggleSearchDialog(input);
+            toggleInputDialog(input, DIALOG_TYPE_ENTRY_PICKER);
         };
         mount(input.offsetParent, button);
         const reprocessButton = () => {

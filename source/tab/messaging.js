@@ -1,6 +1,6 @@
 import postRobot from "post-robot";
 import { enterLoginDetails, submitLoginForm } from "./login.js";
-import { hideSearchDialog } from "./searchDialog.js";
+import { hideInputDialog } from "./inputDialog.js";
 import { hideSaveDialog } from "./saveDialog.js";
 import { openGeneratorForCurrentInput } from "./generator.js";
 

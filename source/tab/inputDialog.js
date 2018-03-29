@@ -4,20 +4,24 @@ import { getExtensionURL } from "../shared/library/extension.js";
 import { CLEAR_STYLES } from "./styles.js";
 import { onBodyResize } from "./resize.js";
 
-const DIALOG_MARGIN = 10;
-const DIALOG_WIDTH = 320;
-const DIALOG_HEIGHT = 280;
+export const DIALOG_TYPE_ENTRY_PICKER = "/";
+export const DIALOG_TYPE_PASSWORD_GENERATOR = "/generate-password";
+
+const DIALOG_SIZES = {
+    [DIALOG_TYPE_ENTRY_PICKER]: [320, 280],
+    [DIALOG_TYPE_PASSWORD_GENERATOR]: [320, 340]
+};
 
 let __sharedInstance;
 
-class SearchDialog {
-    constructor() {
+class InputDialog {
+    constructor(dialogType) {
         this._input = null;
-        this._dialog = createDialog();
+        this._dialog = createDialog(dialogType);
         mount(document.body, this._dialog);
         this._onScroll = ::this.updatePosition;
         scrolling(document.body, this._onScroll);
-        this._onBodyClick = hideSearchDialog;
+        this._onBodyClick = hideInputDialog;
         document.body.addEventListener("click", this._onBodyClick, false);
         const { remove: removeBodyResizeListener } = onBodyResize(::this.updatePosition);
         this._removeBodyResizeListener = removeBodyResizeListener;
@@ -52,9 +56,9 @@ class SearchDialog {
     }
 }
 
-function createDialog() {
-    const dialogURL = getExtensionURL("dialog.html");
-    // console.log("URL", dialogURL);
+function createDialog(dialogType) {
+    const dialogURL = getExtensionURL(`dialog.html#${dialogType}`);
+    const [width, height] = DIALOG_SIZES[dialogType];
     const frame = el("iframe", {
         style: {
             width: "100%",
@@ -68,8 +72,8 @@ function createDialog() {
         {
             style: {
                 ...CLEAR_STYLES,
-                width: `${DIALOG_WIDTH}px`,
-                height: `${DIALOG_HEIGHT}px`,
+                width: `${width}px`,
+                height: `${height}px`,
                 backgroundColor: "rgba(0, 0, 0, 0.85)",
                 position: "absolute",
                 zIndex: 9999999
@@ -79,25 +83,25 @@ function createDialog() {
     );
 }
 
-export function hideSearchDialog() {
+export function hideInputDialog() {
     if (__sharedInstance) {
         __sharedInstance.destroy();
         __sharedInstance = null;
     }
 }
 
-export function showSearchDialog(targetInput) {
+export function showInputDialog(targetInput, dialogType) {
     if (__sharedInstance) {
-        hideSearchDialog();
+        hideInputDialog();
     }
-    __sharedInstance = new SearchDialog();
+    __sharedInstance = new InputDialog(dialogType);
     __sharedInstance.input = targetInput;
 }
 
-export function toggleSearchDialog(targetInput) {
+export function toggleInputDialog(targetInput, dialogType) {
     if (__sharedInstance) {
-        hideSearchDialog();
+        hideInputDialog();
     } else {
-        showSearchDialog(targetInput);
+        showInputDialog(targetInput, dialogType);
     }
 }
