@@ -8,6 +8,7 @@ import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
 import SearchPage from "./containers/SearchPage.js";
 import SaveNewCredentialsPage from "./containers/SaveNewCredentialsPage.js";
+import PasswordGeneratorPage from "./components/PasswordGeneratorPage.js";
 
 import "../shared/styles/base.sass";
 import "./styles/dialog.sass";
@@ -21,6 +22,7 @@ ReactDOM.render(
             <div className="rootContainer">
                 <Route exact path="/" component={SearchPage} />
                 <Route path="/save-new-credentials" component={SaveNewCredentialsPage} />
+                <Route path="/generate-password" component={PasswordGeneratorPage} />
             </div>
         </ConnectedRouter>
     </Provider>,
