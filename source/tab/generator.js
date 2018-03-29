@@ -1,5 +1,6 @@
 import mucus from "mucus";
 import listen from "event-listener";
+import debounce from "debounce";
 import { DIALOG_TYPE_PASSWORD_GENERATOR, showInputDialog, hideInputDialog } from "./inputDialog.js";
 import { setInputValue } from "./input.js";
 
@@ -54,10 +55,9 @@ export function watchInputs() {
     if (__stopTracking) {
         stopTrackingInputs();
     }
-    // todo: debounce
-    const searchInputs = () => {
+    const searchInputs = debounce(() => {
         [...document.body.getElementsByTagName("input")].forEach(input => trackInput(input));
-    };
+    }, 200);
     // watch for new ones
     __stopTracking = mucus(document.body, function(changes) {
         // changes.added.filter(item => item.tagName.toLowerCase() === "input").forEach(input => trackInput(input));

@@ -54,6 +54,7 @@
     "console.style": "^0.2.2",
     "copy-webpack-plugin": "^4.2.0",
     "css-loader": "^0.28.7",
+    "debounce": "^1.1.0",
     "dropbox": "^2.5.12",
     "dropbox-fs": "^0.1.0",
     "event-listener": "^1.1.0",
