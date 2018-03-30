@@ -35,7 +35,6 @@ export function searchEntriesForURL(url) {
 }
 
 export function setGeneratedPassword(password) {
-    // chrome.runtime.sendMessage({ type: "set-generated-password", password });
     return getCurrentTab().then(tab => {
         return sendTabMessage(tab.id, {
             type: "set-generated-password",

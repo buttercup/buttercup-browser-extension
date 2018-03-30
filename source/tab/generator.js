@@ -60,7 +60,6 @@ export function watchInputs() {
     }, 200);
     // watch for new ones
     __stopTracking = mucus(document.body, function(changes) {
-        // changes.added.filter(item => item.tagName.toLowerCase() === "input").forEach(input => trackInput(input));
         searchInputs();
     });
     // check existing
