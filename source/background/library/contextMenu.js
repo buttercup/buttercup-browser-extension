@@ -15,19 +15,27 @@ export function updateContextMenu() {
         title: "Buttercup",
         ...CONTEXT_SHARED_ALL
     });
-    const unlockArchiveMenu = chrome.contextMenus.create({
-        title: "Unlock archive",
-        parentId: __menu,
-        ...CONTEXT_SHARED_ALL
-    });
     chrome.contextMenus.create({
-        title: "Lock all archives",
+        title: "About",
         parentId: __menu,
         onclick: () => {
-            createNewTab(getExtensionURL("setup.html#/lock-archives"));
+            createNewTab(getExtensionURL("setup.html#/about"));
         },
         ...CONTEXT_SHARED_ALL
     });
+    // const unlockArchiveMenu = chrome.contextMenus.create({
+    //     title: "Unlock archive",
+    //     parentId: __menu,
+    //     ...CONTEXT_SHARED_ALL
+    // });
+    // chrome.contextMenus.create({
+    //     title: "Lock all archives",
+    //     parentId: __menu,
+    //     onclick: () => {
+    //         createNewTab(getExtensionURL("setup.html#/lock-archives"));
+    //     },
+    //     ...CONTEXT_SHARED_ALL
+    // });
     chrome.contextMenus.create({
         parentId: __menu,
         type: "separator",
