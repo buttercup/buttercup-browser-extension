@@ -33,24 +33,24 @@ export function updateContextMenu() {
         type: "separator",
         ...CONTEXT_SHARED_ALL
     });
-    chrome.contextMenus.create({
-        title: "Log in using",
-        parentId: __menu,
-        onclick: () => {
-            // todo
-        },
-        enabled: false,
-        ...CONTEXT_SHARED_ALL
-    });
-    chrome.contextMenus.create({
-        title: "Enter login details",
-        parentId: __menu,
-        onclick: () => {
-            // todo
-        },
-        enabled: false,
-        ...CONTEXT_SHARED_ALL
-    });
+    // chrome.contextMenus.create({
+    //     title: "Log in using",
+    //     parentId: __menu,
+    //     onclick: () => {
+    //         // todo
+    //     },
+    //     enabled: false,
+    //     ...CONTEXT_SHARED_ALL
+    // });
+    // chrome.contextMenus.create({
+    //     title: "Enter login details",
+    //     parentId: __menu,
+    //     onclick: () => {
+    //         // todo
+    //     },
+    //     enabled: false,
+    //     ...CONTEXT_SHARED_ALL
+    // });
     chrome.contextMenus.create({
         title: "Generate password",
         parentId: __menu,
