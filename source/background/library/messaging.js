@@ -19,7 +19,7 @@ import {
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
-import { createNewTab } from "../../shared/library/extension.js";
+import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 
 const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
@@ -175,6 +175,15 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             return true;
+        }
+        case "set-generated-password": {
+            const { password } = request;
+            getCurrentTab().then(tab => {
+                sendTabMessage(tab.id, {
+                    type: "set-generated-password",
+                    password
+                });
+            });
         }
         case "unlock-archive": {
             const { sourceID, masterPassword } = request;

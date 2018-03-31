@@ -1,7 +1,6 @@
 import { dispatch } from "../redux/index.js";
 import { setEntireState } from "../../shared/actions/app.js";
 import log from "../../shared/library/log.js";
-import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 
 let __backgroundPort = null;
 
@@ -35,12 +34,7 @@ export function searchEntriesForURL(url) {
 }
 
 export function setGeneratedPassword(password) {
-    return getCurrentTab().then(tab => {
-        return sendTabMessage(tab.id, {
-            type: "set-generated-password",
-            password
-        });
-    });
+    chrome.runtime.sendMessage({ type: "set-generated-password", password });
 }
 
 function handleBackgroundMessage(message) {
