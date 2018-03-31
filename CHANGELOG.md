@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v1.5.0
+_2018-03-31_
+
+ * Password generator
+ * Right-click context menu
+
 ## v1.4.0
 _2018-03-23_
 
