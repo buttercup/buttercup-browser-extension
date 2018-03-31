@@ -6,6 +6,9 @@ import LayoutMain from "./LayoutMain.js";
 
 const Background = styled(LayoutMain)`
     background: #31353d;
+    padding: 6px;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
 `;
 const Generator = styled(GeneratorUserInterface)`
     width: 100%;

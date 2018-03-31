@@ -9,11 +9,12 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    overflow: hidden;
 `;
 
 class LayoutMain extends Component {
     render() {
-        return <Container>{this.props.children}</Container>;
+        return <Container className={this.props.className}>{this.props.children}</Container>;
     }
 }
 

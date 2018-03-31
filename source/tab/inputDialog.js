@@ -13,9 +13,7 @@ const DIALOG_SIZES = {
 };
 const DIALOG_STYLING = {
     [DIALOG_TYPE_ENTRY_PICKER]: {},
-    [DIALOG_TYPE_PASSWORD_GENERATOR]: {
-        padding: "6px"
-    }
+    [DIALOG_TYPE_PASSWORD_GENERATOR]: {}
 };
 
 let __sharedInstance;
