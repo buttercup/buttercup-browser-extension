@@ -4,7 +4,7 @@ const CONTEXT_SHARED_ALL = {
     contexts: ["all"]
 };
 const CONTEXT_SHARED_EDITABLE = {
-    contexts: ["editable"]
+    contexts: ["editable", "password"]
 };
 
 let __menu;
