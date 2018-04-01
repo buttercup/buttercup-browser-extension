@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v1.6.0
+_2018-04-01_
+
+ * "password" type input support for Firefox and the password generator
+ * ([#134](https://github.com/buttercup/buttercup-browser-extension/issues/134)) Password generator "Use this" button fails on Firefox
+ * ([#133](https://github.com/buttercup/buttercup-browser-extension/issues/133)) Password generator bad padding issue
+
 ## v1.5.0
 _2018-03-31_
 
