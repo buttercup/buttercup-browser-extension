@@ -46,7 +46,7 @@ export function startMessageListeners() {
 
 function startPostMessageListener() {
     postRobot.on("bcup-close-dialog", () => {
-        hideSearchDialog();
+        hideInputDialog();
         hideSaveDialog();
     });
     postRobot.on("bcup-get-url", () => window.location.href);
