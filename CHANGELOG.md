@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v1.6.1
+_2018-04-01_
+
+ * ([#137](https://github.com/buttercup/buttercup-browser-extension/issues/137)) Unable to close save-new dialog
+
 ## v1.6.0
 _2018-04-01_
 
