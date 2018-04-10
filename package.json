@@ -41,7 +41,7 @@
     "@buttercup/channel-queue": "^0.2.2",
     "@buttercup/iconographer": "^0.5.0",
     "@buttercup/locust": "^0.8.0",
-    "@buttercup/ui": "^1.4.1",
+    "@buttercup/ui": "^1.4.2",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-jsx-control-statements": "^3.2.8",
