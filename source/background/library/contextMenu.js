@@ -1,10 +1,11 @@
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
+import { getBrowser } from "../../shared/library/browser.js";
 
 const CONTEXT_SHARED_ALL = {
     contexts: ["all"]
 };
 const CONTEXT_SHARED_EDITABLE = {
-    contexts: ["editable", "password"]
+    contexts: getBrowser() === "firefox" ? ["editable", "password"] : ["editable"]
 };
 
 let __menu;
