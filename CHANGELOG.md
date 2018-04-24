@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v1.6.2
+_2018-04-24_
+
+ * ([#139](https://github.com/buttercup/buttercup-browser-extension/issues/139)) No "Generate password" option shown when right-clicking inputs (Firefox/Chrome)
+
 ## v1.6.1
 _2018-04-01_
 
