@@ -22,7 +22,9 @@ export const FormLegendItem = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 250px;
+    width: 160px;
+    flex-grow: 0;
+    flex-shrink: 0;
 `;
 
 export const FormRow = styled.div`
@@ -38,6 +40,7 @@ export const FormRow = styled.div`
 
 export const FormInputItem = styled.div`
     flex-grow: 2;
+    flex-shrink: 1;
     display: flex;
     flex-direction: row;
     align-items: center;

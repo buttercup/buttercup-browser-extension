@@ -48,27 +48,23 @@ export default connect(
         fetchLoginDetails: () => () => getLastLogin(),
         saveNewCredentials: (sourceID, groupID, entryDetails) => dispatch => {
             if (sourceID && groupID) {
-                const { username, password, confirmPassword, title, url } = entryDetails;
+                const { username, password, title, url } = entryDetails;
                 if (stringsAreSet(username, password, title)) {
-                    if (confirmPassword === password) {
-                        dispatch(setBusy("Saving credentials..."));
-                        addNewEntry(sourceID, groupID, entryDetails)
-                            .then(() => {
-                                notifySuccess("Save successful", "Successfully saved new credentials.");
-                                clearLastLogin();
-                                dispatch(unsetBusy());
-                                setTimeout(() => {
-                                    closeCurrentTab();
-                                }, 1000);
-                            })
-                            .catch(err => {
-                                dispatch(unsetBusy());
-                                notifyError("Failed saving credentials", err.message);
-                                console.error(err);
-                            });
-                    } else {
-                        notifyWarning("Unable to save credentials", "Passwords must match.");
-                    }
+                    dispatch(setBusy("Saving credentials..."));
+                    addNewEntry(sourceID, groupID, entryDetails)
+                        .then(() => {
+                            notifySuccess("Save successful", "Successfully saved new credentials.");
+                            clearLastLogin();
+                            dispatch(unsetBusy());
+                            setTimeout(() => {
+                                closeCurrentTab();
+                            }, 1000);
+                        })
+                        .catch(err => {
+                            dispatch(unsetBusy());
+                            notifyError("Failed saving credentials", err.message);
+                            console.error(err);
+                        });
                 } else {
                     notifyWarning(
                         "Unable to save credentials",

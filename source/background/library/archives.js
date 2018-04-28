@@ -251,7 +251,7 @@ export function removeSource(sourceID) {
 export function saveSource(sourceID) {
     return getArchiveManager().then(archiveManager => {
         const sourceIndex = archiveManager.indexOfSource(sourceID);
-        const source = archiveManager.unlockedSources[sourceIndex];
+        const source = archiveManager.sources[sourceIndex];
         if (!source) {
             throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
         }
