@@ -66,7 +66,6 @@ class SaveCredentialsPage extends Component {
         groupID: "",
         loading: true,
         password: "",
-        passwordConfirm: "",
         sourceID: "",
         title: "",
         url: "",
@@ -166,7 +165,6 @@ class SaveCredentialsPage extends Component {
         this.props.saveNewCredentials(this.state.sourceID, this.state.groupID, {
             username: this.state.username,
             password: this.state.password,
-            confirmPassword: this.state.passwordConfirm,
             title: this.state.title,
             url: this.state.url
         });
@@ -212,17 +210,6 @@ class SaveCredentialsPage extends Component {
                                         placeholder="Enter password..."
                                         onChange={event => this.handleEditProperty("password", event)}
                                         value={this.state.password}
-                                        type="password"
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>Confirm Password</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter password again..."
-                                        onChange={event => this.handleEditProperty("passwordConfirm", event)}
-                                        value={this.state.passwordConfirm}
                                         type="password"
                                     />
                                 </FormInputItem>
