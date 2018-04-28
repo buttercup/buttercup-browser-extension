@@ -63,14 +63,20 @@ export function attachLaunchButton(input) {
         };
         mount(input.offsetParent, button);
         const reprocessButton = () => {
-            left = input.offsetLeft + newInputWidth;
-            top = input.offsetTop;
-            setStyle(button, {
-                top: `${top}px`,
-                left: `${left}px`
-            });
+            try {
+                left = input.offsetLeft + newInputWidth;
+                top = input.offsetTop;
+                setStyle(button, {
+                    top: `${top}px`,
+                    left: `${left}px`
+                });
+            } catch (err) {
+                clearInterval(reprocessInterval);
+                removeOnBodyWidthResize();
+            }
         };
-        onBodyWidthResize(reprocessButton);
+        const { remove: removeOnBodyWidthResize } = onBodyWidthResize(reprocessButton);
+        const reprocessInterval = setInterval(reprocessButton, 1250);
         reprocessButton();
     };
     tryToAttach();
