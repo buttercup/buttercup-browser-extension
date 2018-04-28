@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v1.7.0
+_2018-04-28_
+
+ * ([#124](https://github.com/buttercup/buttercup-browser-extension/issues/124)) Simplify save-new login screen by removing password confirmation
+ * ([#141](https://github.com/buttercup/buttercup-browser-extension/issues/141)) Buttercup launch button layout issues
+ * Dependency updates
+
 ## v1.6.2
 _2018-04-24_
 

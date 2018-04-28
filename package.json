@@ -1,6 +1,6 @@
 {
   "name": "buttercup-browser-extension",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "Buttercup browser extension for Chrome and Firefox.",
   "main": "source/background/index.js",
   "scripts": {
