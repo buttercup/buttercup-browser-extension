@@ -15,6 +15,11 @@ const FormInputItemColumnLayout = styled(FormInputItem)`
     justify-content: center;
     align-items: flex-start;
 `;
+const PasswordHideButton = styled(ButtercupButton)`
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin-left: 4px;
+`;
 
 function flattenGroups(groups) {
     const processed = [];
@@ -66,6 +71,7 @@ class SaveCredentialsPage extends Component {
         groupID: "",
         loading: true,
         password: "",
+        showPassword: false,
         sourceID: "",
         title: "",
         url: "",
@@ -170,6 +176,13 @@ class SaveCredentialsPage extends Component {
         });
     }
 
+    handleShowPasswordClick(event, show) {
+        event.preventDefault();
+        this.setState({
+            showPassword: show
+        });
+    }
+
     render() {
         const selectedArchive = this.state.sourceID && this.state.sourceID.length > 0;
         return (
@@ -210,9 +223,25 @@ class SaveCredentialsPage extends Component {
                                         placeholder="Enter password..."
                                         onChange={event => this.handleEditProperty("password", event)}
                                         value={this.state.password}
-                                        type="password"
+                                        type={this.state.showPassword ? "text" : "password"}
                                     />
                                 </FormInputItem>
+                                <Choose>
+                                    <When condition={!this.state.showPassword}>
+                                        <PasswordHideButton
+                                            onClick={event => this.handleShowPasswordClick(event, true)}
+                                        >
+                                            <FontAwesome name="eye" />
+                                        </PasswordHideButton>
+                                    </When>
+                                    <Otherwise>
+                                        <PasswordHideButton
+                                            onClick={event => this.handleShowPasswordClick(event, false)}
+                                        >
+                                            <FontAwesome name="eye-slash" />
+                                        </PasswordHideButton>
+                                    </Otherwise>
+                                </Choose>
                             </FormRow>
                             <FormRow>
                                 <FormLegendItem>URL</FormLegendItem>
