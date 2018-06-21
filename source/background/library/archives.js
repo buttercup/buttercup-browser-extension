@@ -9,7 +9,7 @@ import {
 } from "../../shared/library/buttercup.js";
 import { getArchiveManager } from "./buttercup.js";
 import log from "../../shared/library/log.js";
-import { getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
+import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 
 export function addArchiveByRequest(payload) {
     switch (payload.type) {
@@ -139,6 +139,14 @@ export function addWebDAVArchive(payload) {
 
 export function archiveToObjectGroupsOnly(archive) {
     return archive.toObject(Group.OutputFlag.Groups);
+}
+
+export function checkUnlockPossibility() {
+    return getArchiveManager().then(archiveManager => {
+        if (archiveManager.sources.length > 0) {
+            createNewTab(getExtensionURL("setup.html#/unlock"));
+        }
+    });
 }
 
 export function generateEntryPath(entry) {
