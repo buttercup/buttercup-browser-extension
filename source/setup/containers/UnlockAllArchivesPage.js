@@ -20,11 +20,18 @@ export default connect(
         archives: getArchivesArray(state)
     }),
     {
-        onUnlockArchive: (sourceID, masterPassword) => dispatch => {
+        onUnlockArchive: (sourceID, masterPassword) => (dispatch, getState) => {
+            const state = getState();
+            const archives = getArchivesArray(state);
+            const isLast = archives.filter(a => a.state !== "unlocked" && a.sourceID !== sourceID).length === 0;
             return unlockArchive(sourceID, masterPassword)
                 .then(() => {
                     notifySuccess("Archive unlocked", "Successfully unlocked archive");
-                    setTimeout(() => {}, 1250);
+                    setTimeout(() => {
+                        if (isLast) {
+                            closeCurrentTab();
+                        }
+                    }, 1250);
                     return true;
                 })
                 .catch(err => {
@@ -32,22 +39,6 @@ export default connect(
                     notifyError("Failed unlocking archive", `Unable to unlock archive (${sourceID}): ${err.message}`);
                     return false;
                 });
-            // dispatch(setBusy("Unlocking archive..."));
-            // dispatch(setEditing(true));
-            // unlockArchive(sourceID, masterPassword)
-            //     .then(() => {
-            //         dispatch(unsetBusy());
-            //         notifySuccess("Archive unlocked", "Successfully unlocked archive");
-            //         setTimeout(() => {
-            //             closeCurrentTab();
-            //         }, 1250);
-            //     })
-            //     .catch(err => {
-            //         dispatch(setEditing(false));
-            //         dispatch(unsetBusy());
-            //         console.error(err);
-            //         notifyError("Failed unlocking archive", `Unable to unlock archive (${sourceID}): ${err.message}`);
-            //     });
         }
     }
 )(UnlockAllArchivesPage);

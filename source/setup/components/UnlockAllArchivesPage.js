@@ -41,7 +41,6 @@ class UnlockAllArchivesPage extends Component {
         onUnlockArchive: PropTypes.func.isRequired
     };
 
-    // We store some details in the state, because they're sensitive:
     state = {
         masterPasswords: {},
         unlocking: []
@@ -86,7 +85,6 @@ class UnlockAllArchivesPage extends Component {
 
     onInputKeyPress(event, sourceID) {
         if (event.key === "Enter") {
-            // this.props.onUnlockArchive(this.props.sourceID, this.state.masterPassword);
             this.handleUnlockArchive(undefined, sourceID);
         }
     }
