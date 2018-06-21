@@ -48,10 +48,32 @@ class UnlockAllArchivesPage extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            if (this._passwordInput) {
-                this._passwordInput.focus();
-            }
+            this.focusNextInput();
         }, 100);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const lockedCountCurrent = this.props.archives.reduce(
+            (total, ar) => total + (ar.state === "locked" ? 1 : 0),
+            0
+        );
+        if (nextProps.archives && nextProps.archives.length > 0) {
+            const nextLockedCount = nextProps.archives.reduce(
+                (total, ar) => total + (ar.state === "locked" ? 1 : 0),
+                0
+            );
+            if (nextLockedCount > 0 && nextLockedCount !== lockedCountCurrent) {
+                setTimeout(() => {
+                    this.focusNextInput();
+                }, 350);
+            }
+        }
+    }
+
+    focusNextInput() {
+        if (this._passwordInput) {
+            this._passwordInput.focus();
+        }
     }
 
     handleUnlockArchive(event, sourceID) {
@@ -90,6 +112,7 @@ class UnlockAllArchivesPage extends Component {
     }
 
     render() {
+        const firstLockedIndex = this.props.archives.findIndex(archive => archive.state === "locked");
         return (
             <LayoutMain title="Unlock archives">
                 <For each="archive" of={this.props.archives} index="archiveIndex">
@@ -120,7 +143,7 @@ class UnlockAllArchivesPage extends Component {
                                         value={this.state.masterPasswords[archive.sourceID] || ""}
                                         onKeyPress={event => this.onInputKeyPress(event, archive.sourceID)}
                                         innerRef={input => {
-                                            if (archiveIndex === 0) {
+                                            if (archiveIndex === firstLockedIndex) {
                                                 this._passwordInput = input;
                                             }
                                         }}
