@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import FontAwesome from "react-fontawesome";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
@@ -28,84 +29,117 @@ const ButtonsRow = styled.div`
     }
 `;
 
+const ArchiveShape = PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    sourceID: PropTypes.string.isRequired,
+    state: PropTypes.string.isRequired
+});
+
 class UnlockAllArchivesPage extends Component {
     static propTypes = {
-        archiveTitle: PropTypes.string.isRequired,
-        isEditing: PropTypes.bool.isRequired,
-        onLockArchive: PropTypes.func.isRequired,
-        onRemoveArchive: PropTypes.func.isRequired,
-        onUnlockArchive: PropTypes.func.isRequired,
-        sourceID: PropTypes.string.isRequired,
-        state: PropTypes.oneOf(["locked", "unlocked"]).isRequired
+        archives: PropTypes.arrayOf(ArchiveShape).isRequired,
+        onUnlockArchive: PropTypes.func.isRequired
     };
 
     // We store some details in the state, because they're sensitive:
     state = {
-        masterPassword: ""
+        masterPasswords: {},
+        unlocking: []
     };
 
     componentDidMount() {
         setTimeout(() => {
-            this._passwordInput.focus();
+            if (this._passwordInput) {
+                this._passwordInput.focus();
+            }
         }, 100);
     }
 
-    handleUnlockArchive(event) {
-        event.preventDefault();
-        this.props.onUnlockArchive(this.props.sourceID, this.state.masterPassword);
-    }
-
-    handleUpdateForm(property, event) {
-        this.setState({
-            [property]: event.target.value
+    handleUnlockArchive(event, sourceID) {
+        if (event) {
+            event.preventDefault();
+        }
+        this.setState({ unlocking: [...this.state.unlocking, sourceID] }, () => {
+            this.props.onUnlockArchive(sourceID, this.state.masterPasswords[sourceID]).then(unlocked => {
+                const newState = {
+                    unlocking: this.state.unlocking.filter(id => id !== sourceID)
+                };
+                if (unlocked) {
+                    newState.masterPasswords = {
+                        ...this.state.masterPasswords,
+                        [sourceID]: ""
+                    };
+                }
+                this.setState(newState);
+            });
         });
     }
 
-    onInputKeyPress(event) {
+    handleUpdatePassword(event, sourceID) {
+        this.setState({
+            masterPasswords: {
+                ...this.state.masterPasswords,
+                [sourceID]: event.target.value
+            }
+        });
+    }
+
+    onInputKeyPress(event, sourceID) {
         if (event.key === "Enter") {
-            this.props.onUnlockArchive(this.props.sourceID, this.state.masterPassword);
+            // this.props.onUnlockArchive(this.props.sourceID, this.state.masterPassword);
+            this.handleUnlockArchive(undefined, sourceID);
         }
     }
 
     render() {
-        const disableForm = this.props.isEditing;
-        let title, action;
-        switch (this.props.state) {
-            case "locked":
-                title = "Unlock Archive";
-                action = "Unlock";
-                break;
-            case "unlocked":
-                title = "Manage Archive";
-                action = "Manage";
-                break;
-            default:
-                throw new Error(`Unknown archive state: ${this.props.state}`);
-        }
         return (
-            <LayoutMain title={title}>
-                <h3>
-                    {action} '{this.props.archiveTitle}'
-                </h3>
-                <PasswordRow>
-                    <PasswordLabel>Password:</PasswordLabel>
-                    <ButtercupInput
-                        placeholder="Enter master password..."
-                        type="password"
-                        disabled={disableForm}
-                        onChange={event => this.handleUpdateForm("masterPassword", event)}
-                        value={this.state.masterPassword}
-                        onKeyPress={::this.onInputKeyPress}
-                        innerRef={input => {
-                            this._passwordInput = input;
-                        }}
-                    />
-                </PasswordRow>
-                <ButtonsRow>
-                    <ButtercupButton onClick={::this.handleUnlockArchive} disabled={disableForm}>
-                        Unlock
-                    </ButtercupButton>
-                </ButtonsRow>
+            <LayoutMain title="Unlock archives">
+                <For each="archive" of={this.props.archives} index="archiveIndex">
+                    <If condition={archiveIndex > 0}>
+                        <hr />
+                    </If>
+                    <Choose>
+                        <When condition={archive.state === "unlocked"}>
+                            <h3>
+                                <i>'{archive.title}' is unlocked...</i>
+                            </h3>
+                        </When>
+                        <Otherwise>
+                            <With unlocking={this.state.unlocking.includes(archive.sourceID)}>
+                                <h3>
+                                    <If condition={unlocking}>
+                                        <FontAwesome name="cog" spin />&nbsp;
+                                    </If>
+                                    Unlock '{archive.title}'
+                                </h3>
+                                <PasswordRow>
+                                    <PasswordLabel>Password:</PasswordLabel>
+                                    <ButtercupInput
+                                        placeholder="Enter master password..."
+                                        type="password"
+                                        disabled={unlocking}
+                                        onChange={event => this.handleUpdatePassword(event, archive.sourceID)}
+                                        value={this.state.masterPasswords[archive.sourceID] || ""}
+                                        onKeyPress={event => this.onInputKeyPress(event, archive.sourceID)}
+                                        innerRef={input => {
+                                            if (archiveIndex === 0) {
+                                                this._passwordInput = input;
+                                            }
+                                        }}
+                                    />
+                                </PasswordRow>
+                                <ButtonsRow>
+                                    <ButtercupButton
+                                        onClick={event => this.handleUnlockArchive(event, archive.sourceID)}
+                                        disabled={unlocking}
+                                    >
+                                        Unlock
+                                    </ButtercupButton>
+                                </ButtonsRow>
+                            </With>
+                        </Otherwise>
+                    </Choose>
+                </For>
             </LayoutMain>
         );
     }

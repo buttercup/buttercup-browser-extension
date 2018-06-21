@@ -7,6 +7,7 @@ import addArchive from "./addArchive.js";
 import dropbox from "../../shared/reducers/dropbox.js";
 import manageArchive from "./manageArchive.js";
 import remoteFiles from "./remoteFiles.js";
+import searching from "../../shared/reducers/searching.js";
 
 const appReducer = combineReducers({
     app,
@@ -15,6 +16,7 @@ const appReducer = combineReducers({
     dropbox,
     manageArchive,
     remoteFiles,
+    searching,
     setupRouting
 });
 
