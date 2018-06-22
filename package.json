@@ -51,7 +51,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "browser-info": "^1.2.0",
-    "buttercup": "^1.6.2",
+    "buttercup": "^1.7.1",
     "console.style": "^0.2.2",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
