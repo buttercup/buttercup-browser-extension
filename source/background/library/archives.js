@@ -1,15 +1,18 @@
 import extractDomain from "extract-domain";
 import {
     Archive,
-    createCredentials,
+    ArchiveSource,
+    Credentials,
+    Datasources,
     EntryFinder,
-    WebDAVDatasource,
     Workspace,
     Group
 } from "../../shared/library/buttercup.js";
 import { getArchiveManager } from "./buttercup.js";
 import log from "../../shared/library/log.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
+
+const { WebDAVDatasource } = Datasources;
 
 export function addArchiveByRequest(payload) {
     switch (payload.type) {
@@ -32,7 +35,7 @@ export function addDropboxArchive(payload) {
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
-            const dropboxCreds = createCredentials("dropbox");
+            const dropboxCreds = new Credentials("dropbox");
             dropboxCreds.setValue(
                 "datasource",
                 JSON.stringify({
@@ -41,10 +44,14 @@ export function addDropboxArchive(payload) {
                     path: filename
                 })
             );
-            return [archiveManager, dropboxCreds, createCredentials.fromPassword(masterPassword)];
+            return Promise.all([
+                dropboxCreds.toSecureString(masterPassword),
+                Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+            ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
+            return source.unlock(masterPassword, create).then(() => archiveManager.addSource(source));
         });
 }
 
@@ -71,7 +78,7 @@ export function addNextcloudArchive(payload) {
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
-            const nextcloudCreds = createCredentials("nextcloud");
+            const nextcloudCreds = new Credentials("nextcloud");
             nextcloudCreds.username = username;
             nextcloudCreds.password = password;
             nextcloudCreds.setValue(
@@ -82,10 +89,14 @@ export function addNextcloudArchive(payload) {
                     path: filename
                 })
             );
-            return [archiveManager, nextcloudCreds, createCredentials.fromPassword(masterPassword)];
+            return Promise.all([
+                nextcloudCreds.toSecureString(masterPassword),
+                Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+            ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
+            return source.unlock(masterPassword, create).then(() => archiveManager.addSource(source));
         });
 }
 
@@ -95,7 +106,7 @@ export function addOwnCloudArchive(payload) {
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
-            const owncloudCreds = createCredentials("owncloud");
+            const owncloudCreds = new Credentials("owncloud");
             owncloudCreds.username = username;
             owncloudCreds.password = password;
             owncloudCreds.setValue(
@@ -106,10 +117,14 @@ export function addOwnCloudArchive(payload) {
                     path: filename
                 })
             );
-            return [archiveManager, owncloudCreds, createCredentials.fromPassword(masterPassword)];
+            return Promise.all([
+                owncloudCreds.toSecureString(masterPassword),
+                Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+            ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
+            return source.unlock(masterPassword, create).then(() => archiveManager.addSource(source));
         });
 }
 
@@ -119,7 +134,7 @@ export function addWebDAVArchive(payload) {
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
-            const webdavCreds = createCredentials("webdav");
+            const webdavCreds = new Credentials("webdav");
             webdavCreds.username = username;
             webdavCreds.password = password;
             webdavCreds.setValue(
@@ -130,11 +145,16 @@ export function addWebDAVArchive(payload) {
                     path: filename
                 })
             );
-            return [archiveManager, webdavCreds, createCredentials.fromPassword(masterPassword)];
+            return Promise.all([
+                webdavCreds.toSecureString(masterPassword),
+                Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+            ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            return archiveManager.addSource(name, sourceCredentials, archiveCredentials, create);
-        });
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
+            return source.unlock(masterPassword, create).then(() => source);
+        })
+        .then(source => archiveManager.addSource(source));
 }
 
 export function archiveToObjectGroupsOnly(archive) {
@@ -162,8 +182,7 @@ export function generateEntryPath(entry) {
 
 export function getArchive(sourceID) {
     return getArchiveManager().then(archiveManager => {
-        const sourceIndex = archiveManager.indexOfSource(sourceID);
-        const source = archiveManager.sources[sourceIndex];
+        const source = archiveManager.getSourceForID(sourceID);
         if (!source) {
             throw new Error(`Unable to fetch archive: No source found for ID: ${sourceID}`);
         }
@@ -172,7 +191,7 @@ export function getArchive(sourceID) {
                 `Unable fetch archive: Invalid source state (should be unlocked: ${sourceID}): ${source.status}`
             );
         }
-        return source.workspace.primary.archive;
+        return source.workspace.archive;
     });
 }
 
@@ -186,15 +205,15 @@ export function getMatchingEntriesForSearchTerm(term) {
         const lookup = unlockedSources.reduce(
             (current, next) => ({
                 ...current,
-                [next.workspace.primary.archive.getID()]: next.id
+                [next.workspace.archive.id]: next.id
             }),
             {}
         );
-        const archives = unlockedSources.map(source => source.workspace.primary.archive);
+        const archives = unlockedSources.map(source => source.workspace.archive);
         const finder = new EntryFinder(archives);
         return finder.search(term).map(result => ({
             entry: result.entry,
-            sourceID: lookup[result.archive.getID()]
+            sourceID: lookup[result.archive.id]
         }));
     });
 }
@@ -204,7 +223,7 @@ export function getMatchingEntriesForURL(url) {
         const unlockedSources = archiveManager.unlockedSources;
         const entries = [];
         unlockedSources.forEach(source => {
-            const archive = source.workspace.primary.archive;
+            const archive = source.workspace.archive;
             const newEntries = archive.findEntriesByMeta("url", /.+/).filter(entry => {
                 const entryURL = entry.getMeta("url");
                 const entryDomain = extractDomain(entryURL);
@@ -223,8 +242,7 @@ export function getMatchingEntriesForURL(url) {
 
 export function getNameForSource(sourceID) {
     return getArchiveManager().then(archiveManager => {
-        const sourceIndex = archiveManager.indexOfSource(sourceID);
-        const source = archiveManager.sources[sourceIndex];
+        const source = archiveManager.getSourceForID(sourceID);
         if (!source) {
             throw new Error(`Unable to fetch source information: No source found for ID: ${sourceID}`);
         }
@@ -238,7 +256,10 @@ export function getUnlockedSourcesCount() {
 
 export function lockSource(sourceID) {
     log.info(`Locking source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => archiveManager.lock(sourceID));
+    return getArchiveManager().then(archiveManager => {
+        const source = archiveManager.getSourceForID(sourceID);
+        return source.lock();
+    });
 }
 
 export function lockSources() {
@@ -246,27 +267,26 @@ export function lockSources() {
     return getArchiveManager().then(archiveManager => {
         const { unlockedSources } = archiveManager;
         return unlockedSources.length > 0
-            ? Promise.all(unlockedSources.map(source => archiveManager.lock(source.id)))
+            ? Promise.all(unlockedSources.map(source => source.lock()))
             : Promise.resolve();
     });
 }
 
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => archiveManager.remove(sourceID));
+    return getArchiveManager().then(archiveManager => archiveManager.removeSource(sourceID));
 }
 
 export function saveSource(sourceID) {
     return getArchiveManager().then(archiveManager => {
-        const sourceIndex = archiveManager.indexOfSource(sourceID);
-        const source = archiveManager.sources[sourceIndex];
+        const source = archiveManager.getSourceForID(sourceID);
         if (!source) {
             throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
         }
         const { workspace } = source;
         return workspace
             .localDiffersFromRemote()
-            .then(differs => (differs ? workspace.mergeSaveablesFromRemote().then(() => true) : false))
+            .then(differs => (differs ? workspace.mergeFromRemote().then(() => true) : false))
             .then(shouldSave => (shouldSave ? workspace.save() : null));
     });
 }
@@ -287,5 +307,5 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
 
 export function unlockSource(sourceID, masterPassword) {
     log.info(`Unlocking source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => archiveManager.unlock(sourceID, masterPassword));
+    return getArchiveManager().then(archiveManager => archiveManager.getSourceForID(sourceID).unlock(masterPassword));
 }
