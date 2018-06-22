@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v1.8.0
+_2018-06-22_
+
+ * Upgrade core to 1.7.1
+   * Future proofing for archive format
+
 ## v1.7.0
 _2018-04-28_
 
