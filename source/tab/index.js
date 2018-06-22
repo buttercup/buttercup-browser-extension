@@ -5,6 +5,19 @@ import { getSharedTracker } from "./LoginTracker.js";
 import { showSaveDialog } from "./saveDialog.js";
 import { watchInputs } from "./generator.js";
 
+function checkForLoginSaveAbility() {
+    return getLastLoginStatus()
+        .then(result => {
+            if (result.credentials) {
+                showSaveDialog();
+            }
+        })
+        .catch(err => {
+            console.error("An error occurred while communicating with the Buttercup extension");
+            console.error(err);
+        });
+}
+
 // Wait for a target
 function waitAndAttachLaunchButtons() {
     onIdentifiedTarget(loginTarget => {
@@ -34,6 +47,9 @@ function waitAndAttachLaunchButtons() {
                     title: tracker.title,
                     timestamp: Date.now()
                 });
+                setTimeout(() => {
+                    checkForLoginSaveAbility();
+                }, 300);
             }
         );
     });
@@ -49,13 +65,4 @@ watchInputs();
 startMessageListeners();
 
 // Check to see if any logins were recorded
-getLastLoginStatus()
-    .then(result => {
-        if (result.credentials) {
-            showSaveDialog();
-        }
-    })
-    .catch(err => {
-        console.error("An error occurred while communicating with the Buttercup extension");
-        console.error(err);
-    });
+checkForLoginSaveAbility();
