@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v1.9.0
+_2018-06-29_
+
+ * ([#131](https://github.com/buttercup/buttercup-browser-extension/issues/131)) Upgrade core to v2
+   * New archive format (supporting future encryption standards)
+ * ([#130](https://github.com/buttercup/buttercup-browser-extension/issues/130)) Auto unlock prompt shown when browser is opened
+ * ([#147](https://github.com/buttercup/buttercup-browser-extension/issues/147)) Remove settings page link
+
 ## v1.8.0
 _2018-06-22_
 
