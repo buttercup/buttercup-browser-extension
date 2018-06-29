@@ -236,7 +236,7 @@ function processSearchResults([entries, sources]) {
             setEntrySearchResults(
                 entries.map(({ entry, sourceID, sourceName }) => ({
                     title: entry.getProperty("title"),
-                    id: entry.getID(),
+                    id: entry.id,
                     entryPath: generateEntryPath(entry),
                     sourceID,
                     sourceName,

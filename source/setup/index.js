@@ -13,6 +13,7 @@ import Notifier from "./components/Notifier.js";
 import LoadingModal from "./containers/LoadingModal.js";
 import SaveCredentialsPage from "./containers/SaveCredentialsPage.js";
 import AboutPage from "./components/AboutPage.js";
+import UnlockAllArchivesPage from "./containers/UnlockAllArchivesPage.js";
 
 import "react-select/dist/react-select.css";
 
@@ -31,6 +32,7 @@ ReactDOM.render(
                 <Route path="/lock-archives" component={ArchivesLockPage} />
                 <Route path="/save-new-credentials" component={SaveCredentialsPage} />
                 <Route path="/about" component={AboutPage} />
+                <Route path="/unlock" component={UnlockAllArchivesPage} />
                 <LoadingModal />
                 <Notifier />
             </div>

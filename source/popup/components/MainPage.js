@@ -222,10 +222,10 @@ class MainPage extends Component {
                                     <FontAwesome name="lock" />
                                     <div>Lock All</div>
                                 </OptionsItem>
-                                <OptionsItem>
+                                {/*<OptionsItem>
                                     <FontAwesome name="cog" />
                                     <div>Settings</div>
-                                </OptionsItem>
+                                </OptionsItem>*/}
                                 <OptionsItem onClick={() => this.props.onOtherSoftwareClick()}>
                                     <FontAwesome name="cloud-download" />
                                     <div>Other Apps</div>
