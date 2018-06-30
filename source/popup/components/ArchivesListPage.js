@@ -195,15 +195,15 @@ function getProviderImage(archiveSourceType) {
     return <ArchiveTypeImage src={imageSrc} />;
 }
 
-class MainPage extends Component {
+class ArchivesListPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
-        menuState: MenuStateShape.isRequired,
-        onAddArchiveClick: PropTypes.func.isRequired,
-        onArchiveClick: PropTypes.func.isRequired,
-        onLockAllClick: PropTypes.func.isRequired,
-        onMenuClick: PropTypes.func.isRequired,
-        onOtherSoftwareClick: PropTypes.func.isRequired
+        // menuState: MenuStateShape.isRequired,
+        // onAddArchiveClick: PropTypes.func.isRequired,
+        onArchiveClick: PropTypes.func.isRequired
+        // onLockAllClick: PropTypes.func.isRequired,
+        // onMenuClick: PropTypes.func.isRequired,
+        // onOtherSoftwareClick: PropTypes.func.isRequired
     };
 
     render() {
@@ -276,4 +276,4 @@ class MainPage extends Component {
     }
 }
 
-export default MainPage;
+export default ArchivesListPage;
