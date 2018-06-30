@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
+import { version } from "../../../package.json";
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
 
@@ -15,39 +16,47 @@ const Container = styled.div`
     justify-content: space-between;
     border-bottom: 1px solid rgba(80, 80, 80, 1);
     background-color: rgba(10, 10, 10, 1);
+    position: relative;
 `;
 const Logo = styled.img`
     width: ${HEADER_SIZE - 6}px;
     height: auto;
     margin: 3px;
 `;
-// const Logo = styled.div`
-//     padding-left: 8px;
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: space-around;
+const Buttons = styled.div`
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    cursor: pointer;
+    user-select: none;
+`;
+const Separator = styled.div`
+    width: 1px;
+    height: 100%;
+    background-color: rgba(220, 220, 220, 0.4);
+`;
+const Button = styled.div`
+    height: 100%;
+    padding: 0px 14px;
+    color: ${props => (props.selected ? "#eee" : "#aaa")};
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-//     h1 {
-//         color: rgb(0, 183, 172);
-//         text-shadow: 2px 2px 2px rgba(0, 183, 172, 0.25);
-//     }
-// `;
-// const MenuButton = styled.div`
-//     width: ${HEADER_SIZE}px;
-//     height: ${HEADER_SIZE}px;
-//     background-color: rgb(0, 183, 172);
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     cursor: pointer;
-
-//     > .fa {
-//         font-size: 26px;
-//         color: #000;
-//     }
-// `;
-
-// export const MenuStateShape = PropTypes.oneOf(["archives", "options"]);
+    &:hover {
+        background-color: rgba(0, 183, 172, 0.5);
+    }
+`;
+const Version = styled.span`
+    position: absolute;
+    font-size: 10px;
+    font-style: italic;
+    color: #666;
+    top: 8px;
+    left: ${HEADER_SIZE + 5}px;
+`;
 
 class HeaderBar extends Component {
     static propTypes = {
@@ -63,14 +72,17 @@ class HeaderBar extends Component {
         return (
             <Container>
                 <Logo src={BUTTERCUP_LOGO} />
-                {/*<If condition={this.props.menuState === "archives"}>
-                    <Logo>
-                        <h1>Buttercup</h1>
-                    </Logo>
-                </If>
-                <MenuButton onClick={() => this.props.onMenuClick()} key="menu">
-                    <FontAwesome name="bars" />
-                </MenuButton>*/}
+                <Version>v{version}</Version>
+                <Buttons>
+                    <Separator />
+                    <Button>Vaults</Button>
+                    <Separator />
+                    <Button>Items</Button>
+                    <Separator />
+                    <Button>
+                        <FontAwesome name="bars" />
+                    </Button>
+                </Buttons>
             </Container>
         );
     }
