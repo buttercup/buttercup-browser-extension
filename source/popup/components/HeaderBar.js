@@ -60,13 +60,20 @@ const Version = styled.span`
 
 class HeaderBar extends Component {
     static propTypes = {
-        // menuState: MenuStateShape.isRequired,
-        // onMenuClick: PropTypes.func.isRequired
+        current: PropTypes.string,
+        onItemsClick: PropTypes.func.isRequired,
+        onVaultsClick: PropTypes.func.isRequired
     };
 
-    static defaultProps = {
-        // onMenuClick: () => {}
-    };
+    handleItemsClick(event) {
+        event.preventDefault();
+        this.props.onItemsClick();
+    }
+
+    handleVaultsClick(event) {
+        event.preventDefault();
+        this.props.onVaultsClick();
+    }
 
     render() {
         return (
@@ -75,9 +82,13 @@ class HeaderBar extends Component {
                 <Version>v{version}</Version>
                 <Buttons>
                     <Separator />
-                    <Button>Vaults</Button>
+                    <Button onClick={::this.handleVaultsClick} selected={this.props.current === "archives"}>
+                        Vaults
+                    </Button>
                     <Separator />
-                    <Button>Items</Button>
+                    <Button onClick={::this.handleItemsClick} selected={this.props.current === "entries"}>
+                        Items
+                    </Button>
                     <Separator />
                     <Button>
                         <FontAwesome name="bars" />

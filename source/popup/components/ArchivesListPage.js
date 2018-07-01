@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import FontAwesome from "react-fontawesome";
 import HeaderBar from "../containers/HeaderBar.js";
 import styled from "styled-components";
-import { MenuStateShape } from "./HeaderBar.js";
 
 const ARCHIVE_IMAGES = {
     dropbox: require("../../../resources/providers/dropbox-256.png"),
@@ -198,18 +197,13 @@ function getProviderImage(archiveSourceType) {
 class ArchivesListPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
-        // menuState: MenuStateShape.isRequired,
-        // onAddArchiveClick: PropTypes.func.isRequired,
         onArchiveClick: PropTypes.func.isRequired
-        // onLockAllClick: PropTypes.func.isRequired,
-        // onMenuClick: PropTypes.func.isRequired,
-        // onOtherSoftwareClick: PropTypes.func.isRequired
     };
 
     render() {
         return (
             <Container>
-                <HeaderBar menuState={this.props.menuState} onMenuClick={() => this.props.onMenuClick()} />
+                <HeaderBar current="archives" />
                 <ListContainer>
                     <Choose>
                         <When condition={this.props.menuState === "options"}>

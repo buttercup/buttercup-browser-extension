@@ -7,6 +7,7 @@ import store from "./redux/index.js";
 import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
 import ArchivesListPage from "./containers/ArchivesListPage.js";
+import EntriesPage from "./containers/EntriesPage.js";
 
 import "../shared/styles/base.sass";
 import "./styles/popup.sass";
@@ -19,6 +20,7 @@ ReactDOM.render(
         <ConnectedRouter history={history}>
             <div>
                 <Route exact path="/" component={ArchivesListPage} />
+                <Route exact path="/entries" component={EntriesPage} />
             </div>
         </ConnectedRouter>
     </Provider>,
