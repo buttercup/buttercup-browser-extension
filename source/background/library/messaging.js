@@ -23,6 +23,13 @@ import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/librar
 
 const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
+function clearSearchResults() {
+    return getUnlockedSourcesCount().then(unlockedSources => {
+        dispatch(setEntrySearchResults([]));
+        dispatch(setSourcesCount(unlockedSources));
+    });
+}
+
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
         case "add-archive": {
@@ -51,6 +58,9 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
+        case "clear-search":
+            clearSearchResults();
+            return false;
         case "clear-used-credentials":
             clearLastLogin();
             return false;

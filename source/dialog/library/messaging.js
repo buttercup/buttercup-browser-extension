@@ -25,14 +25,6 @@ export function getLastLogin() {
     });
 }
 
-export function searchEntriesForTerm(searchTerm) {
-    chrome.runtime.sendMessage({ type: "search-entries-for-term", term: searchTerm });
-}
-
-export function searchEntriesForURL(url) {
-    chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
-}
-
 export function setGeneratedPassword(password) {
     chrome.runtime.sendMessage({ type: "set-generated-password", password });
 }

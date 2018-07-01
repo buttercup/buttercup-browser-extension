@@ -22,6 +22,10 @@ export function getExtensionURL(path) {
     return chrome.extension.getURL(path);
 }
 
+export function inPopup() {
+    return /\/popup\.html/.test(window.location.href);
+}
+
 export function sendTabMessage(tabID, message) {
     return new Promise(resolve => {
         chrome.tabs.sendMessage(tabID, message, response => {

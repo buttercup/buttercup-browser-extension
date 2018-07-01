@@ -6,7 +6,7 @@ import { ConnectedRouter } from "react-router-redux";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
-import SearchPage from "./containers/SearchPage.js";
+import SearchPage from "../shared/containers/SearchPage.js";
 import SaveNewCredentialsPage from "./containers/SaveNewCredentialsPage.js";
 import PasswordGeneratorPage from "./containers/PasswordGeneratorPage.js";
 

@@ -1,9 +1,12 @@
 import { dispatch } from "../redux/index.js";
 import { setEntireState } from "../../shared/actions/app.js";
 import log from "../../shared/library/log.js";
-// import { addArchiveByRequest } from "./archives.js";
 
 let __backgroundPort = null;
+
+export function clearSearchResults() {
+    chrome.runtime.sendMessage({ type: "clear-search" });
+}
 
 export function connectToBackground() {
     __backgroundPort = chrome.runtime.connect({ name: "buttercup-state" });

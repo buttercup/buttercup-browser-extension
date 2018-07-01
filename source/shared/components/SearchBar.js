@@ -11,7 +11,6 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    border-bottom: 3px outset rgba(255, 255, 255, 0.3);
 `;
 const ButtercupIcon = styled.img`
     margin: 4px;
@@ -36,7 +35,12 @@ const SearchInput = styled.input`
 
 class SearchBar extends Component {
     static propTypes = {
-        onSearchTermChange: PropTypes.func.isRequired
+        onSearchTermChange: PropTypes.func.isRequired,
+        showLogo: PropTypes.bool.isRequired
+    };
+
+    static defaultProps = {
+        showLogo: true
     };
 
     state = {
@@ -60,7 +64,9 @@ class SearchBar extends Component {
     render() {
         return (
             <Container>
-                <ButtercupIcon src={BUTTERCUP_ICON} />
+                <If condition={this.props.showLogo}>
+                    <ButtercupIcon src={BUTTERCUP_ICON} />
+                </If>
                 <SearchInput
                     type="text"
                     placeholder="Search for entries..."
