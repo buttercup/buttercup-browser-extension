@@ -33,6 +33,13 @@ You can **block** Buttercup from detecting forms and inputs by applying the attr
 <input type="email" data-bcupignore="true" />
 ```
 
+### Development
+Development of features and bugfixes is supported in the following environment:
+
+ * NodeJS version 8
+ * Linux / Mac
+ * Tested in at least Chrome + Firefox
+
 ### Supported browsers
 [Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), Firefox and [Opera](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) (with the ["Download Chrome Extension"](https://addons.opera.com/en-gb/extensions/details/download-chrome-extension-9/) installed) are supported.
 
@@ -46,12 +53,3 @@ You can load an **unpacked extension** in Chrome by navigating to [chrome://exte
 
 ### Adding to Firefox
 You can load an **unpacked extension** in Firefox by navigating to [about:debugging](about:debugging). Click "Load Temporary Add-on" and locate the project's directory, using **dist/** as the extension directory.
-
-## Contributing
-Contributions are very welcome and strongly encouraged, though we do ask that you stick to some basic styling parameters:
-
- - Use **4 spaces** for indentation
- - New line at the end of each file
- - Commas on same line (at end)
- - Semicolons are not optional
- - _(Just follow the editor config and existing styles)_
