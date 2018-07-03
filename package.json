@@ -12,6 +12,7 @@
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
     "precommit": "lint-staged",
     "test": "run-s test:format",
+    "test:ci": "run-s test build",
     "test:format": "prettier-check '{{source,test}/**/*.js,webpack.config.js}'"
   },
   "lint-staged": {
