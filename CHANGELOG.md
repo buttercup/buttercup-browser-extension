@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v1.9.1
+_2018-07-08_
+
+ * ([#152](https://github.com/buttercup/buttercup-browser-extension/issues/152)) **Bugfix**: Failure while adding WebDAV archives
+
 ## v1.9.0
 _2018-06-29_
 
