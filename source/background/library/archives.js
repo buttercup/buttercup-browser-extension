@@ -152,9 +152,11 @@ export function addWebDAVArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return source.unlock(masterPassword, create).then(() => source);
-        })
-        .then(source => archiveManager.addSource(source));
+            return source
+                .unlock(masterPassword, create)
+                .then(() => source)
+                .then(() => archiveManager.addSource(source));
+        });
 }
 
 export function archiveToObjectGroupsOnly(archive) {
