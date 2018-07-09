@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
-import { getIconForURL } from "../library/icons.js";
+import { getIconForURL } from "../../shared/library/icons.js";
 
 const KEY_ICON = require("../../../resources/key.png");
 

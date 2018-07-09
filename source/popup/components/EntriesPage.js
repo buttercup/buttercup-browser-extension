@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
 import HeaderBar from "../containers/HeaderBar.js";
-import SearchPage from "../../shared/containers/SearchPage.js";
+// import SearchPage from "../../shared/containers/SearchPage.js";
 
 const Container = styled.div`
     width: 100%;
@@ -18,7 +18,6 @@ class EntriesPage extends Component {
         return (
             <Container>
                 <HeaderBar current="entries" />
-                <SearchPage showLogo={false} />
             </Container>
         );
     }

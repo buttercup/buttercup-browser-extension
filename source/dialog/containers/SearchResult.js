@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
 import SearchResult from "../components/SearchResult.js";
 import { getEntryResultPath, getEntryResultTitle, getEntryResultURL } from "../../shared/selectors/searching.js";
-import { inPopup } from "../library/extension.js";
 
 export default connect(
     (state, ownProps) => ({
@@ -11,13 +10,10 @@ export default connect(
     }),
     {
         onEnterDetailsRequest: (sourceID, entryID, signIn = false) => () => {
-            if (inPopup()) {
-            } else {
-                const { sendCredentialsToTab } = require("../../dialog/library/messaging.js");
-                const { closeDialog } = require("../../dialog/library/context.js");
-                sendCredentialsToTab(sourceID, entryID, signIn);
-                closeDialog();
-            }
+            const { sendCredentialsToTab } = require("../../dialog/library/messaging.js");
+            const { closeDialog } = require("../../dialog/library/context.js");
+            sendCredentialsToTab(sourceID, entryID, signIn);
+            closeDialog();
         }
     }
 )(SearchResult);
