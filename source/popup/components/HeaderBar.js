@@ -62,12 +62,18 @@ class HeaderBar extends Component {
     static propTypes = {
         current: PropTypes.string,
         onItemsClick: PropTypes.func.isRequired,
+        onMenuClick: PropTypes.func.isRequired,
         onVaultsClick: PropTypes.func.isRequired
     };
 
     handleItemsClick(event) {
         event.preventDefault();
         this.props.onItemsClick();
+    }
+
+    handleMenuClick(event) {
+        event.preventDefault();
+        this.props.onMenuClick();
     }
 
     handleVaultsClick(event) {
@@ -90,7 +96,7 @@ class HeaderBar extends Component {
                         Items
                     </Button>
                     <Separator />
-                    <Button>
+                    <Button onClick={::this.handleMenuClick} selected={this.props.current === "menu"}>
                         <FontAwesome name="bars" />
                     </Button>
                 </Buttons>

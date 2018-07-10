@@ -6,6 +6,9 @@ export default connect((state, ownProps) => ({}), {
     onItemsClick: () => dispatch => {
         dispatch(push("/entries"));
     },
+    onMenuClick: () => dispatch => {
+        dispatch(push("/menu"));
+    },
     onVaultsClick: () => dispatch => {
         dispatch(push("/"));
     }
