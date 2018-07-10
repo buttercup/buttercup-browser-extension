@@ -20,6 +20,14 @@ This browser extension allows users to interface with password archives authored
 
 The extension can remotely connect to archives via Buttercup's common communication protocols (WebDAV, Dropbox etc.).
 
+### Supported browsers
+[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) and [Opera](https://addons.opera.com/en/extensions/details/buttercup/) are supported.
+
+Other browsers will be supported in order of request/popularity.
+
+#### Supported platforms
+The browsers listed above, running on Windows, Mac or Linux on a desktop platform. This extension is not supported on any mobile or tablet devices.
+
 ### Usage
 The browser extension can be controlled from the **popup menu**, which is launched by pressing the Buttercup button in the browser menu. This menu displays a list of archives as well as settings and other items.
 
@@ -39,14 +47,6 @@ Development of features and bugfixes is supported in the following environment:
  * NodeJS version 8
  * Linux / Mac
  * Tested in at least Chrome + Firefox
-
-### Supported browsers
-[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), Firefox and [Opera](https://addons.opera.com/en/extensions/details/buttercup/) are supported.
-
-Other browsers will be supported in order of request/popularity.
-
-#### Supported platforms
-The browsers listed above, running on Windows, Mac or Linux on a desktop platform. This extension is not supported on any mobile or tablet devices.
 
 ### Adding to Chrome
 You can load an **unpacked extension** in Chrome by navigating to [chrome://extensions/](chrome://extensions/). Simply locate the project's directory and use **dist/** as the extension directory.
