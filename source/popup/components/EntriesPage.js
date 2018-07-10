@@ -6,6 +6,8 @@ import HeaderBar from "../containers/HeaderBar.js";
 import SearchBar from "../containers/SearchBar.js";
 import SearchResults from "../containers/SearchResults.js";
 
+let __clearedButtercupSearchResults = false;
+
 const Container = styled.div`
     width: 100%;
     height: 100%;
@@ -17,7 +19,16 @@ const Container = styled.div`
 `;
 
 class EntriesPage extends Component {
-    static propTypes = {};
+    static propTypes = {
+        onPrepare: PropTypes.func.isRequired
+    };
+
+    componentWillMount() {
+        if (!__clearedButtercupSearchResults) {
+            this.props.onPrepare();
+            __clearedButtercupSearchResults = true;
+        }
+    }
 
     render() {
         return (
