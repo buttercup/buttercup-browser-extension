@@ -78,21 +78,6 @@ const Subtitle = styled.span`
     text-overflow: ellipsis;
     white-space: nowrap;
 `;
-const EnterDetailsAndLoginButton = styled.div`
-    width: ${ROW_HEIGHT}px;
-    height: ${ROW_HEIGHT}px;
-    color: rgba(240, 240, 240, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    cursor: pointer;
-    flex-shrink: 0;
-
-    &:hover {
-        background-color: rgba(0, 183, 172, 0.5);
-    }
-`;
 
 class SearchResult extends Component {
     static propTypes = {
@@ -180,9 +165,6 @@ class SearchResult extends Component {
                         </Subtitle>
                     </DetailRow>
                 </DetailsContainer>
-                <EnterDetailsAndLoginButton onClick={::this.handleMouseClickSignIn}>
-                    <FontAwesome name="sign-in" />
-                </EnterDetailsAndLoginButton>
             </Container>
         );
     }
