@@ -41,7 +41,7 @@ Development of features and bugfixes is supported in the following environment:
  * Tested in at least Chrome + Firefox
 
 ### Supported browsers
-[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), Firefox and [Opera](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) (with the ["Download Chrome Extension"](https://addons.opera.com/en-gb/extensions/details/download-chrome-extension-9/) installed) are supported.
+[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), Firefox and [Opera](https://addons.opera.com/en/extensions/details/buttercup/) are supported.
 
 Other browsers will be supported in order of request/popularity.
 
