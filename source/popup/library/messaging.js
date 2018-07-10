@@ -27,6 +27,14 @@ function handleBackgroundMessage(message) {
     }
 }
 
+export function requestCredentialsOpening(sourceID, entryID) {
+    chrome.runtime.sendMessage({
+        type: "open-credentials-url",
+        sourceID,
+        entryID
+    });
+}
+
 export function sendStateUpdate(action) {
     log.info("Sending state update to background", action);
     try {

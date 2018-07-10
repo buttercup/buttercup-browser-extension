@@ -272,6 +272,21 @@ export function lockSources() {
     });
 }
 
+export function openCredentialsPageForEntry(sourceID, entryID) {
+    return getEntry(sourceID, entryID)
+        .then(entry => entry.getURLs("login"))
+        .then(([loginURL]) => {
+            log.info(`Selected to open URL of entry: ${entryID}`);
+            if (loginURL) {
+                const targetURL = /^https?:\/\//i.test(loginURL) ? loginURL : `https://${loginURL}`;
+                log.info(`Opening selected entry URL: ${targetURL}`);
+                createNewTab(targetURL);
+            } else {
+                log.info("Failed opening entry page: No URL found on entry");
+            }
+        });
+}
+
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
     return getArchiveManager().then(archiveManager => archiveManager.removeSource(sourceID));

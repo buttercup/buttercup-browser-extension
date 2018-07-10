@@ -82,7 +82,7 @@ const Subtitle = styled.span`
 class SearchResult extends Component {
     static propTypes = {
         entryID: PropTypes.string.isRequired,
-        onEnterDetailsRequest: PropTypes.func.isRequired,
+        onSelectEntry: PropTypes.func.isRequired,
         sourceID: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         url: PropTypes.string
@@ -110,14 +110,9 @@ class SearchResult extends Component {
         this.mounted = false;
     }
 
-    handleMouseClickEnterDetails(event) {
+    handleClickEntry(event) {
         event.preventDefault();
-        this.props.onEnterDetailsRequest(this.props.sourceID, this.props.entryID, /* auto sign in: */ false);
-    }
-
-    handleMouseClickSignIn(event) {
-        event.preventDefault();
-        this.props.onEnterDetailsRequest(this.props.sourceID, this.props.entryID, /* auto sign in: */ true);
+        this.props.onSelectEntry(this.props.sourceID, this.props.entryID);
     }
 
     onMouseEnterDetail() {
@@ -140,7 +135,7 @@ class SearchResult extends Component {
                     hovering={this.state.hoveringDetail}
                     onMouseEnter={::this.onMouseEnterDetail}
                     onMouseLeave={::this.onMouseLeaveDetail}
-                    onClick={::this.handleMouseClickEnterDetails}
+                    onClick={::this.handleClickEntry}
                 >
                     <EntryImageBackground>
                         <EntryImage data={this.state.icon} />
@@ -150,7 +145,7 @@ class SearchResult extends Component {
                     hovering={this.state.hoveringDetail}
                     onMouseEnter={::this.onMouseEnterDetail}
                     onMouseLeave={::this.onMouseLeaveDetail}
-                    onClick={::this.handleMouseClickEnterDetails}
+                    onClick={::this.handleClickEntry}
                 >
                     <DetailRow>
                         <Title>{this.props.title}</Title>

@@ -13,6 +13,7 @@ import {
     getUnlockedSourcesCount,
     lockSource,
     lockSources,
+    openCredentialsPageForEntry,
     removeSource,
     sendCredentialsToTab,
     unlockSource
@@ -117,6 +118,11 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             return true;
+        }
+        case "open-credentials-url": {
+            const { sourceID, entryID } = request;
+            openCredentialsPageForEntry(sourceID, entryID);
+            return false;
         }
         case "open-tab": {
             const { url } = request;
