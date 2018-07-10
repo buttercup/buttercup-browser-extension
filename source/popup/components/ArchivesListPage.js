@@ -157,8 +157,8 @@ const NoArchivesInner = styled.div`
     }
 `;
 const MenuArrowContainer = styled.div`
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
     background: url(${MENU_ARROW});
     background-size: 100% 100%;
     background-repeat: no-repeat;
