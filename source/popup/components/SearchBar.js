@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-const BUTTERCUP_ICON = require("../../../resources/buttercup-128.png");
 const SEARCH_ICON = require("../../../resources/search-icon.png");
 
 const Container = styled.div`
@@ -11,11 +10,6 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-`;
-const ButtercupIcon = styled.img`
-    margin: 4px;
-    width: 32px;
-    height: 32px;
 `;
 const SearchInput = styled.input`
     flex-grow: 2;
@@ -59,7 +53,6 @@ class SearchBar extends Component {
     render() {
         return (
             <Container>
-                <ButtercupIcon src={BUTTERCUP_ICON} />
                 <SearchInput
                     type="text"
                     placeholder="Search for entries..."

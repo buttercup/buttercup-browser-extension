@@ -29,12 +29,7 @@ const Message = styled.div`
 class SearchPage extends Component {
     static propTypes = {
         availableSources: PropTypes.number.isRequired,
-        onPrepareFirstResults: PropTypes.func.isRequired,
-        showLogo: PropTypes.bool.isRequired
-    };
-
-    static defaultProps = {
-        showLogo: true
+        onPrepareFirstResults: PropTypes.func.isRequired
     };
 
     componentWillMount() {
@@ -46,7 +41,7 @@ class SearchPage extends Component {
             <SearchLayout>
                 <Choose>
                     <When condition={this.props.availableSources > 0}>
-                        <SearchBar showLogo={this.props.showLogo} />
+                        <SearchBar />
                         <SearchResults />
                     </When>
                     <Otherwise>
