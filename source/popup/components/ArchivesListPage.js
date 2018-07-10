@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import FontAwesome from "react-fontawesome";
 import HeaderBar from "../containers/HeaderBar.js";
 import styled from "styled-components";
 
@@ -206,32 +205,8 @@ class ArchivesListPage extends Component {
                 <HeaderBar current="archives" />
                 <ListContainer>
                     <Choose>
-                        <When condition={this.props.menuState === "options"}>
-                            <OptionsList>
-                                <OptionsItem onClick={() => this.props.onAddArchiveClick()}>
-                                    <FontAwesome name="plus" />
-                                    <div>Add Archive</div>
-                                </OptionsItem>
-                                <OptionsItem onClick={() => this.props.onLockAllClick()}>
-                                    <FontAwesome name="lock" />
-                                    <div>Lock All</div>
-                                </OptionsItem>
-                                {/*<OptionsItem>
-                                    <FontAwesome name="cog" />
-                                    <div>Settings</div>
-                                </OptionsItem>*/}
-                                <OptionsItem onClick={() => this.props.onOtherSoftwareClick()}>
-                                    <FontAwesome name="cloud-download" />
-                                    <div>Other Apps</div>
-                                </OptionsItem>
-                            </OptionsList>
-                        </When>
-                        <Otherwise>
-                            <Choose>
-                                <When condition={this.props.archives.length > 0}>{this.renderArchivesList()}</When>
-                                <Otherwise>{this.renderNoArchives()}</Otherwise>
-                            </Choose>
-                        </Otherwise>
+                        <When condition={this.props.archives.length > 0}>{this.renderArchivesList()}</When>
+                        <Otherwise>{this.renderNoArchives()}</Otherwise>
                     </Choose>
                 </ListContainer>
             </Container>
