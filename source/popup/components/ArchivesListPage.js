@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import FontAwesome from "react-fontawesome";
 import HeaderBar from "../containers/HeaderBar.js";
 import styled from "styled-components";
-import { MenuStateShape } from "./HeaderBar.js";
 
 const ARCHIVE_IMAGES = {
     dropbox: require("../../../resources/providers/dropbox-256.png"),
@@ -159,8 +157,8 @@ const NoArchivesInner = styled.div`
     }
 `;
 const MenuArrowContainer = styled.div`
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
     background: url(${MENU_ARROW});
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -195,49 +193,20 @@ function getProviderImage(archiveSourceType) {
     return <ArchiveTypeImage src={imageSrc} />;
 }
 
-class MainPage extends Component {
+class ArchivesListPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
-        menuState: MenuStateShape.isRequired,
-        onAddArchiveClick: PropTypes.func.isRequired,
-        onArchiveClick: PropTypes.func.isRequired,
-        onLockAllClick: PropTypes.func.isRequired,
-        onMenuClick: PropTypes.func.isRequired,
-        onOtherSoftwareClick: PropTypes.func.isRequired
+        onArchiveClick: PropTypes.func.isRequired
     };
 
     render() {
         return (
             <Container>
-                <HeaderBar menuState={this.props.menuState} onMenuClick={() => this.props.onMenuClick()} />
+                <HeaderBar current="archives" />
                 <ListContainer>
                     <Choose>
-                        <When condition={this.props.menuState === "options"}>
-                            <OptionsList>
-                                <OptionsItem onClick={() => this.props.onAddArchiveClick()}>
-                                    <FontAwesome name="plus" />
-                                    <div>Add Archive</div>
-                                </OptionsItem>
-                                <OptionsItem onClick={() => this.props.onLockAllClick()}>
-                                    <FontAwesome name="lock" />
-                                    <div>Lock All</div>
-                                </OptionsItem>
-                                {/*<OptionsItem>
-                                    <FontAwesome name="cog" />
-                                    <div>Settings</div>
-                                </OptionsItem>*/}
-                                <OptionsItem onClick={() => this.props.onOtherSoftwareClick()}>
-                                    <FontAwesome name="cloud-download" />
-                                    <div>Other Apps</div>
-                                </OptionsItem>
-                            </OptionsList>
-                        </When>
-                        <Otherwise>
-                            <Choose>
-                                <When condition={this.props.archives.length > 0}>{this.renderArchivesList()}</When>
-                                <Otherwise>{this.renderNoArchives()}</Otherwise>
-                            </Choose>
-                        </Otherwise>
+                        <When condition={this.props.archives.length > 0}>{this.renderArchivesList()}</When>
+                        <Otherwise>{this.renderNoArchives()}</Otherwise>
                     </Choose>
                 </ListContainer>
             </Container>
@@ -276,4 +245,4 @@ class MainPage extends Component {
     }
 }
 
-export default MainPage;
+export default ArchivesListPage;

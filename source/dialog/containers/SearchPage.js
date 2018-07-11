@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import SearchPage from "../components/SearchPage.js";
 import { getSourcesCount } from "../../shared/selectors/searching.js";
 import { getTopURL } from "../library/context.js";
-import { searchEntriesForURL } from "../library/messaging.js";
+import { searchEntriesForURL } from "../../shared/library/messaging.js";
 
 export default connect(
     (state, ownProps) => ({

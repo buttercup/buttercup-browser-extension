@@ -13,6 +13,7 @@ import {
     getUnlockedSourcesCount,
     lockSource,
     lockSources,
+    openCredentialsPageForEntry,
     removeSource,
     sendCredentialsToTab,
     unlockSource
@@ -22,6 +23,13 @@ import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 
 const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
+
+function clearSearchResults() {
+    return getUnlockedSourcesCount().then(unlockedSources => {
+        dispatch(setEntrySearchResults([]));
+        dispatch(setSourcesCount(unlockedSources));
+    });
+}
 
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
@@ -51,6 +59,9 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
+        case "clear-search":
+            clearSearchResults();
+            return false;
         case "clear-used-credentials":
             clearLastLogin();
             return false;
@@ -107,6 +118,11 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             return true;
+        }
+        case "open-credentials-url": {
+            const { sourceID, entryID } = request;
+            openCredentialsPageForEntry(sourceID, entryID);
+            return false;
         }
         case "open-tab": {
             const { url } = request;

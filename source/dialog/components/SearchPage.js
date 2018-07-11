@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import LayoutMain from "./LayoutMain.js";
+import SearchLayout from "./SearchLayout.js";
 import SearchBar from "../containers/SearchBar.js";
 import SearchResults from "../containers/SearchResults.js";
 
@@ -38,7 +38,7 @@ class SearchPage extends Component {
 
     render() {
         return (
-            <LayoutMain>
+            <SearchLayout>
                 <Choose>
                     <When condition={this.props.availableSources > 0}>
                         <SearchBar />
@@ -53,7 +53,7 @@ class SearchPage extends Component {
                         </FullSizeNotice>
                     </Otherwise>
                 </Choose>
-            </LayoutMain>
+            </SearchLayout>
         );
     }
 }

@@ -6,9 +6,9 @@ import { getIconForURL } from "../../shared/library/icons.js";
 
 const KEY_ICON = require("../../../resources/key.png");
 
-const ICON_CONTAINER_SIZE = 52;
+const ICON_CONTAINER_SIZE = 40;
 const ICON_SIZE = ICON_CONTAINER_SIZE - 8;
-const ROW_HEIGHT = 64;
+const ROW_HEIGHT = 48;
 
 const Container = styled.div`
     width: 100%;
@@ -78,26 +78,11 @@ const Subtitle = styled.span`
     text-overflow: ellipsis;
     white-space: nowrap;
 `;
-const EnterDetailsAndLoginButton = styled.div`
-    width: ${ROW_HEIGHT}px;
-    height: ${ROW_HEIGHT}px;
-    color: rgba(240, 240, 240, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    cursor: pointer;
-    flex-shrink: 0;
-
-    &:hover {
-        background-color: rgba(0, 183, 172, 0.5);
-    }
-`;
 
 class SearchResult extends Component {
     static propTypes = {
         entryID: PropTypes.string.isRequired,
-        onEnterDetailsRequest: PropTypes.func.isRequired,
+        onSelectEntry: PropTypes.func.isRequired,
         sourceID: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         url: PropTypes.string
@@ -125,14 +110,9 @@ class SearchResult extends Component {
         this.mounted = false;
     }
 
-    handleMouseClickEnterDetails(event) {
+    handleClickEntry(event) {
         event.preventDefault();
-        this.props.onEnterDetailsRequest(this.props.sourceID, this.props.entryID, /* auto sign in: */ false);
-    }
-
-    handleMouseClickSignIn(event) {
-        event.preventDefault();
-        this.props.onEnterDetailsRequest(this.props.sourceID, this.props.entryID, /* auto sign in: */ true);
+        this.props.onSelectEntry(this.props.sourceID, this.props.entryID);
     }
 
     onMouseEnterDetail() {
@@ -155,7 +135,7 @@ class SearchResult extends Component {
                     hovering={this.state.hoveringDetail}
                     onMouseEnter={::this.onMouseEnterDetail}
                     onMouseLeave={::this.onMouseLeaveDetail}
-                    onClick={::this.handleMouseClickEnterDetails}
+                    onClick={::this.handleClickEntry}
                 >
                     <EntryImageBackground>
                         <EntryImage data={this.state.icon} />
@@ -165,7 +145,7 @@ class SearchResult extends Component {
                     hovering={this.state.hoveringDetail}
                     onMouseEnter={::this.onMouseEnterDetail}
                     onMouseLeave={::this.onMouseLeaveDetail}
-                    onClick={::this.handleMouseClickEnterDetails}
+                    onClick={::this.handleClickEntry}
                 >
                     <DetailRow>
                         <Title>{this.props.title}</Title>
@@ -180,9 +160,6 @@ class SearchResult extends Component {
                         </Subtitle>
                     </DetailRow>
                 </DetailsContainer>
-                <EnterDetailsAndLoginButton onClick={::this.handleMouseClickSignIn}>
-                    <FontAwesome name="sign-in" />
-                </EnterDetailsAndLoginButton>
             </Container>
         );
     }

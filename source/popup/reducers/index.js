@@ -2,12 +2,12 @@ import { combineReducers } from "redux";
 import { APP_MASTER_SET } from "../../shared/actions/types.js";
 import popupRouting from "./routing.js";
 import archives from "../../shared/reducers/archives.js";
-import popupMenu from "./popupMenu.js";
+import searching from "../../shared/reducers/searching.js";
 
 const appReducer = combineReducers({
     archives,
-    popupMenu,
-    popupRouting
+    popupRouting,
+    searching
 });
 
 const rootReducer = (state, action) => {

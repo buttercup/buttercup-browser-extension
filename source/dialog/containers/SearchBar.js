@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import SearchBar from "../components/SearchBar.js";
-import { searchEntriesForTerm, searchEntriesForURL } from "../library/messaging.js";
 import { getTopURL } from "../library/context.js";
+import { searchEntriesForTerm, searchEntriesForURL } from "../../shared/library/messaging.js";
 
 export default connect((state, ownProps) => ({}), {
     onSearchTermChange: searchTerm => () => {

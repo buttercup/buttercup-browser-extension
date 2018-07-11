@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route } from "react-router";
@@ -6,7 +6,9 @@ import { ConnectedRouter } from "react-router-redux";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
 import { connectToBackground } from "./library/messaging.js";
-import MainPage from "./containers/MainPage.js";
+import ArchivesListPage from "./containers/ArchivesListPage.js";
+import EntriesPage from "./containers/EntriesPage.js";
+import MenuPage from "./containers/MenuPage.js";
 
 import "../shared/styles/base.sass";
 import "./styles/popup.sass";
@@ -17,9 +19,11 @@ connectToBackground();
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <div>
-                <Route exact path="/" component={MainPage} />
-            </div>
+            <Fragment>
+                <Route exact path="/" component={ArchivesListPage} />
+                <Route path="/entries" component={EntriesPage} />
+                <Route path="/menu" component={MenuPage} />
+            </Fragment>
         </ConnectedRouter>
     </Provider>,
     document.getElementById("root")
