@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v1.10.0
+_2018-07-11_
+
+ * New popup menu design
+   * Search and open items from the popup
+
 ## v1.9.1
 _2018-07-08_
 
