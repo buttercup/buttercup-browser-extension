@@ -41,7 +41,7 @@
   "devDependencies": {
     "@buttercup/channel-queue": "^0.3.0",
     "@buttercup/iconographer": "^0.7.1",
-    "@buttercup/locust": "^0.8.0",
+    "@buttercup/locust": "^0.9.0",
     "@buttercup/ui": "^1.4.2",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
