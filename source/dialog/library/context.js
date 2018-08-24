@@ -1,5 +1,7 @@
 import postRobot from "post-robot";
 
+postRobot.CONFIG.LOG_LEVEL = "error";
+
 export function closeDialog() {
     return postRobot.send(window.top, "bcup-close-dialog");
 }

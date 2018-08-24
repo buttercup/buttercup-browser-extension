@@ -31,6 +31,7 @@ export function attachLaunchButton(input) {
         let top = input.offsetTop;
         const buttonZ = findBestZIndexInContainer(input.offsetParent);
         // Update input style
+        updateOffsetParentPositioning(input.offsetParent);
         setStyle(input, {
             width: `${newInputWidth}px`
         });
@@ -80,4 +81,14 @@ export function attachLaunchButton(input) {
         reprocessButton();
     };
     tryToAttach();
+}
+
+function updateOffsetParentPositioning(offsetParent) {
+    const { position: computedPosition } = window.getComputedStyle(offsetParent, null);
+    const position = computedPosition || offsetParent.style.position || "static";
+    if (position === "static") {
+        setStyle(offsetParent, {
+            position: "relative"
+        });
+    }
 }
