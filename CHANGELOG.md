@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v1.11.0
+_2018-08-24_
+
+ * ([#136](https://github.com/buttercup/buttercup-browser-extension/issues/136)) Use last generated password form context menu
+ * ([#153](https://github.com/buttercup/buttercup-browser-extension/issues/153)) **Bugfix**: Button layout issues
+ * Upgraded login form targetting
+
 ## v1.10.0
 _2018-07-11_
 
