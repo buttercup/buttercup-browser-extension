@@ -129,7 +129,8 @@ class UnlockAllArchivesPage extends Component {
                             <With unlocking={this.state.unlocking.includes(archive.sourceID)}>
                                 <h3>
                                     <If condition={unlocking}>
-                                        <FontAwesome name="cog" spin />&nbsp;
+                                        <FontAwesome name="cog" spin />
+                                        &nbsp;
                                     </If>
                                     Unlock '{archive.title}'
                                 </h3>
