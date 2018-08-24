@@ -1,5 +1,6 @@
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 import { getBrowser } from "../../shared/library/browser.js";
+import { lastPassword } from "./lastGeneratedPassword.js";
 
 const CONTEXT_SHARED_ALL = {
     contexts: ["all"]
@@ -8,9 +9,21 @@ const CONTEXT_SHARED_EDITABLE = {
     contexts: getBrowser() === "firefox" ? ["editable", "password"] : ["editable"]
 };
 
-let __menu;
+let __menu = null;
 
 export function updateContextMenu() {
+    // **
+    // ** Init
+    // **
+    const firstTime = __menu === null;
+    if (firstTime) {
+        lastPassword.on("valueExpired", updateContextMenu);
+        lastPassword.on("valueSet", updateContextMenu);
+    }
+    const generatedPassword = lastPassword.value;
+    // **
+    // ** Build menu
+    // **
     chrome.contextMenus.removeAll();
     __menu = chrome.contextMenus.create({
         title: "Buttercup",
@@ -69,6 +82,22 @@ export function updateContextMenu() {
                 .then(tabID => {
                     sendTabMessage(tabID, {
                         type: "open-generator"
+                    });
+                });
+        },
+        ...CONTEXT_SHARED_EDITABLE
+    });
+    chrome.contextMenus.create({
+        title: "Insert last generated password",
+        parentId: __menu,
+        enabled: lastPassword.expired === false,
+        onclick: () => {
+            getCurrentTab()
+                .then(tab => tab.id)
+                .then(tabID => {
+                    sendTabMessage(tabID, {
+                        type: "set-generated-password",
+                        password: generatedPassword
                     });
                 });
         },

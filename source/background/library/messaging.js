@@ -20,6 +20,7 @@ import {
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
+import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 
 const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
@@ -200,6 +201,8 @@ function handleMessage(request, sender, sendResponse) {
                     password
                 });
             });
+            lastPassword.value = password;
+            return false;
         }
         case "unlock-archive": {
             const { sourceID, masterPassword } = request;
