@@ -44,9 +44,15 @@ You can **block** Buttercup from detecting forms and inputs by applying the attr
 ### Development
 Development of features and bugfixes is supported in the following environment:
 
- * NodeJS version 8
+ * NodeJS version 8 (latest minor version)
  * Linux / Mac
- * Tested in at least Chrome + Firefox
+ * Tested in at least Chrome / Firefox / Opera
+ 
+To set up your development environment:
+ * Clone this repo
+ * Execute `npm install` inside the project directory
+ * Execute `npm run dev` to build and watch the project
+ * Add the `./dist` directory to the browser of your choice as an _unpacked extension_
 
 ### Adding to Chrome
 You can load an **unpacked extension** in Chrome by navigating to [chrome://extensions/](chrome://extensions/). Simply locate the project's directory and use **dist/** as the extension directory.
