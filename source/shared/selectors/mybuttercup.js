@@ -15,3 +15,7 @@ export function getOrganisationArchives(state) {
 export function getOrganisations(state) {
     return state[KEY].organisations;
 }
+
+export function getSelectedArchives(state) {
+    return state[KEY].selectedArchives;
+}

@@ -25,6 +25,7 @@ export const MYBUTTERCUP_SET_AUTH_ID = "mybuttercup/setAuthenticationID";
 export const MYBUTTERCUP_SET_AUTH_TOKEN = "mybuttercup/setAuthToken";
 export const MYBUTTERCUP_SET_ORG_ARCHIVES = "mybuttercup/setOrganisationArchives";
 export const MYBUTTERCUP_SET_ORGS = "mybuttercup/setOrganisations";
+export const MYBUTTERCUP_TOGGLE_SELECTED_ARCHIVE = "mybuttercup/selectedArchives/toggle";
 
 export const SEARCH_SET_ENTRY_RESULTS = "searching/results/set";
 export const SEARCH_SET_SOURCES_COUNT = "searching/setSources";

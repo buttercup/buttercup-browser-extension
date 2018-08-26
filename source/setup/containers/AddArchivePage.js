@@ -45,6 +45,7 @@ import {
 } from "../../shared/selectors/googleDrive";
 import { performAuthentication as performMyButtercupAuthentication } from "../library/myButtercup.js";
 import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButtercup.js";
+import { getSelectedArchives as getSelectedMyButtercupArchives } from "../../shared/selectors/myButtercup.js";
 import {
     getAuthID as getMyButtercupAuthID,
     getAuthToken as getMyButtercupAuthToken
@@ -72,7 +73,8 @@ export default connect(
         myButtercupAuthToken: getMyButtercupAuthToken(state),
         selectedArchiveType: getSelectedArchiveType(state),
         selectedFilename: getSelectedFilename(state),
-        selectedFilenameNeedsCreation: selectedFileNeedsCreation(state)
+        selectedFilenameNeedsCreation: selectedFileNeedsCreation(state),
+        selectedMyButtercupArchives: getSelectedMyButtercupArchives(state)
     }),
     {
         onAuthenticateDesktop: code => dispatch => {

@@ -3,14 +3,16 @@ import {
     MYBUTTERCUP_SET_AUTH_ID,
     MYBUTTERCUP_SET_AUTH_TOKEN,
     MYBUTTERCUP_SET_ORG_ARCHIVES,
-    MYBUTTERCUP_SET_ORGS
+    MYBUTTERCUP_SET_ORGS,
+    MYBUTTERCUP_TOGGLE_SELECTED_ARCHIVE
 } from "../actions/types.js";
 
 const INITIAL = {
     authenticationID: null,
     authToken: null,
     organisationArchives: {},
-    organisations: []
+    organisations: [],
+    selectedArchives: []
 };
 
 export default function myButtercupReducer(state = INITIAL, action = {}) {
@@ -21,7 +23,8 @@ export default function myButtercupReducer(state = INITIAL, action = {}) {
                 authenticationID: null,
                 authToken: null,
                 organisationArchives: {},
-                organisations: []
+                organisations: [],
+                selectedArchives: []
             };
         case MYBUTTERCUP_SET_AUTH_ID:
             return {
@@ -48,6 +51,13 @@ export default function myButtercupReducer(state = INITIAL, action = {}) {
                 }
             };
         }
+        case MYBUTTERCUP_TOGGLE_SELECTED_ARCHIVE:
+            return {
+                ...state,
+                selectedArchives: state.selectedArchives.includes(action.payload)
+                    ? state.selectedArchives.filter(id => id !== action.payload)
+                    : [...state.selectedArchives, action.payload]
+            };
 
         default:
             return state;
