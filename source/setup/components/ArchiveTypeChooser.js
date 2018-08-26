@@ -6,7 +6,7 @@ import { Button, ButtonGroup, Text, Classes } from "@blueprintjs/core";
 export const ARCHIVE_TYPES = [
     {
         type: "mybuttercup",
-        title: "My Buttercup",
+        title: "MyButtercup",
         image: require("../../../resources/providers/mybuttercup-256.png")
     },
     {

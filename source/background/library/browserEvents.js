@@ -8,11 +8,15 @@ import { getAutoLoginDetails } from "../../shared/selectors/autoLogin.js";
 import { clearAutoLogin } from "../../shared/actions/autoLogin.js";
 import { sendTabMessage } from "../../shared/library/extension.js";
 import { getEntry } from "./archives.js";
+import { setAuthToken as setDropboxAuthToken } from "../../shared/actions/dropbox.js";
+import { setAuthToken as setMyButtercupAuthToken } from "../../shared/actions/myButtercup.js";
+import { MYBUTTERCUP_CALLBACK_URL } from "../../shared/library/myButtercup.js";
 
 const AUTOLOGIN_EXPIRY = ms("45s");
 const BUTTERCUP_DOMAIN_REXP = /^https:\/\/buttercup.pw\//;
 const DROPBOX_ACCESS_TOKEN_REXP = /access_token=([^&]+)/;
 const GOOGLE_DRIVE_AUTH_CODE_REXP = /\?googleauth&code=([^&#?]+)/;
+const MYBUTTERCUP_ACCESS_TOKEN_REXP = /access_token=([^&]+)/;
 
 export function attachBrowserStateListeners() {
     chrome.tabs.onUpdated.addListener(handleTabUpdatedEvent);
@@ -57,11 +61,19 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
                     }`
                 );
             });
-    } else if (autoLogin.setTime && Date.now() - autoLogin.setTime >= AUTOLOGIN_EXPIRY) {
+    } else if (url && url.indexOf(MYBUTTERCUP_CALLBACK_URL) === 0) {
+        const accessTokenMatch = url.match(MYBUTTERCUP_ACCESS_TOKEN_REXP);
+        if (accessTokenMatch) {
+            const token = accessTokenMatch[1];
+            log.info(`Retrieved MyButtercup access token from tab: ${tabID}`);
+            dispatch(setMyButtercupAuthToken(token));
+            chrome.tabs.remove(tabID);
+        }
+    }
+    if (autoLogin.setTime && Date.now() - autoLogin.setTime >= AUTOLOGIN_EXPIRY) {
         log.info("Auto-login session expired: details cleared");
         dispatch(clearAutoLogin());
     }
-
     if (changeInfo.status === "loading") {
         dispatch(setUserActivity());
     }

@@ -35,6 +35,7 @@ class AddArchivePage extends PureComponent {
         localAuthStatus: PropTypes.string.isRequired,
         onAuthenticateDesktop: PropTypes.func.isRequired,
         onAuthenticateDropbox: PropTypes.func.isRequired,
+        onAuthenticateMyButtercup: PropTypes.func.isRequired,
         onChooseDropboxBasedArchive: PropTypes.func.isRequired,
         onChooseGoogleDriveBasedArchive: PropTypes.func.isRequired,
         onChooseLocallyBasedArchive: PropTypes.func.isRequired,
@@ -65,7 +66,8 @@ class AddArchivePage extends PureComponent {
     componentDidMount() {
         this.setState({
             dropboxAuthenticationID: uuid(),
-            googleDriveAuthenticationID: uuid()
+            googleDriveAuthenticationID: uuid(),
+            myButtercupAuthenticationID: uuid()
         });
         this.props.onReady();
     }
@@ -101,6 +103,12 @@ class AddArchivePage extends PureComponent {
         this.props.onChooseLocallyBasedArchive(this.state.archiveName, this.state.masterPassword);
     }
 
+    handleChooseMyButtercupBasedFile(event) {
+        event.preventDefault();
+        // We send the remote credentials as these should never touch Redux
+        // this.props.onChooseDropboxBasedArchive(this.state.archiveName, this.state.masterPassword);
+    }
+
     handleChooseWebDAVBasedFile(event) {
         event.preventDefault();
         // We send the remote credentials as these should never touch Redux
@@ -129,6 +137,11 @@ class AddArchivePage extends PureComponent {
         );
     }
 
+    handleMyButtercupAuth(event) {
+        event.preventDefault();
+        this.props.onAuthenticateMyButtercup(this.state.myButtercupAuthenticationID);
+    }
+
     handleUpdateForm(property, event) {
         this.setState({
             [property]: event.target.value
@@ -140,26 +153,24 @@ class AddArchivePage extends PureComponent {
         const isTargetingDropbox = this.props.selectedArchiveType === "dropbox";
         const isTargetingGoogleDrive = this.props.selectedArchiveType === "googledrive";
         const isTargetingLocal = this.props.selectedArchiveType === "localfile";
+        const isTargetingMyButtercup = this.props.selectedArchiveType === "mybuttercup";
         const hasAuthenticatedDropbox = typeof this.props.dropboxAuthToken === "string";
         const hasAuthenticatedGoogleDrive = typeof this.props.googleDriveAccessToken === "string";
+        const hasAuthenticatedMyButtercup =
+            this.props.myButtercupAuthID === this.state.myButtercupAuthenticationID && this.props.myButtercupAuthToken;
         const hasAuthenticated =
             (isTargetingWebDAV && this.props.isConnected) ||
             (isTargetingDropbox && hasAuthenticatedDropbox) ||
+            (isTargetingMyButtercup && hasAuthenticatedMyButtercup) ||
             (isTargetingGoogleDrive && hasAuthenticatedGoogleDrive) ||
             (isTargetingLocal && this.props.localAuthStatus === "authenticated");
         const fetchTypeSwitch = switchcase()
             .case(/webdav|owncloud|nextcloud/, "webdav")
             .case("dropbox", "dropbox")
             .case("googledrive", "googledrive")
+            .case("mybuttercup", "mybuttercup")
             .case("localfile", "localfile");
         const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
-        // // Currently waiting for this to be fixed:
-        // // https://github.com/anywhichway/switchcase/issues/3
-        // const fetchType = switchcase({
-        //     [/webdav|owncloud|nextcloud/]: "webdav",
-        //     dropbox: "dropbox",
-        //     localfile: "localfile"
-        // })(this.props.selectedArchiveType);
         return (
             <LayoutMain title="Add Archive">
                 <H4>Choose Vault Type</H4>
@@ -185,6 +196,11 @@ class AddArchivePage extends PureComponent {
                         <Otherwise>{this.renderConnectionInfo()}</Otherwise>
                     </Choose>
                 </If>
+                <If condition={isTargetingMyButtercup && hasAuthenticatedMyButtercup}>
+                    <h3>Choose Archive(s)</h3>
+                    <span>This is where organisation / archive choosing will be...</span>
+                    <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
+                </If>
             </LayoutMain>
         );
     }
@@ -196,6 +212,7 @@ class AddArchivePage extends PureComponent {
             .case(/webdav|owncloud|nextcloud/, ::this.handleChooseWebDAVBasedFile)
             .case("dropbox", ::this.handleChooseDropboxBasedFile)
             .case("googledrive", ::this.handleChooseGoogleDriveBasedFile)
+            .case("mybuttercup", ::this.handleChooseMyButtercupBasedFile)
             .case("localfile", ::this.handleChooseLocalBasedFile);
         const handleSubmit = onClickTypeSwitch(this.props.selectedArchiveType);
 
@@ -237,6 +254,8 @@ class AddArchivePage extends PureComponent {
         const hasAuthenticatedDropbox = isAuthenticatingDropbox && this.props.dropboxAuthToken;
         const isAuthenticatingGoogleDrive = this.props.googleDriveAuthID === this.state.googleDriveAuthenticationID;
         const hasAuthenticatedGoogleDrive = isAuthenticatingGoogleDrive && this.props.googleDriveAccessToken;
+        const isAuthenticatingMyButtercup = this.props.myButtercupAuthID === this.state.myButtercupAuthenticationID;
+        const hasAuthenticatedMyButtercup = isAuthenticatingMyButtercup && this.props.myButtercupAuthToken;
         const isAuthenticatingDesktop = this.props.localAuthStatus === "authenticating";
         const hasAuthenticatedDesktop = this.props.localAuthStatus === "authenticated";
         const isWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
@@ -319,6 +338,22 @@ class AddArchivePage extends PureComponent {
                             </Button>
                         </Card>
                     </When>
+                    <When condition={this.props.selectedArchiveType === "mybuttercup"}>
+                        <Card>
+                            <H4>MyButtercup</H4>
+                            <p>
+                                To start, please grant Buttercup access to your My Buttercup account.
+                            </p>
+                            <Button
+                                icon="key"
+                                onClick={::this.handleMyButtercupAuth}
+                                disabled={hasAuthenticatedMyButtercup}
+                                loading={isAuthenticatingMyButtercup && !hasAuthenticatedMyButtercup}
+                            >
+                                Grant Access
+                            </Button>
+                        </Card>
+                    </When>
                     <When condition={this.props.selectedArchiveType === "localfile"}>
                         <Card>
                             <H4>Local File</H4>
@@ -359,7 +394,7 @@ class AddArchivePage extends PureComponent {
                                 loading={isAuthenticatingDesktop}
                                 disabled={!this.props.isConnected || !this.state.localCode || hasAuthenticatedDesktop}
                             >
-                                Authenticate
+                                Continue
                             </Button>
                         </Card>
                     </When>

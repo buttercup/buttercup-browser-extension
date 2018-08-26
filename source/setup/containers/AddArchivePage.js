@@ -35,7 +35,6 @@ import {
     addWebDAVArchive
 } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
-import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
 import { setAuthID as setGoogleDriveAuthID } from "../../shared/actions/googleDrive.js";
 import { setAuthID as setDropboxAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
@@ -44,6 +43,12 @@ import {
     getAccessToken as getGoogleDriveAccessToken,
     getRefreshToken as getGoogleDriveRefeshToken
 } from "../../shared/selectors/googleDrive";
+import { performAuthentication as performMyButtercupAuthentication } from "../library/myButtercup.js";
+import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButtercup.js";
+import {
+    getAuthID as getMyButtercupAuthID,
+    getAuthToken as getMyButtercupAuthToken
+} from "../../shared/selectors/mybuttercup.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
     createNewClient as createLocalClient,
@@ -63,6 +68,8 @@ export default connect(
         localAuthStatus: getLocalAuthStatus(state),
         isConnected: isConnected(state),
         isConnecting: isConnecting(state),
+        myButtercupAuthID: getMyButtercupAuthID(state),
+        myButtercupAuthToken: getMyButtercupAuthToken(state),
         selectedArchiveType: getSelectedArchiveType(state),
         selectedFilename: getSelectedFilename(state),
         selectedFilenameNeedsCreation: selectedFileNeedsCreation(state)
@@ -92,6 +99,10 @@ export default connect(
         onAuthenticateGoogleDrive: googleDriveAuthID => dispatch => {
             dispatch(setGoogleDriveAuthID(googleDriveAuthID));
             authenticateGoogleDrive();
+        },
+        onAuthenticateMyButtercup: myButtercupAuthID => dispatch => {
+            dispatch(setMyButtercupAuthID(myButtercupAuthID));
+            performMyButtercupAuthentication();
         },
         onChooseDropboxBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
             const name = stripTags(archiveName);
