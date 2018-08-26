@@ -7,6 +7,7 @@ import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/u
 import switchcase from "switchcase";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
+import MyButtercupArchiveChooser from "../containers/MyButtercupArchiveChooser.js";
 import { ARCHIVE_TYPES } from "./ArchiveTypeChooser.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
 
@@ -171,10 +172,14 @@ class AddArchivePage extends PureComponent {
             .case("mybuttercup", "mybuttercup")
             .case("localfile", "localfile");
         const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
+        const chooserTypeSwitch = switchcase()
+            .case("mybuttercup", MyButtercupArchiveChooser)
+            .default(ArchiveTypeChooser);
+        const ArchiveTypeChooserInst = chooserTypeSwitch(this.props.selectedArchiveType);
         return (
             <LayoutMain title="Add Archive">
                 <H4>Choose Vault Type</H4>
-                <ArchiveTypeChooser disabled={hasAuthenticated} />
+                <ArchiveTypeChooserInst disabled={hasAuthenticated} />
                 <Spacer />
                 <If condition={this.props.selectedArchiveType}>
                     <Choose>
@@ -198,7 +203,7 @@ class AddArchivePage extends PureComponent {
                 </If>
                 <If condition={isTargetingMyButtercup && hasAuthenticatedMyButtercup}>
                     <h3>Choose Archive(s)</h3>
-                    <span>This is where organisation / archive choosing will be...</span>
+                    <MyButtercupArchiveChooser />
                     <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
                 </If>
             </LayoutMain>

@@ -48,7 +48,7 @@ import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButter
 import {
     getAuthID as getMyButtercupAuthID,
     getAuthToken as getMyButtercupAuthToken
-} from "../../shared/selectors/mybuttercup.js";
+} from "../../shared/selectors/myButtercup.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
     createNewClient as createLocalClient,

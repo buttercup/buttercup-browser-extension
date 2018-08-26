@@ -7,3 +7,7 @@ export function getAuthID(state) {
 export function getAuthToken(state) {
     return state[KEY].authToken;
 }
+
+export function getOrganisations(state) {
+    return state[KEY].organisations;
+}

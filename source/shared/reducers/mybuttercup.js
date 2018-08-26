@@ -1,8 +1,14 @@
-import { MYBUTTERCUP_CLEAR_STATE, MYBUTTERCUP_SET_AUTH_ID, MYBUTTERCUP_SET_AUTH_TOKEN } from "../actions/types.js";
+import {
+    MYBUTTERCUP_CLEAR_STATE,
+    MYBUTTERCUP_SET_AUTH_ID,
+    MYBUTTERCUP_SET_AUTH_TOKEN,
+    MYBUTTERCUP_SET_ORGS
+} from "../actions/types.js";
 
 const INITIAL = {
     authenticationID: null,
-    authToken: null
+    authToken: null,
+    organisations: []
 };
 
 export default function myButtercupReducer(state = INITIAL, action = {}) {
@@ -11,7 +17,8 @@ export default function myButtercupReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 authenticationID: null,
-                authToken: null
+                authToken: null,
+                organisations: []
             };
         case MYBUTTERCUP_SET_AUTH_ID:
             return {
@@ -22,6 +29,11 @@ export default function myButtercupReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 authToken: action.payload
+            };
+        case MYBUTTERCUP_SET_ORGS:
+            return {
+                ...state,
+                organisations: [...action.payload]
             };
 
         default:
