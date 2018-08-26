@@ -2,7 +2,7 @@ import Buttercup, { MyButtercupClient } from "../../shared/library/buttercup.js"
 import { dispatch, getState } from "../redux/index.js";
 import { MYBUTTERCUP_CALLBACK_URL } from "../../shared/library/myButtercup.js";
 import { getAuthToken } from "../../shared/selectors/myButtercup.js";
-import { setOrganisations } from "../../shared/actions/myButtercup.js";
+import { setOrganisationArchives, setOrganisations } from "../../shared/actions/myButtercup.js";
 
 const myButtercupClient = MyButtercupClient.getSharedClient();
 
@@ -19,6 +19,21 @@ export function fetchAccountDetails() {
     const authToken = getAuthToken(state);
     return myButtercupClient.fetchOrganisations(authToken).then(orgs => {
         dispatch(setOrganisations(orgs));
+        return Promise.all(
+            orgs.map(org =>
+                myButtercupClient
+                    .fetchOrganisationArchives(authToken, org.id)
+                    .then(archives => archives.filter(archive => archive.type === "normal"))
+                    .then(archives => {
+                        dispatch(
+                            setOrganisationArchives({
+                                orgID: org.id,
+                                archives
+                            })
+                        );
+                    })
+            )
+        );
     });
 }
 
