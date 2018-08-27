@@ -51,7 +51,7 @@ export function addDropboxArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return source.unlock(masterPassword, create).then(() => archiveManager.addSource(source));
+            return archiveManager.addSource(source).then(() => source.unlock(masterPassword, create));
         });
 }
 
@@ -96,7 +96,7 @@ export function addNextcloudArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return source.unlock(masterPassword, create).then(() => archiveManager.addSource(source));
+            return archiveManager.addSource(source).then(() => source.unlock(masterPassword, create));
         });
 }
 
@@ -124,7 +124,7 @@ export function addOwnCloudArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return source.unlock(masterPassword, create).then(() => archiveManager.addSource(source));
+            return archiveManager.addSource(source).then(() => source.unlock(masterPassword, create));
         });
 }
 
@@ -152,10 +152,7 @@ export function addWebDAVArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return source
-                .unlock(masterPassword, create)
-                .then(() => source)
-                .then(() => archiveManager.addSource(source));
+            return archiveManager.addSource(source).then(() => source.unlock(masterPassword, create));
         });
 }
 
