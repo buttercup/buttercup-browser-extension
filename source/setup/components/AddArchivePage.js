@@ -40,6 +40,7 @@ class AddArchivePage extends PureComponent {
         onChooseDropboxBasedArchive: PropTypes.func.isRequired,
         onChooseGoogleDriveBasedArchive: PropTypes.func.isRequired,
         onChooseLocallyBasedArchive: PropTypes.func.isRequired,
+        onChooseMyButtercupArchives: PropTypes.func.isRequired,
         onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
         onConnectDesktop: PropTypes.func.isRequired,
         onConnectWebDAVBasedSource: PropTypes.func.isRequired,
@@ -107,8 +108,7 @@ class AddArchivePage extends PureComponent {
 
     handleChooseMyButtercupBasedFile(event) {
         event.preventDefault();
-        // We send the remote credentials as these should never touch Redux
-        // this.props.onChooseDropboxBasedArchive(this.state.archiveName, this.state.masterPassword);
+        this.props.onChooseMyButtercupArchives(this.state.masterPassword);
     }
 
     handleChooseWebDAVBasedFile(event) {

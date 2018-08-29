@@ -31,6 +31,8 @@ export function addArchiveByRequest(payload) {
             return addWebDAVArchive(payload);
         case "localfile":
             return addLocalArchive(payload);
+        case "mybuttercup":
+            return addMyButtercupArchive(payload);
         default:
             return Promise.reject(new Error(`Unable to add archive: Unknown type: ${payload.type}`));
     }
@@ -145,6 +147,33 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
             }
         })
         .then(() => saveSource(sourceID));
+}
+
+export function addMyButtercupArchive(payload) {
+    const { archives, masterPassword, authToken } = payload;
+    log.info("Attempting to connect My Buttercup archive(s)");
+    return getArchiveManager().then(archiveManager => {
+        let additionsWork = Promise.resolve();
+        archives.forEach(({ orgID, archiveID, name }) => {
+            additionsWork = additionsWork.then(() => {
+                log.info(` -> My Buttercup archive: ${name} (${archiveID})`);
+                const myBcupCreds = new Credentials("mybuttercup");
+                myBcupCreds.setValue("datasource", {
+                    type: "mybuttercup",
+                    token: authToken,
+                    archiveID
+                });
+                return Promise.all([
+                    myBcupCreds.toSecureString(masterPassword),
+                    Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+                ]).then(([sourceCreds, archiveCreds]) => {
+                    const source = new ArchiveSource(name, sourceCreds, archiveCreds);
+                    return archiveManager.addSource(source).then(() => source.unlock(masterPassword));
+                });
+            });
+        });
+        return additionsWork;
+    });
 }
 
 export function addNextcloudArchive(payload) {

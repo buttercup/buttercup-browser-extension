@@ -41,6 +41,15 @@ export function addLocalArchive(name, masterPassword, filename, key, shouldCreat
     });
 }
 
+export function addMyButtercupArchives(authToken, archives, masterPassword) {
+    return makeArchiveAdditionRequest({
+        type: "mybuttercup",
+        archives,
+        masterPassword,
+        authToken
+    });
+}
+
 export function addNextcloudArchive(name, masterPassword, filename, url, username, password, shouldCreate = false) {
     return makeArchiveAdditionRequest({
         type: "nextcloud",
