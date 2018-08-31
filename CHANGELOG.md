@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v1.11.1
+_2018-08-27_
+
+ * ([#164](https://github.com/buttercup/buttercup-browser-extension/issues/164)) `t is null` error when unlocking archives
+
 ## v1.11.0
 _2018-08-24_
 
