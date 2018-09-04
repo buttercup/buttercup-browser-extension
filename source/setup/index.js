@@ -5,7 +5,6 @@ import { Route } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
-import { connectToBackground } from "./library/messaging.js";
 import AddArchivePage from "./containers/AddArchivePage.js";
 import ArchiveUnlockPage from "./containers/ArchiveUnlockPage.js";
 import ArchivesLockPage from "./containers/ArchivesLockPage.js";
@@ -20,8 +19,6 @@ import "react-select/dist/react-select.css";
 import "../shared/styles/base.sass";
 import "./styles/setup.sass";
 import "../../resources/fontawesome/font-awesome.scss";
-
-connectToBackground();
 
 ReactDOM.render(
     <Provider store={store}>

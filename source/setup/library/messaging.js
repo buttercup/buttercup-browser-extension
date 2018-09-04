@@ -1,8 +1,4 @@
-import { dispatch } from "../redux/index.js";
-import { setEntireState } from "../../shared/actions/app.js";
 import log from "../../shared/library/log.js";
-
-let __backgroundPort = null;
 
 export function addNewEntry(sourceID, groupID, details) {
     const payload = {
@@ -23,11 +19,6 @@ export function addNewEntry(sourceID, groupID, details) {
 
 export function clearLastLogin() {
     chrome.runtime.sendMessage({ type: "clear-used-credentials" });
-}
-
-export function connectToBackground() {
-    __backgroundPort = chrome.runtime.connect({ name: "buttercup-state" });
-    __backgroundPort.onMessage.addListener(handleBackgroundMessage);
 }
 
 export function getArchivesGroupTree(sourceID) {
@@ -52,23 +43,6 @@ export function getLastLogin() {
             }
         });
     });
-}
-
-function handleBackgroundMessage(message) {
-    switch (message.type) {
-        case "action": {
-            const { action } = message;
-            dispatch(action);
-            break;
-        }
-        case "full-state":
-            log.info("Received full state update from background", message.state);
-            dispatch(setEntireState(message.state));
-            break;
-        default:
-            log.error(`Unknown message received: ${JSON.stringify(message)}`);
-            break;
-    }
 }
 
 export function lockAllArchives() {
@@ -121,19 +95,6 @@ export function removeArchive(sourceID) {
             return reject(new Error(`Adding removal failed: ${error}`));
         });
     });
-}
-
-export function sendStateUpdate(action) {
-    log.info("Sending state update to background", action);
-    try {
-        __backgroundPort.postMessage({
-            type: "action",
-            action
-        });
-    } catch (err) {
-        log.error(`Failed sending action to port: ${err.message}`);
-        console.error(err);
-    }
 }
 
 export function unlockArchive(sourceID, masterPassword) {
