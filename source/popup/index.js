@@ -5,7 +5,6 @@ import { Route } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
-import { connectToBackground } from "./library/messaging.js";
 import ArchivesListPage from "./containers/ArchivesListPage.js";
 import EntriesPage from "./containers/EntriesPage.js";
 import MenuPage from "./containers/MenuPage.js";
@@ -13,8 +12,6 @@ import MenuPage from "./containers/MenuPage.js";
 import "../shared/styles/base.sass";
 import "./styles/popup.sass";
 import "../../resources/fontawesome/font-awesome.scss";
-
-connectToBackground();
 
 ReactDOM.render(
     <Provider store={store}>

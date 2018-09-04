@@ -188,7 +188,7 @@ const Message = styled.div`
 function getProviderImage(archiveSourceType) {
     const imageSrc = ARCHIVE_IMAGES[archiveSourceType];
     if (!imageSrc) {
-        throw new Error(`No image asset for archive type: ${archiveSourceType}`);
+        return null;
     }
     return <ArchiveTypeImage src={imageSrc} />;
 }
