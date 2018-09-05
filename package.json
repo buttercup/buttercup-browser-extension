@@ -6,6 +6,7 @@
   "scripts": {
     "build": "run-s clean build:production",
     "build:production": "NODE_ENV=production webpack --progress",
+    "build:windows": "npm run clean && SET NODE_ENV=production && webpack --progress",
     "clean": "rimraf dist/*",
     "dev": "webpack -w --progress",
     "dev:prod": "NODE_ENV=production webpack -w --progress",
