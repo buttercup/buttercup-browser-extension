@@ -4,6 +4,7 @@
     "name": "Buttercup",
     "description": "Browser extension for Buttercup",
     "version": "0.0.0",
+    "author": "MadDev Oy",
 
     "browser_action": {
         "default_icon": "resources/buttercup-256.png",
@@ -22,7 +23,8 @@
             "background-buttercup.js",
             "background-vendor.js",
             "background-index.js"
-        ]
+        ],
+        "persistent": true
     },
 
     "content_scripts" : [
@@ -57,6 +59,10 @@
         "dialog.html",
         "dialog.js",
         "resources/*"
-    ]
+    ],
 
+    "-ms-preload": {
+        "backgroundScript": "ms-bridge-background.js",
+        "contentScript": "ms-bridge-content.js"
+    }
 }
