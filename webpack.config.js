@@ -134,6 +134,12 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
             },
             {
                 from: path.join(RESOURCES, "buttercup-*.png")
+            },
+            {
+                from: path.join(RESOURCES, "ms-bridge-background.js")
+            },
+            {
+                from: path.join(RESOURCES, "ms-bridge-content.js")
             }
         ]),
         new CommonsChunkPlugin({
