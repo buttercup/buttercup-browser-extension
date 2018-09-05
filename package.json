@@ -92,6 +92,7 @@
     "redom": "^3.12.7",
     "redux": "^3.7.2",
     "redux-actions": "^2.6.1",
+    "redux-browser-extension-sync": "^0.1.1",
     "redux-thunk": "^2.3.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.1.0",
