@@ -1,11 +1,18 @@
 import { storage } from "buttercup/dist/buttercup-web.js";
 
-const { StorageInterface } = storage;
+const { MemoryStorageInterface, StorageInterface } = storage;
 
 export function getDefaultStorageAdapter() {
     return chrome.storage.local;
 }
 
+// export default class BrowserStorageInterface extends MemoryStorageInterface {
+//     constructor() {
+//         super();
+//     }
+// }
+
+// Edge doesn't like chrome storage for some reason, so this will fail:
 export default class BrowserStorageInterface extends StorageInterface {
     constructor() {
         super();

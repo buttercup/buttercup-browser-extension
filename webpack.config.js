@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { devDependencies, version } = require("./package.json");
 
-const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
+const { NormalModuleReplacementPlugin, DefinePlugin } = webpack;
 const { CommonsChunkPlugin } = webpack.optimize;
 
 const DIST = path.resolve(__dirname, "./dist");
