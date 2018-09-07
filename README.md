@@ -20,10 +20,12 @@ This browser extension allows users to interface with password archives authored
 
 The extension can remotely connect to archives via Buttercup's common communication protocols (WebDAV, Dropbox etc.).
 
+This extension uses [Locust](https://github.com/buttercup/locust) to perform login form detection. Issues relating to the detection and operation of login forms should be opened there.
+
 ### Supported browsers
 [Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) and [Opera](https://addons.opera.com/en/extensions/details/buttercup/) are supported.
 
-Other browsers will be supported in order of request/popularity.
+Other browsers will be supported in order of request/popularity. Issues created for unsupported browsers, or for browsers not on the roadmap, may be closed without warning.
 
 #### Supported platforms
 The browsers listed above, running on Windows, Mac or Linux on a desktop platform. This extension is not supported on any mobile or tablet devices.
