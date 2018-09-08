@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import { InputGroup } from "@blueprintjs/core";
 import styled from "styled-components";
 
 const SEARCH_ICON = require("../../../resources/search-icon.png");
@@ -10,57 +11,28 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-`;
-const SearchInput = styled.input`
-    flex-grow: 2;
-    border: 0;
-    color: #fff;
-    height: 36px;
-    margin: 0px;
-    background-color: rgba(0, 0, 0, 0);
-    font-size: 16px;
-    padding-left: 26px;
-    outline: none;
-    background: url(${SEARCH_ICON});
-    background-repeat: no-repeat;
-    background-position: 6px 50%;
-    background-size: 14px 14px;
+    padding: 0.5rem;
 `;
 
-class SearchBar extends Component {
+class SearchBar extends PureComponent {
     static propTypes = {
         onSearchTermChange: PropTypes.func.isRequired
     };
 
-    state = {
-        searchTerm: ""
-    };
-
-    componentDidMount() {
-        setTimeout(() => {
-            this._input.focus();
-        }, 250);
-    }
-
     handleSearchTermChange(event) {
         const value = event.target.value;
-        this.setState({
-            searchTerm: value
-        });
         this.props.onSearchTermChange(value);
     }
 
     render() {
         return (
             <Container>
-                <SearchInput
-                    type="text"
+                <InputGroup
                     placeholder="Search for entries..."
-                    value={this.state.searchTerm}
+                    className="bp3-fill"
+                    type="search"
+                    leftIcon="search"
                     onChange={::this.handleSearchTermChange}
-                    innerRef={input => {
-                        this._input = input;
-                    }}
                 />
             </Container>
         );
