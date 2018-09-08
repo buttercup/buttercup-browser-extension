@@ -33,7 +33,6 @@ class EntriesPage extends Component {
     render() {
         return (
             <Container>
-                <HeaderBar current="entries" />
                 <SearchBar />
                 <SearchResults />
             </Container>

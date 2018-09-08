@@ -202,7 +202,6 @@ class ArchivesListPage extends Component {
     render() {
         return (
             <Container>
-                <HeaderBar current="archives" />
                 <ListContainer>
                     <Choose>
                         <When condition={this.props.archives.length > 0}>{this.renderArchivesList()}</When>

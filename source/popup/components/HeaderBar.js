@@ -2,7 +2,25 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
+import { Select } from "@blueprintjs/select";
+import { Button as Button2, MenuItem } from "@blueprintjs/core";
+import { ArchivesShape, ArchiveShape } from "../../shared/prop-types/archive.js";
 import { version } from "../../../package.json";
+
+const renderArchive = (item, { handleClick, modifiers }) => {
+    if (!item) {
+        return null;
+    }
+    return (
+        <MenuItem
+            active={modifiers.active}
+            key={item.title}
+            label={item.type}
+            onClick={handleClick}
+            text={item.title}
+        />
+    );
+};
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
 
@@ -10,18 +28,17 @@ const HEADER_SIZE = 30;
 
 const Container = styled.div`
     width: 100%;
-    height: ${HEADER_SIZE}px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(80, 80, 80, 1);
-    background-color: rgba(10, 10, 10, 1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     position: relative;
+    padding: 0.5rem;
 `;
 const Logo = styled.img`
-    width: ${HEADER_SIZE - 6}px;
-    height: auto;
-    margin: 3px;
+    height: 16px;
+    width: auto;
+    flex: 0;
 `;
 const Buttons = styled.div`
     height: 100%;
@@ -60,10 +77,13 @@ const Version = styled.span`
 
 class HeaderBar extends Component {
     static propTypes = {
+        currentArchive: ArchiveShape,
+        archives: ArchivesShape,
         current: PropTypes.string,
         onItemsClick: PropTypes.func.isRequired,
         onMenuClick: PropTypes.func.isRequired,
-        onVaultsClick: PropTypes.func.isRequired
+        onVaultsClick: PropTypes.func.isRequired,
+        onCurrentVaultChange: PropTypes.func.isRequired
     };
 
     handleItemsClick(event) {
@@ -81,11 +101,25 @@ class HeaderBar extends Component {
         this.props.onVaultsClick();
     }
 
+    handleVaultChange(vault) {
+        this.props.onCurrentVaultChange(vault.id);
+    }
+
     render() {
+        const { currentArchive } = this.props;
         return (
             <Container>
-                <Logo src={BUTTERCUP_LOGO} />
-                <Version>v{version}</Version>
+                {/* <Logo src={BUTTERCUP_LOGO} /> */}
+                <Select
+                    filterable={false}
+                    popoverProps={{ minimal: true }}
+                    itemRenderer={renderArchive}
+                    items={this.props.archives}
+                    onItemSelect={::this.handleVaultChange}
+                >
+                    <Button2 icon="film" rightIcon="caret-down" text={currentArchive ? currentArchive.name : "beep"} />
+                </Select>
+                {/* <Version>v{version}</Version> */}
                 <Buttons>
                     <Separator />
                     <Button onClick={::this.handleVaultsClick} selected={this.props.current === "archives"}>

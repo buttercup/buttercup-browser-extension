@@ -8,6 +8,7 @@ import history from "./redux/history.js";
 import ArchivesListPage from "./containers/ArchivesListPage.js";
 import EntriesPage from "./containers/EntriesPage.js";
 import MenuPage from "./containers/MenuPage.js";
+import HeaderBar from "./containers/HeaderBar.js";
 
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
@@ -17,13 +18,16 @@ import "../../resources/fontawesome/font-awesome.scss";
 
 ReactDOM.render(
     <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <Fragment>
-                <Route exact path="/" component={EntriesPage} />
-                <Route path="/entries" component={EntriesPage} />
-                <Route path="/menu" component={MenuPage} />
-            </Fragment>
-        </ConnectedRouter>
+        <Fragment>
+            <HeaderBar />
+            <ConnectedRouter history={history}>
+                <Fragment>
+                    <Route exact path="/" component={EntriesPage} />
+                    <Route path="/entries" component={ArchivesListPage} />
+                    <Route path="/menu" component={MenuPage} />
+                </Fragment>
+            </ConnectedRouter>
+        </Fragment>
     </Provider>,
     document.getElementById("root")
 );
