@@ -2,81 +2,48 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
+import cx from "classnames";
+import { Colors, Text, Classes } from "@blueprintjs/core";
 import { getIconForURL } from "../../shared/library/icons.js";
 
-const KEY_ICON = require("../../../resources/key.png");
+const KEY_ICON = require("../../../resources/no-icon.svg");
 
-const ICON_CONTAINER_SIZE = 40;
-const ICON_SIZE = ICON_CONTAINER_SIZE - 8;
-const ROW_HEIGHT = 48;
-
-const Container = styled.div`
-    width: 100%;
-    height: ${ROW_HEIGHT}px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    flex-shrink: 0;
-`;
-const EntryImageContainer = styled.div`
-    background-color: ${props => (props.hovering ? "rgba(0, 183, 172, 0.5)" : "rgba(0,0,0,0)")};
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: ${ROW_HEIGHT}px;
-    height: ${ROW_HEIGHT}px;
-    flex-shrink: 0;
-`;
 const EntryImageBackground = styled.div`
-    width: ${ICON_CONTAINER_SIZE}px;
-    height: ${ICON_CONTAINER_SIZE}px;
+    width: 2.5rem;
+    height: 2.5rem;
     background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 3px;
+    padding: 3px;
+    border: 1px solid ${Colors.LIGHT_GRAY3};
 `;
-const EntryImage = styled.div`
-    width: ${ICON_SIZE}px;
-    height: ${ICON_SIZE}px;
-    background: url(${props => props.data});
-    background-size: ${ICON_SIZE}px ${ICON_SIZE}px;
-    background-repeat: no-repeat;
+const EntryImage = styled.img`
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
 `;
 const DetailsContainer = styled.div`
-    flex-grow: 2;
-    flex-shrink: 2;
+    flex: 1;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
     overflow: auto;
-    height: 100%;
     cursor: pointer;
-    background-color: ${props => (props.hovering ? "rgba(0, 183, 172, 0.5)" : "rgba(0,0,0,0)")};
+    border-radius: 3px;
+    padding: 0.5rem;
+
+    &:hover {
+        background-color: ${Colors.LIGHT_GRAY3};
+    }
 `;
 const DetailRow = styled.div`
-    width: calc(100% - 16px);
-    padding-left: 8px;
-    padding-right: 8px;
-    overflow: hidden;
-    height: 22px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+    margin-left: 1rem;
+    flex: 1;
 `;
-const Title = styled.span`
-    font-size: 16px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-`;
-const Subtitle = styled.span`
-    color: rgb(180, 180, 180);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+const Title = styled(Text)`
+    margin-bottom: 0.3rem;
 `;
 
 class SearchResult extends Component {
@@ -89,7 +56,6 @@ class SearchResult extends Component {
     };
 
     state = {
-        hoveringDetail: false,
         icon: KEY_ICON
     };
 
@@ -115,52 +81,24 @@ class SearchResult extends Component {
         this.props.onSelectEntry(this.props.sourceID, this.props.entryID);
     }
 
-    onMouseEnterDetail() {
-        this.setState({
-            hoveringDetail: true
-        });
-    }
-
-    onMouseLeaveDetail() {
-        this.setState({
-            hoveringDetail: false
-        });
-    }
-
     render() {
         const [sourceName, ...groups] = this.props.path;
         return (
-            <Container>
-                <EntryImageContainer
-                    hovering={this.state.hoveringDetail}
-                    onMouseEnter={::this.onMouseEnterDetail}
-                    onMouseLeave={::this.onMouseLeaveDetail}
-                    onClick={::this.handleClickEntry}
-                >
-                    <EntryImageBackground>
-                        <EntryImage data={this.state.icon} />
-                    </EntryImageBackground>
-                </EntryImageContainer>
-                <DetailsContainer
-                    hovering={this.state.hoveringDetail}
-                    onMouseEnter={::this.onMouseEnterDetail}
-                    onMouseLeave={::this.onMouseLeaveDetail}
-                    onClick={::this.handleClickEntry}
-                >
-                    <DetailRow>
-                        <Title>{this.props.title}</Title>
-                    </DetailRow>
-                    <DetailRow>
-                        <Subtitle>
-                            <FontAwesome name="cube" /> <strong>{sourceName}</strong> »{" "}
-                            <For each="group" index="index" of={groups}>
-                                <If condition={index > 0}> › </If>
-                                {group}
-                            </For>
-                        </Subtitle>
-                    </DetailRow>
-                </DetailsContainer>
-            </Container>
+            <DetailsContainer onClick={::this.handleClickEntry}>
+                <EntryImageBackground>
+                    <EntryImage src={this.state.icon} />
+                </EntryImageBackground>
+                <DetailRow>
+                    <Title>{this.props.title}</Title>
+                    <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
+                        {sourceName} ›{" "}
+                        <For each="group" index="index" of={groups}>
+                            <If condition={index > 0}> › </If>
+                            {group}
+                        </For>
+                    </Text>
+                </DetailRow>
+            </DetailsContainer>
         );
     }
 }

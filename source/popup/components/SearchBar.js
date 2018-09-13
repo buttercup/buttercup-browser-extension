@@ -24,6 +24,10 @@ class SearchBar extends PureComponent {
         this.props.onSearchTermChange(value);
     }
 
+    componentDidMount() {
+        this.props.onSearchTermChange("a");
+    }
+
     render() {
         return (
             <Container>
