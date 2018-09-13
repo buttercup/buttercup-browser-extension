@@ -1,26 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import { Button as Button2, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 import FontAwesome from "react-fontawesome";
-import { Select } from "@blueprintjs/select";
-import { Button as Button2, MenuItem } from "@blueprintjs/core";
-import { ArchivesShape, ArchiveShape } from "../../shared/prop-types/archive.js";
-import { version } from "../../../package.json";
-
-const renderArchive = (item, { handleClick, modifiers }) => {
-    if (!item) {
-        return null;
-    }
-    return (
-        <MenuItem
-            active={modifiers.active}
-            key={item.title}
-            label={item.type}
-            onClick={handleClick}
-            text={item.title}
-        />
-    );
-};
+import styled from "styled-components";
+import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
 
@@ -106,19 +89,27 @@ class HeaderBar extends Component {
     }
 
     render() {
-        const { currentArchive } = this.props;
+        const { currentArchive, archives } = this.props;
+        const archiveMenu = (
+            <Menu>
+                <For each="vault" of={archives} index="index">
+                    <MenuItem
+                        icon="graph"
+                        text={vault.name}
+                        key={index}
+                        onClick={() => this.handleVaultChange(vault)}
+                    />
+                </For>
+                <MenuDivider />
+                <MenuItem icon="add" text="Manage Archives" />
+            </Menu>
+        );
         return (
             <Container>
                 {/* <Logo src={BUTTERCUP_LOGO} /> */}
-                <Select
-                    filterable={false}
-                    popoverProps={{ minimal: true }}
-                    itemRenderer={renderArchive}
-                    items={this.props.archives}
-                    onItemSelect={::this.handleVaultChange}
-                >
+                <Popover content={archiveMenu} position={Position.BOTTOM_LEFT}>
                     <Button2 icon="film" rightIcon="caret-down" text={currentArchive ? currentArchive.name : "beep"} />
-                </Select>
+                </Popover>
                 {/* <Version>v{version}</Version> */}
                 <Buttons>
                     <Separator />
