@@ -11,13 +11,13 @@ export default connect(
     }),
     {
         onItemsClick: () => dispatch => {
-            dispatch(push("/entries"));
+            dispatch(push("/"));
         },
         onMenuClick: () => dispatch => {
             dispatch(push("/menu"));
         },
         onVaultsClick: () => dispatch => {
-            dispatch(push("/"));
+            dispatch(push("/vaults"));
         },
         onCurrentVaultChange: vaultId => () => {
             setCurrentVaultContext(vaultId);

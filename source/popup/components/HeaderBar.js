@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Button as Button2, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
+import { Button as Button2, Menu, MenuDivider, MenuItem, Popover, Position, Icon } from "@blueprintjs/core";
 import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
 import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
+import { VaultIcon } from "./VaultIcon";
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
 
@@ -85,40 +86,49 @@ class HeaderBar extends Component {
     }
 
     handleVaultChange(vault) {
-        this.props.onCurrentVaultChange(vault.id);
+        this.props.onCurrentVaultChange(vault ? vault.id : null);
     }
 
     render() {
         const { currentArchive, archives } = this.props;
         const archiveMenu = (
             <Menu>
+                <MenuItem
+                    icon="shield"
+                    text="All Vaults"
+                    onClick={() => this.handleVaultChange(null)}
+                    active={!currentArchive}
+                />
+                <MenuDivider />
                 <For each="vault" of={archives} index="index">
                     <MenuItem
-                        icon="graph"
+                        active={currentArchive && currentArchive.id === vault.id}
+                        icon={<VaultIcon vault={vault} />}
+                        label={vault.status === "locked" ? <Icon icon="lock" /> : null}
                         text={vault.name}
                         key={index}
                         onClick={() => this.handleVaultChange(vault)}
                     />
                 </For>
                 <MenuDivider />
-                <MenuItem icon="add" text="Manage Archives" />
+                <MenuItem icon="numbered-list" text="Manage Vaults" />
             </Menu>
         );
         return (
             <Container>
                 {/* <Logo src={BUTTERCUP_LOGO} /> */}
                 <Popover content={archiveMenu} position={Position.BOTTOM_LEFT}>
-                    <Button2 icon="film" rightIcon="caret-down" text={currentArchive ? currentArchive.name : "beep"} />
+                    <Button2
+                        icon={currentArchive ? <VaultIcon vault={currentArchive} /> : "shield"}
+                        rightIcon="caret-down"
+                        text={currentArchive ? currentArchive.name : "All Vaults"}
+                    />
                 </Popover>
                 {/* <Version>v{version}</Version> */}
                 <Buttons>
                     <Separator />
                     <Button onClick={::this.handleVaultsClick} selected={this.props.current === "archives"}>
                         Vaults
-                    </Button>
-                    <Separator />
-                    <Button onClick={::this.handleItemsClick} selected={this.props.current === "entries"}>
-                        Items
                     </Button>
                     <Separator />
                     <Button onClick={::this.handleMenuClick} selected={this.props.current === "menu"}>

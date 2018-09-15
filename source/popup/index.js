@@ -23,7 +23,7 @@ ReactDOM.render(
             <ConnectedRouter history={history}>
                 <Fragment>
                     <Route exact path="/" component={EntriesPage} />
-                    <Route path="/entries" component={ArchivesListPage} />
+                    <Route path="/vaults" component={ArchivesListPage} />
                     <Route path="/menu" component={MenuPage} />
                 </Fragment>
             </ConnectedRouter>
