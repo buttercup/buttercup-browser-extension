@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import HeaderBar from "../components/HeaderBar.js";
 import { getArchives, getCurrentArchive } from "../../shared/selectors/archives.js";
-import { setCurrentArchiveId } from "../../shared/actions/archives.js";
+import { setCurrentVaultContext } from "../../shared/library/messaging.js";
 
 export default connect(
     (state, ownProps) => ({
@@ -19,6 +19,8 @@ export default connect(
         onVaultsClick: () => dispatch => {
             dispatch(push("/"));
         },
-        onCurrentVaultChange: setCurrentArchiveId
+        onCurrentVaultChange: vaultId => () => {
+            setCurrentVaultContext(vaultId);
+        }
     }
 )(HeaderBar);

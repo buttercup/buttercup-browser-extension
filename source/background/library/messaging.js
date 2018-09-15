@@ -18,6 +18,7 @@ import {
     unlockSource
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
+import { setCurrentArchiveId } from "../../shared/actions/archives.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
@@ -214,6 +215,10 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             return true;
+        }
+        case "set-current-vault-context": {
+            dispatch(setCurrentArchiveId(request.vaultId));
+            return;
         }
         default:
             // Do nothing
