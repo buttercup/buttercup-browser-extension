@@ -228,8 +228,7 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 function processSearchResults([entries, sources]) {
-    const state = getState();
-    const currentArchive = getCurrentArchive(state);
+    const currentArchive = getCurrentArchive(getState());
     return Promise.all(
         entries
             .filter(entry => {

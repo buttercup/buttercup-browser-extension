@@ -80,11 +80,6 @@ class HeaderBar extends Component {
         this.props.onMenuClick();
     }
 
-    handleVaultsClick(event) {
-        event.preventDefault();
-        this.props.onVaultsClick();
-    }
-
     handleVaultChange(vault) {
         this.props.onCurrentVaultChange(vault ? vault.id : null);
     }
@@ -111,7 +106,7 @@ class HeaderBar extends Component {
                     />
                 </For>
                 <MenuDivider />
-                <MenuItem icon="numbered-list" text="Manage Vaults" />
+                <MenuItem icon="numbered-list" text="Manage Vaults" onClick={this.props.onVaultsClick} />
             </Menu>
         );
         return (
@@ -127,9 +122,6 @@ class HeaderBar extends Component {
                 {/* <Version>v{version}</Version> */}
                 <Buttons>
                     <Separator />
-                    <Button onClick={::this.handleVaultsClick} selected={this.props.current === "archives"}>
-                        Vaults
-                    </Button>
                     <Separator />
                     <Button onClick={::this.handleMenuClick} selected={this.props.current === "menu"}>
                         <FontAwesome name="bars" />
