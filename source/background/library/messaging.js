@@ -22,6 +22,7 @@ import { setCurrentArchiveId } from "../../shared/actions/archives.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
+import { getCurrentArchive } from "../../shared/selectors/archives.js";
 
 const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
@@ -227,13 +228,22 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 function processSearchResults([entries, sources]) {
+    const state = getState();
+    const currentArchive = getCurrentArchive(state);
     return Promise.all(
-        entries.map(info =>
-            getNameForSource(info.sourceID).then(name => ({
-                ...info,
-                sourceName: name
-            }))
-        )
+        entries
+            .filter(entry => {
+                if (currentArchive) {
+                    return currentArchive.id === entry.sourceID;
+                }
+                return true;
+            })
+            .map(info =>
+                getNameForSource(info.sourceID).then(name => ({
+                    ...info,
+                    sourceName: name
+                }))
+            )
     ).then(entries => {
         dispatch(
             setEntrySearchResults(
