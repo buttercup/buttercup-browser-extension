@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
@@ -12,7 +12,7 @@ const SearchInputWrapper = styled.div`
     margin-bottom: 0.5rem;
 `;
 
-class EntriesPage extends Component {
+export default class EntriesPage extends PureComponent {
     static propTypes = {
         onPrepare: PropTypes.func.isRequired
     };
@@ -46,5 +46,3 @@ class EntriesPage extends Component {
         );
     }
 }
-
-export default EntriesPage;
