@@ -5,11 +5,9 @@ import { NonIdealState, Divider } from "@blueprintjs/core";
 import SearchResult from "../containers/SearchResult.js";
 
 const Container = styled.div`
-    width: 100%;
-    height: 300px;
     overflow-x: hidden;
     overflow-y: scroll;
-    padding: 0.5rem;
+    flex: 1;
 `;
 
 const EntryShape = PropTypes.shape({

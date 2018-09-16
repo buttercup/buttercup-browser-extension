@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
+import styled from "styled-components";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
 import ArchivesListPage from "./containers/ArchivesListPage.js";
@@ -16,16 +17,23 @@ import "../shared/styles/base.sass";
 import "./styles/popup.sass";
 import "../../resources/fontawesome/font-awesome.scss";
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 0.5rem;
+`;
+
 ReactDOM.render(
     <Provider store={store}>
         <Fragment>
             <HeaderBar />
             <ConnectedRouter history={history}>
-                <Fragment>
+                <Container>
                     <Route exact path="/" component={EntriesPage} />
                     <Route path="/vaults" component={ArchivesListPage} />
                     <Route path="/menu" component={MenuPage} />
-                </Fragment>
+                </Container>
             </ConnectedRouter>
         </Fragment>
     </Provider>,
