@@ -2,12 +2,9 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Button, Colors, Icon, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 import styled from "styled-components";
-import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
 import { VaultIcon } from "./VaultIcon";
-
-const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
-
-const HEADER_SIZE = 30;
+import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
+import { version } from "../../../package.json";
 
 const Container = styled.div`
     display: flex;
@@ -23,9 +20,11 @@ class HeaderBar extends PureComponent {
         archives: ArchivesShape,
         current: PropTypes.string,
         onItemsClick: PropTypes.func.isRequired,
-        onMenuClick: PropTypes.func.isRequired,
         onVaultsClick: PropTypes.func.isRequired,
-        onCurrentVaultChange: PropTypes.func.isRequired
+        onCurrentVaultChange: PropTypes.func.isRequired,
+        onAddArchiveClick: PropTypes.func.isRequired,
+        onLockAllClick: PropTypes.func.isRequired,
+        onOtherSoftwareClick: PropTypes.func.isRequired
     };
 
     handleItemsClick(event) {
@@ -67,6 +66,15 @@ class HeaderBar extends PureComponent {
                 <MenuItem icon="numbered-list" text="Manage Vaults" onClick={this.props.onVaultsClick} />
             </Menu>
         );
+        const optionsMenu = (
+            <Menu>
+                <MenuItem text="Add Vault" icon="add" onClick={::this.props.onAddArchiveClick} />
+                <MenuItem text="Lock All Vaults" icon="lock" onClick={::this.props.onLockAllClick} />
+                <MenuItem text="Other Applications" icon="mobile-phone" onClick={::this.props.onOtherSoftwareClick} />
+                <MenuDivider />
+                <MenuItem text={`Buttercup v${version}`} icon="info-sign" disabled />
+            </Menu>
+        );
         return (
             <Container>
                 <Popover content={archiveMenu} position={Position.BOTTOM_LEFT}>
@@ -76,7 +84,9 @@ class HeaderBar extends PureComponent {
                         text={currentArchive ? currentArchive.name : "All Vaults"}
                     />
                 </Popover>
-                <Button onClick={::this.handleMenuClick} icon="cog" minimal />
+                <Popover content={optionsMenu} position={Position.BOTTOM_RIGHT}>
+                    <Button icon="cog" minimal />
+                </Popover>
             </Container>
         );
     }

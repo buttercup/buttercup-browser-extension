@@ -32,7 +32,6 @@ ReactDOM.render(
                 <Container>
                     <Route exact path="/" component={EntriesPage} />
                     <Route path="/vaults" component={ArchivesListPage} />
-                    <Route path="/menu" component={MenuPage} />
                 </Container>
             </ConnectedRouter>
         </Fragment>
