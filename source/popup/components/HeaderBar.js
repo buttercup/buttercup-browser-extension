@@ -42,7 +42,7 @@ class HeaderBar extends PureComponent {
     }
 
     render() {
-        const { currentArchive, archives } = this.props;
+        const { currentArchive, archives, location } = this.props;
         const archiveMenu = (
             <Menu>
                 <MenuItem
@@ -63,13 +63,13 @@ class HeaderBar extends PureComponent {
                     />
                 </For>
                 <MenuDivider />
+                <MenuItem text="Add Vault" icon="add" onClick={::this.props.onAddArchiveClick} />
+                <MenuItem text="Lock All Vaults" icon="lock" onClick={::this.props.onLockAllClick} />
                 <MenuItem icon="numbered-list" text="Manage Vaults" onClick={this.props.onVaultsClick} />
             </Menu>
         );
         const optionsMenu = (
             <Menu>
-                <MenuItem text="Add Vault" icon="add" onClick={::this.props.onAddArchiveClick} />
-                <MenuItem text="Lock All Vaults" icon="lock" onClick={::this.props.onLockAllClick} />
                 <MenuItem text="Other Applications" icon="mobile-phone" onClick={::this.props.onOtherSoftwareClick} />
                 <MenuDivider />
                 <MenuItem text={`Buttercup v${version}`} icon="info-sign" disabled />
@@ -77,13 +77,20 @@ class HeaderBar extends PureComponent {
         );
         return (
             <Container>
-                <Popover content={archiveMenu} position={Position.BOTTOM_LEFT}>
-                    <Button
-                        icon={currentArchive ? <VaultIcon vault={currentArchive} /> : "shield"}
-                        rightIcon="caret-down"
-                        text={currentArchive ? currentArchive.name : "All Vaults"}
-                    />
-                </Popover>
+                <Choose>
+                    <When condition={location.pathname !== "/"}>
+                        <Button text="Back" icon="arrow-left" onClick={::this.props.onItemsClick} />
+                    </When>
+                    <Otherwise>
+                        <Popover content={archiveMenu} position={Position.BOTTOM_LEFT}>
+                            <Button
+                                icon={currentArchive ? <VaultIcon vault={currentArchive} /> : "shield"}
+                                rightIcon="caret-down"
+                                text={currentArchive ? currentArchive.name : "All Vaults"}
+                            />
+                        </Popover>
+                    </Otherwise>
+                </Choose>
                 <Popover content={optionsMenu} position={Position.BOTTOM_RIGHT}>
                     <Button icon="cog" minimal />
                 </Popover>

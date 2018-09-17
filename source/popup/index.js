@@ -8,7 +8,6 @@ import store from "./redux/index.js";
 import history from "./redux/history.js";
 import ArchivesListPage from "./containers/ArchivesListPage.js";
 import EntriesPage from "./containers/EntriesPage.js";
-import MenuPage from "./containers/MenuPage.js";
 import HeaderBar from "./containers/HeaderBar.js";
 
 import "@blueprintjs/core/lib/css/blueprint.css";
@@ -26,15 +25,15 @@ const Container = styled.div`
 
 ReactDOM.render(
     <Provider store={store}>
-        <Fragment>
-            <HeaderBar />
-            <ConnectedRouter history={history}>
+        <ConnectedRouter history={history}>
+            <Fragment>
+                <HeaderBar />
                 <Container>
                     <Route exact path="/" component={EntriesPage} />
                     <Route path="/vaults" component={ArchivesListPage} />
                 </Container>
-            </ConnectedRouter>
-        </Fragment>
+            </Fragment>
+        </ConnectedRouter>
     </Provider>,
     document.getElementById("root")
 );
