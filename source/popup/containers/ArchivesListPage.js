@@ -10,6 +10,9 @@ export default connect(
     {
         onArchiveClick: (archiveID, state) => () => {
             createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}/${state}`));
+        },
+        onAddArchiveClick: () => () => {
+            createNewTab(getExtensionURL("setup.html#/add-archive"));
         }
     }
 )(ArchivesListPage);

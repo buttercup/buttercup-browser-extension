@@ -45,24 +45,26 @@ class HeaderBar extends PureComponent {
         const { currentArchive, archives, location } = this.props;
         const archiveMenu = (
             <Menu>
-                <MenuItem
-                    icon="shield"
-                    text="All Vaults"
-                    onClick={() => this.handleVaultChange(null)}
-                    active={!currentArchive}
-                />
-                <MenuDivider />
-                <For each="vault" of={archives} index="index">
+                <If condition={archives.length > 0}>
+                    <MenuDivider title="Current Vault:" />
                     <MenuItem
-                        active={currentArchive && currentArchive.id === vault.id}
-                        icon={<VaultIcon vault={vault} />}
-                        label={vault.status === "locked" ? <Icon icon="lock" /> : null}
-                        text={vault.name}
-                        key={index}
-                        onClick={() => this.handleVaultChange(vault)}
+                        icon="shield"
+                        text="All Vaults"
+                        onClick={() => this.handleVaultChange(null)}
+                        active={!currentArchive}
                     />
-                </For>
-                <MenuDivider />
+                    <For each="vault" of={archives} index="index">
+                        <MenuItem
+                            active={currentArchive && currentArchive.id === vault.id}
+                            icon={<VaultIcon vault={vault} />}
+                            label={vault.status === "locked" ? <Icon icon="lock" /> : null}
+                            text={vault.name}
+                            key={index}
+                            onClick={() => this.handleVaultChange(vault)}
+                        />
+                    </For>
+                    <MenuDivider />
+                </If>
                 <MenuItem text="Add Vault" icon="add" onClick={::this.props.onAddArchiveClick} />
                 <MenuItem text="Lock All Vaults" icon="lock" onClick={::this.props.onLockAllClick} />
                 <MenuItem icon="numbered-list" text="Manage Vaults" onClick={this.props.onVaultsClick} />
@@ -80,6 +82,9 @@ class HeaderBar extends PureComponent {
                 <Choose>
                     <When condition={location.pathname !== "/"}>
                         <Button text="Back" icon="arrow-left" onClick={::this.props.onItemsClick} />
+                    </When>
+                    <When condition={location.pathname === "/" && archives.length === 0}>
+                        <Button icon="add" onClick={::this.props.onAddArchiveClick} />
                     </When>
                     <Otherwise>
                         <Popover content={archiveMenu} position={Position.BOTTOM_LEFT}>

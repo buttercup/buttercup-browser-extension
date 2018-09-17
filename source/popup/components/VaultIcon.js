@@ -9,8 +9,8 @@ const ARCHIVE_IMAGES = {
 };
 
 const Wrapper = styled.div`
-    width: 20px;
-    height: 20px;
+    width: ${p => (p.isLarge ? "40px" : "20px")};
+    height: ${p => (p.isLarge ? "40px" : "20px")};
     border-radius: 50%;
     background-color: ${p => p.vault.colour};
     display: flex;
@@ -18,14 +18,14 @@ const Wrapper = styled.div`
     align-items: center;
 
     img {
-        width: 14px;
+        width: ${p => (p.isLarge ? "28px" : "14px")};
         height: auto;
         filter: brightness(0) invert(1);
     }
 `;
 
-export const VaultIcon = ({ vault }) => (
-    <Wrapper vault={vault}>
+export const VaultIcon = ({ vault, isLarge = false }) => (
+    <Wrapper vault={vault} isLarge={isLarge}>
         <img src={ARCHIVE_IMAGES[vault.type]} />
     </Wrapper>
 );
