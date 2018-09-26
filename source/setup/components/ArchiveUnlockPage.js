@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
-import { Button, Intent, Classes, FormGroup, InputGroup } from "@blueprintjs/core";
+import { Button, Intent, Classes, FormGroup, InputGroup, Toaster, Position } from "@blueprintjs/core";
 import Dialog from "./Dialog.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 

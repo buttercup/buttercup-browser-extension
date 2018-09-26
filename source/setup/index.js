@@ -8,7 +8,6 @@ import history from "./redux/history.js";
 import AddArchivePage from "./containers/AddArchivePage.js";
 import ArchiveUnlockPage from "./containers/ArchiveUnlockPage.js";
 import ArchivesLockPage from "./containers/ArchivesLockPage.js";
-import Notifier from "./components/Notifier.js";
 import LoadingModal from "./containers/LoadingModal.js";
 import SaveCredentialsPage from "./containers/SaveCredentialsPage.js";
 import AboutPage from "./components/AboutPage.js";
@@ -33,7 +32,6 @@ ReactDOM.render(
                 <Route path="/about" component={AboutPage} />
                 <Route path="/unlock" component={UnlockAllArchivesPage} />
                 <LoadingModal />
-                <Notifier />
             </Fragment>
         </ConnectedRouter>
     </Provider>,

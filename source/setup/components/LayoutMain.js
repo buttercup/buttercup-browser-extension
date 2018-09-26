@@ -5,8 +5,8 @@ import styled from "styled-components";
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
 
 const MainContent = styled.div`
-    width: 600px;
-    min-height: 100vh;
+    width: 40vw;
+    height: 70vh;
     background-color: #fff;
     display: flex;
     flex-direction: column;

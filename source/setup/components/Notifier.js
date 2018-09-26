@@ -1,20 +1,14 @@
-import React, { Component } from "react";
-import NotificationSystem from "react-notification-system";
+import React, { Fragment } from "react";
+import { Toaster, Position, Text, Classes } from "@blueprintjs/core";
 
-let __notificationSystem;
+export default Toaster.create({
+    className: "buttercup-notifier",
+    position: Position.RIGHT_TOP
+});
 
-class Notifier extends Component {
-    componentDidMount() {
-        __notificationSystem = this._notificationSystem = this.refs.notificationSystem;
-    }
-
-    render() {
-        return <NotificationSystem ref="notificationSystem" />;
-    }
-}
-
-export function getNotificationSystem() {
-    return __notificationSystem;
-}
-
-export default Notifier;
+export const Message = ({ title, message }) => (
+    <Fragment>
+        <Text>{title}</Text>
+        <Text className={Classes.TEXT_SMALL}>{message}</Text>
+    </Fragment>
+);
