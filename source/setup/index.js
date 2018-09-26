@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route } from "react-router";
@@ -15,6 +15,8 @@ import AboutPage from "./components/AboutPage.js";
 import UnlockAllArchivesPage from "./containers/UnlockAllArchivesPage.js";
 
 import "react-select/dist/react-select.css";
+import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 import "../shared/styles/base.sass";
 import "./styles/setup.sass";
@@ -23,7 +25,7 @@ import "../../resources/fontawesome/font-awesome.scss";
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <div>
+            <Fragment>
                 <Route path="/add-archive" component={AddArchivePage} />
                 <Route path="/access-archive/:id/:state" component={ArchiveUnlockPage} />
                 <Route path="/lock-archives" component={ArchivesLockPage} />
@@ -32,7 +34,7 @@ ReactDOM.render(
                 <Route path="/unlock" component={UnlockAllArchivesPage} />
                 <LoadingModal />
                 <Notifier />
-            </div>
+            </Fragment>
         </ConnectedRouter>
     </Provider>,
     document.getElementById("root")
