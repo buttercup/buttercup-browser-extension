@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import uuid from "uuid/v4";
@@ -25,7 +25,7 @@ const Spacer = styled.div`
     height: 30px;
 `;
 
-class AddArchivePage extends Component {
+class AddArchivePage extends PureComponent {
     static propTypes = {
         dropboxAuthID: PropTypes.string,
         dropboxAuthToken: PropTypes.string,
@@ -128,6 +128,7 @@ class AddArchivePage extends Component {
             <LayoutMain title="Add Archive">
                 <h3>Choose Archive Type</h3>
                 <ArchiveTypeChooser disabled={this.props.isConnecting || this.props.isConnected} />
+
                 <If condition={this.props.selectedArchiveType}>{this.renderConnectionInfo()}</If>
                 <If condition={this.props.isConnecting}>
                     <LoaderContainer>

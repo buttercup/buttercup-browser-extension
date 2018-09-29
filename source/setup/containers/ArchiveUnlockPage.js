@@ -8,7 +8,6 @@ import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { isEditing } from "../selectors/manageArchive.js";
 import { setEditing } from "../actions/manageArchive.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
-import Toaster from "./Toaster.js";
 
 export default connect(
     (state, ownProps) => ({

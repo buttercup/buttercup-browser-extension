@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { Button, ButtonGroup, Text, Classes } from "@blueprintjs/core";
 
 const ARCHIVE_TYPES = [
     {
@@ -25,40 +26,18 @@ const ARCHIVE_TYPES = [
     }
 ];
 
-const Container = styled.div`
-    border: 1px solid #eee;
-    border-radius: 4px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-`;
-const ArchiveItemContainer = styled.div`
-    width: 80px;
-    height: 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    cursor: pointer;
-    background-color: ${props =>
-        props.selected ? (props.disabled ? "rgba(135, 188, 185, 0.2)" : "rgba(0, 183, 172, 0.2)") : "none"};
-
-    &:hover {
-        background-color: ${props => (props.disabled ? "rgba(135, 188, 185, 0.3)" : "rgba(0, 183, 172, 0.3)")};
-    }
-`;
 const ArchiveTypeImage = styled.img`
-    margin-top: 16px;
-    width: 26px;
-    height: 26px;
+    width: 2rem;
+    height: 2rem;
 `;
-const ArchiveTypeTitle = styled.div`
-    margin-top: 4px;
+const VaultContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 `;
 
-class ArchiveTypeChooser extends Component {
+class ArchiveTypeChooser extends PureComponent {
     static propTypes = {
         disabled: PropTypes.bool.isRequired,
         selectedArchiveType: PropTypes.string,
@@ -77,19 +56,22 @@ class ArchiveTypeChooser extends Component {
 
     render() {
         return (
-            <Container>
+            <ButtonGroup fill large minimal>
                 <For each="provider" of={ARCHIVE_TYPES}>
-                    <ArchiveItemContainer
+                    <Button
                         key={provider.type}
                         onClick={() => this.handleArchiveTypeSelection(provider.type)}
-                        selected={this.props.selectedArchiveType === provider.type}
+                        active={this.props.selectedArchiveType === provider.type}
                         disabled={this.props.disabled}
-                    >
-                        <ArchiveTypeImage src={provider.image} />
-                        <ArchiveTypeTitle>{provider.title}</ArchiveTypeTitle>
-                    </ArchiveItemContainer>
+                        icon={
+                            <VaultContainer>
+                                <ArchiveTypeImage src={provider.image} />{" "}
+                                <Text className={Classes.TEXT_MUTED}>{provider.title}</Text>
+                            </VaultContainer>
+                        }
+                    />
                 </For>
-            </Container>
+            </ButtonGroup>
         );
     }
 }

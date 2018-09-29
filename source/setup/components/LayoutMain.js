@@ -1,32 +1,39 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Colors } from "@blueprintjs/core";
 import styled from "styled-components";
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
 
 const MainContent = styled.div`
-    width: 40vw;
-    height: 70vh;
+    width: 100vw;
+    height: 100vh;
     background-color: #fff;
+    padding: 3rem 0;
+`;
+const Wrapper = styled.div`
+    width: 680px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding-bottom: 100px;
+
+    @media screen and (max-width: 700px) {
+        width: 100%;
+    }
 `;
 const Header = styled.div`
-    width: calc(100% - 20px);
+    margin: 0.5rem 1rem 0;
+    padding: 0.3rem 0;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin: 5px 10px 8px 10px;
-    padding-top: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid ${Colors.LIGHT_GRAY3};
 `;
 const Title = styled.h1`
     margin: 0px 0px 4px 0px;
     padding: 0;
     font-size: 18px;
+    flex: 1;
 `;
 const TitleImage = styled.img`
     width: 28px;
@@ -35,12 +42,14 @@ const TitleImage = styled.img`
     margin-right: 6px;
 `;
 const ContentContainer = styled.div`
-    width: 90%;
+    flex: 1;
     /* text-align: left; */
-    display: flex;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: flex-start; */
+    overflow-y: auto;
+    padding: 1rem;
 `;
 
 class LayoutMain extends Component {
@@ -51,11 +60,13 @@ class LayoutMain extends Component {
     render() {
         return (
             <MainContent>
-                <Header>
-                    <TitleImage src={BUTTERCUP_LOGO} />
-                    <Title>{this.props.title}</Title>
-                </Header>
-                <ContentContainer>{this.props.children}</ContentContainer>
+                <Wrapper>
+                    <Header>
+                        <TitleImage src={BUTTERCUP_LOGO} />
+                        <Title>{this.props.title}</Title>
+                    </Header>
+                    <ContentContainer>{this.props.children}</ContentContainer>
+                </Wrapper>
             </MainContent>
         );
     }
