@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Button, ButtonGroup, Text, Classes } from "@blueprintjs/core";
 
-const ARCHIVE_TYPES = [
+export const ARCHIVE_TYPES = [
     {
         type: "dropbox",
         title: "Dropbox",

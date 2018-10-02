@@ -4,22 +4,15 @@ import styled from "styled-components";
 import { Card, Button, H3, H4, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import uuid from "uuid/v4";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
-import Spinner from "react-spinkit";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
+import { ARCHIVE_TYPES } from "./ArchiveTypeChooser.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
 import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
 
 const SubSection = styled.div`
     width: 100%;
     margin-top: 30px;
-`;
-const LoaderContainer = styled.div`
-    width: 100%;
-    height: 300px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
 const Spacer = styled.div`
     width: 100%;
@@ -84,30 +77,10 @@ class AddArchivePage extends PureComponent {
         );
     }
 
-    handleConnectNextcloud(event) {
-        event.preventDefault();
-        this.props.onConnectWebDAVBasedSource(
-            "nextcloud",
-            this.state.remoteURL,
-            this.state.remoteUsername,
-            this.state.remotePassword
-        );
-    }
-
-    handleConnectOwnCloud(event) {
-        event.preventDefault();
-        this.props.onConnectWebDAVBasedSource(
-            "owncloud",
-            this.state.remoteURL,
-            this.state.remoteUsername,
-            this.state.remotePassword
-        );
-    }
-
     handleConnectWebDAV(event) {
         event.preventDefault();
         this.props.onConnectWebDAVBasedSource(
-            "webdav",
+            this.props.selectedArchiveType,
             this.state.remoteURL,
             this.state.remoteUsername,
             this.state.remotePassword
@@ -131,11 +104,6 @@ class AddArchivePage extends PureComponent {
                 <ArchiveTypeChooser disabled={this.props.isConnecting || this.props.isConnected} />
 
                 <If condition={this.props.selectedArchiveType}>{this.renderConnectionInfo()}</If>
-                <If condition={this.props.isConnecting}>
-                    <LoaderContainer>
-                        <Spinner color="rgba(0, 183, 172, 1)" name="ball-grid-pulse" />
-                    </LoaderContainer>
-                </If>
                 <If condition={canShowWebDAVExplorer && this.props.isConnected}>
                     <H4>Choose or Create Archive</H4>
                     <RemoteExplorer
@@ -210,16 +178,18 @@ class AddArchivePage extends PureComponent {
 
     renderConnectionInfo() {
         const connectionOptionsDisabled = this.props.isConnecting || this.props.isConnected;
-        const title =
+        const sectionTitle =
             this.props.selectedArchiveType === "dropbox" ? "Authenticate Cloud Source" : "Enter Connection Details";
         const isAuthenticatingDropbox = this.props.dropboxAuthID === this.state.dropboxAuthenticationID;
+        const isWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
+        const title = ARCHIVE_TYPES.find(archiveType => archiveType.type === this.props.selectedArchiveType).title;
         return (
             <SubSection>
-                <H4>{title}</H4>
+                <H4>{sectionTitle}</H4>
                 <Choose>
-                    <When condition={this.props.selectedArchiveType === "webdav"}>
+                    <When condition={isWebDAV}>
                         <Card>
-                            <FormGroup full label="WebDAV URL" labelInfo="(required)">
+                            <FormGroup full label={`${title} URL`} labelInfo="(required)">
                                 <InputGroup
                                     leftIcon="globe"
                                     placeholder="Enter remote URL..."
@@ -228,19 +198,19 @@ class AddArchivePage extends PureComponent {
                                     value={this.state.remoteURL}
                                 />
                             </FormGroup>
-                            <FormGroup full label="WebDAV Username" labelInfo="(required)">
+                            <FormGroup full label={`${title} Username`} labelInfo="(required)">
                                 <InputGroup
                                     leftIcon="user"
-                                    placeholder="Enter WebDAV username..."
+                                    placeholder={`Enter ${title} username...`}
                                     disabled={connectionOptionsDisabled}
                                     onChange={event => this.handleUpdateForm("remoteUsername", event)}
                                     value={this.state.remoteUsername}
                                 />
                             </FormGroup>
-                            <FormGroup full label="WebDAV Password" labelInfo="(required)">
+                            <FormGroup full label={`${title} Password`} labelInfo="(required)">
                                 <InputGroup
                                     leftIcon="key"
-                                    placeholder="Enter WebDAV password..."
+                                    placeholder={`Enter ${title} password...`}
                                     type="password"
                                     disabled={connectionOptionsDisabled}
                                     onChange={event => this.handleUpdateForm("remotePassword", event)}
@@ -250,104 +220,12 @@ class AddArchivePage extends PureComponent {
                             <Button
                                 intent={Intent.SUCCESS}
                                 onClick={::this.handleConnectWebDAV}
-                                loading={connectionOptionsDisabled}
+                                loading={this.props.isConnecting}
+                                disabled={this.props.isConnected}
                             >
                                 Connect
                             </Button>
                         </Card>
-                        <FormButtonContainer />
-                    </When>
-                    <When condition={this.props.selectedArchiveType === "owncloud"}>
-                        <FormContainer>
-                            <FormRow>
-                                <FormLegendItem>ownCloud URL</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter ownCloud URL..."
-                                        disabled={connectionOptionsDisabled}
-                                        onChange={event => this.handleUpdateForm("remoteURL", event)}
-                                        value={this.state.remoteURL}
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>ownCloud Username</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter ownCloud username..."
-                                        disabled={connectionOptionsDisabled}
-                                        onChange={event => this.handleUpdateForm("remoteUsername", event)}
-                                        value={this.state.remoteUsername}
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>ownCloud Password</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter ownCloud password..."
-                                        type="password"
-                                        disabled={connectionOptionsDisabled}
-                                        onChange={event => this.handleUpdateForm("remotePassword", event)}
-                                        value={this.state.remotePassword}
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                        </FormContainer>
-                        <FormButtonContainer>
-                            <ButtercupButton
-                                onClick={::this.handleConnectOwnCloud}
-                                disabled={connectionOptionsDisabled}
-                            >
-                                Connect
-                            </ButtercupButton>
-                        </FormButtonContainer>
-                    </When>
-                    <When condition={this.props.selectedArchiveType === "nextcloud"}>
-                        <FormContainer>
-                            <FormRow>
-                                <FormLegendItem>Nextcloud URL</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter Nextcloud URL..."
-                                        disabled={connectionOptionsDisabled}
-                                        onChange={event => this.handleUpdateForm("remoteURL", event)}
-                                        value={this.state.remoteURL}
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>Nextcloud Username</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter Nextcloud username..."
-                                        disabled={connectionOptionsDisabled}
-                                        onChange={event => this.handleUpdateForm("remoteUsername", event)}
-                                        value={this.state.remoteUsername}
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>Nextcloud Password</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter Nextcloud password..."
-                                        type="password"
-                                        disabled={connectionOptionsDisabled}
-                                        onChange={event => this.handleUpdateForm("remotePassword", event)}
-                                        value={this.state.remotePassword}
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                        </FormContainer>
-                        <FormButtonContainer>
-                            <ButtercupButton
-                                onClick={::this.handleConnectNextcloud}
-                                disabled={connectionOptionsDisabled}
-                            >
-                                Connect
-                            </ButtercupButton>
-                        </FormButtonContainer>
                     </When>
                     <When condition={this.props.selectedArchiveType === "dropbox"}>
                         <Card>
@@ -356,7 +234,12 @@ class AddArchivePage extends PureComponent {
                                 To start, please grant Buttercup access to your Dropbox account. This access will be
                                 only used to store and read a Buttercup Vault that you choose or create.
                             </p>
-                            <Button icon="key" onClick={::this.handleDropboxAuth} disabled={isAuthenticatingDropbox}>
+                            <Button
+                                icon="key"
+                                onClick={::this.handleDropboxAuth}
+                                disabled={this.props.isConnected}
+                                loading={isAuthenticatingDropbox}
+                            >
                                 Grant Dropbox Access
                             </Button>
                         </Card>
