@@ -94,37 +94,30 @@ class AddArchivePage extends PureComponent {
     }
 
     render() {
-        const canShowWebDAVExplorer = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
+        const isTargetingWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
         const isTargetingDropbox = this.props.selectedArchiveType === "dropbox";
-        const hasAuthenticatedDropbox =
-            this.props.dropboxAuthID === this.state.dropboxAuthenticationID && this.props.dropboxAuthToken;
+        const hasAuthenticatedDropbox = typeof this.props.dropboxAuthToken === "string";
+        const hasAuthenticated =
+            (isTargetingWebDAV && this.props.isConnected) || (isTargetingDropbox && hasAuthenticatedDropbox);
         return (
             <LayoutMain title="Add Archive">
                 <H4>Choose Archive Type</H4>
-                <ArchiveTypeChooser disabled={this.props.isConnecting || this.props.isConnected} />
-
-                <If condition={this.props.selectedArchiveType}>{this.renderConnectionInfo()}</If>
-                <If condition={canShowWebDAVExplorer && this.props.isConnected}>
-                    <H4>Choose or Create Archive</H4>
-                    <RemoteExplorer
-                        onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
-                        onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
-                        selectedFilename={this.props.selectedFilename}
-                        selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
-                        fetchType="webdav"
-                    />
-                    <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
-                </If>
-                <If condition={isTargetingDropbox && hasAuthenticatedDropbox}>
-                    <H4>Choose or Create Archive</H4>
-                    <RemoteExplorer
-                        onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
-                        onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
-                        selectedFilename={this.props.selectedFilename}
-                        selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
-                        fetchType="dropbox"
-                    />
-                    <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
+                <ArchiveTypeChooser disabled={hasAuthenticated} />
+                <If condition={this.props.selectedArchiveType}>
+                    <Choose>
+                        <When condition={hasAuthenticated}>
+                            <H4>Choose or Create Archive</H4>
+                            <RemoteExplorer
+                                onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
+                                onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
+                                selectedFilename={this.props.selectedFilename}
+                                selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
+                                fetchType={isTargetingWebDAV ? "webdav" : "dropbox"}
+                            />
+                            <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
+                        </When>
+                        <Otherwise>{this.renderConnectionInfo()}</Otherwise>
+                    </Choose>
                 </If>
             </LayoutMain>
         );
@@ -181,6 +174,7 @@ class AddArchivePage extends PureComponent {
         const sectionTitle =
             this.props.selectedArchiveType === "dropbox" ? "Authenticate Cloud Source" : "Enter Connection Details";
         const isAuthenticatingDropbox = this.props.dropboxAuthID === this.state.dropboxAuthenticationID;
+        const hasAuthenticatedDropbox = isAuthenticatingDropbox && this.props.dropboxAuthToken;
         const isWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
         const title = ARCHIVE_TYPES.find(archiveType => archiveType.type === this.props.selectedArchiveType).title;
         return (
@@ -237,8 +231,8 @@ class AddArchivePage extends PureComponent {
                             <Button
                                 icon="key"
                                 onClick={::this.handleDropboxAuth}
-                                disabled={this.props.isConnected}
-                                loading={isAuthenticatingDropbox}
+                                disabled={hasAuthenticatedDropbox}
+                                loading={isAuthenticatingDropbox && !hasAuthenticatedDropbox}
                             >
                                 Grant Dropbox Access
                             </Button>
