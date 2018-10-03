@@ -3,17 +3,24 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
 import joinPath from "path.join";
+import { Tree, Spinner, InputGroup, Colors } from "@blueprintjs/core";
 
 const BCUP_EXTENSION = /\.bcup$/i;
 const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");
-const EXPAND_SPACE_AFTER = 4;
 const NOOP = () => {};
-const ROW_SIZE_UNIT = 26;
 
 function LazyType(f) {
     return function __lazyType() {
         return f().apply(this, arguments);
     };
+}
+
+function sanitiseFilename(filename) {
+    let output = filename.trim();
+    if (BCUP_EXTENSION.test(output) !== true) {
+        output += ".bcup";
+    }
+    return output;
 }
 
 const LazyDirectoryShape = LazyType(() => DirectoryShape);
@@ -36,80 +43,27 @@ const Container = styled.div`
     margin-bottom: 20px;
     overflow-y: scroll;
 `;
-const ItemRow = styled.div`
-    margin-left: ${props => (props.depth ? props.depth * ROW_SIZE_UNIT : 0)}px;
-    height: ${ROW_SIZE_UNIT}px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: stretch;
-    background-color: ${props => (props.selected ? "rgba(0, 183, 172, 0.2)" : "inherit")};
-`;
-const ExpandBox = styled.div`
-    width: ${ROW_SIZE_UNIT}px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${props => (props.isFile ? "#ddd" : "rgba(0, 183, 172, 1)")};
-    color: #fff;
-    margin-right: ${EXPAND_SPACE_AFTER}px;
-    cursor: ${props => (props.isFile ? "default" : "pointer")};
-`;
-const ExpandBoxBCUP = styled(ExpandBox)`
-    background-image: url(${BUTTERCUP_LOGO_SMALL});
-    background-size: 26px;
-    background-position: 50% 50%;
-`;
-const ItemIcon = styled.div`
-    width: ${ROW_SIZE_UNIT}px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: ${props => (props.isFile ? "#b2b2b2" : "#f2ac09")};
-    font-size: 18px;
-    margin-right: 4px;
-`;
-const ItemIconNewFile = ItemIcon.extend`
-    color: ${props => (props.highlight === true ? "rgba(0, 183, 172, 1)" : "rgb(120, 120, 120)")};
-`;
-const ItemText = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 16px;
-    font-weight: bold;
-    font-style: ${props => (props.selected ? "italic" : "normal")};
-    color: rgb(72, 72, 72);
-    cursor: pointer;
-`;
-const ItemNewText = ItemText.extend`
+const ItemNewText = styled.div`
     font-style: italic;
-    color: rgb(120, 120, 120);
+    color: ${p => (p.selected ? "#fff" : Colors.GRAY1)};
     cursor: text;
-`;
-const LoaderIconContainer = styled.div`
-    width: ${ROW_SIZE_UNIT}px;
-    height: ${ROW_SIZE_UNIT}px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #888;
-    margin-left: ${EXPAND_SPACE_AFTER}px;
 `;
 const NewFilenameInput = styled.input`
     border: none;
-    height: ${ROW_SIZE_UNIT}px;
-    width: 200px;
-    backgroundcolor: #ddd;
+    width: 100%;
+    font-size: inherit;
+    background-color: transparent;
+    outline: none;
+`;
+const SpinnerIconWrapper = styled.span`
+    margin-right: 7px;
 `;
 
-function sanitiseFilename(filename) {
-    let output = filename.trim();
-    if (BCUP_EXTENSION.test(output) !== true) {
-        output += ".bcup";
-    }
-    return output;
-}
+const SpinnerIcon = () => (
+    <SpinnerIconWrapper>
+        <Spinner size={16} />
+    </SpinnerIconWrapper>
+);
 
 class RemoteFileTree extends Component {
     static propTypes = {
@@ -136,23 +90,10 @@ class RemoteFileTree extends Component {
         openDirectories: ["/"]
     };
 
-    handleExpansionClick(item) {
-        const { path } = item;
-        if (this.state.openDirectories.includes(path)) {
-            // close
-            this.setState({
-                openDirectories: this.state.openDirectories.filter(dir => dir !== path)
-            });
-        } else {
-            // open
-            this.setState({
-                openDirectories: [...this.state.openDirectories, path]
-            });
-            this.props.onOpenDirectory(path);
-        }
-    }
-
     handleFileClick(fileItem) {
+        if (!fileItem) {
+            return;
+        }
         this.setState({
             editingNewFile: false,
             editingNewFileDirectory: null,
@@ -207,130 +148,98 @@ class RemoteFileTree extends Component {
         }
     }
 
-    render() {
-        return (
-            <Container>
-                <Choose>
-                    <When condition={!!this.props.rootDirectory}>{this.renderDirectory(this.props.rootDirectory)}</When>
-                    <Otherwise>
-                        <If condition={this.props.directoriesLoading.includes("/")}>{this.renderLoader("/", 1)}</If>
-                    </Otherwise>
-                </Choose>
-            </Container>
-        );
+    handleNodeExpand({ nodeData }) {
+        this.setState({
+            openDirectories: [...this.state.openDirectories, nodeData.path]
+        });
+        this.props.onOpenDirectory(nodeData.path);
     }
 
-    renderDirectory(dir, depth = 0) {
-        const isOpen = this.state.openDirectories.includes(dir.path);
-        const isLoading = this.props.directoriesLoading.includes(dir.path);
-        const name = dir.name.trim().length > 0 ? dir.name : "/";
-        const thisItem = (
-            <ItemRow depth={depth} key={dir.path}>
-                <ExpandBox onClick={() => this.handleExpansionClick(dir)}>
-                    <Choose>
-                        <When condition={isOpen}>
-                            <FontAwesome name="minus" />
-                        </When>
-                        <Otherwise>
-                            <FontAwesome name="plus" />
-                        </Otherwise>
-                    </Choose>
-                </ExpandBox>
-                <ItemIcon isFile={false}>
-                    <FontAwesome name="folder" />
-                </ItemIcon>
-                <ItemText onClick={() => this.handleExpansionClick(dir)}>{name}</ItemText>
-            </ItemRow>
-        );
-        const allItems = [null];
-        if (isOpen) {
-            // Directory is open, so add children
-            allItems.push(...dir.directories);
-        }
-        return [
-            <For each="directory" of={allItems}>
-                <Choose>
-                    <When condition={directory === null}>{thisItem}</When>
-                    <Otherwise>{this.renderDirectory(directory, depth + 1)}</Otherwise>
-                </Choose>
-            </For>,
-            isOpen ? this.renderFiles(dir, depth + 1) : null,
-            isOpen && isLoading ? this.renderLoader(dir.path, depth + 1) : null,
-            isOpen ? this.renderNewItem(dir.path, depth + 1) : null
-        ];
+    handleNodeCollapse({ nodeData }) {
+        this.setState({
+            openDirectories: this.state.openDirectories.filter(dir => dir !== nodeData.path)
+        });
     }
 
-    renderFiles(dir, depth = 0) {
-        return (
-            <For each="file" of={dir.files}>
-                <ItemRow depth={depth} key={file.path} selected={file.path === this.props.selectedFilename}>
-                    <Choose>
-                        <When condition={/\.bcup$/i.test(file.name)}>
-                            <ExpandBoxBCUP isFile={true} />
-                        </When>
-                        <Otherwise>
-                            <ExpandBox isFile={true} />
-                        </Otherwise>
-                    </Choose>
-                    <ItemIcon isFile={true}>
-                        <FontAwesome name="file" />
-                    </ItemIcon>
-                    <ItemText
-                        onClick={() => this.handleFileClick(file)}
-                        selected={file.path === this.props.selectedFilename}
-                    >
-                        {file.name}
-                    </ItemText>
-                </ItemRow>
-            </For>
-        );
-    }
-
-    renderLoader(parentPath, depth = 0) {
-        return (
-            <ItemRow depth={depth} key={`loader:${parentPath}`}>
-                <LoaderIconContainer>
-                    <FontAwesome name="repeat" spin />
-                </LoaderIconContainer>
-            </ItemRow>
-        );
-    }
-
-    renderNewItem(parentPath, depth = 0) {
+    getTreeNewItem(parentPath) {
         const { editingNewFile, editingNewFileDirectory, editingNewFileName } = this.state;
         const currentlyEditingThis = editingNewFileDirectory === parentPath && editingNewFileName.length > 0;
-        const selectedThis =
+        const isSelected =
             currentlyEditingThis &&
             joinPath(editingNewFileDirectory, editingNewFileName) === this.props.selectedFilename;
+        console.log(this.state);
+        const label = (
+            <Choose>
+                <When condition={editingNewFileDirectory === parentPath && editingNewFile}>
+                    <NewFilenameInput
+                        type="text"
+                        value={editingNewFileName}
+                        onChange={::this.onNewFilenameChange}
+                        onBlur={::this.onBlurNewItem}
+                        onKeyPress={::this.onNewItemKeyPress}
+                        innerRef={input => {
+                            this._newFilenameInput = input;
+                        }}
+                    />
+                </When>
+                <Otherwise>
+                    <ItemNewText selected={isSelected} onClick={() => this.onEditNewItem(parentPath)}>
+                        <Choose>
+                            <When condition={currentlyEditingThis}>{editingNewFileName}</When>
+                            <Otherwise>Enter new archive name...</Otherwise>
+                        </Choose>
+                    </ItemNewText>
+                </Otherwise>
+            </Choose>
+        );
+        return {
+            id: "new-vault-file",
+            icon: "plus",
+            label,
+            isSelected
+        };
+    }
+
+    getTree(directory, isDir = true) {
+        return {
+            id: directory.path,
+            label: directory.name,
+            isExpanded: this.state.openDirectories.includes(directory.path),
+            isSelected: directory.path === this.props.selectedFilename,
+            hasCaret: isDir,
+            icon: isDir ? "folder-close" : "document",
+            nodeData: directory,
+            childNodes: this.props.directoriesLoading.includes(directory.path)
+                ? [
+                      {
+                          id: "loading" + Math.random().toString(),
+                          label: "Loading",
+                          icon: <SpinnerIcon />
+                      }
+                  ]
+                : [
+                      ...(directory.directories || []).map(dir => this.getTree(dir)),
+                      ...(directory.files || []).map(dir => this.getTree(dir, false)),
+                      this.getTreeNewItem(directory.path)
+                  ]
+        };
+    }
+
+    render() {
         return (
-            <ItemRow depth={depth} key={`new:${parentPath}`} selected={selectedThis}>
-                <ExpandBox isFile={true} />
-                <ItemIconNewFile highlight={editingNewFileDirectory === parentPath}>
-                    <FontAwesome name="plus-square" />
-                </ItemIconNewFile>
-                <Choose>
-                    <When condition={editingNewFileDirectory === parentPath && editingNewFile}>
-                        <NewFilenameInput
-                            type="text"
-                            value={editingNewFileName}
-                            onChange={::this.onNewFilenameChange}
-                            onBlur={::this.onBlurNewItem}
-                            onKeyPress={::this.onNewItemKeyPress}
-                            innerRef={input => {
-                                this._newFilenameInput = input;
-                            }}
-                        />
-                    </When>
-                    <Otherwise>
-                        <ItemNewText onClick={() => this.onEditNewItem(parentPath)} selected={selectedThis}>
-                            <Choose>
-                                <When condition={currentlyEditingThis}>{editingNewFileName}</When>
-                                <Otherwise>Enter new archive name...</Otherwise>
-                            </Choose>
-                        </ItemNewText>
-                    </Otherwise>
-                </Choose>
-            </ItemRow>
+            <Choose>
+                <When condition={!!this.props.rootDirectory}>
+                    <Tree
+                        contents={this.getTree(this.props.rootDirectory).childNodes}
+                        onNodeExpand={::this.handleNodeExpand}
+                        onNodeCollapse={::this.handleNodeCollapse}
+                        onNodeClick={({ nodeData }) => this.handleFileClick(nodeData)}
+                    />
+                </When>
+                <Otherwise>
+                    <SpinnerIcon />
+                </Otherwise>
+            </Choose>
         );
     }
 }

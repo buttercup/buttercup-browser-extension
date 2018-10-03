@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/buttercup/buttercup-browser-extension#readme",
   "devDependencies": {
-    "@blueprintjs/core": "^3.5.1",
+    "@blueprintjs/core": "^3.6.1",
     "@blueprintjs/icons": "^3.1.0",
     "@buttercup/channel-queue": "^0.3.0",
     "@buttercup/iconographer": "^0.7.1",
