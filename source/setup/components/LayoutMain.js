@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Colors } from "@blueprintjs/core";
 import styled from "styled-components";
@@ -7,7 +7,7 @@ const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
 
 const MainContent = styled.div`
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #fff;
     padding: 3rem 0;
 `;
@@ -43,33 +43,24 @@ const TitleImage = styled.img`
 `;
 const ContentContainer = styled.div`
     flex: 1;
-    /* text-align: left; */
-    /* display: flex; */
-    /* flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start; */
     overflow-y: auto;
     padding: 1rem;
 `;
 
-class LayoutMain extends Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired
-    };
+const LayoutMain = ({ title, children }) => (
+    <MainContent>
+        <Wrapper>
+            <Header>
+                <TitleImage src={BUTTERCUP_LOGO} />
+                <Title>{title}</Title>
+            </Header>
+            <ContentContainer>{children}</ContentContainer>
+        </Wrapper>
+    </MainContent>
+);
 
-    render() {
-        return (
-            <MainContent>
-                <Wrapper>
-                    <Header>
-                        <TitleImage src={BUTTERCUP_LOGO} />
-                        <Title>{this.props.title}</Title>
-                    </Header>
-                    <ContentContainer>{this.props.children}</ContentContainer>
-                </Wrapper>
-            </MainContent>
-        );
-    }
-}
+LayoutMain.propTypes = {
+    title: PropTypes.string.isRequired
+};
 
 export default LayoutMain;
