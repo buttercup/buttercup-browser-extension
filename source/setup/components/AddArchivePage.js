@@ -16,7 +16,7 @@ const Spacer = styled.div`
 `;
 const SplitView = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, calc(50% - 0.5rem));
     grid-gap: 1rem;
 `;
 
