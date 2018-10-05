@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Card, Button, H3, H4, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
@@ -17,6 +17,11 @@ const SubSection = styled.div`
 const Spacer = styled.div`
     width: 100%;
     height: 30px;
+`;
+const SplitView = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
 `;
 
 class AddArchivePage extends PureComponent {
@@ -107,14 +112,18 @@ class AddArchivePage extends PureComponent {
                     <Choose>
                         <When condition={hasAuthenticated}>
                             <H4>Choose or Create Archive</H4>
-                            <RemoteExplorer
-                                onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
-                                onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
-                                selectedFilename={this.props.selectedFilename}
-                                selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
-                                fetchType={isTargetingWebDAV ? "webdav" : "dropbox"}
-                            />
-                            <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
+                            <SplitView>
+                                <Card>
+                                    <RemoteExplorer
+                                        onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
+                                        onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
+                                        selectedFilename={this.props.selectedFilename}
+                                        selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
+                                        fetchType={isTargetingWebDAV ? "webdav" : "dropbox"}
+                                    />
+                                </Card>
+                                <Card>{this.renderArchiveNameInput()}</Card>
+                            </SplitView>
                         </When>
                         <Otherwise>{this.renderConnectionInfo()}</Otherwise>
                     </Choose>
@@ -124,48 +133,41 @@ class AddArchivePage extends PureComponent {
     }
 
     renderArchiveNameInput() {
+        const { selectedFilename } = this.props;
+        const disabled = !selectedFilename;
         return (
-            <SubSection key="archiveNameInput">
-                <H4>Enter Archive Name</H4>
-                <FormContainer>
-                    <FormRow>
-                        <FormLegendItem>Name</FormLegendItem>
-                        <FormInputItem>
-                            <ButtercupInput
-                                placeholder="Enter archive name..."
-                                onChange={event => this.handleUpdateForm("archiveName", event)}
-                                value={this.state.archiveName}
-                            />
-                        </FormInputItem>
-                    </FormRow>
-                    <FormRow>
-                        <FormLegendItem>Master Password</FormLegendItem>
-                        <FormInputItem>
-                            <ButtercupInput
-                                placeholder="Enter archive password..."
-                                onChange={event => this.handleUpdateForm("masterPassword", event)}
-                                type="password"
-                                value={this.state.masterPassword}
-                            />
-                        </FormInputItem>
-                    </FormRow>
-                </FormContainer>
-                <FormButtonContainer>
-                    <Choose>
-                        <When condition={this.props.selectedArchiveType === "dropbox"}>
-                            <ButtercupButton onClick={event => this.handleChooseDropboxBasedFile(event)}>
-                                Save Archive
-                            </ButtercupButton>
-                        </When>
-                        <Otherwise>
-                            <ButtercupButton onClick={event => this.handleChooseWebDAVBasedFile(event)}>
-                                Save Archive
-                            </ButtercupButton>
-                        </Otherwise>
-                    </Choose>
-                </FormButtonContainer>
-                <Spacer />
-            </SubSection>
+            <Fragment>
+                <FormGroup full label="Name" labelInfo="(required)" disabled={disabled}>
+                    <InputGroup
+                        leftIcon="tag"
+                        disabled={disabled}
+                        placeholder="Enter archive name..."
+                        onChange={event => this.handleUpdateForm("archiveName", event)}
+                        value={this.state.archiveName}
+                    />
+                </FormGroup>
+                <FormGroup full label="Master Password" labelInfo="(required)" disabled={disabled}>
+                    <InputGroup
+                        leftIcon="lock"
+                        disabled={disabled}
+                        placeholder="Enter archive password..."
+                        type="password"
+                        onChange={event => this.handleUpdateForm("masterPassword", event)}
+                        value={this.state.masterPassword}
+                    />
+                </FormGroup>
+                <Button
+                    fill
+                    disabled={disabled}
+                    onClick={event =>
+                        this.props.selectedArchiveType === "dropbox"
+                            ? this.handleChooseDropboxBasedFile(event)
+                            : this.handleChooseWebDAVBasedFile(event)
+                    }
+                >
+                    Save Vault
+                </Button>
+            </Fragment>
         );
     }
 

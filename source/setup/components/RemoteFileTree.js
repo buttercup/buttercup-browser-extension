@@ -167,7 +167,6 @@ class RemoteFileTree extends Component {
         const isSelected =
             currentlyEditingThis &&
             joinPath(editingNewFileDirectory, editingNewFileName) === this.props.selectedFilename;
-        console.log(this.state);
         const label = (
             <Choose>
                 <When condition={editingNewFileDirectory === parentPath && editingNewFile}>
@@ -228,7 +227,7 @@ class RemoteFileTree extends Component {
     render() {
         return (
             <Choose>
-                <When condition={!!this.props.rootDirectory}>
+                <When condition={this.props.rootDirectory && this.props.rootDirectory.directories.length > 0}>
                     <Tree
                         contents={this.getTree(this.props.rootDirectory).childNodes}
                         onNodeExpand={::this.handleNodeExpand}
