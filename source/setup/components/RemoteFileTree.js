@@ -90,8 +90,9 @@ class RemoteFileTree extends Component {
         openDirectories: ["/"]
     };
 
-    handleFileClick(fileItem) {
-        if (!fileItem) {
+    handleFileClick({ nodeData }, _, e) {
+        if (!nodeData || typeof nodeData.directories !== "undefined" || !/\.bcup$/i.test(nodeData.name)) {
+            e.preventDefault();
             return;
         }
         this.setState({
@@ -99,7 +100,7 @@ class RemoteFileTree extends Component {
             editingNewFileDirectory: null,
             editingNewFileName: ""
         });
-        this.props.onSelectRemotePath(fileItem.path);
+        this.props.onSelectRemotePath(nodeData.path);
     }
 
     handleNewItemFinishedEditing() {
@@ -148,7 +149,11 @@ class RemoteFileTree extends Component {
         }
     }
 
-    handleNodeExpand({ nodeData }) {
+    handleNodeExpand({ nodeData }, _, e) {
+        if (typeof nodeData.directories === "undefined") {
+            e.preventDefault();
+            return;
+        }
         this.setState({
             openDirectories: [...this.state.openDirectories, nodeData.path]
         });
@@ -232,7 +237,8 @@ class RemoteFileTree extends Component {
                         contents={this.getTree(this.props.rootDirectory).childNodes}
                         onNodeExpand={::this.handleNodeExpand}
                         onNodeCollapse={::this.handleNodeCollapse}
-                        onNodeClick={({ nodeData }) => this.handleFileClick(nodeData)}
+                        onNodeDoubleClick={::this.handleNodeExpand}
+                        onNodeClick={::this.handleFileClick}
                     />
                 </When>
                 <Otherwise>

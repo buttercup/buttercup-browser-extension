@@ -16,7 +16,7 @@ const SubSection = styled.div`
 `;
 const Spacer = styled.div`
     width: 100%;
-    height: 30px;
+    height: 2rem;
 `;
 const SplitView = styled.div`
     display: grid;
@@ -106,12 +106,13 @@ class AddArchivePage extends PureComponent {
             (isTargetingWebDAV && this.props.isConnected) || (isTargetingDropbox && hasAuthenticatedDropbox);
         return (
             <LayoutMain title="Add Archive">
-                <H4>Choose Archive Type</H4>
+                <H4>Choose Vault Type</H4>
                 <ArchiveTypeChooser disabled={hasAuthenticated} />
+                <Spacer />
                 <If condition={this.props.selectedArchiveType}>
                     <Choose>
                         <When condition={hasAuthenticated}>
-                            <H4>Choose or Create Archive</H4>
+                            <H4>Choose or Create Vault</H4>
                             <SplitView>
                                 <Card>
                                     <RemoteExplorer
@@ -141,7 +142,7 @@ class AddArchivePage extends PureComponent {
                     <InputGroup
                         leftIcon="tag"
                         disabled={disabled}
-                        placeholder="Enter archive name..."
+                        placeholder="Enter vault name..."
                         onChange={event => this.handleUpdateForm("archiveName", event)}
                         value={this.state.archiveName}
                     />
@@ -150,7 +151,7 @@ class AddArchivePage extends PureComponent {
                     <InputGroup
                         leftIcon="lock"
                         disabled={disabled}
-                        placeholder="Enter archive password..."
+                        placeholder="Enter vault password..."
                         type="password"
                         onChange={event => this.handleUpdateForm("masterPassword", event)}
                         value={this.state.masterPassword}
@@ -241,7 +242,7 @@ class AddArchivePage extends PureComponent {
                         </Card>
                     </When>
                     <Otherwise>
-                        <i>Unsupported archive type.</i>
+                        <i>Unsupported vault type.</i>
                     </Otherwise>
                 </Choose>
             </SubSection>
