@@ -10,10 +10,6 @@ import { ARCHIVE_TYPES } from "./ArchiveTypeChooser.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
 import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
 
-const SubSection = styled.div`
-    width: 100%;
-    margin-top: 30px;
-`;
 const Spacer = styled.div`
     width: 100%;
     height: 2rem;
@@ -181,7 +177,7 @@ class AddArchivePage extends PureComponent {
         const isWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
         const title = ARCHIVE_TYPES.find(archiveType => archiveType.type === this.props.selectedArchiveType).title;
         return (
-            <SubSection>
+            <Fragment>
                 <H4>{sectionTitle}</H4>
                 <Choose>
                     <When condition={isWebDAV}>
@@ -245,7 +241,7 @@ class AddArchivePage extends PureComponent {
                         <i>Unsupported vault type.</i>
                     </Otherwise>
                 </Choose>
-            </SubSection>
+            </Fragment>
         );
     }
 }
