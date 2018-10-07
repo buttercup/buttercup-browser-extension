@@ -25,8 +25,8 @@ export default withRouter(
             onAddArchiveClick: () => () => {
                 createNewTab(getExtensionURL("setup.html#/add-archive"));
             },
-            onLockAllClick: () => () => {
-                createNewTab(getExtensionURL("setup.html#/lock-archives"));
+            onLockAllClick: () => dispatch => {
+                dispatch(push("/vaults/lock", { lockAll: true }));
             },
             onOtherSoftwareClick: () => () => {
                 createNewTab("https://buttercup.pw");

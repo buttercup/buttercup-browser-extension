@@ -2,10 +2,22 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import cx from "classnames";
-import { Colors, Divider, Text, Classes, NonIdealState, Button, Intent, Icon } from "@blueprintjs/core";
+import {
+    Colors,
+    Divider,
+    Text,
+    Classes,
+    NonIdealState,
+    Button,
+    Intent,
+    Icon,
+    Spinner,
+    Callout
+} from "@blueprintjs/core";
 import HeaderBar from "../containers/HeaderBar.js";
 import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
 import { VaultIcon } from "./VaultIcon.js";
+import { lockAllArchives } from "../library/messaging.js";
 
 const Container = styled.div`
     overflow-x: hidden;
@@ -29,6 +41,9 @@ const ListItem = styled.div`
         background-color: ${Colors.LIGHT_GRAY3};
     }
 `;
+const CalloutBar = styled(Callout)`
+    margin-bottom: 0.5rem;
+`;
 
 class ArchivesListPage extends PureComponent {
     static propTypes = {
@@ -37,9 +52,41 @@ class ArchivesListPage extends PureComponent {
         onAddArchiveClick: PropTypes.func.isRequired
     };
 
+    state = {
+        lockingAll: false,
+        lockedSuccessfully: false
+    };
+
+    handleLockArchives() {
+        this.setState(state => ({
+            ...state,
+            lockingAll: true
+        }));
+        lockAllArchives()
+            .then(() => {
+                this.setState(state => ({
+                    ...state,
+                    lockedSuccessfully: true
+                }));
+                setTimeout(() => this.props.history.goBack(), 2500);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
+    componentDidMount() {
+        if (this.props.location.state && this.props.location.state.lockAll === true) {
+            this.handleLockArchives();
+        }
+    }
+
     render() {
         return (
             <Container>
+                <If condition={this.state.lockedSuccessfully}>
+                    <CalloutBar intent={Intent.SUCCESS}>All vaults have been locked.</CalloutBar>
+                </If>
                 <Choose>
                     <When condition={this.props.archives.length > 0}>{this.renderArchivesList()}</When>
                     <Otherwise>
@@ -71,7 +118,14 @@ class ArchivesListPage extends PureComponent {
                         <Text>{vault.title}</Text>
                         <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>{vault.type}</Text>
                     </TitleContainer>
-                    <Icon icon="lock" color={Colors.GRAY3} />
+                    <Choose>
+                        <When condition={vault.status === "locked"}>
+                            <Icon icon="lock" color={Colors.GRAY3} />
+                        </When>
+                        <When condition={this.state.lockingAll}>
+                            <Spinner size={16} />
+                        </When>
+                    </Choose>
                 </ListItem>
                 <Divider />
             </For>

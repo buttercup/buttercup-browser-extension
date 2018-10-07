@@ -7,7 +7,6 @@ import store from "./redux/index.js";
 import history from "./redux/history.js";
 import AddArchivePage from "./containers/AddArchivePage.js";
 import ArchiveUnlockPage from "./containers/ArchiveUnlockPage.js";
-import ArchivesLockPage from "./containers/ArchivesLockPage.js";
 import LoadingModal from "./containers/LoadingModal.js";
 import SaveCredentialsPage from "./containers/SaveCredentialsPage.js";
 import AboutPage from "./components/AboutPage.js";
@@ -27,7 +26,6 @@ ReactDOM.render(
             <Fragment>
                 <Route path="/add-archive" component={AddArchivePage} />
                 <Route path="/access-archive/:id/:state" component={ArchiveUnlockPage} />
-                <Route path="/lock-archives" component={ArchivesLockPage} />
                 <Route path="/save-new-credentials" component={SaveCredentialsPage} />
                 <Route path="/about" component={AboutPage} />
                 <Route path="/unlock" component={UnlockAllArchivesPage} />
