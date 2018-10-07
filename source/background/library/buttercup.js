@@ -1,5 +1,6 @@
-import { ArchiveManager, vendor as ButtercupVendor } from "../../shared/library/buttercup.js";
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
+import ms from "ms";
+import { ArchiveManager, vendor as ButtercupVendor } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
 import { setArchives } from "../../shared/actions/archives.js";
@@ -33,6 +34,11 @@ function createArchiveManager() {
         return am.rehydrate().then(() => {
             log.info("Rehydrated archive manager");
             __archiveManager = am;
+            am.toggleAutoUpdating(true, ms("2m"));
+            am.on("autoUpdateStop", () => {
+                log.info("Completed auto-update");
+            });
+            log.info("Activated auto updating");
         });
     }, TASK_TYPE_HIGH_PRIORITY);
 }
