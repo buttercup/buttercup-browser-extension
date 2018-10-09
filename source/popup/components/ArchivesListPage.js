@@ -12,7 +12,11 @@ import {
     Intent,
     Icon,
     Spinner,
-    Callout
+    Callout,
+    Popover,
+    Menu,
+    MenuItem,
+    Position
 } from "@blueprintjs/core";
 import HeaderBar from "../containers/HeaderBar.js";
 import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
@@ -44,12 +48,17 @@ const ListItem = styled.div`
 const CalloutBar = styled(Callout)`
     margin-bottom: 0.5rem;
 `;
+const IconWrapper = styled.div`
+    margin-right: 0.5rem;
+`;
 
 class ArchivesListPage extends PureComponent {
     static propTypes = {
         archives: ArchivesShape,
         onArchiveClick: PropTypes.func.isRequired,
-        onAddArchiveClick: PropTypes.func.isRequired
+        onAddArchiveClick: PropTypes.func.isRequired,
+        onLockArchive: PropTypes.func.isRequired,
+        onRemoveArchive: PropTypes.func.isRequired
     };
 
     state = {
@@ -73,6 +82,14 @@ class ArchivesListPage extends PureComponent {
             .catch(err => {
                 console.error(err);
             });
+    }
+
+    handleLockArchive(vault) {
+        this.props.onLockArchive(vault.id);
+    }
+
+    handleRemoveArchive(vault) {
+        this.props.onRemoveArchive(vault.id);
     }
 
     componentDidMount() {
@@ -109,23 +126,52 @@ class ArchivesListPage extends PureComponent {
         );
     }
 
+    renderContextMenu(vault) {
+        return (
+            <Menu>
+                <Choose>
+                    <When condition={vault.status === "unlocked"}>
+                        <MenuItem text="Lock" icon="lock" onClick={() => this.handleLockArchive(vault)} />
+                    </When>
+                    <Otherwise>
+                        <MenuItem
+                            text="Unlock"
+                            icon="unlock"
+                            onClick={() => this.props.onArchiveClick(vault.id, vault.state)}
+                        />
+                    </Otherwise>
+                </Choose>
+                <MenuItem text="Remove" icon="trash" onClick={() => this.handleRemoveArchive(vault)} />
+            </Menu>
+        );
+    }
+
+    //  onClick={() => this.props.onArchiveClick(vault.id, vault.state)}
     renderArchivesList() {
         return (
             <For each="vault" of={this.props.archives}>
-                <ListItem key={vault.id} onClick={() => this.props.onArchiveClick(vault.id, vault.state)}>
-                    <VaultIcon vault={vault} isLarge />
-                    <TitleContainer>
-                        <Text>{vault.title}</Text>
+                <ListItem key={vault.id}>
+                    <Choose>
+                        <When condition={this.state.lockingAll}>
+                            <Spinner size={40} />
+                        </When>
+                        <Otherwise>
+                            <VaultIcon vault={vault} isLarge />
+                        </Otherwise>
+                    </Choose>
+                    <TitleContainer onClick={e => this.props.onArchiveClick(vault.id, vault.state)}>
+                        <Text>
+                            {vault.title}
+                            <If condition={vault.status === "locked"}>
+                                {" "}
+                                <Icon icon="lock" color={Colors.GRAY3} iconSize={12} />
+                            </If>
+                        </Text>
                         <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>{vault.type}</Text>
                     </TitleContainer>
-                    <Choose>
-                        <When condition={vault.status === "locked"}>
-                            <Icon icon="lock" color={Colors.GRAY3} />
-                        </When>
-                        <When condition={this.state.lockingAll}>
-                            <Spinner size={16} />
-                        </When>
-                    </Choose>
+                    <Popover content={this.renderContextMenu(vault)} minimal position={Position.BOTTOM_RIGHT}>
+                        <Button icon="chevron-down" minimal />
+                    </Popover>
                 </ListItem>
                 <Divider />
             </For>

@@ -24,3 +24,29 @@ export function lockAllArchives() {
         });
     });
 }
+
+export function lockArchive(sourceID) {
+    log.info(`Sending request to background to lock archive source: ${sourceID}`);
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "lock-archive", sourceID }, response => {
+            const { ok, error } = response;
+            if (ok) {
+                return resolve();
+            }
+            return reject(new Error(`Locking archive failed: ${error}`));
+        });
+    });
+}
+
+export function removeArchive(sourceID) {
+    log.info(`Sending request to background for the removal of archive source: ${sourceID}`);
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "remove-archive", sourceID }, response => {
+            const { ok, error } = response;
+            if (ok) {
+                return resolve();
+            }
+            return reject(new Error(`Adding removal failed: ${error}`));
+        });
+    });
+}
