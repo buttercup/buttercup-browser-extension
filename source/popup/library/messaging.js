@@ -11,3 +11,16 @@ export function requestCredentialsOpening(sourceID, entryID) {
         entryID
     });
 }
+
+export function lockAllArchives() {
+    log.info("Sending request to background to lock all archives");
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "lock-all-archives" }, response => {
+            const { ok, error } = response;
+            if (ok) {
+                return resolve();
+            }
+            return reject(new Error(`Locking archives failed: ${error}`));
+        });
+    });
+}

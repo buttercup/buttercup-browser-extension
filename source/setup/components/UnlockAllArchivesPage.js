@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import FontAwesome from "react-fontawesome";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
+import { FormGroup, InputGroup, Button, ControlGroup } from "@blueprintjs/core";
+import Dialog from "./Dialog.js";
 import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 
@@ -82,16 +82,9 @@ class UnlockAllArchivesPage extends Component {
         }
         this.setState({ unlocking: [...this.state.unlocking, sourceID] }, () => {
             this.props.onUnlockArchive(sourceID, this.state.masterPasswords[sourceID]).then(unlocked => {
-                const newState = {
+                this.setState({
                     unlocking: this.state.unlocking.filter(id => id !== sourceID)
-                };
-                if (unlocked) {
-                    newState.masterPasswords = {
-                        ...this.state.masterPasswords,
-                        [sourceID]: ""
-                    };
-                }
-                this.setState(newState);
+                });
             });
         });
     }
@@ -114,55 +107,43 @@ class UnlockAllArchivesPage extends Component {
     render() {
         const firstLockedIndex = this.props.archives.findIndex(archive => archive.state === "locked");
         return (
-            <LayoutMain title="Unlock archives">
+            <Dialog title="Unlock archives">
                 <For each="archive" of={this.props.archives} index="archiveIndex">
-                    <If condition={archiveIndex > 0}>
-                        <hr />
-                    </If>
-                    <Choose>
-                        <When condition={archive.state === "unlocked"}>
-                            <h3>
-                                <i>'{archive.title}' is unlocked...</i>
-                            </h3>
-                        </When>
-                        <Otherwise>
-                            <With unlocking={this.state.unlocking.includes(archive.sourceID)}>
-                                <h3>
-                                    <If condition={unlocking}>
-                                        <FontAwesome name="cog" spin />
-                                        &nbsp;
-                                    </If>
-                                    Unlock '{archive.title}'
-                                </h3>
-                                <PasswordRow>
-                                    <PasswordLabel>Password:</PasswordLabel>
-                                    <ButtercupInput
-                                        placeholder="Enter master password..."
-                                        type="password"
-                                        disabled={unlocking}
-                                        onChange={event => this.handleUpdatePassword(event, archive.sourceID)}
-                                        value={this.state.masterPasswords[archive.sourceID] || ""}
-                                        onKeyPress={event => this.onInputKeyPress(event, archive.sourceID)}
-                                        innerRef={input => {
-                                            if (archiveIndex === firstLockedIndex) {
-                                                this._passwordInput = input;
-                                            }
-                                        }}
-                                    />
-                                </PasswordRow>
-                                <ButtonsRow>
-                                    <ButtercupButton
-                                        onClick={event => this.handleUnlockArchive(event, archive.sourceID)}
-                                        disabled={unlocking}
-                                    >
-                                        Unlock
-                                    </ButtercupButton>
-                                </ButtonsRow>
-                            </With>
-                        </Otherwise>
-                    </Choose>
+                    <With
+                        unlocking={this.state.unlocking.includes(archive.sourceID)}
+                        unlocked={archive.state === "unlocked"}
+                    >
+                        <FormGroup
+                            label={`Unlock "${archive.title}"`}
+                            disabled={unlocked}
+                            helperText={unlocked ? "Vault is unlocked." : null}
+                        >
+                            <ControlGroup fill>
+                                <InputGroup
+                                    fill
+                                    placeholder="Enter master password..."
+                                    type="password"
+                                    disabled={unlocked}
+                                    onChange={event => this.handleUpdatePassword(event, archive.sourceID)}
+                                    value={this.state.masterPasswords[archive.sourceID] || ""}
+                                    onKeyPress={event => this.onInputKeyPress(event, archive.sourceID)}
+                                    inputRef={input => {
+                                        if (archiveIndex === firstLockedIndex) {
+                                            this._passwordInput = input;
+                                        }
+                                    }}
+                                />
+                                <Button
+                                    onClick={event => this.handleUnlockArchive(event, archive.sourceID)}
+                                    loading={unlocking}
+                                    disabled={unlocked}
+                                    text="Unlock"
+                                />
+                            </ControlGroup>
+                        </FormGroup>
+                    </With>
                 </For>
-            </LayoutMain>
+            </Dialog>
         );
     }
 }
