@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { NonIdealState, Divider } from "@blueprintjs/core";
 import SearchResult from "../containers/SearchResult.js";
 
+const BUTTERCUP_LOGO = require("../../../resources/buttercup-standalone.png");
+
 const Container = styled.div`
     overflow-x: hidden;
     overflow-y: scroll;
@@ -34,9 +36,9 @@ class SearchResults extends Component {
                     </When>
                     <Otherwise>
                         <NonIdealState
-                            title="Nothing to see"
-                            description="There are no entries available"
-                            icon="satellite"
+                            title="Welcome to Buttercup"
+                            description="Use the search bar to find entries in your unlocked vaults."
+                            icon={<img src={BUTTERCUP_LOGO} width="64" />}
                         />
                     </Otherwise>
                 </Choose>
