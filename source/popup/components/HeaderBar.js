@@ -22,7 +22,8 @@ class HeaderBar extends PureComponent {
         onItemsClick: PropTypes.func.isRequired,
         onVaultsClick: PropTypes.func.isRequired,
         onCurrentVaultChange: PropTypes.func.isRequired,
-        onAddArchiveClick: PropTypes.func.isRequired,
+        onAddVaultClick: PropTypes.func.isRequired,
+        onUnlockVaultClick: PropTypes.func.isRequired,
         onLockAllClick: PropTypes.func.isRequired,
         onOtherSoftwareClick: PropTypes.func.isRequired
     };
@@ -38,7 +39,13 @@ class HeaderBar extends PureComponent {
     }
 
     handleVaultChange(vault) {
-        this.props.onCurrentVaultChange(vault ? vault.id : null);
+        if (!vault) {
+            this.props.onCurrentVaultChange(null);
+        } else if (vault.status === "unlocked") {
+            this.props.onCurrentVaultChange(vault.id);
+        } else {
+            this.props.onUnlockVaultClick(vault.id, vault.state);
+        }
     }
 
     render() {
@@ -65,7 +72,7 @@ class HeaderBar extends PureComponent {
                     </For>
                     <MenuDivider />
                 </If>
-                <MenuItem text="Add Vault" icon="add" onClick={::this.props.onAddArchiveClick} />
+                <MenuItem text="Add Vault" icon="add" onClick={::this.props.onAddVaultClick} />
                 <MenuItem text="Lock All Vaults" icon="lock" onClick={::this.props.onLockAllClick} />
                 <MenuItem icon="numbered-list" text="Manage Vaults" onClick={this.props.onVaultsClick} />
             </Menu>
@@ -84,7 +91,7 @@ class HeaderBar extends PureComponent {
                         <Button text="Back" icon="arrow-left" onClick={::this.props.onItemsClick} />
                     </When>
                     <When condition={location.pathname === "/" && archives.length === 0}>
-                        <Button icon="add" onClick={::this.props.onAddArchiveClick} />
+                        <Button icon="add" onClick={::this.props.onAddVaultClick} />
                     </When>
                     <Otherwise>
                         <Popover content={archiveMenu} position={Position.BOTTOM_LEFT}>

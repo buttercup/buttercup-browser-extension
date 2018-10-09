@@ -22,7 +22,10 @@ export default withRouter(
             onCurrentVaultChange: vaultId => () => {
                 setCurrentVaultContext(vaultId);
             },
-            onAddArchiveClick: () => () => {
+            onUnlockVaultClick: (archiveID, state) => () => {
+                createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}/${state}`));
+            },
+            onAddVaultClick: () => () => {
                 createNewTab(getExtensionURL("setup.html#/add-archive"));
             },
             onLockAllClick: () => dispatch => {
