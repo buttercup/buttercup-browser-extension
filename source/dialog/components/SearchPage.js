@@ -14,7 +14,8 @@ const SearchLayout = styled.div`
     overflow: hidden;
     background: rgba(255, 255, 255, 0.85);
     box-shadow: inset 0 0 0 1px ${Colors.GRAY5};
-    border-radius: 3px;
+    border-radius: 0 0 3px 3px;
+    padding: 0.5rem;
 `;
 
 class SearchPage extends PureComponent {

@@ -10,7 +10,7 @@ const Container = styled.div`
     flex: 0 0 auto;
     display: flex;
     align-items: center;
-    padding: 0.5rem;
+    margin-bottom: 0.5rem;
 `;
 const ButtercupIcon = styled.img`
     width: 30px;

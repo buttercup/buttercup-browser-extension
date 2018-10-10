@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import SearchResult from "../containers/SearchResult.js";
+import EntriesList from "../../shared/components/Entries.js";
 
 const Container = styled.div`
     width: 100%;
@@ -23,16 +23,17 @@ const EntryShape = PropTypes.shape({
 class SearchResults extends Component {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
-        sourcesUnlocked: PropTypes.number.isRequired
+        sourcesUnlocked: PropTypes.number.isRequired,
+        onEnterDetailsRequest: PropTypes.func.isRequired
     };
 
     render() {
         return (
-            <Container>
-                <For each="entry" of={this.props.entries}>
-                    <SearchResult key={entry.id} sourceID={entry.sourceID} entryID={entry.id} />
-                </For>
-            </Container>
+            <EntriesList
+                entries={this.props.entries}
+                sourcesUnlocked={this.props.sourcesUnlocked}
+                onSelectEntry={this.props.onEnterDetailsRequest}
+            />
         );
     }
 }
