@@ -2,12 +2,20 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import cx from "classnames";
-import { Colors, Text, Classes, ButtonGroup, Button, Tooltip, Position } from "@blueprintjs/core";
+import { Colors, Text, Classes, ButtonGroup, Button, Tooltip, Position, Collapse, Divider } from "@blueprintjs/core";
 import { getIconForURL } from "../../shared/library/icons.js";
 import { EntryShape } from "../prop-types/entry.js";
 
-const KEY_ICON = require("../../../resources/no-icon.svg");
+const NO_ICON = require("../../../resources/no-icon.svg");
 
+const Container = styled.div`
+    border-radius: 3px;
+    padding: 0.5rem;
+    background-color: ${p => (p.isDetailsOpen ? Colors.LIGHT_GRAY3 : "transparent")};
+    &:hover {
+        background-color: ${Colors.LIGHT_GRAY3};
+    }
+`;
 const EntryImageBackground = styled.div`
     width: 2.5rem;
     height: 2.5rem;
@@ -29,15 +37,8 @@ const DetailsContainer = styled.div`
     flex: 1;
     width: 100%;
     display: flex;
-    overflow: auto;
     cursor: pointer;
-    border-radius: 3px;
-    padding: 0.5rem;
     align-items: center;
-
-    &:hover {
-        background-color: ${Colors.LIGHT_GRAY3};
-    }
 `;
 const DetailRow = styled.div`
     margin-left: 0.5rem;
@@ -54,7 +55,8 @@ class SearchResult extends PureComponent {
     };
 
     state = {
-        icon: KEY_ICON
+        icon: NO_ICON,
+        isDetailsOpen: false
     };
 
     componentWillMount() {
@@ -79,35 +81,51 @@ class SearchResult extends PureComponent {
         this.mounted = false;
     }
 
+    handleToggleDetails(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.setState(state => ({
+            ...state,
+            isDetailsOpen: !state.isDetailsOpen
+        }));
+    }
+
     render() {
         const { entry, onSelectEntry } = this.props;
         const { title, sourceName, entryPath } = entry;
+        const { isDetailsOpen } = this.state;
         return (
-            <DetailsContainer onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
-                <EntryImageBackground>
-                    <EntryImage src={this.state.icon} />
-                </EntryImageBackground>
-                <DetailRow>
-                    <Title>{title}</Title>
-                    <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
-                        {sourceName} ›{" "}
-                        <For each="group" index="index" of={entryPath}>
-                            <If condition={index > 0}> › </If>
-                            {group}
-                        </For>
-                    </Text>
-                </DetailRow>
-                <ButtonGroup>
-                    <Tooltip content="Auto Sign In">
-                        <Button
-                            minimal
-                            icon="share"
-                            onClick={() => onSelectEntry(entry.sourceID, entry.id, /* auto sign in: */ true)}
-                        />
-                    </Tooltip>
-                    <Button minimal icon="more" />
-                </ButtonGroup>
-            </DetailsContainer>
+            <Container isDetailsOpen={isDetailsOpen}>
+                <DetailsContainer onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
+                    <EntryImageBackground>
+                        <EntryImage src={this.state.icon} />
+                    </EntryImageBackground>
+                    <DetailRow>
+                        <Title>{title}</Title>
+                        <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
+                            {sourceName} ›{" "}
+                            <For each="group" index="index" of={entryPath}>
+                                <If condition={index > 0}> › </If>
+                                {group}
+                            </For>
+                        </Text>
+                    </DetailRow>
+                    <ButtonGroup>
+                        <Tooltip content="Auto Sign In">
+                            <Button
+                                minimal
+                                icon="log-in"
+                                onClick={() => onSelectEntry(entry.sourceID, entry.id, /* auto sign in: */ true)}
+                            />
+                        </Tooltip>
+                        <Button minimal active={isDetailsOpen} icon="more" onClick={::this.handleToggleDetails} />
+                    </ButtonGroup>
+                </DetailsContainer>
+                <Collapse isOpen={isDetailsOpen}>
+                    <Divider />
+                    <div>Details here</div>
+                </Collapse>
+            </Container>
         );
     }
 }

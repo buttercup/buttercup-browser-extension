@@ -11,7 +11,6 @@ export default connect(
     }),
     {
         onEnterDetailsRequest: (sourceID, entryID, signIn = false) => () => {
-            console.log(sourceID, entryID);
             sendCredentialsToTab(sourceID, entryID, signIn);
             closeDialog();
         }

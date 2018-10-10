@@ -10,7 +10,6 @@ let __dialog;
 
 function createDialog() {
     const dialogURL = getExtensionURL("dialog.html#/save-new-credentials");
-    // console.log("URL", dialogURL);
     const frame = el("iframe", {
         style: {
             width: "100%",
