@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import cx from "classnames";
-import { Colors, Text, Classes } from "@blueprintjs/core";
+import { Colors, Text, Classes, ButtonGroup, Button, Tooltip, Position } from "@blueprintjs/core";
 import { getIconForURL } from "../../shared/library/icons.js";
 import { EntryShape } from "../prop-types/entry.js";
 
@@ -33,6 +33,7 @@ const DetailsContainer = styled.div`
     cursor: pointer;
     border-radius: 3px;
     padding: 0.5rem;
+    align-items: center;
 
     &:hover {
         background-color: ${Colors.LIGHT_GRAY3};
@@ -78,16 +79,11 @@ class SearchResult extends PureComponent {
         this.mounted = false;
     }
 
-    handleClickEntry(event) {
-        event.preventDefault();
-        this.props.onSelectEntry(this.props.entry.sourceID, this.props.entry.id);
-    }
-
     render() {
-        const { entry } = this.props;
+        const { entry, onSelectEntry } = this.props;
         const { title, sourceName, entryPath } = entry;
         return (
-            <DetailsContainer onClick={::this.handleClickEntry}>
+            <DetailsContainer onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
                 <EntryImageBackground>
                     <EntryImage src={this.state.icon} />
                 </EntryImageBackground>
@@ -101,6 +97,16 @@ class SearchResult extends PureComponent {
                         </For>
                     </Text>
                 </DetailRow>
+                <ButtonGroup>
+                    <Tooltip content="Auto Sign In">
+                        <Button
+                            minimal
+                            icon="share"
+                            onClick={() => onSelectEntry(entry.sourceID, entry.id, /* auto sign in: */ true)}
+                        />
+                    </Tooltip>
+                    <Button minimal icon="more" />
+                </ButtonGroup>
             </DetailsContainer>
         );
     }
