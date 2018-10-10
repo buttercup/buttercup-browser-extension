@@ -52,10 +52,12 @@ class InputDialog {
     }
 
     updatePosition() {
-        const { top, left, height } = this.input.getBoundingClientRect();
+        const { top, left, height, width } = this.input.getBoundingClientRect();
+        const buttonWidth = height * 0.8;
         setStyle(this.dialog, {
             left: `${left}px`,
-            top: `${window.scrollY + top + height + 2}px`
+            top: `${window.scrollY + top + height + 2}px`,
+            width: `${width + buttonWidth}px`
         });
     }
 }
