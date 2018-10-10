@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
-import { InputGroup } from "@blueprintjs/core";
+import { InputGroup, Classes } from "@blueprintjs/core";
 import SearchResults from "../containers/SearchResults.js";
 
 let __clearedButtercupSearchResults = false;
@@ -35,7 +35,7 @@ export default class EntriesPage extends PureComponent {
                 <SearchInputWrapper>
                     <InputGroup
                         placeholder="Search for entries..."
-                        className="bp3-fill"
+                        className={Classes.FILL}
                         type="search"
                         leftIcon="search"
                         onChange={::this.handleSearchTermChange}

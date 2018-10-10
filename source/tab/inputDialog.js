@@ -79,7 +79,6 @@ function createDialog(dialogType) {
                 ...CLEAR_STYLES,
                 width: `${width}px`,
                 height: `${height}px`,
-                backgroundColor: "rgba(0, 0, 0, 0.85)",
                 position: "absolute",
                 zIndex: 9999999,
                 ...specificStyles

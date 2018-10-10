@@ -1,32 +1,23 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import { Colors, NonIdealState } from "@blueprintjs/core";
 import styled from "styled-components";
-import SearchLayout from "./SearchLayout.js";
 import SearchBar from "../containers/SearchBar.js";
 import SearchResults from "../containers/SearchResults.js";
 
-const FullSizeNotice = styled.div`
+const SearchLayout = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-`;
-const MessageHeader = styled.div`
-    font-size: 18px;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 16px;
-`;
-const Message = styled.div`
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-    width: 80%;
-    text-align: center;
+    justify-content: center;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: inset 0 0 0 1px ${Colors.GRAY5};
+    border-radius: 3px;
 `;
 
-class SearchPage extends Component {
+class SearchPage extends PureComponent {
     static propTypes = {
         availableSources: PropTypes.number.isRequired,
         onPrepareFirstResults: PropTypes.func.isRequired
@@ -45,12 +36,11 @@ class SearchPage extends Component {
                         <SearchResults />
                     </When>
                     <Otherwise>
-                        <FullSizeNotice>
-                            <MessageHeader>No unlocked archives</MessageHeader>
-                            <Message>
-                                No archives are currently available/unlocked. Why not get started by adding one?
-                            </Message>
-                        </FullSizeNotice>
+                        <NonIdealState
+                            icon="lock"
+                            title="No unlocked vaults"
+                            description="No vaults are currently available or unlocked. Why not get started by adding one?"
+                        />
                     </Otherwise>
                 </Choose>
             </SearchLayout>

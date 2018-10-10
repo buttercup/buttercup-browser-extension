@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route } from "react-router";
@@ -9,6 +9,8 @@ import SearchPage from "./containers/SearchPage.js";
 import SaveNewCredentialsPage from "./containers/SaveNewCredentialsPage.js";
 import PasswordGeneratorPage from "./containers/PasswordGeneratorPage.js";
 
+import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import "../shared/styles/base.sass";
 import "./styles/dialog.sass";
 import "../../resources/fontawesome/font-awesome.scss";
@@ -16,11 +18,11 @@ import "../../resources/fontawesome/font-awesome.scss";
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <div className="rootContainer">
+            <Fragment>
                 <Route exact path="/" component={SearchPage} />
                 <Route path="/save-new-credentials" component={SaveNewCredentialsPage} />
                 <Route path="/generate-password" component={PasswordGeneratorPage} />
-            </div>
+            </Fragment>
         </ConnectedRouter>
     </Provider>,
     document.getElementById("root")
