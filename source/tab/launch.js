@@ -11,10 +11,8 @@ export function attachLaunchButton(input) {
     if (input.dataset.bcup === "attached" || itemIsIgnored(input)) {
         return;
     }
-    const { height: rawHeight, width: rawWidth, zIndex: zIndexRaw, backgroundColor } = window.getComputedStyle(
-        input,
-        null
-    );
+    const { backgroundColor, borderTopLeftRadius, borderBottomLeftRadius } = window.getComputedStyle(input, null);
+
     const tryToAttach = () => {
         const bounds = input.getBoundingClientRect();
         const { width, height } = bounds;
@@ -33,7 +31,9 @@ export function attachLaunchButton(input) {
         // Update input style
         updateOffsetParentPositioning(input.offsetParent);
         setStyle(input, {
-            width: `${newInputWidth}px`
+            width: `${newInputWidth}px`,
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0
         });
         // Create and add button
         const button = el("button", {
@@ -46,9 +46,9 @@ export function attachLaunchButton(input) {
                 height: `${height}px`,
                 left: `${left}px`,
                 top: `${top}px`,
-                borderRadius: "0px",
+                borderRadius: `0 ${borderTopLeftRadius} ${borderBottomLeftRadius} 0`,
                 background: `rgb(0, 183, 172) url(${BUTTON_BACKGROUND_IMAGE})`,
-                backgroundSize: `${buttonWidth / 2}px`,
+                backgroundSize: `${Math.ceil(buttonWidth / 2)}px`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "50% 50%",
                 border: "1px solid rgb(0, 155, 145)",
