@@ -2,9 +2,8 @@ import { el, mount, unmount } from "redom";
 import { getExtensionURL } from "../shared/library/extension.js";
 import { CLEAR_STYLES } from "./styles.js";
 
-const DIALOG_MARGIN = 10;
-const DIALOG_WIDTH = 260;
-const DIALOG_HEIGHT = 160;
+const DIALOG_WIDTH = 380;
+const DIALOG_HEIGHT = 230;
 
 let __dialog;
 
@@ -25,7 +24,7 @@ function createDialog() {
                 ...CLEAR_STYLES,
                 width: `${DIALOG_WIDTH}px`,
                 height: `${DIALOG_HEIGHT}px`,
-                backgroundColor: "rgba(0, 0, 0, 0.85)",
+                backgroundColor: "transparent",
                 position: "absolute",
                 top: "16px",
                 right: "16px",

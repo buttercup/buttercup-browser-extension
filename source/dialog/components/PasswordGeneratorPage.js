@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { GeneratorUserInterface } from "@buttercup/ui";
-import LayoutMain from "./LayoutMain.js";
 
-const Background = styled(LayoutMain)`
+const Background = styled.div`
     background: #31353d;
     padding: 6px;
     width: calc(100% - 12px);
