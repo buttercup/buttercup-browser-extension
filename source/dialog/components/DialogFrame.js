@@ -9,8 +9,8 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: inset 0 0 0 1px ${Colors.GRAY5};
+    background-color: ${p => p.theme.backgroundColor};
+    box-shadow: inset 0 0 0 1px ${p => p.theme.backgroundFrameColor};
     border-radius: 0 0 3px 3px;
     padding: 0.5rem;
 `;

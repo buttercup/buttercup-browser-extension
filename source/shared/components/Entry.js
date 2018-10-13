@@ -25,19 +25,19 @@ const Container = styled.div`
     border-radius: 3px;
     padding: 0.5rem;
     &:hover {
-        background-color: ${Colors.LIGHT_GRAY3};
+        background-color: ${p => p.theme.listItemHover};
     }
 `;
 const EntryImageBackground = styled.div`
     width: 2.5rem;
     height: 2.5rem;
-    background-color: #fff;
+    background-color: ${p => p.theme.backgroundFrameColor};
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 3px;
     padding: 3px;
-    border: 1px solid ${Colors.LIGHT_GRAY3};
+    border: 1px solid ${p => p.theme.listItemHover};
 `;
 const EntryImage = styled.img`
     display: block;

@@ -10,15 +10,15 @@ const Generator = styled(GeneratorUserInterface)`
     height: 100%;
     border-radius: 0;
     background-color: transparent;
-    color: #000;
+    color: inherit;
     padding: 0;
 
     pre {
-        background-color: ${Colors.LIGHT_GRAY1};
+        background-color: ${p => p.theme.codeBlock};
         font-family: Courier, monospace;
 
         .num {
-            color: ${Colors.GREEN1};
+            color: ${p => p.theme.codeAccent};
         }
     }
 `;
