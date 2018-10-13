@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Colors } from "@blueprintjs/core";
+import { Colors, Divider } from "@blueprintjs/core";
 import styled from "styled-components";
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
@@ -8,7 +8,6 @@ const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
 const MainContent = styled.div`
     width: 100vw;
     min-height: 100vh;
-    background-color: #fff;
     padding: 3rem 0;
 `;
 const Wrapper = styled.div`
@@ -27,7 +26,6 @@ const Header = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border-bottom: 1px solid ${Colors.LIGHT_GRAY3};
 `;
 const Title = styled.h1`
     margin: 0px 0px 4px 0px;
@@ -52,6 +50,7 @@ const LayoutMain = ({ title, children }) => (
                 <TitleImage src={BUTTERCUP_LOGO} />
                 <Title>{title}</Title>
             </Header>
+            <Divider />
             <ContentContainer>{children}</ContentContainer>
         </Wrapper>
     </MainContent>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Spinner, Intent, Classes } from "@blueprintjs/core";
@@ -24,7 +24,7 @@ const LoadingText = styled.div`
     margin-top: 1rem;
 `;
 
-class LoadingModal extends Component {
+class LoadingModal extends PureComponent {
     static propTypes = {
         busy: PropTypes.bool.isRequired,
         busyMessage: PropTypes.string.isRequired

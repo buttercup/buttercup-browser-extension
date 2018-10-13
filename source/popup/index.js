@@ -10,17 +10,12 @@ import history from "./redux/history.js";
 import ArchivesListPage from "./containers/ArchivesListPage.js";
 import EntriesPage from "./containers/EntriesPage.js";
 import HeaderBar from "./containers/HeaderBar.js";
+import Container from "../shared/components/Container.js";
 import themes from "../shared/themes.js";
 
 import "../shared/styles/base.sass";
 import "./styles/popup.sass";
 
-const Container = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: ${p => p.theme.backgroundColor};
-`;
 const ContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
