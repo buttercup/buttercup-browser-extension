@@ -1,22 +1,10 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { Colors, NonIdealState } from "@blueprintjs/core";
+import { NonIdealState } from "@blueprintjs/core";
 import styled from "styled-components";
 import SearchBar from "../containers/SearchBar.js";
 import SearchResults from "../containers/SearchResults.js";
-
-const SearchLayout = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: inset 0 0 0 1px ${Colors.GRAY5};
-    border-radius: 0 0 3px 3px;
-    padding: 0.5rem;
-`;
+import DialogFrame from "./DialogFrame.js";
 
 class SearchPage extends PureComponent {
     static propTypes = {
@@ -30,7 +18,7 @@ class SearchPage extends PureComponent {
 
     render() {
         return (
-            <SearchLayout>
+            <DialogFrame>
                 <Choose>
                     <When condition={this.props.availableSources > 0}>
                         <SearchBar />
@@ -44,7 +32,7 @@ class SearchPage extends PureComponent {
                         />
                     </Otherwise>
                 </Choose>
-            </SearchLayout>
+            </DialogFrame>
         );
     }
 }
