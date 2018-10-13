@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Spinner from "react-spinkit";
+import { Spinner, Intent, Classes } from "@blueprintjs/core";
 
 const Overlay = styled.div`
     position: fixed;
@@ -12,16 +12,16 @@ const Overlay = styled.div`
     right: 0px;
     bottom: 0px;
     background-color: rgba(0, 0, 0, 0.8);
-    display: ${props => (props.show ? "flex" : "none")};
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 2;
 `;
 const LoadingText = styled.div`
-    font-size: 18px;
+    font-size: 1.2rem;
     color: #fff;
-    margin-top: 18px;
+    margin-top: 1rem;
 `;
 
 class LoadingModal extends Component {
@@ -31,9 +31,12 @@ class LoadingModal extends Component {
     };
 
     render() {
+        if (this.props.busy !== true) {
+            return null;
+        }
         return (
-            <Overlay show={this.props.busy}>
-                <Spinner color="rgba(0, 183, 172, 1)" name="ball-grid-pulse" />
+            <Overlay>
+                <Spinner size={64} intent={Intent.SUCCESS} />
                 <LoadingText>{this.props.busyMessage}</LoadingText>
             </Overlay>
         );

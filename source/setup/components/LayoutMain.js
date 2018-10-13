@@ -42,8 +42,6 @@ const TitleImage = styled.img`
     margin-right: 6px;
 `;
 const ContentContainer = styled.div`
-    flex: 1;
-    overflow-y: auto;
     padding: 1rem;
 `;
 
