@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
-import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
 import { InputGroup, Classes } from "@blueprintjs/core";
 import SearchResults from "../containers/SearchResults.js";

@@ -85,7 +85,6 @@
     "pug-loader": "^2.4.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-fontawesome": "^1.6.1",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "react-router-redux": "^5.0.0-alpha.9",

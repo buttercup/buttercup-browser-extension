@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import FontAwesome from "react-fontawesome";
 import joinPath from "path.join";
 import { Tree, Spinner, InputGroup, Colors } from "@blueprintjs/core";
 

@@ -1,17 +1,16 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { Button, Colors, Icon, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
+import { Button, Icon, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 import styled from "styled-components";
-import { VaultIcon } from "./VaultIcon";
-import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
 import { version } from "../../../package.json";
+import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
+import { VaultIcon } from "./VaultIcon";
 
 const Container = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border-bottom: 1px solid ${Colors.LIGHT_GRAY2};
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 0.25rem;
 `;
 
 class HeaderBar extends PureComponent {

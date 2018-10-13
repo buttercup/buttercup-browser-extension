@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Async as Select } from "react-select";
-import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
 import Spinner from "react-spinkit";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";

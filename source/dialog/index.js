@@ -9,11 +9,8 @@ import SearchPage from "./containers/SearchPage.js";
 import SaveNewCredentialsPage from "./containers/SaveNewCredentialsPage.js";
 import PasswordGeneratorPage from "./containers/PasswordGeneratorPage.js";
 
-import "@blueprintjs/core/lib/css/blueprint.css";
-import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import "../shared/styles/base.sass";
 import "./styles/dialog.sass";
-import "../../resources/fontawesome/font-awesome.scss";
 
 ReactDOM.render(
     <Provider store={store}>

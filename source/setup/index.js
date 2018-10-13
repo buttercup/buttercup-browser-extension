@@ -13,12 +13,9 @@ import AboutPage from "./components/AboutPage.js";
 import UnlockAllArchivesPage from "./containers/UnlockAllArchivesPage.js";
 
 import "react-select/dist/react-select.css";
-import "@blueprintjs/core/lib/css/blueprint.css";
-import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 import "../shared/styles/base.sass";
 import "./styles/setup.sass";
-import "../../resources/fontawesome/font-awesome.scss";
 
 ReactDOM.render(
     <Provider store={store}>
