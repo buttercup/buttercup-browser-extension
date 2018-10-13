@@ -31,6 +31,7 @@ class SearchResults extends Component {
                 <Choose>
                     <When condition={this.props.entries.length > 0}>
                         <Entries
+                            autoLoginEnabled={false}
                             entries={this.props.entries}
                             onSelectEntry={this.props.onSelectEntry}
                             sourcesUnlocked={this.props.sourcesUnlocked}

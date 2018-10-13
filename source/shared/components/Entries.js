@@ -11,10 +11,10 @@ const Container = styled.div`
     flex: 1;
 `;
 
-const Entries = ({ entries, onSelectEntry }) => (
+const Entries = ({ entries, onSelectEntry, autoLoginEnabled = true }) => (
     <Container>
         <For each="entry" of={entries}>
-            <Entry key={entry.id} entry={entry} onSelectEntry={onSelectEntry} />
+            <Entry key={entry.id} entry={entry} onSelectEntry={onSelectEntry} autoLoginEnabled={autoLoginEnabled} />
             <Divider />
         </For>
     </Container>
@@ -23,6 +23,7 @@ const Entries = ({ entries, onSelectEntry }) => (
 Entries.propTypes = {
     entries: EntriesShape,
     sourcesUnlocked: PropTypes.number,
+    autoLoginEnabled: PropTypes.bool,
     onSelectEntry: PropTypes.func.isRequired
 };
 

@@ -63,7 +63,12 @@ const Title = styled(Text)`
 class SearchResult extends PureComponent {
     static propTypes = {
         onSelectEntry: PropTypes.func.isRequired,
+        autoLoginEnabled: PropTypes.bool,
         entry: EntryShape
+    };
+
+    static defaultProps = {
+        autoLoginEnabled: true
     };
 
     state = {
@@ -125,13 +130,15 @@ class SearchResult extends PureComponent {
                         </Text>
                     </DetailRow>
                     <ButtonGroup>
-                        <Tooltip content="Auto Sign In">
-                            <Button
-                                minimal
-                                icon="log-in"
-                                onClick={() => onSelectEntry(entry.sourceID, entry.id, /* auto sign in: */ true)}
-                            />
-                        </Tooltip>
+                        <If condition={this.props.autoLoginEnabled}>
+                            <Tooltip content="Auto Sign In">
+                                <Button
+                                    minimal
+                                    icon="log-in"
+                                    onClick={() => onSelectEntry(entry.sourceID, entry.id, /* auto sign in: */ true)}
+                                />
+                            </Tooltip>
+                        </If>
                         <Popover content={this.renderDropdown()} position={Position.TOP_RIGHT}>
                             <Button minimal icon="duplicate" rightIcon="caret-down" />
                         </Popover>
