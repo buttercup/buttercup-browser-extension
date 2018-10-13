@@ -22,7 +22,7 @@ const Entries = ({ entries, onSelectEntry }) => (
 
 Entries.propTypes = {
     entries: EntriesShape,
-    sourcesUnlocked: PropTypes.number.isRequired,
+    sourcesUnlocked: PropTypes.number,
     onSelectEntry: PropTypes.func.isRequired
 };
 
