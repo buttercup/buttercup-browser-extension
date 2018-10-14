@@ -1,5 +1,6 @@
 export const APP_SET_BUSY = "app/setBusy";
 export const APP_UNSET_BUSY = "app/unsetBusy";
+export const APP_SET_CONFIG = "app/setConfig";
 
 export const ARCHIVES_SET = "archives/set";
 export const ARCHIVES_SET_CURRENT = "archives/setCurrent";

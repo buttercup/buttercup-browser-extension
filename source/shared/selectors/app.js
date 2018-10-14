@@ -7,3 +7,7 @@ export function getBusyMessage(state) {
 export function shouldShowBusyModal(state) {
     return state[KEY].busy;
 }
+
+export function getConfig(state, key) {
+    return state[KEY].config[key];
+}
