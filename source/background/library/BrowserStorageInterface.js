@@ -1,4 +1,4 @@
-import { storage } from "buttercup/dist/buttercup-web.js";
+import { storage } from "../../shared/library/buttercup.js";
 
 const { StorageInterface } = storage;
 
