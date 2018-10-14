@@ -42,6 +42,8 @@
     "@blueprintjs/core": "^3.6.1",
     "@blueprintjs/icons": "^3.1.0",
     "@buttercup/channel-queue": "^0.3.0",
+    "@buttercup/config": "^0.1.0",
+    "@buttercup/facades": "^0.2.0",
     "@buttercup/iconographer": "^0.7.1",
     "@buttercup/locust": "^0.9.0",
     "@buttercup/ui": "^1.4.2",
