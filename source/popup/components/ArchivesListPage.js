@@ -42,7 +42,7 @@ const ListItem = styled.div`
     padding: 0.5rem;
 
     &:hover {
-        background-color: ${Colors.LIGHT_GRAY3};
+        background-color: ${p => p.theme.listItemHover};
     }
 `;
 const CalloutBar = styled(Callout)`

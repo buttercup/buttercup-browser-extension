@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { NonIdealState, Divider } from "@blueprintjs/core";
-import SearchResult from "../containers/SearchResult.js";
+import { NonIdealState } from "@blueprintjs/core";
+import Entries from "../../shared/components/Entries.js";
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-standalone.png");
 
@@ -21,7 +21,8 @@ const EntryShape = PropTypes.shape({
 class SearchResults extends Component {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
-        sourcesUnlocked: PropTypes.number.isRequired
+        sourcesUnlocked: PropTypes.number.isRequired,
+        onSelectEntry: PropTypes.func.isRequired
     };
 
     render() {
@@ -29,10 +30,12 @@ class SearchResults extends Component {
             <Container>
                 <Choose>
                     <When condition={this.props.entries.length > 0}>
-                        <For each="entry" of={this.props.entries}>
-                            <SearchResult key={entry.id} sourceID={entry.sourceID} entryID={entry.id} />
-                            <Divider />
-                        </For>
+                        <Entries
+                            autoLoginEnabled={false}
+                            entries={this.props.entries}
+                            onSelectEntry={this.props.onSelectEntry}
+                            sourcesUnlocked={this.props.sourcesUnlocked}
+                        />
                     </When>
                     <Otherwise>
                         <NonIdealState

@@ -4,10 +4,12 @@ import IconBrowserStorageInterface from "./IconBrowserStorageInterface.js";
 let __ic;
 
 export function getIconForURL(url) {
+    console.log(url);
     const iconographer = getSharedInstance();
     return iconographer
         .getIconForURL(url)
         .then(icon => {
+            console.log(icon);
             if (icon) {
                 return icon;
             }
