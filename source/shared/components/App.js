@@ -7,7 +7,7 @@ import themes from "../themes.js";
 
 const App = ({ children, darkMode, noBackgroundColor }) => (
     <ThemeProvider theme={darkMode ? themes.dark : themes.light}>
-        <Container className={Classes.DARK} noBackgroundColor={noBackgroundColor}>
+        <Container className={darkMode ? Classes.DARK : null} noBackgroundColor={noBackgroundColor}>
             {children}
         </Container>
     </ThemeProvider>

@@ -1,8 +1,13 @@
 import React from "react";
-import { Classes } from "@blueprintjs/core";
+import styled from "styled-components";
+import { Classes, Colors } from "@blueprintjs/core";
+
+const DialogContainer = styled.div`
+    background-color: ${Colors.DARK_GRAY3};
+`;
 
 export default ({ title, children, actions }) => (
-    <div className={Classes.DIALOG_CONTAINER}>
+    <DialogContainer className={Classes.DIALOG_CONTAINER}>
         <div className={Classes.DIALOG}>
             <div className={Classes.DIALOG_HEADER}>{title}</div>
             <div className={Classes.DIALOG_BODY}>{children}</div>
@@ -12,5 +17,5 @@ export default ({ title, children, actions }) => (
                 </div>
             </If>
         </div>
-    </div>
+    </DialogContainer>
 );

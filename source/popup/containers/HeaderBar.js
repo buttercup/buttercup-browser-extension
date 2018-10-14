@@ -3,14 +3,16 @@ import { push } from "react-router-redux";
 import { withRouter } from "react-router";
 import HeaderBar from "../components/HeaderBar.js";
 import { getArchives, getCurrentArchive } from "../../shared/selectors/archives.js";
-import { setCurrentVaultContext } from "../../shared/library/messaging.js";
+import { getConfigKey } from "../../shared/selectors/app.js";
+import { setCurrentVaultContext, setConfig } from "../../shared/library/messaging.js";
 import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
 export default withRouter(
     connect(
         (state, ownProps) => ({
             archives: getArchives(state),
-            currentArchive: getCurrentArchive(state)
+            currentArchive: getCurrentArchive(state),
+            darkMode: getConfigKey(state, "darkMode")
         }),
         {
             onItemsClick: () => dispatch => {
@@ -21,6 +23,11 @@ export default withRouter(
             },
             onCurrentVaultChange: vaultId => () => {
                 setCurrentVaultContext(vaultId);
+            },
+            onToggleDarkMode: () => (_, getState) => {
+                const state = getState();
+                const darkMode = getConfigKey(state, "darkMode");
+                setConfig("darkMode", !darkMode);
             },
             onUnlockVaultClick: (archiveID, state) => () => {
                 createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}/${state}`));

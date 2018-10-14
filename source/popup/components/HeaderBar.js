@@ -18,13 +18,15 @@ class HeaderBar extends PureComponent {
         currentArchive: ArchiveShape,
         archives: ArchivesShape,
         current: PropTypes.string,
+        darkMode: PropTypes.bool,
         onItemsClick: PropTypes.func.isRequired,
         onVaultsClick: PropTypes.func.isRequired,
         onCurrentVaultChange: PropTypes.func.isRequired,
         onAddVaultClick: PropTypes.func.isRequired,
         onUnlockVaultClick: PropTypes.func.isRequired,
         onLockAllClick: PropTypes.func.isRequired,
-        onOtherSoftwareClick: PropTypes.func.isRequired
+        onOtherSoftwareClick: PropTypes.func.isRequired,
+        onToggleDarkMode: PropTypes.func.isRequired
     };
 
     handleItemsClick(event) {
@@ -48,7 +50,7 @@ class HeaderBar extends PureComponent {
     }
 
     render() {
-        const { currentArchive, archives, location } = this.props;
+        const { currentArchive, archives, location, darkMode } = this.props;
         const archiveMenu = (
             <Menu>
                 <If condition={archives.length > 0}>
@@ -79,6 +81,11 @@ class HeaderBar extends PureComponent {
         const optionsMenu = (
             <Menu>
                 <MenuItem text="Other Applications" icon="mobile-phone" onClick={::this.props.onOtherSoftwareClick} />
+                <MenuItem
+                    text={darkMode ? "Light theme" : "Dark theme"}
+                    icon={darkMode ? "flash" : "moon"}
+                    onClick={::this.props.onToggleDarkMode}
+                />
                 <MenuDivider />
                 <MenuItem text={`Buttercup v${version}`} icon="info-sign" disabled />
             </Menu>
