@@ -3,15 +3,14 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import { Classes, Divider } from "@blueprintjs/core";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
 import ArchivesListPage from "./containers/ArchivesListPage.js";
 import EntriesPage from "./containers/EntriesPage.js";
 import HeaderBar from "./containers/HeaderBar.js";
-import Container from "../shared/components/Container.js";
-import themes from "../shared/themes.js";
+import App from "../shared/containers/App.js";
 
 import "../shared/styles/base.sass";
 import "./styles/popup.sass";
@@ -26,16 +25,14 @@ const ContentWrapper = styled.div`
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <ThemeProvider theme={themes.dark}>
-                <Container className={Classes.DARK}>
-                    <HeaderBar />
-                    <Divider />
-                    <ContentWrapper>
-                        <Route exact path="/" component={EntriesPage} />
-                        <Route path="/vaults" component={ArchivesListPage} />
-                    </ContentWrapper>
-                </Container>
-            </ThemeProvider>
+            <App>
+                <HeaderBar />
+                <Divider />
+                <ContentWrapper>
+                    <Route exact path="/" component={EntriesPage} />
+                    <Route path="/vaults" component={ArchivesListPage} />
+                </ContentWrapper>
+            </App>
         </ConnectedRouter>
     </Provider>,
     document.getElementById("root")

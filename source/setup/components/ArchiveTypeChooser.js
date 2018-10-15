@@ -29,6 +29,7 @@ export const ARCHIVE_TYPES = [
 const ArchiveTypeImage = styled.img`
     width: 2rem;
     height: 2rem;
+    ${p => (p.darkMode ? "filter: brightness(0) invert(1);" : "")};
 `;
 const VaultContainer = styled.div`
     display: flex;
@@ -40,6 +41,7 @@ const VaultContainer = styled.div`
 class ArchiveTypeChooser extends PureComponent {
     static propTypes = {
         disabled: PropTypes.bool.isRequired,
+        darkMode: PropTypes.bool,
         selectedArchiveType: PropTypes.string,
         onSelectArchiveType: PropTypes.func.isRequired
     };
@@ -65,7 +67,7 @@ class ArchiveTypeChooser extends PureComponent {
                         disabled={this.props.disabled}
                         icon={
                             <VaultContainer>
-                                <ArchiveTypeImage src={provider.image} />{" "}
+                                <ArchiveTypeImage darkMode={this.props.darkMode} src={provider.image} />{" "}
                                 <Text className={Classes.TEXT_MUTED}>{provider.title}</Text>
                             </VaultContainer>
                         }

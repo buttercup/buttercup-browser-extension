@@ -21,6 +21,7 @@ import {
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 import { setCurrentArchiveId } from "../../shared/actions/archives.js";
+import { setConfig } from "../../shared/actions/app.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
@@ -224,6 +225,14 @@ function handleMessage(request, sender, sendResponse) {
         case "set-current-vault-context": {
             dispatch(setCurrentArchiveId(request.vaultId));
             return;
+        }
+        case "set-config": {
+            dispatch(
+                setConfig({
+                    key: request.key,
+                    value: request.value
+                })
+            );
         }
         default:
             // Do nothing
