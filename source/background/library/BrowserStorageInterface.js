@@ -2,14 +2,18 @@ import { storage } from "../../shared/library/buttercup.js";
 
 const { StorageInterface } = storage;
 
-export function getDefaultStorageAdapter() {
+export function getSyncStorage() {
+    return chrome.storage.sync;
+}
+
+export function getNonSyncStorage() {
     return chrome.storage.local;
 }
 
 export default class BrowserStorageInterface extends StorageInterface {
-    constructor() {
+    constructor(storage = getSyncStorage()) {
         super();
-        this._storage = getDefaultStorageAdapter();
+        this._storage = storage;
     }
 
     get storage() {
