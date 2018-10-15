@@ -261,6 +261,7 @@ function processSearchResults([entries, sources]) {
             setEntrySearchResults(
                 entries.map(({ entry, sourceID, sourceName }) => {
                     const facade = createEntryFacade(entry);
+                    const urls = getEntryURLs(entry.getProperty(), ENTRY_URL_TYPE_LOGIN);
                     return {
                         title: entry.getProperty("title"),
                         id: entry.id,
@@ -268,7 +269,8 @@ function processSearchResults([entries, sources]) {
                         sourceID,
                         sourceName,
                         facade,
-                        url: getEntryURLs(entry.getProperty(), ENTRY_URL_TYPE_LOGIN)
+                        url: urls[0] || null,
+                        urls
                     };
                 })
             )
