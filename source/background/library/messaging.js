@@ -1,3 +1,5 @@
+import { createEntryFacade } from "@buttercup/facades";
+import * as Buttercup from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import {
@@ -23,6 +25,8 @@ import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 import { getCurrentArchive } from "../../shared/selectors/archives.js";
+
+const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
 const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
@@ -246,14 +250,18 @@ function processSearchResults([entries, sources]) {
     ).then(entries => {
         dispatch(
             setEntrySearchResults(
-                entries.map(({ entry, sourceID, sourceName }) => ({
-                    title: entry.getProperty("title"),
-                    id: entry.id,
-                    entryPath: generateEntryPath(entry),
-                    sourceID,
-                    sourceName,
-                    url: entry.getMeta("url") || entry.getMeta("icon")
-                }))
+                entries.map(({ entry, sourceID, sourceName }) => {
+                    const facade = createEntryFacade(entry);
+                    return {
+                        title: entry.getProperty("title"),
+                        id: entry.id,
+                        entryPath: generateEntryPath(entry),
+                        sourceID,
+                        sourceName,
+                        facade,
+                        url: getEntryURLs(entry.getProperty(), ENTRY_URL_TYPE_LOGIN)
+                    };
+                })
             )
         );
         dispatch(setSourcesCount(sources));
