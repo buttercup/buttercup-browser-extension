@@ -1,13 +1,11 @@
-import { APP_SET_BUSY, APP_UNSET_BUSY, APP_SET_CONFIG } from "../actions/types.js";
-
-const INITIAL_CONFIG = {
-    darkMode: true
-};
+import { APP_SET_BUSY, APP_UNSET_BUSY, APP_SET_CONFIG, APP_SET_CONFIG_VALUE } from "../actions/types.js";
+import { INITIAL_CONFIG } from "../library/config.js";
 
 const INITIAL = {
     busy: false,
     busyMessage: "",
-    config: INITIAL_CONFIG
+    config: { ...INITIAL_CONFIG },
+    configSource: "app"
 };
 
 export default function appReducer(state = INITIAL, action = {}) {
@@ -28,9 +26,18 @@ export default function appReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 config: {
+                    ...action.payload.config
+                },
+                configSource: action.payload.source
+            };
+        case APP_SET_CONFIG_VALUE:
+            return {
+                ...state,
+                config: {
                     ...state.config,
                     [action.payload.key]: action.payload.value
-                }
+                },
+                configSource: "app"
             };
 
         default:

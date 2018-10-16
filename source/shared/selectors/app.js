@@ -18,3 +18,7 @@ export function getConfigKey(state, key) {
         return config[key];
     }
 }
+
+export function getConfigSource(state) {
+    return state[KEY].configSource;
+}
