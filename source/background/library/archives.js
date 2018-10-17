@@ -52,7 +52,10 @@ export function addDropboxArchive(payload) {
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
             return archiveManager.interruptAutoUpdate(() =>
-                archiveManager.addSource(source).then(() => source.unlock(masterPassword, create))
+                archiveManager
+                    .addSource(source)
+                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => archiveManager.dehydrateSource(source))
             );
         });
 }
@@ -99,7 +102,10 @@ export function addNextcloudArchive(payload) {
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
             return archiveManager.interruptAutoUpdate(() =>
-                archiveManager.addSource(source).then(() => source.unlock(masterPassword, create))
+                archiveManager
+                    .addSource(source)
+                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => archiveManager.dehydrateSource(source))
             );
         });
 }
@@ -129,7 +135,10 @@ export function addOwnCloudArchive(payload) {
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
             return archiveManager.interruptAutoUpdate(() =>
-                archiveManager.addSource(source).then(() => source.unlock(masterPassword, create))
+                archiveManager
+                    .addSource(source)
+                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => archiveManager.dehydrateSource(source))
             );
         });
 }
@@ -159,7 +168,10 @@ export function addWebDAVArchive(payload) {
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
             return archiveManager.interruptAutoUpdate(() =>
-                archiveManager.addSource(source).then(() => source.unlock(masterPassword, create))
+                archiveManager
+                    .addSource(source)
+                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => archiveManager.dehydrateSource(source))
             );
         });
 }
