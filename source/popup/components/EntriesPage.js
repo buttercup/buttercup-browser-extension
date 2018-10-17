@@ -4,25 +4,12 @@ import styled from "styled-components";
 import { InputGroup, Classes } from "@blueprintjs/core";
 import SearchResults from "../containers/SearchResults.js";
 
-let __clearedButtercupSearchResults = false;
-
 const SearchInputWrapper = styled.div`
     flex: 0;
     margin-bottom: 0.5rem;
 `;
 
 export default class EntriesPage extends PureComponent {
-    static propTypes = {
-        onPrepare: PropTypes.func.isRequired
-    };
-
-    componentWillMount() {
-        if (!__clearedButtercupSearchResults) {
-            this.props.onPrepare();
-            __clearedButtercupSearchResults = true;
-        }
-    }
-
     handleSearchTermChange(event) {
         const value = event.target.value;
         this.props.onSearchTermChange(value);

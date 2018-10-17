@@ -6,7 +6,6 @@ import { searchEntriesForTerm } from "../../shared/library/messaging.js";
 export default connect(
     (state, ownProps) => ({}),
     {
-        onPrepare: () => () => {},
         onSearchTermChange: searchTerm => () => {
             if (searchTerm.trim().length > 0) {
                 searchEntriesForTerm(searchTerm);
