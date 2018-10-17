@@ -9,6 +9,7 @@ import store from "./redux/index.js";
 import history from "./redux/history.js";
 import ArchivesListPage from "./containers/ArchivesListPage.js";
 import EntriesPage from "./containers/EntriesPage.js";
+import SettingsPage from "./containers/SettingsPage.js";
 import HeaderBar from "./containers/HeaderBar.js";
 import App from "../shared/containers/App.js";
 
@@ -31,6 +32,7 @@ ReactDOM.render(
                 <ContentWrapper>
                     <Route exact path="/" component={EntriesPage} />
                     <Route path="/vaults" component={ArchivesListPage} />
+                    <Route exact path="/settings" component={SettingsPage} />
                 </ContentWrapper>
             </App>
         </ConnectedRouter>
