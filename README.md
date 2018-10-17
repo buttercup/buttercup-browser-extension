@@ -48,12 +48,12 @@ Development of features and bugfixes is supported in the following environment:
 
  * NodeJS version 8 (latest minor version)
  * Linux / Mac
- * Tested in at least Chrome / Firefox / Opera
+ * Tested in at least Chrome / Firefox
  
 To set up your development environment:
  * Clone this repo
  * Execute `npm install` inside the project directory
- * Execute `npm run dev` to build and watch the project
+ * Execute `npm run dev` to build and watch the project (to build production code, execute `npm run build`)
  * Add the `./dist` directory to the browser of your choice as an _unpacked extension_
 
 ### Adding to Chrome
