@@ -63,6 +63,7 @@ const Title = styled(Text)`
 `;
 const Details = styled(Card)`
     margin-top: 0.5rem;
+    padding: 1rem 1rem 0.5rem !important;
 `;
 
 class SearchResult extends PureComponent {
@@ -135,9 +136,10 @@ class SearchResult extends PureComponent {
     renderEntryDetails() {
         const { entry } = this.props;
         const { uncovered } = this.state;
+        const fields = entry.facade.fields.filter(field => field.removeable === false && field.property !== "title");
         return (
             <Details>
-                <For each="field" of={entry.facade.fields}>
+                <For each="field" of={fields}>
                     <FormGroup key={field.property} label={field.title}>
                         <ControlGroup>
                             <InputGroup
