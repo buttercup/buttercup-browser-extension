@@ -15,6 +15,7 @@ const DIALOG_STYLING = {
     [DIALOG_TYPE_ENTRY_PICKER]: {},
     [DIALOG_TYPE_PASSWORD_GENERATOR]: {}
 };
+const DIALOG_MIN_WIDTH = 250;
 
 let __sharedInstance;
 
@@ -81,6 +82,7 @@ function createDialog(dialogType) {
                 ...CLEAR_STYLES,
                 width: `${width}px`,
                 height: `${height}px`,
+                minWidth: `${DIALOG_MIN_WIDTH}px`,
                 position: "absolute",
                 zIndex: 9999999,
                 ...specificStyles
