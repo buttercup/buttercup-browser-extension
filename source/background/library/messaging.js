@@ -20,12 +20,10 @@ import {
     unlockSource
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
-import { setCurrentArchiveId } from "../../shared/actions/archives.js";
 import { setConfigValue } from "../../shared/actions/app.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
-import { getCurrentArchive } from "../../shared/selectors/archives.js";
 
 const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
@@ -222,10 +220,6 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
-        case "set-current-vault-context": {
-            dispatch(setCurrentArchiveId(request.vaultId));
-            return;
-        }
         case "set-config": {
             dispatch(
                 setConfigValue({
@@ -241,21 +235,13 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 function processSearchResults([entries, sources]) {
-    const currentArchive = getCurrentArchive(getState());
     return Promise.all(
-        entries
-            .filter(entry => {
-                if (currentArchive) {
-                    return currentArchive.id === entry.sourceID;
-                }
-                return true;
-            })
-            .map(info =>
-                getNameForSource(info.sourceID).then(name => ({
-                    ...info,
-                    sourceName: name
-                }))
-            )
+        entries.map(info =>
+            getNameForSource(info.sourceID).then(name => ({
+                ...info,
+                sourceName: name
+            }))
+        )
     ).then(entries => {
         dispatch(
             setEntrySearchResults(

@@ -6,10 +6,6 @@ export function searchEntriesForURL(url) {
     chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
 }
 
-export function setCurrentVaultContext(vaultId) {
-    chrome.runtime.sendMessage({ type: "set-current-vault-context", vaultId });
-}
-
 export function setConfig(key, value) {
     chrome.runtime.sendMessage({ type: "set-config", key, value });
 }
