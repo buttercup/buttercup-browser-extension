@@ -9,12 +9,12 @@ import {
     ButtonGroup,
     Button,
     Tooltip,
-    Position,
     Divider,
-    Menu,
-    MenuItem,
-    Popover,
-    MenuDivider
+    Collapse,
+    Card,
+    FormGroup,
+    InputGroup,
+    ControlGroup
 } from "@blueprintjs/core";
 import { getIconForURL } from "../../shared/library/icons.js";
 import { EntryShape } from "../prop-types/entry.js";
@@ -25,6 +25,7 @@ const NO_ICON = require("../../../resources/no-icon.svg");
 const Container = styled.div`
     border-radius: 3px;
     padding: 0.5rem;
+    background-color: ${p => (p.isActive ? p.theme.listItemHover : null)};
     &:hover {
         background-color: ${p => p.theme.listItemHover};
     }
@@ -32,7 +33,7 @@ const Container = styled.div`
 const EntryImageBackground = styled.div`
     width: 2.5rem;
     height: 2.5rem;
-    background-color: ${p => p.theme.backgroundFrameColor};
+    background-color: ${p => p.theme.backgroundColor};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,7 +47,7 @@ const EntryImage = styled.img`
     height: auto;
     border-radius: 2px;
 `;
-const DetailsContainer = styled.div`
+const EntryRow = styled.div`
     flex: 1;
     width: 100%;
     display: flex;
@@ -59,6 +60,9 @@ const DetailRow = styled.div`
 `;
 const Title = styled(Text)`
     margin-bottom: 0.3rem;
+`;
+const Details = styled(Card)`
+    margin-top: 0.5rem;
 `;
 
 class SearchResult extends PureComponent {
@@ -73,7 +77,9 @@ class SearchResult extends PureComponent {
     };
 
     state = {
-        icon: NO_ICON
+        icon: NO_ICON,
+        isDetailsVisible: false,
+        uncovered: []
     };
 
     componentWillMount() {
@@ -110,25 +116,58 @@ class SearchResult extends PureComponent {
         }
     }
 
-    renderDropdown() {
+    toggleSecretCover(property) {
+        this.setState(state => ({
+            ...state,
+            uncovered: state.uncovered.includes(property)
+                ? state.uncovered.filter(prop => prop !== property)
+                : [...state.uncovered, property]
+        }));
+    }
+
+    toggleDetails() {
+        this.setState(state => ({
+            ...state,
+            isDetailsVisible: !state.isDetailsVisible
+        }));
+    }
+
+    renderEntryDetails() {
+        const { entry } = this.props;
+        const { uncovered } = this.state;
         return (
-            <Menu>
-                <MenuItem icon="user" text="Copy Username" onClick={() => this.handleCopyToClipboard("username")} />
-                <MenuItem icon="key" text="Copy Password" onClick={() => this.handleCopyToClipboard("password")} />
-                <If condition={this.props.entry.url}>
-                    <MenuDivider />
-                    <MenuItem icon="globe" text="Copy URL" onClick={() => this.handleCopyToClipboard("url", false)} />
-                </If>
-            </Menu>
+            <Details>
+                <For each="field" of={entry.facade.fields}>
+                    <FormGroup key={field.property} label={field.title}>
+                        <ControlGroup>
+                            <InputGroup
+                                className={Classes.FILL}
+                                value={field.value ? field.value : ""}
+                                readOnly
+                                type={field.secret && !uncovered.includes(field.property) ? "password" : "text"}
+                            />
+                            <If condition={field.secret}>
+                                <Button
+                                    active={uncovered.includes(field.property)}
+                                    icon={uncovered.includes(field.property) ? "eye-open" : "eye-off"}
+                                    onClick={() => this.toggleSecretCover(field.property)}
+                                />
+                            </If>
+                            <Button icon="clipboard" onClick={() => this.handleCopyToClipboard(field.property)} />
+                        </ControlGroup>
+                    </FormGroup>
+                </For>
+            </Details>
         );
     }
 
     render() {
         const { entry, onSelectEntry } = this.props;
+        const { isDetailsVisible } = this.state;
         const { title, sourceName, entryPath } = entry;
         return (
-            <Container>
-                <DetailsContainer>
+            <Container isActive={isDetailsVisible}>
+                <EntryRow>
                     <EntryImageBackground>
                         <EntryImage src={this.state.icon} />
                     </EntryImageBackground>
@@ -152,11 +191,10 @@ class SearchResult extends PureComponent {
                                 />
                             </Tooltip>
                         </If>
-                        <Popover content={this.renderDropdown()} position={Position.TOP_RIGHT}>
-                            <Button minimal icon="duplicate" rightIcon="caret-down" />
-                        </Popover>
+                        <Button minimal icon="more" active={isDetailsVisible} onClick={() => this.toggleDetails()} />
                     </ButtonGroup>
-                </DetailsContainer>
+                </EntryRow>
+                <Collapse isOpen={isDetailsVisible}>{this.renderEntryDetails()}</Collapse>
             </Container>
         );
     }
