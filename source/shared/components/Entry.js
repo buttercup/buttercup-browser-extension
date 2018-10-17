@@ -18,6 +18,7 @@ import {
 } from "@blueprintjs/core";
 import { getIconForURL } from "../../shared/library/icons.js";
 import { EntryShape } from "../prop-types/entry.js";
+import { writeToClipboard } from "../library/browser.js";
 
 const NO_ICON = require("../../../resources/no-icon.svg");
 
@@ -97,14 +98,26 @@ class SearchResult extends PureComponent {
         this.mounted = false;
     }
 
+    handleCopyToClipboard(property, facade = true) {
+        const { entry } = this.props;
+        if (facade) {
+            const field = entry.facade.fields.find(item => item.property === property && item.field === "property");
+            if (field) {
+                writeToClipboard(field.value);
+            }
+        } else {
+            writeToClipboard(entry[property]);
+        }
+    }
+
     renderDropdown() {
         return (
             <Menu>
-                <MenuItem icon="user" text="Copy Username" />
-                <MenuItem icon="key" text="Copy Password" />
+                <MenuItem icon="user" text="Copy Username" onClick={() => this.handleCopyToClipboard("username")} />
+                <MenuItem icon="key" text="Copy Password" onClick={() => this.handleCopyToClipboard("password")} />
                 <If condition={this.props.entry.url}>
                     <MenuDivider />
-                    <MenuItem icon="globe" text="Copy URL" />
+                    <MenuItem icon="globe" text="Copy URL" onClick={() => this.handleCopyToClipboard("url", false)} />
                 </If>
             </Menu>
         );
