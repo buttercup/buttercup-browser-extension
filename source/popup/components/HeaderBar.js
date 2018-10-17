@@ -20,6 +20,7 @@ class HeaderBar extends PureComponent {
         darkMode: PropTypes.bool,
         onItemsClick: PropTypes.func.isRequired,
         onVaultsClick: PropTypes.func.isRequired,
+        onSettingsClick: PropTypes.func.isRequired,
         onAddVaultClick: PropTypes.func.isRequired,
         onUnlockVaultClick: PropTypes.func.isRequired,
         onLockAllClick: PropTypes.func.isRequired,
@@ -73,6 +74,7 @@ class HeaderBar extends PureComponent {
                 />
                 <MenuDivider />
                 <MenuItem text={`Buttercup v${version}`} icon="info-sign" disabled />
+                <MenuItem text="Settings" icon="cog" onClick={::this.props.onSettingsClick} />
             </Menu>
         );
         return (

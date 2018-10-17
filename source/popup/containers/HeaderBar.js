@@ -20,6 +20,9 @@ export default withRouter(
             onVaultsClick: () => dispatch => {
                 dispatch(push("/vaults"));
             },
+            onSettingsClick: () => dispatch => {
+                dispatch(push("/settings"));
+            },
             onToggleDarkMode: () => (_, getState) => {
                 const state = getState();
                 const darkMode = getConfigKey(state, "darkMode");
