@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v1.12.0
+_2018-10-07_
+
+ * ([#110](https://github.com/buttercup/buttercup-browser-extension/issues/110)) Reload archives after some time
+ * ([#174](https://github.com/buttercup/buttercup-browser-extension/issues/174)) Unable to access via WebDAV (Seafile)
+
 ## v1.11.1
 _2018-08-27_
 

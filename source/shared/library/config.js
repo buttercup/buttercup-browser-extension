@@ -1,5 +1,5 @@
 export const INITIAL_CONFIG = {
     darkMode: false,
-    showSaveDialog: "always",
+    showSaveDialog: "always", // always/unlocked/never
     autoUnlockVaults: true
 };

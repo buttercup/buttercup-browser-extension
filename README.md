@@ -18,7 +18,7 @@ Buttercup credentials manager extension for the browser.
 ## About
 This browser extension allows users to interface with password archives authored by the [Buttercup password manager](https://github.com/buttercup-pw/buttercup) (though it **does not** require the application to be installed).
 
-The extension can remotely connect to archives via Buttercup's common communication protocols (WebDAV, Dropbox etc.).
+The extension can remotely connect to archives via Buttercup's common communication protocols (WebDAV, Dropbox etc.). Vaults are loaded from their remote source and their contents used to assist users with logging in to their recorded services. The extension also periodically updates vaults from their remote source so that the contents are always up to date.
 
 This extension uses [Locust](https://github.com/buttercup/locust) to perform login form detection. Issues relating to the detection and operation of login forms should be opened there.
 
@@ -48,12 +48,12 @@ Development of features and bugfixes is supported in the following environment:
 
  * NodeJS version 8 (latest minor version)
  * Linux / Mac
- * Tested in at least Chrome / Firefox / Opera
+ * Tested in at least Chrome / Firefox
  
 To set up your development environment:
  * Clone this repo
  * Execute `npm install` inside the project directory
- * Execute `npm run dev` to build and watch the project
+ * Execute `npm run dev` to build and watch the project (to build production code, execute `npm run build`)
  * Add the `./dist` directory to the browser of your choice as an _unpacked extension_
 
 ### Adding to Chrome

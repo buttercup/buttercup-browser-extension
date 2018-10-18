@@ -51,7 +51,9 @@ export function addDropboxArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return archiveManager.addSource(source).then(() => source.unlock(masterPassword, create));
+            return archiveManager.interruptAutoUpdate(() =>
+                archiveManager.addSource(source).then(() => source.unlock(masterPassword, create))
+            );
         });
 }
 
@@ -96,7 +98,9 @@ export function addNextcloudArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return archiveManager.addSource(source).then(() => source.unlock(masterPassword, create));
+            return archiveManager.interruptAutoUpdate(() =>
+                archiveManager.addSource(source).then(() => source.unlock(masterPassword, create))
+            );
         });
 }
 
@@ -124,7 +128,9 @@ export function addOwnCloudArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return archiveManager.addSource(source).then(() => source.unlock(masterPassword, create));
+            return archiveManager.interruptAutoUpdate(() =>
+                archiveManager.addSource(source).then(() => source.unlock(masterPassword, create))
+            );
         });
 }
 
@@ -152,7 +158,9 @@ export function addWebDAVArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
-            return archiveManager.addSource(source).then(() => source.unlock(masterPassword, create));
+            return archiveManager.interruptAutoUpdate(() =>
+                archiveManager.addSource(source).then(() => source.unlock(masterPassword, create))
+            );
         });
 }
 
@@ -288,7 +296,9 @@ export function openCredentialsPageForEntry(sourceID, entryID) {
 
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => archiveManager.removeSource(sourceID));
+    return getArchiveManager().then(archiveManager => {
+        return archiveManager.interruptAutoUpdate(() => archiveManager.removeSource(sourceID));
+    });
 }
 
 export function saveSource(sourceID) {
@@ -298,10 +308,12 @@ export function saveSource(sourceID) {
             throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
         }
         const { workspace } = source;
-        return workspace
-            .localDiffersFromRemote()
-            .then(differs => (differs ? workspace.mergeFromRemote().then(() => true) : false))
-            .then(shouldSave => (shouldSave ? workspace.save() : null));
+        return archiveManager.interruptAutoUpdate(() =>
+            workspace
+                .localDiffersFromRemote()
+                .then(differs => (differs ? workspace.mergeFromRemote().then(() => true) : false))
+                .then(shouldSave => (shouldSave ? workspace.save() : null))
+        );
     });
 }
 

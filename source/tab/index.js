@@ -1,14 +1,23 @@
 import { onIdentifiedTarget, watchLogin } from "./login.js";
 import { attachLaunchButton } from "./launch.js";
-import { getLastLoginStatus, startMessageListeners, transferLoginCredentials } from "./messaging.js";
+import {
+    getConfig,
+    getLastLoginStatus,
+    getSourcesStats,
+    startMessageListeners,
+    transferLoginCredentials
+} from "./messaging.js";
 import { getSharedTracker } from "./LoginTracker.js";
 import { showSaveDialog } from "./saveDialog.js";
 import { watchInputs } from "./generator.js";
 
 function checkForLoginSaveAbility() {
-    return getLastLoginStatus()
-        .then(result => {
-            if (result.credentials) {
+    return Promise.all([getLastLoginStatus(), getConfig(), getSourcesStats()])
+        .then(([loginStatus, config, sourceStats]) => {
+            const unlockedCount = sourceStats.unlocked;
+            const canShowSaveDialog =
+                config.showSaveDialog === "always" || (config.showSaveDialog === "unlocked" && unlockedCount > 0);
+            if (loginStatus.credentials && canShowSaveDialog) {
                 showSaveDialog();
             }
         })
