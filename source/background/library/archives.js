@@ -333,5 +333,14 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
 
 export function unlockSource(sourceID, masterPassword) {
     log.info(`Unlocking source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => archiveManager.getSourceForID(sourceID).unlock(masterPassword));
+    return getArchiveManager().then(archiveManager =>
+        archiveManager
+            .getSourceForID(sourceID)
+            .unlock(
+                masterPassword,
+                /* init remote: */ false,
+                /* content override: */ null,
+                /* store offline content: */ false
+            )
+    );
 }
