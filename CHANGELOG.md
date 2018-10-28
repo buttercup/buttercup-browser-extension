@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v1.12.1
+_2018-10-18_
+
+ * ([#173](https://github.com/buttercup/buttercup-browser-extension/issues/173)) Source type is empty - display glitches
+ * ([#182](https://github.com/buttercup/buttercup-browser-extension/issues/182)) Add bundling process for Chrome/Firefox
+
 ## v1.12.0
 _2018-10-07_
 

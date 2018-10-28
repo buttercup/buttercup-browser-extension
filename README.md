@@ -58,6 +58,9 @@ To set up your development environment:
  * Execute `npm run dev` to build and watch the project (to build production code, execute `npm run build`)
  * Add the `./dist` directory to the browser of your choice as an _unpacked extension_
 
+#### Releasing
+To build release-ready zip archives, run the command `npm run release` after having set up the development environment. The archives will be written to `release/(browser)` where `(browser)` is the browser type. Archives named `extension.zip` contain the built extension sourcecode and `source.zip` contains the raw source.
+
 ### Adding to Chrome
 You can load an **unpacked extension** in Chrome by navigating to [chrome://extensions/](chrome://extensions/). Simply locate the project's directory and use **dist/** as the extension directory.
 
