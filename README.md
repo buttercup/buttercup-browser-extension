@@ -22,6 +22,8 @@ The extension can remotely connect to archives via Buttercup's common communicat
 
 This extension uses [Locust](https://github.com/buttercup/locust) to perform login form detection. Issues relating to the detection and operation of login forms should be opened there.
 
+<img src="https://raw.githubusercontent.com/buttercup/buttercup-browser-extension/master/chrome-extension-2.jpg" />
+
 ### Supported browsers
 [Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) and [Opera](https://addons.opera.com/en/extensions/details/buttercup/) are supported.
 
