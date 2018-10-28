@@ -34,6 +34,9 @@ export default withRouter(
             onAddVaultClick: () => () => {
                 createNewTab(getExtensionURL("setup.html#/add-archive"));
             },
+            onAboutClick: () => () => {
+                createNewTab(getExtensionURL("setup.html#/about"));
+            },
             onLockAllClick: () => dispatch => {
                 dispatch(push("/vaults/lock", { lockAll: true }));
             },

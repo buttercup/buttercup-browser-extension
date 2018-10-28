@@ -25,6 +25,7 @@ class HeaderBar extends PureComponent {
         onUnlockVaultClick: PropTypes.func.isRequired,
         onLockAllClick: PropTypes.func.isRequired,
         onOtherSoftwareClick: PropTypes.func.isRequired,
+        onAboutClick: PropTypes.func.isRequired,
         onToggleDarkMode: PropTypes.func.isRequired
     };
 
@@ -66,14 +67,15 @@ class HeaderBar extends PureComponent {
         );
         const optionsMenu = (
             <Menu>
-                <MenuItem text="Other Applications" icon="mobile-phone" onClick={::this.props.onOtherSoftwareClick} />
+                <MenuItem text={`Buttercup v${version}`} icon="updated" disabled />
                 <MenuItem
                     text={darkMode ? "Light theme" : "Dark theme"}
                     icon={darkMode ? "flash" : "moon"}
                     onClick={::this.props.onToggleDarkMode}
                 />
                 <MenuDivider />
-                <MenuItem text={`Buttercup v${version}`} icon="info-sign" disabled />
+                <MenuItem text="About Buttercup" icon="info-sign" onClick={::this.props.onAboutClick} />
+                <MenuItem text="Other Applications" icon="mobile-phone" onClick={::this.props.onOtherSoftwareClick} />
                 <MenuItem text="Settings" icon="cog" onClick={::this.props.onSettingsClick} />
             </Menu>
         );
