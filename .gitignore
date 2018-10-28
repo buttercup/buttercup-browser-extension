@@ -3,5 +3,6 @@
 .history
 node_modules
 /dist
+/release
 Archive.zip
 dist.zip
