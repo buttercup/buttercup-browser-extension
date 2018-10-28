@@ -57,15 +57,15 @@ class ArchiveUnlockPage extends PureComponent {
         let title, action;
         switch (this.props.state) {
             case "locked":
-                title = "Unlock Archive";
+                title = "Unlock Vault";
                 action = "Unlock";
                 break;
             case "unlocked":
-                title = "Manage Archive";
+                title = "Manage Vault";
                 action = "Manage";
                 break;
             default:
-                throw new Error(`Unknown archive state: ${this.props.state}`);
+                throw new Error(`Unknown vault state: ${this.props.state}`);
         }
         const actions = (
             <Fragment>
