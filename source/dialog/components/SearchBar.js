@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { InputGroup, Classes } from "@blueprintjs/core";
 
 const BUTTERCUP_ICON = require("../../../resources/buttercup-128.png");
 const SEARCH_ICON = require("../../../resources/search-icon.png");
 
 const Container = styled.div`
-    width: 100%;
+    flex: 0 0 auto;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
     align-items: center;
+    margin-bottom: 0.5rem;
 `;
 const ButtercupIcon = styled.img`
-    margin: 4px;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
+    margin-right: 0.5rem;
 `;
 const SearchInput = styled.input`
     flex-grow: 2;
@@ -60,12 +60,14 @@ class SearchBar extends Component {
         return (
             <Container>
                 <ButtercupIcon src={BUTTERCUP_ICON} />
-                <SearchInput
-                    type="text"
+                <InputGroup
+                    className={Classes.FILL}
+                    type="search"
+                    leftIcon="search"
                     placeholder="Search for entries..."
                     value={this.state.searchTerm}
                     onChange={::this.handleSearchTermChange}
-                    innerRef={input => {
+                    inputRef={input => {
                         this._input = input;
                     }}
                 />

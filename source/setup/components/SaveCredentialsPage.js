@@ -1,25 +1,23 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Async as Select } from "react-select";
-import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
-import Spinner from "react-spinkit";
-import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
+import {
+    FormGroup,
+    InputGroup,
+    ControlGroup,
+    Button,
+    Classes,
+    H4,
+    Card,
+    Intent,
+    Spinner,
+    Callout
+} from "@blueprintjs/core";
+import { Button as ButtercupButton } from "@buttercup/ui";
 import { notifyError } from "../library/notify.js";
 import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
-import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
-
-const FormInputItemColumnLayout = styled(FormInputItem)`
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-`;
-const PasswordHideButton = styled(ButtercupButton)`
-    flex-shrink: 0;
-    flex-grow: 0;
-    margin-left: 4px;
-`;
 
 function flattenGroups(groups) {
     const processed = [];
@@ -34,22 +32,17 @@ function flattenGroups(groups) {
     return processed;
 }
 
-const LoaderContainer = styled.div`
-    width: 100%;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+const ButtonRow = styled.div`
+    margin-top: 1rem;
+
+    button {
+        margin-right: 0.5rem;
+    }
 `;
-const NoArchivesNotice = styled.span`
-    font-size: 13px;
-    color: rgb(242, 159, 4);
-`;
-const SelectArchiveHint = styled.span`
-    font-style: italic;
-    font-color: #444;
-    font-size: 13px;
+const SelectColumns = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
 `;
 
 const ArchiveShape = PropTypes.shape({
@@ -58,7 +51,7 @@ const ArchiveShape = PropTypes.shape({
     type: PropTypes.string.isRequired
 });
 
-class SaveCredentialsPage extends Component {
+class SaveCredentialsPage extends PureComponent {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
         cancel: PropTypes.func.isRequired,
@@ -176,93 +169,72 @@ class SaveCredentialsPage extends Component {
         });
     }
 
-    handleShowPasswordClick(event, show) {
+    handleShowPasswordClick(event) {
         event.preventDefault();
-        this.setState({
-            showPassword: show
-        });
+        this.setState(state => ({
+            ...state,
+            showPassword: !state.showPassword
+        }));
     }
 
     render() {
         const selectedArchive = this.state.sourceID && this.state.sourceID.length > 0;
         return (
             <LayoutMain title="Save New Credentials">
-                <h3>New Entry Details</h3>
-                <Choose>
-                    <When condition={this.state.loading}>
-                        <LoaderContainer>
-                            <Spinner color="rgba(0, 183, 172, 1)" name="ball-grid-pulse" />
-                        </LoaderContainer>
-                    </When>
-                    <Otherwise>
-                        <FormContainer>
-                            <FormRow>
-                                <FormLegendItem>Title</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter entry title..."
-                                        onChange={event => this.handleEditProperty("title", event)}
-                                        value={this.state.title}
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>Username</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter username..."
-                                        onChange={event => this.handleEditProperty("username", event)}
-                                        value={this.state.username}
-                                    />
-                                </FormInputItem>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>Password</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
+                <H4>New Entry Details</H4>
+                <Card>
+                    <Choose>
+                        <When condition={this.state.loading}>
+                            <Spinner size="20" />
+                        </When>
+                        <Otherwise>
+                            <FormGroup label="Title">
+                                <InputGroup
+                                    leftIcon="new-text-box"
+                                    placeholder="Enter entry title..."
+                                    onChange={event => this.handleEditProperty("title", event)}
+                                    value={this.state.title}
+                                />
+                            </FormGroup>
+                            <FormGroup label="Username">
+                                <InputGroup
+                                    leftIcon="user"
+                                    placeholder="Enter username..."
+                                    onChange={event => this.handleEditProperty("username", event)}
+                                    value={this.state.username}
+                                />
+                            </FormGroup>
+                            <FormGroup label="Password">
+                                <ControlGroup>
+                                    <InputGroup
+                                        className={Classes.FILL}
+                                        leftIcon="key"
                                         placeholder="Enter password..."
                                         onChange={event => this.handleEditProperty("password", event)}
                                         value={this.state.password}
                                         type={this.state.showPassword ? "text" : "password"}
                                     />
-                                </FormInputItem>
-                                <Choose>
-                                    <When condition={!this.state.showPassword}>
-                                        <PasswordHideButton
-                                            onClick={event => this.handleShowPasswordClick(event, true)}
-                                        >
-                                            <FontAwesome name="eye" />
-                                        </PasswordHideButton>
-                                    </When>
-                                    <Otherwise>
-                                        <PasswordHideButton
-                                            onClick={event => this.handleShowPasswordClick(event, false)}
-                                        >
-                                            <FontAwesome name="eye-slash" />
-                                        </PasswordHideButton>
-                                    </Otherwise>
-                                </Choose>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>URL</FormLegendItem>
-                                <FormInputItem>
-                                    <ButtercupInput
-                                        placeholder="Enter URL..."
-                                        onChange={event => this.handleEditProperty("url", event)}
-                                        value={this.state.url}
+                                    <Button
+                                        active={this.state.showPassword}
+                                        icon={this.state.showPassword ? "eye-open" : "eye-off"}
+                                        onClick={::this.handleShowPasswordClick}
                                     />
-                                </FormInputItem>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>Archive</FormLegendItem>
-                                <FormInputItemColumnLayout>
+                                </ControlGroup>
+                            </FormGroup>
+                            <FormGroup label="URL">
+                                <InputGroup
+                                    leftIcon="globe"
+                                    placeholder="Enter URL..."
+                                    onChange={event => this.handleEditProperty("url", event)}
+                                    value={this.state.url}
+                                />
+                            </FormGroup>
+                            <FormGroup label="Archive and Group">
+                                <SelectColumns>
                                     <Select
                                         name="sourceID"
                                         value={this.state.sourceID}
                                         onChange={::this.handleArchiveSourceChange}
-                                        style={{
-                                            width: "280px"
-                                        }}
                                         autoload={true}
                                         cache={false}
                                         searchable={false}
@@ -270,48 +242,39 @@ class SaveCredentialsPage extends Component {
                                         loadingPlaceholder="Fetching archives..."
                                         loadOptions={::this.fetchArchiveOptions}
                                     />
-                                    <If condition={this.props.archives.length <= 0}>
-                                        <NoArchivesNotice>
-                                            <FontAwesome name="exclamation-circle" /> No <strong>unlocked</strong>{" "}
-                                            archives were found. You must unlock at least one archive to be able to save
-                                            new credentials.
-                                        </NoArchivesNotice>
+                                    <If condition={selectedArchive}>
+                                        <Select
+                                            name="groupID"
+                                            value={this.state.groupID}
+                                            onChange={::this.handleArchiveGroupChange}
+                                            autoload={true}
+                                            cache={false}
+                                            searchable={false}
+                                            placeholder="Select group..."
+                                            loadingPlaceholder="Fetching groups..."
+                                            loadOptions={::this.fetchGroupOptions}
+                                        />
                                     </If>
-                                </FormInputItemColumnLayout>
-                            </FormRow>
-                            <FormRow>
-                                <FormLegendItem>Group</FormLegendItem>
-                                <FormInputItem>
-                                    <Choose>
-                                        <When condition={selectedArchive}>
-                                            <Select
-                                                name="groupID"
-                                                value={this.state.groupID}
-                                                onChange={::this.handleArchiveGroupChange}
-                                                style={{
-                                                    width: "280px"
-                                                }}
-                                                autoload={true}
-                                                cache={false}
-                                                searchable={false}
-                                                placeholder="Select group..."
-                                                loadingPlaceholder="Fetching groups..."
-                                                loadOptions={::this.fetchGroupOptions}
-                                            />
-                                        </When>
-                                        <Otherwise>
-                                            <SelectArchiveHint>Select an archive to continue...</SelectArchiveHint>
-                                        </Otherwise>
-                                    </Choose>
-                                </FormInputItem>
-                            </FormRow>
-                        </FormContainer>
-                        <FormButtonContainer>
-                            <ButtercupButton onClick={::this.handleSaveClicked}>Save New Entry</ButtercupButton>
-                            <ButtercupButton onClick={::this.handleCancelClick}>Cancel</ButtercupButton>
-                        </FormButtonContainer>
-                    </Otherwise>
-                </Choose>
+                                </SelectColumns>
+                            </FormGroup>
+                            <If condition={this.props.archives.length <= 0}>
+                                <Callout intent={Intent.WARNING}>
+                                    No <strong>unlocked</strong> archives were found. You must unlock at least one
+                                    archive to be able to save new credentials.
+                                </Callout>
+                            </If>
+                            <ButtonRow>
+                                <Button
+                                    icon="floppy-disk"
+                                    text="Save New Entry"
+                                    onClick={::this.handleSaveClicked}
+                                    intent={Intent.PRIMARY}
+                                />
+                                <Button text="Cancel" onClick={::this.handleCancelClick} />
+                            </ButtonRow>
+                        </Otherwise>
+                    </Choose>
+                </Card>
             </LayoutMain>
         );
     }

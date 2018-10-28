@@ -77,7 +77,7 @@ export default connect(
                     dispatch(setEditing(false));
                     dispatch(unsetBusy());
                     console.error(err);
-                    notifyError("Failed unlocking archive", `Unable to unlock archive (${sourceID}): ${err.message}`);
+                    notifyError("Failed unlocking archive", `Unable to unlock archive: ${err.message}`);
                 });
         }
     }

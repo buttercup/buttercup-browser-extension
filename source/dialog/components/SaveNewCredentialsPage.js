@@ -1,35 +1,30 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import FontAwesome from "react-fontawesome";
-import { Button } from "@buttercup/ui";
-import LayoutMain from "./LayoutMain.js";
+import { Card as CardBase, H4, H5, Classes, Button, Intent, ButtonGroup } from "@blueprintjs/core";
 
 const Container = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: top;
-    align-items: center;
+    padding: 2rem;
+`;
+const Card = styled(CardBase)`
+    flex: 1;
     flex-direction: column;
-`;
-const SaveHeading = styled.span`
-    font-size: 18px;
-    margin-top: 20px;
-`;
-const ItemTitle = styled.span`
-    margin-top: 12px;
-    width: 80%;
-    height: 40px;
-    font-style: italic;
-    text-align: center;
-`;
-const ButtonsContainer = styled.div`
-    margin-top: 18px;
-    width: 60%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+`;
+const CardBody = styled.div`
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+const CardFooter = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
 `;
 
 class SaveNewCredentialsPage extends Component {
@@ -63,18 +58,24 @@ class SaveNewCredentialsPage extends Component {
 
     render() {
         return (
-            <LayoutMain>
-                <Container>
-                    <SaveHeading>Save new login?</SaveHeading>
-                    <ItemTitle>"{this.state.credentialsTitle}"</ItemTitle>
-                    <ButtonsContainer>
-                        <Button onClick={::this.handleSaveClick}>
-                            <FontAwesome name="save" /> Save
-                        </Button>
-                        <Button onClick={::this.handleCancelClick}>Cancel</Button>
-                    </ButtonsContainer>
-                </Container>
-            </LayoutMain>
+            <Container>
+                <Card interactive>
+                    <CardBody>
+                        <H4>Save in Buttercup?</H4>
+                        <H5 className={Classes.TEXT_MUTED}>{this.state.credentialsTitle}</H5>
+                    </CardBody>
+                    <CardFooter>
+                        <Button
+                            fill
+                            text="Save"
+                            icon="floppy-disk"
+                            onClick={::this.handleSaveClick}
+                            intent={Intent.PRIMARY}
+                        />
+                        <Button fill text="Cancel" onClick={::this.handleCancelClick} />
+                    </CardFooter>
+                </Card>
+            </Container>
         );
     }
 }

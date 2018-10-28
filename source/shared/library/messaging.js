@@ -5,3 +5,7 @@ export function searchEntriesForTerm(searchTerm) {
 export function searchEntriesForURL(url) {
     chrome.runtime.sendMessage({ type: "search-entries-for-url", url });
 }
+
+export function setConfig(key, value) {
+    chrome.runtime.sendMessage({ type: "set-config", key, value });
+}

@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import SearchResult from "../containers/SearchResult.js";
+import { NonIdealState } from "@blueprintjs/core";
+import Entries from "../../shared/components/Entries.js";
+
+const BUTTERCUP_LOGO = require("../../../resources/buttercup-standalone.png");
 
 const Container = styled.div`
-    width: 100%;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
     overflow-x: hidden;
     overflow-y: scroll;
+    flex: 1;
 `;
 
 const EntryShape = PropTypes.shape({
@@ -23,15 +21,30 @@ const EntryShape = PropTypes.shape({
 class SearchResults extends Component {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
-        sourcesUnlocked: PropTypes.number.isRequired
+        sourcesUnlocked: PropTypes.number.isRequired,
+        onSelectEntry: PropTypes.func.isRequired
     };
 
     render() {
         return (
             <Container>
-                <For each="entry" of={this.props.entries}>
-                    <SearchResult key={entry.id} sourceID={entry.sourceID} entryID={entry.id} />
-                </For>
+                <Choose>
+                    <When condition={this.props.entries.length > 0}>
+                        <Entries
+                            autoLoginEnabled={false}
+                            entries={this.props.entries}
+                            onSelectEntry={this.props.onSelectEntry}
+                            sourcesUnlocked={this.props.sourcesUnlocked}
+                        />
+                    </When>
+                    <Otherwise>
+                        <NonIdealState
+                            title="Welcome to Buttercup"
+                            description="Use the search bar to find entries in your unlocked vaults."
+                            icon={<img src={BUTTERCUP_LOGO} width="64" />}
+                        />
+                    </Otherwise>
+                </Choose>
             </Container>
         );
     }

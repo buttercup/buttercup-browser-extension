@@ -4,6 +4,14 @@ import { hideInputDialog } from "./inputDialog.js";
 import { hideSaveDialog } from "./saveDialog.js";
 import { openGeneratorForCurrentInput, setPasswordForCurrentInput } from "./generator.js";
 
+export function getConfig() {
+    return new Promise(resolve => {
+        chrome.runtime.sendMessage({ type: "get-config" }, resp => {
+            resolve(resp.config);
+        });
+    });
+}
+
 export function getLastLoginStatus() {
     return new Promise(resolve => {
         chrome.runtime.sendMessage({ type: "get-used-credentials" }, resp => {
@@ -17,6 +25,17 @@ export function getLastLoginStatus() {
                           credentials: false
                       }
             );
+        });
+    });
+}
+
+export function getSourcesStats() {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-sources-stats" }, resp => {
+            if (resp.ok) {
+                return resolve(resp);
+            }
+            reject(new Error(resp.error || "Unknown error when fetching source stats"));
         });
     });
 }

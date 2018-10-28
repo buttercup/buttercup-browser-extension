@@ -9,12 +9,13 @@ export const DIALOG_TYPE_PASSWORD_GENERATOR = "/generate-password";
 
 const DIALOG_SIZES = {
     [DIALOG_TYPE_ENTRY_PICKER]: [320, 280],
-    [DIALOG_TYPE_PASSWORD_GENERATOR]: [320, 330]
+    [DIALOG_TYPE_PASSWORD_GENERATOR]: [320, 315]
 };
 const DIALOG_STYLING = {
     [DIALOG_TYPE_ENTRY_PICKER]: {},
     [DIALOG_TYPE_PASSWORD_GENERATOR]: {}
 };
+const DIALOG_MIN_WIDTH = 250;
 
 let __sharedInstance;
 
@@ -52,10 +53,12 @@ class InputDialog {
     }
 
     updatePosition() {
-        const { top, left, height } = this.input.getBoundingClientRect();
+        const { top, left, height, width } = this.input.getBoundingClientRect();
+        const buttonWidth = height * 0.8;
         setStyle(this.dialog, {
             left: `${left}px`,
-            top: `${window.scrollY + top + height + 2}px`
+            top: `${window.scrollY + top + height + 2}px`,
+            width: `${width + buttonWidth}px`
         });
     }
 }
@@ -79,7 +82,7 @@ function createDialog(dialogType) {
                 ...CLEAR_STYLES,
                 width: `${width}px`,
                 height: `${height}px`,
-                backgroundColor: "rgba(0, 0, 0, 0.85)",
+                minWidth: `${DIALOG_MIN_WIDTH}px`,
                 position: "absolute",
                 zIndex: 9999999,
                 ...specificStyles

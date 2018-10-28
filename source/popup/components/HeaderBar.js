@@ -1,69 +1,32 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import { Button, Icon, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 import styled from "styled-components";
-import FontAwesome from "react-fontawesome";
 import { version } from "../../../package.json";
-
-const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
-
-const HEADER_SIZE = 30;
+import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
+import { VaultIcon } from "./VaultIcon";
 
 const Container = styled.div`
-    width: 100%;
-    height: ${HEADER_SIZE}px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(80, 80, 80, 1);
-    background-color: rgba(10, 10, 10, 1);
-    position: relative;
-`;
-const Logo = styled.img`
-    width: ${HEADER_SIZE - 6}px;
-    height: auto;
-    margin: 3px;
-`;
-const Buttons = styled.div`
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    cursor: pointer;
-    user-select: none;
-`;
-const Separator = styled.div`
-    width: 1px;
-    height: 100%;
-    background-color: rgba(220, 220, 220, 0.4);
-`;
-const Button = styled.div`
-    height: 100%;
-    padding: 0px 14px;
-    color: ${props => (props.selected ? "#eee" : "#aaa")};
-    font-size: 14px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    &:hover {
-        background-color: rgba(0, 183, 172, 0.5);
-    }
-`;
-const Version = styled.span`
-    position: absolute;
-    font-size: 10px;
-    font-style: italic;
-    color: #666;
-    top: 8px;
-    left: ${HEADER_SIZE + 5}px;
+    padding: 0.5rem 0.5rem 0.25rem;
 `;
 
-class HeaderBar extends Component {
+class HeaderBar extends PureComponent {
     static propTypes = {
+        archives: ArchivesShape,
         current: PropTypes.string,
+        darkMode: PropTypes.bool,
         onItemsClick: PropTypes.func.isRequired,
-        onMenuClick: PropTypes.func.isRequired,
-        onVaultsClick: PropTypes.func.isRequired
+        onVaultsClick: PropTypes.func.isRequired,
+        onSettingsClick: PropTypes.func.isRequired,
+        onAddVaultClick: PropTypes.func.isRequired,
+        onUnlockVaultClick: PropTypes.func.isRequired,
+        onLockAllClick: PropTypes.func.isRequired,
+        onOtherSoftwareClick: PropTypes.func.isRequired,
+        onAboutClick: PropTypes.func.isRequired,
+        onToggleDarkMode: PropTypes.func.isRequired
     };
 
     handleItemsClick(event) {
@@ -76,30 +39,64 @@ class HeaderBar extends Component {
         this.props.onMenuClick();
     }
 
-    handleVaultsClick(event) {
-        event.preventDefault();
-        this.props.onVaultsClick();
+    handleVaultClick(vault) {
+        this.props.onUnlockVaultClick(vault.id, vault.state);
     }
 
     render() {
+        const { archives, location, darkMode } = this.props;
+        const archiveMenu = (
+            <Menu>
+                <If condition={archives.length > 0}>
+                    <MenuDivider title="Vaults:" />
+                    <For each="vault" of={archives} index="index">
+                        <MenuItem
+                            icon={<VaultIcon vault={vault} />}
+                            label={vault.status === "locked" ? <Icon icon="lock" /> : null}
+                            text={vault.name}
+                            key={index}
+                            onClick={() => this.handleVaultClick(vault)}
+                        />
+                    </For>
+                    <MenuDivider />
+                </If>
+                <MenuItem text="Add Vault" icon="add" onClick={::this.props.onAddVaultClick} />
+                <MenuItem text="Lock All Vaults" icon="lock" onClick={::this.props.onLockAllClick} />
+                <MenuItem icon="numbered-list" text="Manage Vaults" onClick={this.props.onVaultsClick} />
+            </Menu>
+        );
+        const optionsMenu = (
+            <Menu>
+                <MenuItem text={`Buttercup v${version}`} icon="updated" disabled />
+                <MenuItem
+                    text={darkMode ? "Light theme" : "Dark theme"}
+                    icon={darkMode ? "flash" : "moon"}
+                    onClick={::this.props.onToggleDarkMode}
+                />
+                <MenuDivider />
+                <MenuItem text="About Buttercup" icon="info-sign" onClick={::this.props.onAboutClick} />
+                <MenuItem text="Other Applications" icon="mobile-phone" onClick={::this.props.onOtherSoftwareClick} />
+                <MenuItem text="Settings" icon="cog" onClick={::this.props.onSettingsClick} />
+            </Menu>
+        );
         return (
             <Container>
-                <Logo src={BUTTERCUP_LOGO} />
-                <Version>v{version}</Version>
-                <Buttons>
-                    <Separator />
-                    <Button onClick={::this.handleVaultsClick} selected={this.props.current === "archives"}>
-                        Vaults
-                    </Button>
-                    <Separator />
-                    <Button onClick={::this.handleItemsClick} selected={this.props.current === "entries"}>
-                        Items
-                    </Button>
-                    <Separator />
-                    <Button onClick={::this.handleMenuClick} selected={this.props.current === "menu"}>
-                        <FontAwesome name="bars" />
-                    </Button>
-                </Buttons>
+                <Choose>
+                    <When condition={location.pathname !== "/"}>
+                        <Button text="Back" icon="arrow-left" onClick={::this.props.onItemsClick} />
+                    </When>
+                    <When condition={location.pathname === "/" && archives.length === 0}>
+                        <Button icon="add" onClick={::this.props.onAddVaultClick} />
+                    </When>
+                    <Otherwise>
+                        <Popover content={archiveMenu} position={Position.BOTTOM_LEFT}>
+                            <Button icon="shield" rightIcon="caret-down" text={"Vaults"} />
+                        </Popover>
+                    </Otherwise>
+                </Choose>
+                <Popover content={optionsMenu} position={Position.BOTTOM_RIGHT}>
+                    <Button icon="cog" minimal />
+                </Popover>
             </Container>
         );
     }

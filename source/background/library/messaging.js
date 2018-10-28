@@ -1,3 +1,5 @@
+import { createEntryFacade } from "@buttercup/facades";
+import * as Buttercup from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import {
@@ -18,9 +20,13 @@ import {
     unlockSource
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
+import { setConfigValue } from "../../shared/actions/app.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
+import { getConfig } from "../../shared/selectors/app.js";
+
+const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
 const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
@@ -65,6 +71,9 @@ function handleMessage(request, sender, sendResponse) {
         case "clear-used-credentials":
             clearLastLogin();
             return false;
+        case "get-config":
+            sendResponse({ config: getConfig(getState()) });
+            return false;
         case "get-groups-tree": {
             const { sourceID } = request;
             getArchive(sourceID)
@@ -78,6 +87,19 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
+        case "get-sources-stats":
+            getUnlockedSourcesCount()
+                .then(unlockedSources => {
+                    sendResponse({
+                        ok: true,
+                        unlocked: unlockedSources
+                    });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
         case "get-used-credentials": {
             const force = !!request.force;
             const currentID = sender.tab.id;
@@ -215,6 +237,14 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
+        case "set-config": {
+            dispatch(
+                setConfigValue({
+                    key: request.key,
+                    value: request.value
+                })
+            );
+        }
         default:
             // Do nothing
             break;
@@ -232,14 +262,20 @@ function processSearchResults([entries, sources]) {
     ).then(entries => {
         dispatch(
             setEntrySearchResults(
-                entries.map(({ entry, sourceID, sourceName }) => ({
-                    title: entry.getProperty("title"),
-                    id: entry.id,
-                    entryPath: generateEntryPath(entry),
-                    sourceID,
-                    sourceName,
-                    url: entry.getMeta("url") || entry.getMeta("icon")
-                }))
+                entries.map(({ entry, sourceID, sourceName }) => {
+                    const facade = createEntryFacade(entry);
+                    const urls = getEntryURLs(entry.getProperty(), ENTRY_URL_TYPE_LOGIN);
+                    return {
+                        title: entry.getProperty("title"),
+                        id: entry.id,
+                        entryPath: generateEntryPath(entry),
+                        sourceID,
+                        sourceName,
+                        facade,
+                        url: urls[0] || null,
+                        urls
+                    };
+                })
             )
         );
         dispatch(setSourcesCount(sources));

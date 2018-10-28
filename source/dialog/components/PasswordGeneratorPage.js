@@ -1,23 +1,25 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { Colors, Classes } from "@blueprintjs/core";
 import { GeneratorUserInterface } from "@buttercup/ui";
-import LayoutMain from "./LayoutMain.js";
+import DialogFrame from "./DialogFrame.js";
 
-const Background = styled(LayoutMain)`
-    background: #31353d;
-    padding: 6px;
-    width: calc(100% - 12px);
-    height: calc(100% - 12px);
-`;
 const Generator = styled(GeneratorUserInterface)`
     width: 100%;
     height: 100%;
     border-radius: 0;
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
 
-    pre,
-    pre * {
+    pre {
+        background-color: ${p => p.theme.codeBlock};
         font-family: Courier, monospace;
+
+        .num {
+            color: ${p => p.theme.codeAccent};
+        }
     }
 `;
 
@@ -28,9 +30,9 @@ class PasswordGeneratorPage extends Component {
 
     render() {
         return (
-            <Background>
+            <DialogFrame className={Classes.UI_TEXT}>
                 <Generator onGenerate={password => this.props.onSetPassword(password)} />
-            </Background>
+            </DialogFrame>
         );
     }
 }

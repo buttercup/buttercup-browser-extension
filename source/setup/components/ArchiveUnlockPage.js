@@ -1,34 +1,10 @@
-import React, { Component } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
-import LayoutMain from "./LayoutMain.js";
+import { Button, Intent, Classes, FormGroup, InputGroup, Toaster, Position } from "@blueprintjs/core";
+import Dialog from "./Dialog.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 
-const PasswordRow = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 30px;
-`;
-const PasswordLabel = styled.label`
-    margin-right: 6px;
-`;
-const ButtonsRow = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-
-    > * {
-        margin-left: 12px;
-    }
-`;
-
-class ArchiveUnlockPage extends Component {
+class ArchiveUnlockPage extends PureComponent {
     static propTypes = {
         archiveTitle: PropTypes.string.isRequired,
         isEditing: PropTypes.bool.isRequired,
@@ -45,9 +21,9 @@ class ArchiveUnlockPage extends Component {
     };
 
     componentDidMount() {
-        setTimeout(() => {
+        if (this._passwordInput) {
             this._passwordInput.focus();
-        }, 100);
+        }
     }
 
     handleCancelUnlock(event) {
@@ -76,75 +52,69 @@ class ArchiveUnlockPage extends Component {
         });
     }
 
-    onInputKeyPress(event) {
-        if (event.key === "Enter") {
-            this.props.onUnlockArchive(this.props.sourceID, this.state.masterPassword);
-        }
-    }
-
     render() {
         const disableForm = this.props.isEditing;
         let title, action;
         switch (this.props.state) {
             case "locked":
-                title = "Unlock Archive";
+                title = "Unlock Vault";
                 action = "Unlock";
                 break;
             case "unlocked":
-                title = "Manage Archive";
+                title = "Manage Vault";
                 action = "Manage";
                 break;
             default:
-                throw new Error(`Unknown archive state: ${this.props.state}`);
+                throw new Error(`Unknown vault state: ${this.props.state}`);
         }
-        return (
-            <LayoutMain title={title}>
-                <h3>
-                    {action} '{this.props.archiveTitle}'
-                </h3>
+        const actions = (
+            <Fragment>
+                <Button
+                    className="ml-0"
+                    intent={Intent.DANGER}
+                    icon="trash"
+                    onClick={::this.handleRemoveArchive}
+                    disabled={disableForm}
+                >
+                    Remove Archive
+                </Button>
+                <Button className="ml-auto" onClick={::this.handleCancelUnlock} disabled={disableForm}>
+                    Cancel
+                </Button>
                 <Choose>
                     <When condition={this.props.state === "locked"}>
-                        <PasswordRow>
-                            <PasswordLabel>Password:</PasswordLabel>
-                            <ButtercupInput
-                                placeholder="Enter master password..."
+                        <Button onClick={::this.handleUnlockArchive} disabled={disableForm}>
+                            Unlock
+                        </Button>
+                    </When>
+                    <Otherwise>
+                        <Button icon="lock" onClick={::this.handleLockArchive} disabled={disableForm}>
+                            Lock
+                        </Button>
+                    </Otherwise>
+                </Choose>
+            </Fragment>
+        );
+        return (
+            <Dialog title={`${title}: ${this.props.archiveTitle}`} actions={actions}>
+                <If condition={this.props.state === "locked"}>
+                    <form onSubmit={::this.handleUnlockArchive}>
+                        <FormGroup disabled={disableForm} label="Master Password" labelFor="master-password">
+                            <InputGroup
+                                id="master-password"
                                 type="password"
+                                placeholder="Enter your password..."
                                 disabled={disableForm}
+                                large
                                 onChange={event => this.handleUpdateForm("masterPassword", event)}
-                                value={this.state.masterPassword}
-                                onKeyPress={::this.onInputKeyPress}
-                                innerRef={input => {
+                                inputRef={input => {
                                     this._passwordInput = input;
                                 }}
                             />
-                        </PasswordRow>
-                        <ButtonsRow>
-                            <ButtercupButton onClick={::this.handleRemoveArchive} disabled={disableForm}>
-                                Remove Archive
-                            </ButtercupButton>
-                            <ButtercupButton onClick={::this.handleCancelUnlock} disabled={disableForm}>
-                                Cancel
-                            </ButtercupButton>
-                            <ButtercupButton onClick={::this.handleUnlockArchive} disabled={disableForm}>
-                                Unlock
-                            </ButtercupButton>
-                        </ButtonsRow>
-                    </When>
-                    <Otherwise>
-                        <ButtonsRow>
-                            <ButtercupButton onClick={::this.handleRemoveArchive} disabled={disableForm}>
-                                Remove Archive
-                            </ButtercupButton>
-                            <ButtercupButton onClick={::this.handleCancelUnlock} disabled={disableForm}>
-                                Cancel
-                            </ButtercupButton>
-                            <ButtercupButton onClick={::this.handleLockArchive} disabled={disableForm}>
-                                Lock
-                            </ButtercupButton>
-                        </ButtonsRow>
-                    </Otherwise>
-                </Choose>
-            </LayoutMain>
+                        </FormGroup>
+                    </form>
+                </If>
+            </Dialog>
         );
     }
 }

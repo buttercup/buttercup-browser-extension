@@ -5,10 +5,6 @@ import RemoteFileTree from "./RemoteFileTree.js";
 
 const NOOP = () => {};
 
-const Container = styled.div`
-    width: 100%;
-`;
-
 class RemoteExplorer extends Component {
     static propTypes = {
         directoriesLoading: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -34,17 +30,15 @@ class RemoteExplorer extends Component {
 
     render() {
         return (
-            <Container>
-                <RemoteFileTree
-                    directoriesLoading={this.props.directoriesLoading}
-                    onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
-                    onOpenDirectory={dir => this.props.onOpenDirectory(dir, this.props.fetchType)}
-                    onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
-                    rootDirectory={this.props.rootDirectory}
-                    selectedFilename={this.props.selectedFilename}
-                    selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
-                />
-            </Container>
+            <RemoteFileTree
+                directoriesLoading={this.props.directoriesLoading}
+                onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
+                onOpenDirectory={dir => this.props.onOpenDirectory(dir, this.props.fetchType)}
+                onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
+                rootDirectory={this.props.rootDirectory}
+                selectedFilename={this.props.selectedFilename}
+                selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
+            />
         );
     }
 }

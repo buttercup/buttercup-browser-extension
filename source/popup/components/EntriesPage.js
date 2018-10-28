@@ -1,44 +1,34 @@
-import React, { Component } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
-import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
-import HeaderBar from "../containers/HeaderBar.js";
-import SearchBar from "../containers/SearchBar.js";
+import { InputGroup, Classes } from "@blueprintjs/core";
 import SearchResults from "../containers/SearchResults.js";
 
-let __clearedButtercupSearchResults = false;
-
-const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+const SearchInputWrapper = styled.div`
+    flex: 0;
+    margin-bottom: 0.5rem;
 `;
 
-class EntriesPage extends Component {
-    static propTypes = {
-        onPrepare: PropTypes.func.isRequired
-    };
-
-    componentWillMount() {
-        if (!__clearedButtercupSearchResults) {
-            this.props.onPrepare();
-            __clearedButtercupSearchResults = true;
-        }
+export default class EntriesPage extends PureComponent {
+    handleSearchTermChange(event) {
+        const value = event.target.value;
+        this.props.onSearchTermChange(value);
     }
 
     render() {
         return (
-            <Container>
-                <HeaderBar current="entries" />
-                <SearchBar />
+            <Fragment>
+                <SearchInputWrapper>
+                    <InputGroup
+                        placeholder="Search for entries..."
+                        className={Classes.FILL}
+                        type="search"
+                        leftIcon="search"
+                        onChange={::this.handleSearchTermChange}
+                    />
+                </SearchInputWrapper>
                 <SearchResults />
-            </Container>
+            </Fragment>
         );
     }
 }
-
-export default EntriesPage;

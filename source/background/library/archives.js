@@ -50,7 +50,7 @@ export function addDropboxArchive(payload) {
             ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "dropbox" });
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)
@@ -100,7 +100,7 @@ export function addNextcloudArchive(payload) {
             ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "nextcloud" });
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)
@@ -133,7 +133,7 @@ export function addOwnCloudArchive(payload) {
             ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "owncloud" });
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)
@@ -166,7 +166,7 @@ export function addWebDAVArchive(payload) {
             ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials);
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "webdav" });
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)
@@ -345,5 +345,14 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
 
 export function unlockSource(sourceID, masterPassword) {
     log.info(`Unlocking source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => archiveManager.getSourceForID(sourceID).unlock(masterPassword));
+    return getArchiveManager().then(archiveManager =>
+        archiveManager
+            .getSourceForID(sourceID)
+            .unlock(
+                masterPassword,
+                /* init remote: */ false,
+                /* content override: */ null,
+                /* store offline content: */ false
+            )
+    );
 }
