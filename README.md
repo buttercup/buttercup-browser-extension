@@ -25,9 +25,11 @@ This extension uses [Locust](https://github.com/buttercup/locust) to perform log
 <img src="https://raw.githubusercontent.com/buttercup/buttercup-browser-extension/master/chrome-extension-2.jpg" />
 
 ### Supported browsers
-[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) and [Opera](https://addons.opera.com/en/extensions/details/buttercup/) are supported.
+[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) are supported.
 
 Other browsers will be supported in order of request/popularity. Issues created for unsupported browsers, or for browsers not on the roadmap, may be closed without warning.
+
+**Opera** is not supported due to their incredibly slow and unreliable release process. We will not be adding support for Opera.
 
 #### Supported platforms
 The browsers listed above, running on Windows, Mac or Linux on a desktop platform. This extension is not supported on any mobile or tablet devices.
