@@ -1,5 +1,17 @@
 # Buttercup browser extension changelog
 
+## v2.0.0
+_2018-10-29_
+
+ * **Major UI overhaul**
+ * ([#180](https://github.com/buttercup/buttercup-browser-extension/issues/180)) Option to disable "save-new" dialog
+ * ([#160](https://github.com/buttercup/buttercup-browser-extension/issues/160)) Settings page
+ * ([#173](https://github.com/buttercup/buttercup-browser-extension/issues/173)) Source type is empty - display glitches (final cleanup)
+ * Dark/Light mode themes
+ * Setting for showing the auto-unlock page (default on)
+ * Vault/Account sync via Chrome/Firefox's account logins (sync storage)
+ * Show/Copy entry properties in dialog/popup menus
+
 ## v1.12.1
 _2018-10-18_
 
