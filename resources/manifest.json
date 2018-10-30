@@ -5,6 +5,12 @@
     "description": "Browser extension for Buttercup",
     "version": "0.0.0",
 
+    "applications": {
+        "gecko": {
+            "id": "browsers@buttercup.pw"
+        }
+    },
+
     "browser_action": {
         "default_icon": "resources/buttercup-256.png",
         "default_popup": "popup.html#/"
@@ -58,5 +64,4 @@
         "dialog.js",
         "resources/*"
     ]
-
 }
