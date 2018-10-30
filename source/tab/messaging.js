@@ -54,7 +54,8 @@ function handleMessage(request, sender, sendResponse) {
             setPasswordForCurrentInput(request.password);
             break;
         default:
-            throw new Error(`Unknown message received: ${request.type}`);
+            // ignore
+            break;
     }
 }
 
