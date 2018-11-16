@@ -56,7 +56,8 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
         },
 
         node: {
-            fs: "empty"
+            fs: "empty",
+            net: "empty"
         },
 
         resolve: {

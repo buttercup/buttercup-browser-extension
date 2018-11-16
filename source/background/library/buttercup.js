@@ -9,8 +9,6 @@ import { migrateLocalStorageToChromeStorage } from "./storageMigration.js";
 
 let __archiveManager, __queue;
 
-ButtercupVendor.webdav.setFetchMethod(window.fetch);
-
 function attachArchiveManagerListeners(archiveManager) {
     archiveManager.on("sourcesUpdated", sources => {
         dispatch(
