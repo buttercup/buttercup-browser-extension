@@ -56,7 +56,8 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
         },
 
         node: {
-            fs: "empty"
+            fs: "empty",
+            net: "empty"
         },
 
         resolve: {
@@ -167,8 +168,8 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
 const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_SETUP, "./index.js"),
-        vendor: [...REACT_PACKAGES, "dropbox", "dropbox-fs", "webdav", "buttercup"],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue"]
+        vendor: [...REACT_PACKAGES, "dropbox", "webdav", "buttercup"],
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client"]
     },
 
     output: {
