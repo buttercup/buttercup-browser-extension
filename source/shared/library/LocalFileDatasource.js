@@ -1,12 +1,14 @@
 import { Datasources } from "./buttercup.js";
+import { buildClient } from "./secureFileClient.js";
 
 const { TextDatasource, registerDatasource } = Datasources;
 
-export default class SecureFileHostDatasource extends TextDatasource {
+export default class LocalFileDatasource extends TextDatasource {
     constructor(filePath, credentials) {
         super();
         this._path = filePath;
         this._token = credentials.getValueOrFail("token");
+        this.client = buildClient(this._token);
     }
 
     get path() {
@@ -21,7 +23,7 @@ export default class SecureFileHostDatasource extends TextDatasource {
      * Load archive history from the datasource
      * @param {Credentials} credentials The credentials for archive decryption
      * @returns {Promise.<Array.<String>>} A promise resolving archive history
-     * @memberof SecureFileHostDatasource
+     * @memberof LocalFileDatasource
      */
     load(credentials) {
         // return this.hasContent
@@ -37,7 +39,7 @@ export default class SecureFileHostDatasource extends TextDatasource {
      * @param {Array.<String>} history Archive history
      * @param {Credentials} credentials The credentials for encryption
      * @returns {Promise} A promise resolving when the save is complete
-     * @memberof SecureFileHostDatasource
+     * @memberof LocalFileDatasource
      */
     save(history, credentials) {
         // return super
@@ -49,7 +51,7 @@ export default class SecureFileHostDatasource extends TextDatasource {
      * Whether or not the datasource supports bypassing remote fetch operations
      * @returns {Boolean} True if content can be set to bypass fetch operations,
      *  false otherwise
-     * @memberof SecureFileHostDatasource
+     * @memberof LocalFileDatasource
      */
     supportsRemoteBypass() {
         return false;
@@ -58,11 +60,11 @@ export default class SecureFileHostDatasource extends TextDatasource {
     /**
      * Output the datasource as an object
      * @returns {Object} An object describing the datasource
-     * @memberof SecureFileHostDatasource
+     * @memberof LocalFileDatasource
      */
     toObject() {
         return {
-            type: "securefilehost",
+            type: "localfile",
             path: this.path
         };
     }
@@ -73,11 +75,11 @@ export default class SecureFileHostDatasource extends TextDatasource {
  * @param {Object} obj The datasource info object
  * @param {Credentials=} hostCredentials The server credentials
  * @static
- * @memberof SecureFileHostDatasource
+ * @memberof LocalFileDatasource
  */
-SecureFileHostDatasource.fromObject = function fromObject(obj, credentials) {
-    if (obj.type === "securefilehost") {
-        return new SecureFileHostDatasource(obj.path, credentials);
+LocalFileDatasource.fromObject = function fromObject(obj, credentials) {
+    if (obj.type === "localfile") {
+        return new LocalFileDatasource(obj.path, credentials);
     }
     throw new Error(`Unknown or invalid type: ${obj.type}`);
 };
@@ -87,10 +89,10 @@ SecureFileHostDatasource.fromObject = function fromObject(obj, credentials) {
  * @param {String} str The string representation of the datasource
  * @param {Credentials=} hostCredentials The server credentials
  * @static
- * @memberof SecureFileHostDatasource
+ * @memberof LocalFileDatasource
  */
-SecureFileHostDatasource.fromString = function fromString(str, hostCredentials) {
-    return SecureFileHostDatasource.fromObject(JSON.parse(str), hostCredentials);
+LocalFileDatasource.fromString = function fromString(str, hostCredentials) {
+    return LocalFileDatasource.fromObject(JSON.parse(str), hostCredentials);
 };
 
-registerDatasource("securefilehost", SecureFileHostDatasource);
+registerDatasource("localfile", LocalFileDatasource);

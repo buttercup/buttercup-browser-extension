@@ -5,9 +5,8 @@ const BASE_URL = "http://localhost:12821";
 
 export function buildClient(token) {
     return {
-        readFile: (remotePath, options, callback) => {
-            const cb = typeof options === "function" ? options : callback;
-            const url = joinURL(BASE_URL, "/get/file");
+        readdir: (remotePath, callback) => {
+            const url = joinURL(BASE_URL, "/get/directory");
             createSession()
                 .encrypt(remotePath)
                 .then(payload =>
@@ -24,10 +23,39 @@ export function buildClient(token) {
                 )
                 .then(response => {
                     if (response.ok && response.status === 200) {
-                        // callback(null, response);
-                        return response.text().then(data => callback(null, data));
+                        return response.json().then(data => callback(null, data));
                     }
-                    callback(new Error(`Failed reading remote file: ${remotePath}`));
+                    throw new Error(`Failed reading remote file: ${remotePath}`);
+                })
+                .catch(callback);
+        },
+
+        readFile: (remotePath, options, callback) => {
+            const cb = typeof options === "function" ? options : callback;
+            const url = joinURL(BASE_URL, "/get/file");
+            createSession()
+                .encrypt(remotePath, token)
+                .then(payload =>
+                    fetch({
+                        url,
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json; charset=utf-8"
+                        },
+                        body: JSON.stringify({
+                            payload
+                        })
+                    })
+                )
+                .then(response => {
+                    if (response.ok && response.status === 200) {
+                        return response.text();
+                    }
+                    throw new Error(`Failed reading remote file: ${remotePath}`);
+                })
+                .then(contents => createSession().decrypt(contents, token))
+                .then(data => {
+                    callback(null, data);
                 })
                 .catch(callback);
         },
@@ -43,7 +71,8 @@ export function buildClient(token) {
                     JSON.stringify({
                         filename: remotePath,
                         content: data
-                    })
+                    }),
+                    token
                 )
                 .then(payload =>
                     fetch({
@@ -62,7 +91,7 @@ export function buildClient(token) {
                         callback();
                         return;
                     }
-                    callback(new Error(`Failed writing remote file: ${remotePath}`));
+                    throw new Error(`Failed writing remote file: ${remotePath}`);
                 })
                 .catch(callback);
         }
