@@ -1,5 +1,6 @@
 import joinURL from "url-join";
 import { createSession } from "iocane";
+import log from "./log.js";
 
 const BASE_URL = "http://localhost:12821";
 
@@ -96,4 +97,51 @@ export function buildClient(token) {
                 .catch(callback);
         }
     };
+}
+
+export function completeConnection(code) {
+    if (!code) {
+        return Promise.reject(new Error("Code is required"));
+    }
+    const codeURL = joinURL(BASE_URL, `/connect/${code}`);
+    log.info("Completing handshake using code");
+    return fetch(codeURL)
+        .then(response => response.json())
+        .then(resp => {
+            if (resp.status !== "ok") {
+                throw new Error("Connection response status was not OK");
+            }
+            const { payload } = resp;
+            return createSession()
+                .decrypt(payload, code)
+                .then(key => {
+                    log.info("Received key: Handshake complete");
+                    return key;
+                });
+        });
+}
+
+export function initiateConnection() {
+    const pingURL = BASE_URL;
+    const connectURL = joinURL(BASE_URL, "/connect");
+    log.info("Checking local endpoint");
+    return fetch(pingURL)
+        .then(response => response.json())
+        .then(response => {
+            log.info(`Received status from local endpoint: ${response.status} (ready: ${response.ready.toString()})`);
+            if (response.status !== "ok") {
+                throw new Error("Received non-OK status");
+            } else if (!response.ready) {
+                throw new Error("Endpoint is not yet ready");
+            }
+            log.info("Beginning handshake");
+            return fetch(connectURL)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.status !== "ok") {
+                        throw new Error("Endpoint connection procedure failed");
+                    }
+                    log.info("Initial connection phase completed");
+                });
+        });
 }
