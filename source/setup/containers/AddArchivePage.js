@@ -3,6 +3,7 @@ import stripTags from "striptags";
 import joinURL from "url-join";
 import AddArchivePage from "../components/AddArchivePage.js";
 import {
+    getLocalAuthKey,
     getLocalAuthStatus,
     getSelectedArchiveType,
     getSelectedFilename,
@@ -16,17 +17,25 @@ import {
     setAdding,
     setConnected,
     setConnecting,
+    setLocalAuthKey,
     setLocalAuthStatus
 } from "../actions/addArchive.js";
 import { connectWebDAV } from "../library/remote.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
-import { addDropboxArchive, addNextcloudArchive, addOwnCloudArchive, addWebDAVArchive } from "../library/archives.js";
+import {
+    addDropboxArchive,
+    addLocalArchive,
+    addNextcloudArchive,
+    addOwnCloudArchive,
+    addWebDAVArchive
+} from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
 import { setAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
+    createNewClient as createLocalClient,
     receiveAuthKey as receiveLocalKey,
     requestConnection as requestLocalConnection
 } from "../library/localFile.js";
@@ -49,8 +58,9 @@ export default connect(
             dispatch(setLocalAuthStatus("authenticating"));
             receiveLocalKey(code)
                 .then(key => {
+                    createLocalClient(key);
                     dispatch(setLocalAuthStatus("authenticated"));
-                    console.log("KEY!", key);
+                    dispatch(setLocalAuthKey(key));
                 })
                 .catch(err => {
                     dispatch(setLocalAuthStatus("idle"));
@@ -90,6 +100,36 @@ export default connect(
                     console.error(err);
                     notifyError(
                         "Failed selecting Dropbox vault",
+                        `An error occurred when adding the vault: ${err.message}`
+                    );
+                    dispatch(setAdding(false));
+                });
+        },
+        onChooseLocallyBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
+            const name = stripTags(archiveName);
+            if (/^[^\s]/.test(name) !== true) {
+                notifyError(`Failed selecting ${type} vault`, `Vault name is invalid: ${name}`);
+                return;
+            }
+            const state = getState();
+            const remoteFilename = getSelectedFilename(state);
+            const shouldCreate = selectedFileNeedsCreation(state);
+            const key = getLocalAuthKey(state);
+            dispatch(setAdding(true));
+            dispatch(setBusy(shouldCreate ? "Adding new vault..." : "Adding existing vault..."));
+            return addLocalArchive(name, masterPassword, remoteFilename, key, shouldCreate)
+                .then(() => {
+                    dispatch(unsetBusy());
+                    notifySuccess("Successfully added vault", `The vault '${archiveName}' was successfully added.`);
+                    setTimeout(() => {
+                        closeCurrentTab();
+                    }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
+                })
+                .catch(err => {
+                    dispatch(unsetBusy());
+                    console.error(err);
+                    notifyError(
+                        "Failed selecting local vault",
                         `An error occurred when adding the vault: ${err.message}`
                     );
                     dispatch(setAdding(false));

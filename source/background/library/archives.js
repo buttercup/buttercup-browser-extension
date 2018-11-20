@@ -9,6 +9,7 @@ import {
     Group
 } from "../../shared/library/buttercup.js";
 import { getArchiveManager } from "./buttercup.js";
+import "../../shared/library/LocalFileDatasource.js";
 import log from "../../shared/library/log.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 
@@ -24,6 +25,8 @@ export function addArchiveByRequest(payload) {
             return addOwnCloudArchive(payload);
         case "webdav":
             return addWebDAVArchive(payload);
+        case "localfile":
+            return addLocalArchive(payload);
         default:
             return Promise.reject(new Error(`Unable to add archive: Unknown type: ${payload.type}`));
     }
@@ -51,6 +54,37 @@ export function addDropboxArchive(payload) {
         })
         .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
             const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "dropbox" });
+            return archiveManager.interruptAutoUpdate(() =>
+                archiveManager
+                    .addSource(source)
+                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => archiveManager.dehydrateSource(source))
+            );
+        });
+}
+
+export function addLocalArchive(payload) {
+    const { name, masterPassword, filename, key, create } = payload;
+    log.info(`Attempting to connect local archive '${filename}'`);
+    log.info(`New archive will be created for request: ${create}`);
+    return getArchiveManager()
+        .then(archiveManager => {
+            const localCreds = new Credentials("localfile");
+            localCreds.setValue(
+                "datasource",
+                JSON.stringify({
+                    type: "localfile",
+                    path: filename,
+                    token: key
+                })
+            );
+            return Promise.all([
+                localCreds.toSecureString(masterPassword),
+                Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+            ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
+        })
+        .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "localfile" });
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)

@@ -9,10 +9,9 @@ export function buildClient(token) {
         readdir: (remotePath, callback) => {
             const url = joinURL(BASE_URL, "/get/directory");
             createSession()
-                .encrypt(remotePath)
+                .encrypt(remotePath, token)
                 .then(payload =>
-                    fetch({
-                        url,
+                    fetch(url, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json; charset=utf-8"
@@ -24,10 +23,13 @@ export function buildClient(token) {
                 )
                 .then(response => {
                     if (response.ok && response.status === 200) {
-                        return response.json().then(data => callback(null, data));
+                        return response.json();
                     }
                     throw new Error(`Failed reading remote file: ${remotePath}`);
                 })
+                .then(response => createSession().decrypt(response.payload, token))
+                .then(JSON.parse)
+                .then(results => callback(null, results))
                 .catch(callback);
         },
 
@@ -37,8 +39,7 @@ export function buildClient(token) {
             createSession()
                 .encrypt(remotePath, token)
                 .then(payload =>
-                    fetch({
-                        url,
+                    fetch(url, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json; charset=utf-8"
@@ -76,8 +77,7 @@ export function buildClient(token) {
                     token
                 )
                 .then(payload =>
-                    fetch({
-                        url,
+                    fetch(url, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json; charset=utf-8"

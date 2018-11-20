@@ -2,13 +2,14 @@ import { Datasources } from "./buttercup.js";
 import { buildClient } from "./secureFileClient.js";
 
 const { TextDatasource, registerDatasource } = Datasources;
+console.log("****", Datasources, TextDatasource, registerDatasource);
 
 export default class LocalFileDatasource extends TextDatasource {
-    constructor(filePath, credentials) {
+    constructor(token, filePath) {
         super();
         this._path = filePath;
-        this._token = credentials.getValueOrFail("token");
-        this.client = buildClient(this._token);
+        this._token = token;
+        this.client = buildClient(token);
     }
 
     get path() {
@@ -26,12 +27,18 @@ export default class LocalFileDatasource extends TextDatasource {
      * @memberof LocalFileDatasource
      */
     load(credentials) {
-        // return this.hasContent
-        //     ? super.load(credentials)
-        //     : this.client.getFileContents(this.path, { format: "text" }).then(content => {
-        //           this.setContent(content);
-        //           return super.load(credentials);
-        //       });
+        const readProc = new Promise((resolve, reject) => {
+            this.client.readFile(this.path, (err, content) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(content);
+            });
+        });
+        return readProc.then(content => {
+            this.setContent(content);
+            return super.load(credentials);
+        });
     }
 
     /**
@@ -65,7 +72,8 @@ export default class LocalFileDatasource extends TextDatasource {
     toObject() {
         return {
             type: "localfile",
-            path: this.path
+            path: this.path,
+            token: this.token
         };
     }
 }
@@ -77,9 +85,9 @@ export default class LocalFileDatasource extends TextDatasource {
  * @static
  * @memberof LocalFileDatasource
  */
-LocalFileDatasource.fromObject = function fromObject(obj, credentials) {
+LocalFileDatasource.fromObject = function fromObject(obj) {
     if (obj.type === "localfile") {
-        return new LocalFileDatasource(obj.path, credentials);
+        return new LocalFileDatasource(obj.token, obj.path);
     }
     throw new Error(`Unknown or invalid type: ${obj.type}`);
 };
@@ -91,8 +99,8 @@ LocalFileDatasource.fromObject = function fromObject(obj, credentials) {
  * @static
  * @memberof LocalFileDatasource
  */
-LocalFileDatasource.fromString = function fromString(str, hostCredentials) {
-    return LocalFileDatasource.fromObject(JSON.parse(str), hostCredentials);
+LocalFileDatasource.fromString = function fromString(str) {
+    return LocalFileDatasource.fromObject(JSON.parse(str));
 };
 
 registerDatasource("localfile", LocalFileDatasource);

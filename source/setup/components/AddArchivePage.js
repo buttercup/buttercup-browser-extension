@@ -30,6 +30,7 @@ class AddArchivePage extends PureComponent {
         onAuthenticateDesktop: PropTypes.func.isRequired,
         onAuthenticateDropbox: PropTypes.func.isRequired,
         onChooseDropboxBasedArchive: PropTypes.func.isRequired,
+        onChooseLocallyBasedArchive: PropTypes.func.isRequired,
         onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
         onConnectDesktop: PropTypes.func.isRequired,
         onConnectWebDAVBasedSource: PropTypes.func.isRequired,
@@ -77,6 +78,7 @@ class AddArchivePage extends PureComponent {
 
     handleChooseLocalBasedFile(event) {
         event.preventDefault();
+        this.props.onChooseLocallyBasedArchive(this.state.archiveName, this.state.masterPassword);
     }
 
     handleChooseWebDAVBasedFile(event) {
@@ -119,11 +121,13 @@ class AddArchivePage extends PureComponent {
         const isTargetingLocal = this.props.selectedArchiveType === "localfile";
         const hasAuthenticatedDropbox = typeof this.props.dropboxAuthToken === "string";
         const hasAuthenticated =
-            (isTargetingWebDAV && this.props.isConnected) || (isTargetingDropbox && hasAuthenticatedDropbox);
+            (isTargetingWebDAV && this.props.isConnected) ||
+            (isTargetingDropbox && hasAuthenticatedDropbox) ||
+            (isTargetingLocal && this.props.localAuthStatus === "authenticated");
         const fetchType = switchcase({
             [[/webdav|owncloud|nextcloud/]]: "webdav",
             dropbox: "dropbox",
-            localfile: "local"
+            localfile: "localfile"
         })(this.props.selectedArchiveType);
         return (
             <LayoutMain title="Add Archive">
@@ -278,7 +282,7 @@ class AddArchivePage extends PureComponent {
                                 <Button
                                     icon="desktop"
                                     onClick={::this.handleLocalAuth}
-                                    disabled={this.isConnected}
+                                    disabled={this.props.isConnected}
                                     loading={this.props.isConnecting && !this.isConnected}
                                 >
                                     Connect to Desktop
@@ -290,7 +294,7 @@ class AddArchivePage extends PureComponent {
                                     placeholder="Enter Authorization Code..."
                                     disabled={hasAuthenticatedDesktop || !this.props.isConnected}
                                     loading={isAuthenticatingDesktop && !hasAuthenticatedDesktop}
-                                    onChange={event => this.setState({ localCode: event.target.value })}
+                                    onChange={event => this.setState({ localCode: event.target.value.toUpperCase() })}
                                     value={this.state.localCode}
                                 />
                             </FormGroup>
