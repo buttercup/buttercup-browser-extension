@@ -1,6 +1,8 @@
 import joinURL from "url-join";
-import { createSession } from "iocane";
+import { vendor as ButtercupVendor } from "./buttercup.js";
 import log from "./log.js";
+
+const { createSession } = ButtercupVendor.iocane;
 
 const BASE_URL = "http://localhost:12821";
 
@@ -51,15 +53,15 @@ export function buildClient(token) {
                 )
                 .then(response => {
                     if (response.ok && response.status === 200) {
-                        return response.text();
+                        return response.json();
                     }
                     throw new Error(`Failed reading remote file: ${remotePath}`);
                 })
-                .then(contents => createSession().decrypt(contents, token))
+                .then(response => createSession().decrypt(response.payload, token))
                 .then(data => {
-                    callback(null, data);
+                    cb(null, data);
                 })
-                .catch(callback);
+                .catch(cb);
         },
 
         writeFile: (remotePath, data, options, callback) => {
@@ -72,7 +74,7 @@ export function buildClient(token) {
                 .encrypt(
                     JSON.stringify({
                         filename: remotePath,
-                        content: data
+                        contents: data
                     }),
                     token
                 )
@@ -89,12 +91,12 @@ export function buildClient(token) {
                 )
                 .then(response => {
                     if (response.ok && response.status === 200) {
-                        callback();
+                        cb();
                         return;
                     }
                     throw new Error(`Failed writing remote file: ${remotePath}`);
                 })
-                .catch(callback);
+                .catch(cb);
         }
     };
 }

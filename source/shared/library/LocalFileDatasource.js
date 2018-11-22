@@ -2,7 +2,6 @@ import { Datasources } from "./buttercup.js";
 import { buildClient } from "./secureFileClient.js";
 
 const { TextDatasource, registerDatasource } = Datasources;
-console.log("****", Datasources, TextDatasource, registerDatasource);
 
 export default class LocalFileDatasource extends TextDatasource {
     constructor(token, filePath) {
@@ -49,9 +48,17 @@ export default class LocalFileDatasource extends TextDatasource {
      * @memberof LocalFileDatasource
      */
     save(history, credentials) {
-        // return super
-        //     .save(history, credentials)
-        //     .then(encrypted => this.client.putFileContents(this.path, encrypted));
+        return super.save(history, credentials).then(
+            encrypted =>
+                new Promise((resolve, reject) => {
+                    this.client.writeFile(this.path, encrypted, err => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        resolve();
+                    });
+                })
+        );
     }
 
     /**
