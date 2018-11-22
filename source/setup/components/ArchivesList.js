@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const ARCHIVE_IMAGES = {
     dropbox: require("../../../resources/providers/dropbox-256.png"),
+    localfile: require("../../../resources/providers/local-256.png"),
     owncloud: require("../../../resources/providers/owncloud-256.png"),
     nextcloud: require("../../../resources/providers/nextcloud-256.png"),
     webdav: require("../../../resources/providers/webdav-256.png")
