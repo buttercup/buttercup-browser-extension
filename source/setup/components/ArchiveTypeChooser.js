@@ -26,8 +26,8 @@ export const ARCHIVE_TYPES = [
     },
     {
         type: "localfile",
-        title: "Local",
-        image: require("../../../resources/providers/local-256.png")
+        title: "Computer",
+        image: require("../../../resources/providers/chip.svg")
     }
 ];
 
