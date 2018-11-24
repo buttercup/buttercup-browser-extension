@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.1.0
+_2018-11-24_
+
+ * ([#91](https://github.com/buttercup/buttercup-browser-extension/issues/91)) Connect through desktop application (local filesystem access)
+ * New WebDAV client
+ * New Dropbox client
+
 ## v2.0.0
 _2018-10-29_
 
