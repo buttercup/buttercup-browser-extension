@@ -34,6 +34,16 @@ Other browsers will be supported in order of request/popularity. Issues created 
 
 **Opera** is not supported due to their incredibly slow and unreliable release process. We will not be adding support for Opera.
 
+### Integrated platforms
+
+The extension allows for connections to several services where your vaults can be stored:
+
+ * Dropbox
+ * ownCloud
+ * Nextcloud
+ * WebDAV (any service supporting WebDAV)
+ * Local filesystem
+
 #### Supported platforms
 The browsers listed above, running on Windows, Mac or Linux on a desktop platform. This extension is not supported on any mobile or tablet devices.
 
