@@ -23,6 +23,11 @@ export const ARCHIVE_TYPES = [
         type: "webdav",
         title: "WebDAV",
         image: require("../../../resources/providers/webdav-256.png")
+    },
+    {
+        type: "localfile",
+        title: "Computer",
+        image: require("../../../resources/providers/chip.svg")
     }
 ];
 

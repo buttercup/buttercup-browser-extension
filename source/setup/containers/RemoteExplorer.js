@@ -7,6 +7,7 @@ import log from "../../shared/library/log.js";
 import { webdavContentsToTree } from "../library/webdav.js";
 import { dropboxContentsToTree } from "../library/dropbox.js";
 import { getAllDirectoryContents, getDirectoryContents, getDirectoriesLoading } from "../selectors/remoteFiles.js";
+import { getLocalDirectoryContents, localContentsToTree } from "../library/localFile.js";
 
 function contentsToTree(contents, fetchType) {
     switch (fetchType) {
@@ -14,6 +15,8 @@ function contentsToTree(contents, fetchType) {
             return webdavContentsToTree(contents);
         case "dropbox":
             return dropboxContentsToTree(contents);
+        case "localfile":
+            return localContentsToTree(contents);
         default:
             notifyError(
                 "Failed processing directory contents",
@@ -32,6 +35,9 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
         case "dropbox":
             fetchRemoteContents = dir => getDropboxDirectoryContents(dir);
             break;
+        case "localfile":
+            fetchRemoteContents = dir => getLocalDirectoryContents(dir);
+            break;
         default:
             notifyError(
                 "Failed fetching directory contents",
@@ -45,6 +51,7 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
             isLoading: true
         })
     );
+    log.info(`Fetching remote contents for path: ${directory}`);
     return fetchRemoteContents(directory)
         .then(contents => {
             log.info(`Received ${fetchType} directory contents: ${directory}`, contents);

@@ -4,6 +4,8 @@ import {
     ADD_ARCHIVE_SET_ADDING,
     ADD_ARCHIVE_SET_CONNECTED,
     ADD_ARCHIVE_SET_CONNECTING,
+    ADD_ARCHIVE_SET_LOCAL_AUTH_KEY,
+    ADD_ARCHIVE_SET_LOCAL_AUTH_STATUS,
     ADD_ARCHIVE_SET_SELECTED_TYPE
 } from "../actions/types.js";
 
@@ -11,6 +13,8 @@ const INITIAL = {
     adding: false,
     connected: false,
     connecting: false,
+    localAuthKey: "",
+    localAuthStatus: "idle",
     selectedArchiveType: null,
     selectedRemoteFile: null,
     shouldCreateRemoteFile: false
@@ -49,6 +53,16 @@ export default function addArchiveReducer(state = INITIAL, action = {}) {
                 ...state,
                 selectedRemoteFile: action.payload,
                 shouldCreateRemoteFile: false
+            };
+        case ADD_ARCHIVE_SET_LOCAL_AUTH_STATUS:
+            return {
+                ...state,
+                localAuthStatus: action.payload
+            };
+        case ADD_ARCHIVE_SET_LOCAL_AUTH_KEY:
+            return {
+                ...state,
+                localAuthKey: action.payload
             };
 
         default:

@@ -8,7 +8,7 @@ const NOOP = () => {};
 class RemoteExplorer extends Component {
     static propTypes = {
         directoriesLoading: PropTypes.arrayOf(PropTypes.string).isRequired,
-        fetchType: PropTypes.oneOf(["webdav", "dropbox"]).isRequired,
+        fetchType: PropTypes.oneOf(["webdav", "dropbox", "localfile"]).isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
         onOpenDirectory: PropTypes.func.isRequired,
         onReady: PropTypes.func.isRequired,

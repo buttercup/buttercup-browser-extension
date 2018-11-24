@@ -38,7 +38,6 @@ export function getDropboxFSClient() {
             throw new Error("Unable to create Dropbox client: No token found");
         }
         __dropboxClient = createDropboxFSClient(createDropboxClient(authToken));
-        console.log("CREATED DB CLIENT", __dropboxClient);
     }
     return __dropboxClient;
 }

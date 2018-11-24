@@ -1,5 +1,13 @@
 {
-  "presets": ["env", "react"],
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 60,
+        "firefox": 60
+      }
+    }],
+    "react"
+  ],
   "plugins": [
     "jsx-control-statements",
     "transform-class-properties",

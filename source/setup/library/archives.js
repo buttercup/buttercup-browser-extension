@@ -11,6 +11,17 @@ export function addDropboxArchive(name, masterPassword, filename, dropboxToken, 
     });
 }
 
+export function addLocalArchive(name, masterPassword, filename, key, shouldCreate = false) {
+    return makeArchiveAdditionRequest({
+        type: "localfile",
+        name,
+        masterPassword,
+        filename,
+        key,
+        create: shouldCreate
+    });
+}
+
 export function addNextcloudArchive(name, masterPassword, filename, url, username, password, shouldCreate = false) {
     return makeArchiveAdditionRequest({
         type: "nextcloud",

@@ -1,5 +1,13 @@
 const KEY = "addArchive";
 
+export function getLocalAuthKey(state) {
+    return state[KEY].localAuthKey;
+}
+
+export function getLocalAuthStatus(state) {
+    return state[KEY].localAuthStatus;
+}
+
 export function getSelectedArchiveType(state) {
     return state[KEY].selectedArchiveType;
 }
