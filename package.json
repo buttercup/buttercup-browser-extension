@@ -1,6 +1,6 @@
 {
   "name": "buttercup-browser-extension",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Buttercup browser extension for Chrome and Firefox.",
   "main": "source/background/index.js",
   "scripts": {
@@ -8,16 +8,17 @@
     "build:production": "NODE_ENV=production webpack --progress",
     "clean": "rimraf dist/* release/*",
     "dev": "webpack -w --progress",
+    "dev:firefox": "concurrently -k 'npm run dev' 'cd dist && web-ext run' --restart-tries 20 --restart-after 5000",
     "dev:prod": "NODE_ENV=production webpack -w --progress",
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
     "precommit": "lint-staged",
     "release": "npm run build && mkdirp release release/chrome release/firefox && run-s release:chrome release:firefox",
     "release:chrome": "zip -r release/chrome/extension.zip ./dist",
     "release:firefox": "run-s release:firefox:extension release:firefox:source",
-    "release:firefox:extension": "cd dist && zip -r ../release/firefox/extension.zip * && cd ..",
+    "release:firefox:extension": "cd dist && web-ext build --overwrite-dest && cd .. && mv ./dist/web-ext-artifacts/*.zip ./release/firefox/",
     "release:firefox:source": "zip -r release/firefox/source.zip . --exclude=/.git* --exclude=/node_modules* --exclude=/.history* --exclude=/dist* --exclude=/release* --exclude=*.DS_Store*",
     "test": "run-s test:format",
-    "test:ci": "run-s test build",
+    "test:ci": "run-s test release",
     "test:format": "prettier-check '{{source,test}/**/*.js,webpack.config.js}'"
   },
   "lint-staged": {
@@ -64,6 +65,7 @@
     "browser-info": "^1.2.0",
     "buttercup": "^2.8.1",
     "classnames": "^2.2.6",
+    "concurrently": "^4.1.0",
     "console.style": "^0.2.2",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
@@ -117,6 +119,7 @@
     "url-join": "^4.0.0",
     "url-loader": "^1.1.1",
     "uuid": "^3.3.2",
+    "web-ext": "^2.9.2",
     "webdav": "2.0.0-rc1",
     "webpack": "^3.12.0",
     "yoctodelay": "^1.1.0"
