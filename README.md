@@ -70,8 +70,17 @@ Development of features and bugfixes is supported in the following environment:
 To set up your development environment:
  * Clone this repo
  * Execute `npm install` inside the project directory
+
+#### Chrome
+Run the following to develop the extension:
+
  * Execute `npm run dev` to build and watch the project (to build production code, execute `npm run build`)
  * Add the `./dist` directory to the browser of your choice as an _unpacked extension_
+
+#### Firefox
+Run the following to develop the extension:
+
+ * Execute `npm run dev:firefox` to build and watch the project (to build production code, execute `npm run release`)
 
 #### Releasing
 To build release-ready zip archives, run the command `npm run release` after having set up the development environment. The archives will be written to `release/(browser)` where `(browser)` is the browser type. Archives named `extension.zip` contain the built extension sourcecode and `source.zip` contains the raw source.
