@@ -22,7 +22,7 @@ function contentsToTree(contents, fetchType) {
                 "Failed processing directory contents",
                 "The remote source type was invalid for processing directory contents"
             );
-            throw new Error(`Unknown remote fetch type: ${fetchType}`);
+            throw new Error(`Failed converting remote contents to tree: Unknown type: ${fetchType}`);
     }
 }
 

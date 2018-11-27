@@ -124,11 +124,18 @@ class AddArchivePage extends PureComponent {
             (isTargetingWebDAV && this.props.isConnected) ||
             (isTargetingDropbox && hasAuthenticatedDropbox) ||
             (isTargetingLocal && this.props.localAuthStatus === "authenticated");
-        const fetchType = switchcase({
-            [[/webdav|owncloud|nextcloud/]]: "webdav",
-            dropbox: "dropbox",
-            localfile: "localfile"
-        })(this.props.selectedArchiveType);
+        const fetchTypeSwitch = switchcase()
+            .case(/webdav|owncloud|nextcloud/, "webdav")
+            .case("dropbox", "dropbox")
+            .case("localfile", "localfile");
+        const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
+        // // Currently waiting for this to be fixed:
+        // // https://github.com/anywhichway/switchcase/issues/3
+        // const fetchType = switchcase({
+        //     [/webdav|owncloud|nextcloud/]: "webdav",
+        //     dropbox: "dropbox",
+        //     localfile: "localfile"
+        // })(this.props.selectedArchiveType);
         return (
             <LayoutMain title="Add Archive">
                 <H4>Choose Vault Type</H4>
@@ -161,11 +168,16 @@ class AddArchivePage extends PureComponent {
     renderArchiveNameInput() {
         const { selectedFilename } = this.props;
         const disabled = !selectedFilename;
-        const onClickHandler = switchcase({
-            [/webdav|owncloud|nextcloud/]: ::this.handleChooseWebDAVBasedFile,
-            dropbox: ::this.handleChooseDropboxBasedFile,
-            localfile: ::this.handleChooseLocalBasedFile
-        })(this.props.selectedArchiveType);
+        const onClickTypeSwitch = switchcase()
+            .case(/webdav|owncloud|nextcloud/, ::this.handleChooseWebDAVBasedFile)
+            .case("dropbox", ::this.handleChooseDropboxBasedFile)
+            .case("localfile", ::this.handleChooseLocalBasedFile);
+        const onClickHandler = onClickTypeSwitch(this.props.selectedArchiveType);
+        // const onClickHandler = switchcase({
+        //     [/webdav|owncloud|nextcloud/]: ::this.handleChooseWebDAVBasedFile,
+        //     dropbox: ::this.handleChooseDropboxBasedFile,
+        //     localfile: ::this.handleChooseLocalBasedFile
+        // })(this.props.selectedArchiveType);
         return (
             <Fragment>
                 <FormGroup full label="Name" labelInfo="(required)" disabled={disabled}>
