@@ -8,6 +8,7 @@
     "build:production": "NODE_ENV=production webpack --progress",
     "clean": "rimraf dist/* release/*",
     "dev": "webpack -w --progress",
+    "dev:firefox": "concurrently -k 'npm run dev' 'cd dist && web-ext run' --restart-tries 20 --restart-after 5000",
     "dev:prod": "NODE_ENV=production webpack -w --progress",
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
     "precommit": "lint-staged",
@@ -64,6 +65,7 @@
     "browser-info": "^1.2.0",
     "buttercup": "^2.8.1",
     "classnames": "^2.2.6",
+    "concurrently": "^4.1.0",
     "console.style": "^0.2.2",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
@@ -117,6 +119,7 @@
     "url-join": "^4.0.0",
     "url-loader": "^1.1.1",
     "uuid": "^3.3.2",
+    "web-ext": "^2.9.2",
     "webdav": "2.0.0-rc1",
     "webpack": "^3.12.0",
     "yoctodelay": "^1.1.0"
