@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v2.1.1
+_2018-11-27_
+
+ * **Bugfix**: ownCloud / Nextcloud / WebDAV vaults could not be added (Chrome)
+
 ## v2.1.0
 _2018-11-24_
 
