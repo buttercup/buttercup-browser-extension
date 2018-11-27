@@ -18,7 +18,7 @@
     "release:firefox:extension": "cd dist && zip -r ../release/firefox/extension.zip * && cd ..",
     "release:firefox:source": "zip -r release/firefox/source.zip . --exclude=/.git* --exclude=/node_modules* --exclude=/.history* --exclude=/dist* --exclude=/release* --exclude=*.DS_Store*",
     "test": "run-s test:format",
-    "test:ci": "run-s test build",
+    "test:ci": "run-s test release",
     "test:format": "prettier-check '{{source,test}/**/*.js,webpack.config.js}'"
   },
   "lint-staged": {
