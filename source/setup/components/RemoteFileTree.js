@@ -231,7 +231,12 @@ class RemoteFileTree extends Component {
     render() {
         return (
             <Choose>
-                <When condition={this.props.rootDirectory && this.props.rootDirectory.files.length > 0}>
+                <When
+                    condition={
+                        this.prop.rootDirectory &&
+                        (this.props.rootDirectory.directories.length > 0 || this.props.rootDirectory.files.length > 0)
+                    }
+                >
                     <Tree
                         contents={this.getTree(this.props.rootDirectory).childNodes}
                         onNodeExpand={::this.handleNodeExpand}
