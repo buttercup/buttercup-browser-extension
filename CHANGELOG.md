@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v2.1.2
+_2018-12-08_
+
+ * ([#203](https://github.com/buttercup/buttercup-browser-extension/issues/203)) Failure saving Dropbox changes
+
 ## v2.1.1
 _2018-11-27_
 
