@@ -231,7 +231,12 @@ class RemoteFileTree extends Component {
     render() {
         return (
             <Choose>
-                <When condition={this.props.directoriesLoading.includes(this.props.rootDirectory.path)}>
+                <When
+                    condition={
+                        !this.props.rootDirectory ||
+                        this.props.directoriesLoading.includes(this.props.rootDirectory.path)
+                    }
+                >
                     <SpinnerIcon />
                 </When>
                 <Otherwise>
