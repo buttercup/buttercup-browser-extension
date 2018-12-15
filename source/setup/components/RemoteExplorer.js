@@ -14,7 +14,6 @@ class RemoteExplorer extends Component {
         onReady: PropTypes.func.isRequired,
         onSelectRemotePath: PropTypes.func.isRequired,
         rootDirectory: PropTypes.object,
-        isLoading: PropTypes.bool.isRequired,
         selectedFilename: PropTypes.string,
         selectedFilenameNeedsCreation: PropTypes.bool.isRequired
     };
@@ -22,8 +21,7 @@ class RemoteExplorer extends Component {
     static defaultProps = {
         onCreateRemotePath: NOOP,
         onSelectRemotePath: NOOP,
-        selectedFilenameNeedsCreation: false,
-        isLoading: true
+        selectedFilenameNeedsCreation: false
     };
 
     componentDidMount() {
@@ -38,7 +36,6 @@ class RemoteExplorer extends Component {
                 onOpenDirectory={dir => this.props.onOpenDirectory(dir, this.props.fetchType)}
                 onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
                 rootDirectory={this.props.rootDirectory}
-                isLoading={this.props.isLoading}
                 selectedFilename={this.props.selectedFilename}
                 selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
             />

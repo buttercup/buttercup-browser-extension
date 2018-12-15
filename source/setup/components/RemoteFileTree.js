@@ -71,7 +71,6 @@ class RemoteFileTree extends Component {
         onOpenDirectory: PropTypes.func.isRequired,
         onSelectRemotePath: PropTypes.func.isRequired,
         rootDirectory: DirectoryShape,
-        isLoading: PropTypes.bool.isRequired,
         selectedFilename: PropTypes.string,
         selectedFilenameNeedsCreation: PropTypes.bool.isRequired
     };
@@ -232,7 +231,10 @@ class RemoteFileTree extends Component {
     render() {
         return (
             <Choose>
-                <When condition={this.props.rootDirectory && this.props.isLoading}>
+                <When condition={this.props.directoriesLoading.includes(this.props.rootDirectory.path)}>
+                    <SpinnerIcon />
+                </When>
+                <Otherwise>
                     <Tree
                         contents={this.getTree(this.props.rootDirectory).childNodes}
                         onNodeExpand={::this.handleNodeExpand}
@@ -240,9 +242,6 @@ class RemoteFileTree extends Component {
                         onNodeDoubleClick={::this.handleNodeExpand}
                         onNodeClick={::this.handleFileClick}
                     />
-                </When>
-                <Otherwise>
-                    <SpinnerIcon />
                 </Otherwise>
             </Choose>
         );
