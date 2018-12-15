@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v2.1.3
+_2018-12-16_
+
+ * ([#190](https://github.com/buttercup/buttercup-browser-extension/issues/190)) Dropbox connection never completes loading procedure (UI spinner)
+
 ## v2.1.2
 _2018-12-08_
 
