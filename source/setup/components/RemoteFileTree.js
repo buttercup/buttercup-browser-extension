@@ -231,7 +231,15 @@ class RemoteFileTree extends Component {
     render() {
         return (
             <Choose>
-                <When condition={this.props.rootDirectory && this.props.rootDirectory.directories.length > 0}>
+                <When
+                    condition={
+                        !this.props.rootDirectory ||
+                        this.props.directoriesLoading.includes(this.props.rootDirectory.path)
+                    }
+                >
+                    <SpinnerIcon />
+                </When>
+                <Otherwise>
                     <Tree
                         contents={this.getTree(this.props.rootDirectory).childNodes}
                         onNodeExpand={::this.handleNodeExpand}
@@ -239,9 +247,6 @@ class RemoteFileTree extends Component {
                         onNodeDoubleClick={::this.handleNodeExpand}
                         onNodeClick={::this.handleFileClick}
                     />
-                </When>
-                <Otherwise>
-                    <SpinnerIcon />
                 </Otherwise>
             </Choose>
         );
