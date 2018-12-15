@@ -28,7 +28,9 @@ This extension uses [Locust](https://github.com/buttercup/locust) to perform log
 Buttercup for Browsers auto-detects some login forms and login inputs, allowing the user to auto-fill them at their discretion. This extension uses [Locust](https://github.com/buttercup/locust) under the hood to **detect forms and inputs** (any issues with detecting forms and inputs should be opened there).
 
 ### Supported browsers
-[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) are supported.
+[Chrome](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) and [Brave](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj) are supported.
+
+_Some browsers, such as **Brave** for example, will be able to install Buttercup via the Google Chrome web store._
 
 Other browsers will be supported in order of request/popularity. Issues created for unsupported browsers, or for browsers not on the roadmap, may be closed without warning.
 
