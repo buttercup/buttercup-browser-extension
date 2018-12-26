@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Pureomponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { NonIdealState } from "@blueprintjs/core";
@@ -7,8 +7,6 @@ import Entries from "../../shared/components/Entries.js";
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-standalone.png");
 
 const Container = styled.div`
-    overflow-x: hidden;
-    overflow-y: scroll;
     flex: 1;
 `;
 
@@ -18,7 +16,7 @@ const EntryShape = PropTypes.shape({
     url: PropTypes.string
 });
 
-class SearchResults extends Component {
+class SearchResults extends Pureomponent {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
         sourcesUnlocked: PropTypes.number.isRequired,

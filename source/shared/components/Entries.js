@@ -1,24 +1,38 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Divider } from "@blueprintjs/core";
 import { EntriesShape } from "../prop-types/entry.js";
 import Entry from "./Entry.js";
+import { List, AutoSizer } from "react-virtualized";
 
-const Container = styled.div`
-    overflow-x: hidden;
-    overflow-y: scroll;
-    flex: 1;
-`;
+class Entries extends PureComponent {
+    rowRenderer = ({ key, index, style }) => {
+        const { entries, onSelectEntry, autoLoginEnabled = true } = this.props;
+        return (
+            <div style={style} key={key}>
+                <Entry entry={entries[index]} onSelectEntry={onSelectEntry} autoLoginEnabled={autoLoginEnabled} />
+            </div>
+        );
+    };
 
-const Entries = ({ entries, onSelectEntry, autoLoginEnabled = true }) => (
-    <Container>
-        <For each="entry" of={entries}>
-            <Entry key={entry.id} entry={entry} onSelectEntry={onSelectEntry} autoLoginEnabled={autoLoginEnabled} />
-            <Divider />
-        </For>
-    </Container>
-);
+    render() {
+        const { entries } = this.props;
+        return (
+            <AutoSizer>
+                {({ height, width }) => (
+                    <List
+                        width={width}
+                        height={height}
+                        rowCount={entries.length}
+                        rowHeight={66}
+                        rowRenderer={this.rowRenderer}
+                        overscanRowCount={10}
+                    />
+                )}
+            </AutoSizer>
+        );
+    }
+}
 
 Entries.propTypes = {
     entries: EntriesShape,

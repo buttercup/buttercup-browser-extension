@@ -1,17 +1,10 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import EntriesList from "../../shared/components/Entries.js";
 
 const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    flex: 1;
 `;
 
 const EntryShape = PropTypes.shape({
@@ -20,7 +13,7 @@ const EntryShape = PropTypes.shape({
     url: PropTypes.string
 });
 
-class SearchResults extends Component {
+class SearchResults extends PureComponent {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
         sourcesUnlocked: PropTypes.number.isRequired,
@@ -29,11 +22,13 @@ class SearchResults extends Component {
 
     render() {
         return (
-            <EntriesList
-                entries={this.props.entries}
-                sourcesUnlocked={this.props.sourcesUnlocked}
-                onSelectEntry={this.props.onEnterDetailsRequest}
-            />
+            <Container>
+                <EntriesList
+                    entries={this.props.entries}
+                    sourcesUnlocked={this.props.sourcesUnlocked}
+                    onSelectEntry={this.props.onEnterDetailsRequest}
+                />
+            </Container>
         );
     }
 }
