@@ -1,4 +1,4 @@
-import React, { Pureomponent } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { NonIdealState } from "@blueprintjs/core";
@@ -16,7 +16,7 @@ const EntryShape = PropTypes.shape({
     url: PropTypes.string
 });
 
-class SearchResults extends Pureomponent {
+class SearchResults extends PureComponent {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
         sourcesUnlocked: PropTypes.number.isRequired,
