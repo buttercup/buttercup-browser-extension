@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import cx from "classnames";
@@ -26,6 +26,9 @@ const Container = styled.div`
     border-radius: 3px;
     padding: 0.5rem;
     background-color: ${p => (p.isActive ? p.theme.listItemHover : null)};
+    position: relative;
+    z-index: ${p => (p.isActive ? 100 : 0)};
+
     &:hover {
         background-color: ${p => p.theme.listItemHover};
     }
@@ -33,6 +36,7 @@ const Container = styled.div`
 const EntryImageBackground = styled.div`
     width: 2.5rem;
     height: 2.5rem;
+    flex: 0 0 auto;
     background-color: ${p => p.theme.backgroundColor};
     display: flex;
     justify-content: center;
@@ -56,6 +60,7 @@ const EntryRow = styled.div`
 `;
 const DetailRow = styled.div`
     margin-left: 0.5rem;
+    overflow: hidden;
     flex: 1;
 `;
 const Title = styled(Text)`
@@ -83,7 +88,7 @@ class SearchResult extends PureComponent {
         uncovered: []
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.mounted = true;
         const url = this.props.entry.url;
         if (url) {
@@ -168,36 +173,50 @@ class SearchResult extends PureComponent {
         const { isDetailsVisible } = this.state;
         const { title, sourceName, entryPath } = entry;
         return (
-            <Container isActive={isDetailsVisible}>
-                <EntryRow>
-                    <EntryImageBackground>
-                        <EntryImage src={this.state.icon} />
-                    </EntryImageBackground>
-                    <DetailRow onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
-                        <Title>{title}</Title>
-                        <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
-                            {sourceName} ›{" "}
-                            <For each="group" index="index" of={entryPath}>
-                                <If condition={index > 0}> › </If>
-                                {group}
-                            </For>
-                        </Text>
-                    </DetailRow>
-                    <ButtonGroup>
-                        <If condition={this.props.autoLoginEnabled}>
-                            <Tooltip content="Auto Sign In">
-                                <Button
-                                    minimal
-                                    icon="log-in"
-                                    onClick={() => onSelectEntry(entry.sourceID, entry.id, /* auto sign in: */ true)}
-                                />
-                            </Tooltip>
-                        </If>
-                        <Button minimal icon="more" active={isDetailsVisible} onClick={() => this.toggleDetails()} />
-                    </ButtonGroup>
-                </EntryRow>
-                <Collapse isOpen={isDetailsVisible}>{this.renderEntryDetails()}</Collapse>
-            </Container>
+            <Fragment>
+                <Container isActive={isDetailsVisible}>
+                    <EntryRow>
+                        <EntryImageBackground>
+                            <EntryImage src={this.state.icon} />
+                        </EntryImageBackground>
+                        <DetailRow onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
+                            <Title>
+                                <Text ellipsize>{title}</Text>
+                            </Title>
+                            <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
+                                {sourceName} ›{" "}
+                                <For each="group" index="index" of={entryPath}>
+                                    <If condition={index > 0}> › </If>
+                                    {group}
+                                </For>
+                            </Text>
+                        </DetailRow>
+                        <ButtonGroup>
+                            <If condition={this.props.autoLoginEnabled}>
+                                <Tooltip content="Auto Sign In">
+                                    <Button
+                                        minimal
+                                        icon="log-in"
+                                        onClick={() =>
+                                            onSelectEntry(entry.sourceID, entry.id, /* auto sign in: */ true)
+                                        }
+                                    />
+                                </Tooltip>
+                            </If>
+                            <Button
+                                minimal
+                                icon="more"
+                                active={isDetailsVisible}
+                                onClick={() => this.toggleDetails()}
+                            />
+                        </ButtonGroup>
+                    </EntryRow>
+                    <Collapse isOpen={isDetailsVisible}>{this.renderEntryDetails()}</Collapse>
+                </Container>
+                <If condition={!isDetailsVisible}>
+                    <Divider />
+                </If>
+            </Fragment>
         );
     }
 }
