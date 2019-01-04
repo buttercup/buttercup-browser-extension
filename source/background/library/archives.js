@@ -9,6 +9,8 @@ import {
     Group
 } from "../../shared/library/buttercup.js";
 import { getArchiveManager } from "./buttercup.js";
+import { getState } from "../redux/index.js";
+import { getConfigKey } from "../../shared/selectors/app.js";
 import "../../shared/library/LocalFileDatasource.js";
 import log from "../../shared/library/log.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
@@ -215,6 +217,10 @@ export function archiveToObjectGroupsOnly(archive) {
 }
 
 export function checkUnlockPossibility() {
+    const canAutoUnlock = getConfigKey(getState(), "autoUnlockVaults");
+    if (!canAutoUnlock) {
+        return Promise.resolve();
+    }
     return getArchiveManager().then(archiveManager => {
         if (archiveManager.sources.length > 0) {
             createNewTab(getExtensionURL("setup.html#/unlock"));

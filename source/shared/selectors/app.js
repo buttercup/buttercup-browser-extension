@@ -17,6 +17,7 @@ export function getConfigKey(state, key) {
     if (key in config) {
         return config[key];
     }
+    return null;
 }
 
 export function getConfigSource(state) {
