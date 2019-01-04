@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.2.0
+_2019-01-05_
+
+ * ([#212](https://github.com/buttercup/buttercup-browser-extension/issues/212)) Poor search results performance
+ * ([#202](https://github.com/buttercup/buttercup-browser-extension/issues/202)) Auto-unlock setting not working
+
 ## v2.1.3
 _2018-12-16_
 
