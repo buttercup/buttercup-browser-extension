@@ -26,10 +26,14 @@ function flattenGroups(groups) {
             ...group,
             level
         });
-        group.groups.forEach(child => nestGroup(child, level + 1));
+        group.groups.sort(titleCompare).forEach(child => nestGroup(child, level + 1));
     };
-    groups.forEach(group => nestGroup(group));
+    groups.sort(titleCompare).forEach(group => nestGroup(group));
     return processed;
+}
+
+function titleCompare(a, b) {
+    return a.title.localeCompare(b.title);
 }
 
 const ButtonRow = styled.div`
