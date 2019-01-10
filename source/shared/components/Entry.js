@@ -171,6 +171,15 @@ class SearchResult extends PureComponent {
         const { entry, onSelectEntry } = this.props;
         const { isDetailsVisible } = this.state;
         const { title, sourceName, entryPath } = entry;
+        const path = (
+            <Fragment>
+                {sourceName} ›{" "}
+                <For each="group" index="index" of={entryPath}>
+                    <If condition={index > 0}> › </If>
+                    {group}
+                </For>
+            </Fragment>
+        );
         return (
             <Fragment>
                 <Container isActive={isDetailsVisible}>
@@ -179,15 +188,11 @@ class SearchResult extends PureComponent {
                             <EntryImage src={this.state.icon} />
                         </EntryImageBackground>
                         <DetailRow onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
-                            <Title>
+                            <Title title={title}>
                                 <Text ellipsize>{title}</Text>
                             </Title>
                             <Text ellipsize className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
-                                {sourceName} ›{" "}
-                                <For each="group" index="index" of={entryPath}>
-                                    <If condition={index > 0}> › </If>
-                                    {group}
-                                </For>
+                                {path}
                             </Text>
                         </DetailRow>
                         <ButtonGroup>
@@ -213,9 +218,12 @@ class SearchResult extends PureComponent {
                             title={title}
                             isOpen={isDetailsVisible}
                             onClose={() => this.toggleDetails()}
-                            style={{ margin: "1rem", height: "calc(100vh - 2rem)", paddingBottom: 0 }}
+                            style={{ margin: "1rem", height: "calc(100vh - 2rem)", paddingBottom: "10px" }}
                         >
                             {this.renderEntryDetails()}
+                            <div className={Classes.DIALOG_FOOTER}>
+                                <Text className={cx(Classes.TEXT_MUTED, Classes.TEXT_SMALL)}>{path}</Text>
+                            </div>
                         </Dialog>
                     </EntryRow>
                 </Container>
