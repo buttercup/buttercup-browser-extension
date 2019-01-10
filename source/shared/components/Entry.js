@@ -183,7 +183,7 @@ class SearchResult extends PureComponent {
                             <Title>
                                 <Text ellipsize>{title}</Text>
                             </Title>
-                            <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
+                            <Text ellipsize className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
                                 {sourceName} ›{" "}
                                 <For each="group" index="index" of={entryPath}>
                                     <If condition={index > 0}> › </If>
