@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { Divider } from "@blueprintjs/core";
 import { EntriesShape } from "../prop-types/entry.js";
 import Entry from "./Entry.js";
 import { List, AutoSizer } from "react-virtualized";
@@ -11,6 +12,7 @@ class Entries extends PureComponent {
         return (
             <div style={style} key={key}>
                 <Entry entry={entries[index]} onSelectEntry={onSelectEntry} autoLoginEnabled={autoLoginEnabled} />
+                <Divider />
             </div>
         );
     };

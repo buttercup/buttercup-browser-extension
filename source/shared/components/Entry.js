@@ -9,12 +9,10 @@ import {
     ButtonGroup,
     Button,
     Tooltip,
-    Divider,
-    Collapse,
-    Card,
     FormGroup,
     InputGroup,
-    ControlGroup
+    ControlGroup,
+    Dialog
 } from "@blueprintjs/core";
 import { getIconForURL } from "../../shared/library/icons.js";
 import { EntryShape } from "../prop-types/entry.js";
@@ -66,9 +64,10 @@ const DetailRow = styled.div`
 const Title = styled(Text)`
     margin-bottom: 0.3rem;
 `;
-const Details = styled(Card)`
-    margin-top: 0.5rem;
-    padding: 1rem 1rem 0.5rem !important;
+const Details = styled.div`
+    overflow: auto;
+    margin: 0 !important;
+    padding: 20px !important;
 `;
 
 class SearchResult extends PureComponent {
@@ -143,7 +142,7 @@ class SearchResult extends PureComponent {
         const { uncovered } = this.state;
         const fields = entry.facade.fields.filter(field => field.removeable === false && field.property !== "title");
         return (
-            <Details>
+            <Details className={Classes.DIALOG_BODY}>
                 <For each="field" of={fields}>
                     <FormGroup key={field.property} label={field.title}>
                         <ControlGroup>
@@ -172,6 +171,15 @@ class SearchResult extends PureComponent {
         const { entry, onSelectEntry } = this.props;
         const { isDetailsVisible } = this.state;
         const { title, sourceName, entryPath } = entry;
+        const path = (
+            <Fragment>
+                {sourceName} ›{" "}
+                <For each="group" index="index" of={entryPath}>
+                    <If condition={index > 0}> › </If>
+                    {group}
+                </For>
+            </Fragment>
+        );
         return (
             <Fragment>
                 <Container isActive={isDetailsVisible}>
@@ -180,15 +188,11 @@ class SearchResult extends PureComponent {
                             <EntryImage src={this.state.icon} />
                         </EntryImageBackground>
                         <DetailRow onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
-                            <Title>
+                            <Title title={title}>
                                 <Text ellipsize>{title}</Text>
                             </Title>
-                            <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
-                                {sourceName} ›{" "}
-                                <For each="group" index="index" of={entryPath}>
-                                    <If condition={index > 0}> › </If>
-                                    {group}
-                                </For>
+                            <Text ellipsize className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
+                                {path}
                             </Text>
                         </DetailRow>
                         <ButtonGroup>
@@ -210,12 +214,19 @@ class SearchResult extends PureComponent {
                                 onClick={() => this.toggleDetails()}
                             />
                         </ButtonGroup>
+                        <Dialog
+                            title={title}
+                            isOpen={isDetailsVisible}
+                            onClose={() => this.toggleDetails()}
+                            style={{ margin: "1rem", height: "calc(100vh - 2rem)", paddingBottom: "10px" }}
+                        >
+                            {this.renderEntryDetails()}
+                            <div className={Classes.DIALOG_FOOTER}>
+                                <Text className={cx(Classes.TEXT_MUTED, Classes.TEXT_SMALL)}>{path}</Text>
+                            </div>
+                        </Dialog>
                     </EntryRow>
-                    <Collapse isOpen={isDetailsVisible}>{this.renderEntryDetails()}</Collapse>
                 </Container>
-                <If condition={!isDetailsVisible}>
-                    <Divider />
-                </If>
             </Fragment>
         );
     }
