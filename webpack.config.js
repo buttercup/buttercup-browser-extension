@@ -13,6 +13,7 @@ const SOURCE = path.resolve(__dirname, "./source");
 const RESOURCES = path.resolve(__dirname, "./resources");
 const INDEX_TEMPLATE = path.resolve(RESOURCES, "./template.pug");
 const MANIFEST = path.resolve(RESOURCES, "./manifest.json");
+const CHANGELOG = path.resolve(__dirname, "./CHANGELOG.md");
 
 const SRC_BACKGROUND = path.resolve(SOURCE, "background");
 const SRC_POPUP = path.resolve(SOURCE, "popup");
@@ -82,7 +83,12 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
 }
 
 function getBasePlugins() {
-    const common = [new NormalModuleReplacementPlugin(/\/iconv-loader/, "node-noop")];
+    const common = [
+        new DefinePlugin({
+            __VERSION__: JSON.stringify(version)
+        }),
+        new NormalModuleReplacementPlugin(/\/iconv-loader/, "node-noop")
+    ];
     if (process.env.NODE_ENV === "production") {
         return [
             ...common,
@@ -135,6 +141,9 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
             },
             {
                 from: path.join(RESOURCES, "buttercup-*.png")
+            },
+            {
+                from: CHANGELOG
             }
         ]),
         new CommonsChunkPlugin({

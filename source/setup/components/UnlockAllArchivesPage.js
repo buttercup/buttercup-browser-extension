@@ -5,7 +5,19 @@ import { FormGroup, InputGroup, Button, ControlGroup } from "@blueprintjs/core";
 import Dialog from "./Dialog.js";
 import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
+import ReleaseNotes from "../containers/ReleaseNotes.js";
 
+const DualColumnLayout = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    @media (max-width: 1040px) {
+        flex-wrap: wrap;
+    }
+`;
 const PasswordRow = styled.div`
     width: 100%;
     display: flex;
@@ -107,43 +119,47 @@ class UnlockAllArchivesPage extends Component {
     render() {
         const firstLockedIndex = this.props.archives.findIndex(archive => archive.state === "locked");
         return (
-            <Dialog title="Unlock archives">
-                <For each="archive" of={this.props.archives} index="archiveIndex">
-                    <With
-                        unlocking={this.state.unlocking.includes(archive.sourceID)}
-                        unlocked={archive.state === "unlocked"}
-                    >
-                        <FormGroup
-                            label={`Unlock "${archive.title}"`}
-                            disabled={unlocked}
-                            helperText={unlocked ? "Vault is unlocked." : null}
+            <DualColumnLayout>
+                <Dialog title="Unlock archives">
+                    <For each="archive" of={this.props.archives} index="archiveIndex">
+                        <With
+                            unlocking={this.state.unlocking.includes(archive.sourceID)}
+                            unlocked={archive.state === "unlocked"}
                         >
-                            <ControlGroup fill>
-                                <InputGroup
-                                    fill
-                                    placeholder="Enter master password..."
-                                    type="password"
-                                    disabled={unlocked}
-                                    onChange={event => this.handleUpdatePassword(event, archive.sourceID)}
-                                    value={this.state.masterPasswords[archive.sourceID] || ""}
-                                    onKeyPress={event => this.onInputKeyPress(event, archive.sourceID)}
-                                    inputRef={input => {
-                                        if (archiveIndex === firstLockedIndex) {
-                                            this._passwordInput = input;
-                                        }
-                                    }}
-                                />
-                                <Button
-                                    onClick={event => this.handleUnlockArchive(event, archive.sourceID)}
-                                    loading={unlocking}
-                                    disabled={unlocked}
-                                    text="Unlock"
-                                />
-                            </ControlGroup>
-                        </FormGroup>
-                    </With>
-                </For>
-            </Dialog>
+                            <FormGroup
+                                label={`Unlock "${archive.title}"`}
+                                disabled={unlocked}
+                                helperText={unlocked ? "Vault is unlocked." : null}
+                                key={`archive-${archive.sourceID}`}
+                            >
+                                <ControlGroup fill>
+                                    <InputGroup
+                                        fill
+                                        placeholder="Enter master password..."
+                                        type="password"
+                                        disabled={unlocked}
+                                        onChange={event => this.handleUpdatePassword(event, archive.sourceID)}
+                                        value={this.state.masterPasswords[archive.sourceID] || ""}
+                                        onKeyPress={event => this.onInputKeyPress(event, archive.sourceID)}
+                                        inputRef={input => {
+                                            if (archiveIndex === firstLockedIndex) {
+                                                this._passwordInput = input;
+                                            }
+                                        }}
+                                    />
+                                    <Button
+                                        onClick={event => this.handleUnlockArchive(event, archive.sourceID)}
+                                        loading={unlocking}
+                                        disabled={unlocked}
+                                        text="Unlock"
+                                    />
+                                </ControlGroup>
+                            </FormGroup>
+                        </With>
+                    </For>
+                </Dialog>
+                <ReleaseNotes />
+            </DualColumnLayout>
         );
     }
 }
