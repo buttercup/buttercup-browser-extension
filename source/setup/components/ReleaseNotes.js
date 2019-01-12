@@ -14,11 +14,12 @@ class ReleaseNotes extends Component {
     }
 
     render() {
+        if (!this.props.releaseNotes) {
+            return null;
+        }
         return (
             <Dialog title={`⚡️ What's New - v${__VERSION__}`}>
-                <If condition={this.props.releaseNotes}>
-                    <div dangerouslySetInnerHTML={{ __html: this.props.releaseNotes }} />
-                </If>
+                <div dangerouslySetInnerHTML={{ __html: this.props.releaseNotes }} />
             </Dialog>
         );
     }
