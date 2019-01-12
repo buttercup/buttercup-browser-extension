@@ -1,5 +1,16 @@
 # Buttercup browser extension changelog
 
+## v2.3.0
+_2018-01-12_
+
+ * **Bugfixes**:
+   * ([#217](https://github.com/buttercup/buttercup-browser-extension/issues/217)) Popup menu layout broken
+   * ([#218](https://github.com/buttercup/buttercup-browser-extension/issues/218)) Some website forms not recognised
+ * Improved entry details UI in popup menus
+ * Improved entry results in popup menus
+ * What's New section on auto-unlock page
+ * Improved login form detection
+
 ## v2.2.0
 _2019-01-05_
 
