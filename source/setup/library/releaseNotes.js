@@ -12,9 +12,13 @@ function extractVersionFromText(txt) {
 export function fetchReleaseNotes() {
     return processReleaseNotes().then(html => {
         setTimeout(() => {
-            dispatch(setReleaseNotes(html));
+            dispatch(setReleaseNotes(forceTargetBlank(html)));
         }, 0);
     });
+}
+
+function forceTargetBlank(html) {
+    return html.replace(/<a href=/g, '<a target="_blank" href=');
 }
 
 function processReleaseNotes() {
