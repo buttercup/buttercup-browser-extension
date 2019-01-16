@@ -218,7 +218,12 @@ class SearchResult extends PureComponent {
                             title={title}
                             isOpen={isDetailsVisible}
                             onClose={() => this.toggleDetails()}
-                            style={{ margin: "1rem", height: "calc(100vh - 2rem)", paddingBottom: "10px" }}
+                            style={{
+                                margin: "1rem",
+                                height: "calc(100vh - 2rem)",
+                                width: "calc(100vw - 2rem)",
+                                paddingBottom: "10px"
+                            }}
                         >
                             {this.renderEntryDetails()}
                             <div className={Classes.DIALOG_FOOTER}>
