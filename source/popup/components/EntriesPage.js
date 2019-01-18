@@ -24,6 +24,7 @@ export default class EntriesPage extends PureComponent {
                         className={Classes.FILL}
                         type="search"
                         leftIcon="search"
+                        autoFocus={true}
                         onChange={::this.handleSearchTermChange}
                     />
                 </SearchInputWrapper>
