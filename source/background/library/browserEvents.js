@@ -1,12 +1,14 @@
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
 import { setAuthToken } from "../../shared/actions/dropbox.js";
+import { setUserActivity } from "../../shared/actions/app.js";
 
 const BUTTERCUP_DOMAIN_REXP = /^https:\/\/buttercup.pw\//;
 const DROPBOX_ACCESS_TOKEN_REXP = /access_token=([^&]+)/;
 
 export function attachBrowserStateListeners() {
     chrome.tabs.onUpdated.addListener(handleTabUpdatedEvent);
+    chrome.tabs.onRemoved.addListener(handleTabRemovedEvent);
 }
 
 function handleTabUpdatedEvent(tabID, changeInfo) {
@@ -21,4 +23,12 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
             chrome.tabs.remove(tabID);
         }
     }
+
+    if (changeInfo.status === "loading") {
+        dispatch(setUserActivity());
+    }
+}
+
+function handleTabRemovedEvent(tabID, removeInfo) {
+    dispatch(setUserActivity());
 }
