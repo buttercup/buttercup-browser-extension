@@ -10,7 +10,7 @@ import {
 } from "../../shared/library/buttercup.js";
 import { getArchiveManager } from "./buttercup.js";
 import { getState } from "../redux/index.js";
-import { getConfigKey } from "../../shared/selectors/app.js";
+import { getConfigKey, getUserActivity } from "../../shared/selectors/app.js";
 import "../../shared/library/LocalFileDatasource.js";
 import log from "../../shared/library/log.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
@@ -395,4 +395,25 @@ export function unlockSource(sourceID, masterPassword) {
                 /* store offline content: */ false
             )
     );
+}
+
+export function watchForSourcesAutoLock() {
+    const lockVaults = () => {
+        const state = getState();
+        const userActivity = getUserActivity(state);
+        const autoLockTime = getConfigKey(state, "autoLockVaults");
+        if (autoLockTime === "off") {
+            return;
+        }
+        const num = parseInt(autoLockTime, 10);
+        let x = Date.now() - userActivity;
+        if (x > num) {
+            getUnlockedSourcesCount().then(count => {
+                if (count > 0) {
+                    lockSources().then(() => checkUnlockPossibility());
+                }
+            });
+        }
+    };
+    setInterval(lockVaults, 1000);
 }
