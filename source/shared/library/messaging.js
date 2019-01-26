@@ -9,3 +9,7 @@ export function searchEntriesForURL(url) {
 export function setConfig(key, value) {
     chrome.runtime.sendMessage({ type: "set-config", key, value });
 }
+
+export function trackUserActivity() {
+    chrome.runtime.sendMessage({ type: "set-user-activity" });
+}

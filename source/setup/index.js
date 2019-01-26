@@ -12,6 +12,7 @@ import SaveCredentialsPage from "./containers/SaveCredentialsPage.js";
 import AboutPage from "./components/AboutPage.js";
 import UnlockAllArchivesPage from "./containers/UnlockAllArchivesPage.js";
 import App from "../shared/containers/App.js";
+import { trackMouseMovement } from "../shared/library/mouseEvents.js";
 
 import "react-select/dist/react-select.css";
 
@@ -33,3 +34,6 @@ ReactDOM.render(
     </Provider>,
     document.getElementById("root")
 );
+
+// Track mousemove events for user activity tracking
+trackMouseMovement();
