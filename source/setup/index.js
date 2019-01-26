@@ -13,6 +13,7 @@ import AboutPage from "./components/AboutPage.js";
 import UnlockAllArchivesPage from "./containers/UnlockAllArchivesPage.js";
 import App from "../shared/containers/App.js";
 import { trackMouseMovement } from "../shared/library/mouseEvents.js";
+import { trackKeydownEvent } from "../shared/library/keyboardEvents.js";
 
 import "react-select/dist/react-select.css";
 
@@ -37,3 +38,6 @@ ReactDOM.render(
 
 // Track mousemove events for user activity tracking
 trackMouseMovement();
+
+// Track keystrokes for user activity tracking
+trackKeydownEvent();
