@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import cx from "classnames";
@@ -70,7 +70,7 @@ const Details = styled.div`
     padding: 20px !important;
 `;
 
-class SearchResult extends PureComponent {
+class SearchResult extends Component {
     static propTypes = {
         onSelectEntry: PropTypes.func.isRequired,
         autoLoginEnabled: PropTypes.bool,
@@ -87,22 +87,12 @@ class SearchResult extends PureComponent {
         uncovered: []
     };
 
+    componentDidUpdate() {
+        this.processIcon();
+    }
+
     componentDidMount() {
-        this.mounted = true;
-        const url = this.props.entry.url;
-        if (url) {
-            getIconForURL(url)
-                .then(icon => {
-                    if (icon && this.mounted) {
-                        this.setState({
-                            icon
-                        });
-                    }
-                })
-                .catch(() => {
-                    // Ignore errors
-                });
-        }
+        this.processIcon();
     }
 
     componentWillUnmount() {
@@ -118,6 +108,16 @@ class SearchResult extends PureComponent {
             }
         } else {
             writeToClipboard(entry[property]);
+        }
+    }
+
+    processIcon() {
+        const url = this.props.entry.url;
+        const icon = getIconForURL(url || "-");
+        if (this.state.icon !== icon) {
+            this.setState({
+                icon
+            });
         }
     }
 

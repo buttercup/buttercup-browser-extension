@@ -51,7 +51,7 @@
     "@buttercup/config": "^0.1.0",
     "@buttercup/dropbox-client": "^0.1.1",
     "@buttercup/facades": "^0.2.0",
-    "@buttercup/iconographer": "^0.7.1",
+    "@buttercup/iconographer": "^1.1.0",
     "@buttercup/locust": "^0.10.0",
     "@buttercup/ui": "^1.4.2",
     "babel-core": "^6.26.3",

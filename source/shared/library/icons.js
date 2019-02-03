@@ -1,40 +1,11 @@
-const { Iconographer, setDataFetcher, setTextFetcher } = require("@buttercup/iconographer");
-import IconBrowserStorageInterface from "./IconBrowserStorageInterface.js";
-
-let __ic;
+import path from "path";
+import { getIconFilename } from "@buttercup/iconographer";
+import extractDomain from "extract-domain";
+import { getExtensionURL } from "./extension.js";
 
 export function getIconForURL(url) {
-    const iconographer = getSharedInstance();
-    return iconographer
-        .getIconForURL(url)
-        .then(icon => {
-            if (icon) {
-                return icon;
-            }
-            return iconographer.processIconForURL(url);
-        })
-        .then(retrieved => {
-            if (retrieved) {
-                return iconographer.getIconForURL(url);
-            }
-            return null;
-        })
-        .catch(err => {
-            console.error(`Failed retrieving icon for URL (${url})`, err);
-            return null;
-        });
-}
-
-function getSharedInstance() {
-    if (!__ic) {
-        __ic = new Iconographer();
-        __ic.storageInterface = new IconBrowserStorageInterface();
-        setTextFetcher(url => {
-            return window.fetch(url).then(res => res.text());
-        });
-        setDataFetcher(url => {
-            return window.fetch(url).then(res => res.blob());
-        });
-    }
-    return __ic;
+    const domain = extractDomain(url);
+    const filepath = getIconFilename(domain);
+    const filename = path.basename(filepath);
+    return getExtensionURL(`site-icons/images/${filename}`);
 }
