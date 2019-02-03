@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import cx from "classnames";
@@ -70,7 +70,7 @@ const Details = styled.div`
     padding: 20px !important;
 `;
 
-class SearchResult extends Component {
+class SearchResult extends PureComponent {
     static propTypes = {
         onSelectEntry: PropTypes.func.isRequired,
         autoLoginEnabled: PropTypes.bool,
