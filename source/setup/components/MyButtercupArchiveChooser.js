@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import { Icon } from "@blueprintjs/core";
 import PropTypes from "prop-types";
-import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
 
 const ARCHIVE_TYPE_NORMAL = "normal";
@@ -91,7 +91,6 @@ const ArchiveTitle = styled.span`
 
 class MyButtercupArchiveChooser extends Component {
     static propTypes = {
-        disabled: PropTypes.bool.isRequired,
         onReady: PropTypes.func.isRequired,
         organisationArchives: PropTypes.objectOf(PropTypes.arrayOf(ArchiveShape)).isRequired,
         organisations: PropTypes.arrayOf(OrgnanisationShape).isRequired,
@@ -115,10 +114,10 @@ class MyButtercupArchiveChooser extends Component {
                         <OrganisationIcon own={organisation.type === ORG_TYPE_PERSONAL}>
                             <Choose>
                                 <When condition={organisation.type === ORG_TYPE_PERSONAL}>
-                                    <FontAwesome name="user" />
+                                    <Icon icon="person" />
                                 </When>
                                 <When condition={organisation.type === ORG_TYPE_TEAM}>
-                                    <FontAwesome name="users" />
+                                    <Icon icon="people" />
                                 </When>
                             </Choose>
                         </OrganisationIcon>
@@ -132,7 +131,7 @@ class MyButtercupArchiveChooser extends Component {
                             >
                                 <ArchiveRowCheckbox>
                                     <If condition={this.props.selectedArchives.includes(archive.id)}>
-                                        <FontAwesome name="check" />
+                                        <Icon icon="tick" />
                                     </If>
                                 </ArchiveRowCheckbox>
                                 <ArchiveRowIcon />

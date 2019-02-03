@@ -1,4 +1,4 @@
-import Buttercup, { MyButtercupClient } from "../../shared/library/buttercup.js";
+import { MyButtercupClient } from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import { MYBUTTERCUP_CALLBACK_URL } from "../../shared/library/myButtercup.js";
 import { getAuthToken } from "../../shared/selectors/myButtercup.js";
