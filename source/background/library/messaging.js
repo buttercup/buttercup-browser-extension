@@ -21,6 +21,7 @@ import {
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 import { setConfigValue, setUserActivity } from "../../shared/actions/app.js";
+import { setAutoLogin } from "../../shared/actions/autoLogin.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
@@ -142,8 +143,19 @@ function handleMessage(request, sender, sendResponse) {
             return true;
         }
         case "open-credentials-url": {
-            const { sourceID, entryID } = request;
-            openCredentialsPageForEntry(sourceID, entryID);
+            const { sourceID, entryID, autoLogin = false } = request;
+            log.info(`Received request to open URL for entry: ${entryID} (auto-login: ${autoLogin.toString()})`);
+            openCredentialsPageForEntry(sourceID, entryID).then(tab => {
+                if (autoLogin) {
+                    dispatch(
+                        setAutoLogin({
+                            sourceID,
+                            entryID,
+                            tabID: tab.id
+                        })
+                    );
+                }
+            });
             return false;
         }
         case "open-tab": {
@@ -154,6 +166,7 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "remove-archive": {
             const { sourceID } = request;
+            log.info(`Received request to remove source: ${sourceID}`);
             removeSource(sourceID)
                 .then(() => {
                     sendResponse({ ok: true });

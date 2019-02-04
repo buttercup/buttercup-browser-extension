@@ -1,4 +1,3 @@
-import md2json from "md-2-json";
 import marked from "marked";
 import { getExtensionURL } from "../../shared/library/extension.js";
 import { dispatch } from "../redux/index.js";
@@ -27,28 +26,33 @@ function processReleaseNotes() {
     return fetch(changelogURL)
         .then(res => res.text())
         .then(changelog => {
-            const parts = md2json.parse(changelog);
-            const [rootKey] = Object.keys(parts);
-            const versionIndex = parts[rootKey];
-            const versionMatrix = Object.keys(versionIndex).reduce(
-                (matrix, rawVer) => ({
-                    ...matrix,
-                    [extractVersionFromText(rawVer)]: rawVer
-                }),
-                {}
-            );
-            const matchedRawVersion = versionMatrix[version];
-            if (!matchedRawVersion) {
-                throw new Error(`Failed finding changelog version for: ${version}`);
-            }
-            const item = versionIndex[matchedRawVersion];
-            if (!item) {
-                throw new Error(`Failed extracting changelog item for: ${version}`);
-            }
-            const { raw: md } = item;
+            const md = scrapeMarkdownForSection(changelog, version);
             return marked(md);
         })
         .catch(err => {
             console.error("Failed fetching changelog", err);
         });
+}
+
+function scrapeMarkdownForSection(markdown, version) {
+    const lines = markdown.split(/\n/g);
+    const sectionLines = [];
+    let inSection = false;
+    for (let i = 0; i < lines.length; i += 1) {
+        const match = /^##.+v(\d+\.\d+\.\d+(-[a-zA-Z0-9.]+)?)/.exec(lines[i]);
+        if (match) {
+            if (inSection) {
+                break;
+            } else if (match[1] === version) {
+                inSection = true;
+                // Uncomment the following to include the version:
+                // sectionLines.push(lines[i]);
+            }
+            continue;
+        }
+        if (inSection) {
+            sectionLines.push(lines[i]);
+        }
+    }
+    return sectionLines.join("\n");
 }

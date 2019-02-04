@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.3.1
+_2019-01-19_
+
+ * **Bugfixes**:
+   * ([#214](https://github.com/buttercup/buttercup-browser-extension/issues/214)) Popup menu layout broken for long items
+ * ([#216](https://github.com/buttercup/buttercup-browser-extension/issues/216)) Autofocus extension popover search input
+
 ## v2.3.0
 _2018-01-12_
 

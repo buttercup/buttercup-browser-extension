@@ -1,6 +1,6 @@
 {
   "name": "buttercup-browser-extension",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Buttercup browser extension for Chrome and Firefox.",
   "main": "source/background/index.js",
   "scripts": {
@@ -51,7 +51,7 @@
     "@buttercup/config": "^0.1.0",
     "@buttercup/dropbox-client": "^0.1.1",
     "@buttercup/facades": "^0.2.0",
-    "@buttercup/iconographer": "^0.7.1",
+    "@buttercup/iconographer": "^1.1.1",
     "@buttercup/locust": "^0.10.0",
     "@buttercup/ui": "^1.4.2",
     "babel-core": "^6.26.3",
@@ -80,7 +80,6 @@
     "json-loader": "^0.5.7",
     "lint-staged": "^7.2.2",
     "marked": "^0.6.0",
-    "md-2-json": "^1.0.5",
     "merge": "^1.2.1",
     "mini-ttl": "^0.1.0",
     "mkdirp": "^0.5.1",

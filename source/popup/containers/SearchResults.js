@@ -9,8 +9,8 @@ export default connect(
         sourcesUnlocked: getSourcesCount(state)
     }),
     {
-        onSelectEntry: (sourceID, entryID) => () => {
-            requestCredentialsOpening(sourceID, entryID);
+        onSelectEntry: (sourceID, entryID, autoSignIn) => () => {
+            requestCredentialsOpening(sourceID, entryID, autoSignIn);
         }
     }
 )(SearchResults);

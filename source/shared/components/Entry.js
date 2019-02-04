@@ -87,22 +87,12 @@ class SearchResult extends PureComponent {
         uncovered: []
     };
 
+    componentDidUpdate() {
+        this.processIcon();
+    }
+
     componentDidMount() {
-        this.mounted = true;
-        const url = this.props.entry.url;
-        if (url) {
-            getIconForURL(url)
-                .then(icon => {
-                    if (icon && this.mounted) {
-                        this.setState({
-                            icon
-                        });
-                    }
-                })
-                .catch(() => {
-                    // Ignore errors
-                });
-        }
+        this.processIcon();
     }
 
     componentWillUnmount() {
@@ -118,6 +108,16 @@ class SearchResult extends PureComponent {
             }
         } else {
             writeToClipboard(entry[property]);
+        }
+    }
+
+    processIcon() {
+        const url = this.props.entry.url;
+        const icon = getIconForURL(url || "-");
+        if (this.state.icon !== icon) {
+            this.setState({
+                icon
+            });
         }
     }
 

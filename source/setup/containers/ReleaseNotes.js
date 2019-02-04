@@ -12,9 +12,6 @@ export default connect(
             const releaseNotes = getReleaseNotes(getState());
             if (!releaseNotes) {
                 fetchReleaseNotes();
-                setTimeout(() => {
-                    console.log("STATE", getState());
-                }, 500);
             }
         }
     }

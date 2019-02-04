@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const { getResourcesPath: getIconResourcesPath } = require("@buttercup/iconographer");
 const { devDependencies, version } = require("./package.json");
 
 const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
@@ -144,6 +145,10 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
             },
             {
                 from: CHANGELOG
+            },
+            {
+                from: getIconResourcesPath(),
+                to: "site-icons"
             }
         ]),
         new CommonsChunkPlugin({
