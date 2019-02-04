@@ -4,7 +4,7 @@ import log from "../shared/library/log.js";
 import { attachBrowserStateListeners } from "./library/browserEvents.js";
 import { updateContextMenu } from "./library/contextMenu.js";
 import { getBrowser } from "../shared/library/browser.js";
-import { checkUnlockPossibility } from "./library/archives.js";
+import { checkUnlockPossibility, watchForSourcesAutoLock } from "./library/autoLock.js";
 import { watchStorage as watchStorageForConfig } from "./library/config.js";
 import store from "./redux/index.js";
 
@@ -17,5 +17,6 @@ startMessageListener();
 attachBrowserStateListeners();
 updateContextMenu();
 setTimeout(checkUnlockPossibility, 2500);
+watchForSourcesAutoLock();
 
 log.info("Started successfully");

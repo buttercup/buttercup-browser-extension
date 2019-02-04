@@ -23,3 +23,7 @@ export function getConfigKey(state, key) {
 export function getConfigSource(state) {
     return state[KEY].configSource;
 }
+
+export function getUserActivity(state) {
+    return state[KEY].userActivityTimestamp;
+}
