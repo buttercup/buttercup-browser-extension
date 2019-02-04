@@ -339,10 +339,11 @@ export function openCredentialsPageForEntry(sourceID, entryID) {
             if (loginURL) {
                 const targetURL = /^https?:\/\//i.test(loginURL) ? loginURL : `https://${loginURL}`;
                 log.info(`Opening selected entry URL: ${targetURL}`);
-                createNewTab(targetURL);
+                return createNewTab(targetURL);
             } else {
                 log.info("Failed opening entry page: No URL found on entry");
             }
+            return null;
         });
 }
 

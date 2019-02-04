@@ -1,7 +1,7 @@
 const NOOP = () => {};
 
 export function createNewTab(url) {
-    chrome.tabs.create({ url }, NOOP);
+    return new Promise(resolve => chrome.tabs.create({ url }, resolve));
 }
 
 export function closeCurrentTab() {
