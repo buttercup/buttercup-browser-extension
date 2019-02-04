@@ -12,6 +12,7 @@ import EntriesPage from "./containers/EntriesPage.js";
 import SettingsPage from "./containers/SettingsPage.js";
 import HeaderBar from "./containers/HeaderBar.js";
 import App from "../shared/containers/App.js";
+import { trackUserActivity } from "./library/messaging.js";
 
 import "../shared/styles/base.sass";
 import "./styles/popup.sass";
@@ -37,5 +38,6 @@ ReactDOM.render(
             </App>
         </ConnectedRouter>
     </Provider>,
-    document.getElementById("root")
+    document.getElementById("root"),
+    () => trackUserActivity()
 );

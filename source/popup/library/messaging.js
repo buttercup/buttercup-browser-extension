@@ -51,3 +51,7 @@ export function removeArchive(sourceID) {
         });
     });
 }
+
+export function trackUserActivity() {
+    chrome.runtime.sendMessage({ type: "set-user-activity" });
+}

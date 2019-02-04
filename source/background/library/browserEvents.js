@@ -2,6 +2,7 @@ import ms from "ms";
 import log from "../../shared/library/log.js";
 import { dispatch, getState } from "../redux/index.js";
 import { setAuthToken } from "../../shared/actions/dropbox.js";
+import { setUserActivity } from "../../shared/actions/app.js";
 import { getAutoLoginDetails } from "../../shared/selectors/autoLogin.js";
 import { clearAutoLogin } from "../../shared/actions/autoLogin.js";
 import { sendTabMessage } from "../../shared/library/extension.js";
@@ -13,6 +14,7 @@ const DROPBOX_ACCESS_TOKEN_REXP = /access_token=([^&]+)/;
 
 export function attachBrowserStateListeners() {
     chrome.tabs.onUpdated.addListener(handleTabUpdatedEvent);
+    chrome.tabs.onRemoved.addListener(handleTabRemovedEvent);
 }
 
 function handleTabUpdatedEvent(tabID, changeInfo) {
@@ -51,4 +53,12 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
         log.info("Auto-login session expired: details cleared");
         dispatch(clearAutoLogin());
     }
+
+    if (changeInfo.status === "loading") {
+        dispatch(setUserActivity());
+    }
+}
+
+function handleTabRemovedEvent(tabID, removeInfo) {
+    dispatch(setUserActivity());
 }

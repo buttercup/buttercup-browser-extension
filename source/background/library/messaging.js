@@ -20,8 +20,8 @@ import {
     unlockSource
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
+import { setConfigValue, setUserActivity } from "../../shared/actions/app.js";
 import { setAutoLogin } from "../../shared/actions/autoLogin.js";
-import { setConfigValue } from "../../shared/actions/app.js";
 import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
@@ -257,6 +257,10 @@ function handleMessage(request, sender, sendResponse) {
                     value: request.value
                 })
             );
+        }
+        case "set-user-activity": {
+            dispatch(setUserActivity());
+            return true;
         }
         default:
             // Do nothing
