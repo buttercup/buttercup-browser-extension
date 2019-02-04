@@ -10,7 +10,7 @@ import {
 import { getSharedTracker } from "./LoginTracker.js";
 import { showSaveDialog } from "./saveDialog.js";
 import { watchInputs } from "./generator.js";
-import { trackMouseMovement } from "../shared/library/mouseEvents.js";
+import { trackMouseMovement, trackScrolling } from "../shared/library/mouseEvents.js";
 import { trackKeydownEvent } from "../shared/library/keyboardEvents.js";
 
 function checkForLoginSaveAbility() {
@@ -80,6 +80,7 @@ checkForLoginSaveAbility();
 
 // Track mousemove events for user activity tracking
 trackMouseMovement();
+trackScrolling();
 
 // Track keystrokes for user activity tracking
 trackKeydownEvent();

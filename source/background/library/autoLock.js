@@ -1,0 +1,25 @@
+import { getState } from "../redux/index.js";
+import { getConfigKey, getUserActivity } from "../../shared/selectors/app.js";
+import { getUnlockedSourcesCount, lockSources } from "./archives.js";
+import { getArchiveManager } from "./buttercup.js";
+
+export function watchForSourcesAutoLock() {
+    const lockVaults = () => {
+        const state = getState();
+        const autoLockTime = getConfigKey(state, "autoLockVaults");
+        if (autoLockTime === "off") {
+            return;
+        }
+        const userActivity = getUserActivity(state);
+        const num = parseInt(autoLockTime, 10);
+        let x = Date.now() - userActivity;
+        if (x > num) {
+            getUnlockedSourcesCount().then(count => {
+                if (count > 0) {
+                    lockSources();
+                }
+            });
+        }
+    };
+    setInterval(lockVaults, 1000);
+}

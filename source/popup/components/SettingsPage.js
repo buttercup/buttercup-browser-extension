@@ -52,6 +52,7 @@ export default class EntriesPage extends PureComponent {
                             { label: "3 hours", value: ms("3h") },
                             { label: "12 hours", value: ms("12h") },
                             { label: "1 day", value: ms("1d") },
+                            { label: "2 days", value: ms("2d") },
                             { label: "1 week", value: ms("1w") },
                             { label: "off", value: "off" }
                         ]}
