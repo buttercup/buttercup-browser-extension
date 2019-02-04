@@ -5,6 +5,9 @@ export const APP_SET_CONFIG_VALUE = "app/config/setValue";
 
 export const ARCHIVES_SET = "archives/set";
 
+export const AUTOLOGIN_CLEAR_DETAILS = "autoLogin/details/clear";
+export const AUTOLOGIN_SET_DETAILS = "autoLogin/details/set";
+
 export const DROPBOX_CLEAR_STATE = "dropbox/clear";
 export const DROPBOX_SET_AUTH_ID = "dropbox/setAuthenticationID";
 export const DROPBOX_SET_AUTH_TOKEN = "dropbox/setAuthToken";

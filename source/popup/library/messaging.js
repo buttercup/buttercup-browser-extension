@@ -4,11 +4,12 @@ export function clearSearchResults() {
     chrome.runtime.sendMessage({ type: "clear-search" });
 }
 
-export function requestCredentialsOpening(sourceID, entryID) {
+export function requestCredentialsOpening(sourceID, entryID, autoLogin = false) {
     chrome.runtime.sendMessage({
         type: "open-credentials-url",
         sourceID,
-        entryID
+        entryID,
+        autoLogin
     });
 }
 

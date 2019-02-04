@@ -29,7 +29,7 @@ class SearchResults extends PureComponent {
                 <Choose>
                     <When condition={this.props.entries.length > 0}>
                         <Entries
-                            autoLoginEnabled={false}
+                            autoLoginEnabled={true}
                             entries={this.props.entries}
                             onSelectEntry={this.props.onSelectEntry}
                             sourcesUnlocked={this.props.sourcesUnlocked}

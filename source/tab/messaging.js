@@ -3,6 +3,7 @@ import { enterLoginDetails, submitLoginForm } from "./login.js";
 import { hideInputDialog } from "./inputDialog.js";
 import { hideSaveDialog } from "./saveDialog.js";
 import { openGeneratorForCurrentInput, setPasswordForCurrentInput } from "./generator.js";
+import { autoLogin } from "./autoLogin.js";
 
 export function getConfig() {
     return new Promise(resolve => {
@@ -53,6 +54,11 @@ function handleMessage(request, sender, sendResponse) {
         case "set-generated-password":
             setPasswordForCurrentInput(request.password);
             break;
+        case "auto-login": {
+            const { username, password } = request;
+            autoLogin(username, password);
+            break;
+        }
         default:
             // ignore
             break;
