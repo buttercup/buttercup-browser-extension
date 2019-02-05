@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.4.1
+_2019-02-05_
+
+ * **Bugfix**:
+   * Regression in auto-unlock functionality
+
 ## v2.4.0
 _2019-02-04_
 
