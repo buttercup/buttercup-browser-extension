@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.4.0
+_2019-02-04_
+
+ * ([#235](https://github.com/buttercup/buttercup-browser-extension/issues/235)) Use local (static) icons and don't request them from remote sources
+ * ([#171](https://github.com/buttercup/buttercup-browser-extension/issues/171)) Auto-lock vaults after a configurable time
+ * Auto-login button in popup menu
+
 ## v2.3.1
 _2019-01-19_
 
