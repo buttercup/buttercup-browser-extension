@@ -31,7 +31,7 @@ const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEn
 
 const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
-function clearSearchResults() {
+export function clearSearchResults() {
     return getUnlockedSourcesCount().then(unlockedSources => {
         dispatch(setEntrySearchResults([]));
         dispatch(setSourcesCount(unlockedSources));
@@ -120,6 +120,7 @@ function handleMessage(request, sender, sendResponse) {
             return false;
         }
         case "lock-all-archives": {
+            clearSearchResults();
             lockSources()
                 .then(() => {
                     sendResponse({ ok: true });
