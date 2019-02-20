@@ -1,4 +1,4 @@
-import { createEntryFacade } from "@buttercup/facades";
+import { createArchiveFacade, createEntryFacade } from "@buttercup/facades";
 import VError from "verror";
 import * as Buttercup from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
@@ -79,6 +79,19 @@ function handleMessage(request, sender, sendResponse) {
         case "clear-used-credentials":
             clearLastLogin();
             return false;
+        case "create-vault-facade": {
+            const { sourceID } = request;
+            getArchive(sourceID)
+                .then(archive => {
+                    const facade = createArchiveFacade(archive);
+                    sendResponse({ ok: true, facade });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
+        }
         case "get-config":
             sendResponse({ config: getConfig(getState()) });
             return false;

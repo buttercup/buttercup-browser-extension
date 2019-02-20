@@ -14,7 +14,6 @@ import {
     Spinner,
     Callout
 } from "@blueprintjs/core";
-import { Button as ButtercupButton } from "@buttercup/ui";
 import { notifyError } from "../library/notify.js";
 import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";

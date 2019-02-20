@@ -9,6 +9,7 @@ import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { isEditing } from "../selectors/manageArchive.js";
 import { setEditing } from "../actions/manageArchive.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
+import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
 export default connect(
     (state, ownProps) => ({
@@ -35,6 +36,9 @@ export default connect(
                     console.error(err);
                     notifyError("Failed locking archive", `Unable to lock archive (${sourceID}): ${err.message}`);
                 });
+        },
+        onOpenVault: sourceID => () => {
+            createNewTab(getExtensionURL(`setup.html#/vault/${sourceID}`));
         },
         onRemoveArchive: sourceID => (dispatch, getState) => {
             const state = getState();

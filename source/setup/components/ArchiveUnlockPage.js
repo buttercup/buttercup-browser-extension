@@ -9,6 +9,7 @@ class ArchiveUnlockPage extends PureComponent {
         archiveTitle: PropTypes.string.isRequired,
         isEditing: PropTypes.bool.isRequired,
         onLockArchive: PropTypes.func.isRequired,
+        onOpenVault: PropTypes.func.isRequired,
         onRemoveArchive: PropTypes.func.isRequired,
         onUnlockArchive: PropTypes.func.isRequired,
         sourceID: PropTypes.string.isRequired,
@@ -52,6 +53,11 @@ class ArchiveUnlockPage extends PureComponent {
         });
     }
 
+    handleVaultOpen(event) {
+        event.preventDefault();
+        this.props.onOpenVault(this.props.sourceID);
+    }
+
     render() {
         const disableForm = this.props.isEditing;
         let title, action;
@@ -88,6 +94,9 @@ class ArchiveUnlockPage extends PureComponent {
                         </Button>
                     </When>
                     <Otherwise>
+                        <Button icon="annotation" onClick={::this.handleVaultOpen} disabled={disableForm}>
+                            Open
+                        </Button>
                         <Button icon="lock" onClick={::this.handleLockArchive} disabled={disableForm}>
                             Lock
                         </Button>

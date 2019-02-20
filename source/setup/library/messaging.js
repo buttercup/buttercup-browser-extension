@@ -31,6 +31,18 @@ export function clearLastLogin() {
     chrome.runtime.sendMessage({ type: "clear-used-credentials" });
 }
 
+export function getArchiveFacade(sourceID) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "create-vault-facade", sourceID }, resp => {
+            if (resp && resp.ok) {
+                resolve(resp.facade);
+            } else {
+                reject(new Error(`Failed getting vault facade: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
+}
+
 export function getArchivesGroupTree(sourceID) {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "get-groups-tree", sourceID }, resp => {
