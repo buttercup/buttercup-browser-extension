@@ -21,6 +21,8 @@ export function addArchiveByRequest(payload) {
     switch (payload.type) {
         case "dropbox":
             return addDropboxArchive(payload);
+        case "googledrive":
+            return addGoogleDriveArchive(payload);
         case "nextcloud":
             return addNextcloudArchive(payload);
         case "owncloud":
@@ -36,7 +38,7 @@ export function addArchiveByRequest(payload) {
 
 export function addDropboxArchive(payload) {
     const { name, masterPassword, filename, dropboxToken, create } = payload;
-    log.info(`Attempting to connect Dropbox archive '${filename}'`);
+    log.info(`Attempting to connect Dropbox archive '${filename}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
@@ -65,9 +67,40 @@ export function addDropboxArchive(payload) {
         });
 }
 
+export function addGoogleDriveArchive(payload) {
+    const { name, masterPassword, fileID, googleDriveToken, create } = payload;
+    log.info(`Attempting to connect Google Drive archive '${fileID}' (${name})`);
+    log.info(`New archive will be created for request: ${create}`);
+    return getArchiveManager()
+        .then(archiveManager => {
+            const googleCreds = new Credentials("googledrive");
+            googleCreds.setValue(
+                "datasource",
+                JSON.stringify({
+                    type: "googledrive",
+                    token: googleDriveToken,
+                    fileID
+                })
+            );
+            return Promise.all([
+                googleCreds.toSecureString(masterPassword),
+                Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+            ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
+        })
+        .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
+            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "googledrive" });
+            return archiveManager.interruptAutoUpdate(() =>
+                archiveManager
+                    .addSource(source)
+                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => archiveManager.dehydrateSource(source))
+            );
+        });
+}
+
 export function addLocalArchive(payload) {
     const { name, masterPassword, filename, key, create } = payload;
-    log.info(`Attempting to connect local archive '${filename}'`);
+    log.info(`Attempting to connect local archive '${filename}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
@@ -115,7 +148,7 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
 
 export function addNextcloudArchive(payload) {
     const { name, masterPassword, filename, url, username, password, create } = payload;
-    log.info(`Attempting to connect Nextcloud archive '${filename}' from: ${url}`);
+    log.info(`Attempting to connect Nextcloud archive '${filename}' from: ${url} (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
@@ -148,7 +181,7 @@ export function addNextcloudArchive(payload) {
 
 export function addOwnCloudArchive(payload) {
     const { name, masterPassword, filename, url, username, password, create } = payload;
-    log.info(`Attempting to connect ownCloud archive '${filename}' from: ${url}`);
+    log.info(`Attempting to connect ownCloud archive '${filename}' from: ${url} (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
@@ -181,7 +214,7 @@ export function addOwnCloudArchive(payload) {
 
 export function addWebDAVArchive(payload) {
     const { name, masterPassword, filename, url, username, password, create } = payload;
-    log.info(`Attempting to connect WebDAV archive '${filename}' from: ${url}`);
+    log.info(`Attempting to connect WebDAV archive '${filename}' from: ${url} (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
         .then(archiveManager => {
