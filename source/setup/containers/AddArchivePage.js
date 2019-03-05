@@ -181,23 +181,6 @@ export default connect(
                     );
                     dispatch(setAdding(false));
                 });
-            // return addDropboxArchive(name, masterPassword, remoteFilename, dropboxToken, shouldCreate)
-            //     .then(() => {
-            //         dispatch(unsetBusy());
-            //         notifySuccess("Successfully added vault", `The vault '${archiveName}' was successfully added.`);
-            //         setTimeout(() => {
-            //             closeCurrentTab();
-            //         }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
-            //     })
-            //     .catch(err => {
-            //         dispatch(unsetBusy());
-            //         console.error(err);
-            //         notifyError(
-            //             "Failed selecting Dropbox vault",
-            //             `An error occurred when adding the vault: ${err.message}`
-            //         );
-            //         dispatch(setAdding(false));
-            //     });
         },
         onChooseLocallyBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
             const name = stripTags(archiveName);
