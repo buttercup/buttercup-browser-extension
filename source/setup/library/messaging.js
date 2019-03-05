@@ -1,3 +1,4 @@
+import VError from "verror";
 import log from "../../shared/library/log.js";
 
 export function addNewEntry(sourceID, groupID, details) {
@@ -88,11 +89,18 @@ export function unlockArchive(sourceID, masterPassword) {
     log.info(`Making request to background to unlock archive source: ${sourceID}`);
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "unlock-archive", sourceID, masterPassword }, response => {
-            const { ok, error } = response;
+            const { ok, error, hush = false } = response;
             if (ok) {
                 return resolve();
             }
-            return reject(new Error(`Unlocking archive source (${sourceID}) failed: ${error}`));
+            return reject(
+                new VError(
+                    {
+                        info: { hush }
+                    },
+                    `Unlocking archive source (${sourceID}) failed: ${error}`
+                )
+            );
         });
     });
 }

@@ -3,14 +3,17 @@ import {
     createClient as createDropboxClient,
     createFsInterface as createDropboxFSClient
 } from "@buttercup/dropbox-client";
+import { createClient as createGoogleDriveClient } from "@buttercup/googledrive-client";
 import joinPath from "path.join";
 import pify from "pify";
 import log from "../../shared/library/log.js";
 import { getState } from "../redux/index.js";
 import { getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
+import { getAuthToken as getGoogleDriveAuthToken } from "../../shared/selectors/googleDrive.js";
 
 let __webdavClient = null,
-    __dropboxClient = null;
+    __dropboxClient = null,
+    __googleDriveClient = null;
 
 export function connectWebDAV(url, username, password) {
     const client = createWebDAVClient(url, username, password);
@@ -30,7 +33,7 @@ export function disposeWebDAVConnection() {
     __webdavClient = null;
 }
 
-export function getDropboxFSClient() {
+function getDropboxFSClient() {
     if (!__dropboxClient) {
         const state = getState();
         const authToken = getDropboxAuthToken(state);
@@ -52,6 +55,50 @@ export function getDropboxDirectoryContents(directory, dropboxClient = getDropbo
             size: item.isDirectory() ? 0 : item.size
         }))
     );
+}
+
+function getGoogleDriveClient() {
+    if (!__googleDriveClient) {
+        const state = getState();
+        const authToken = getGoogleDriveAuthToken(state);
+        if (!authToken) {
+            throw new Error("Unable to create Google Drive client: No token found");
+        }
+        __googleDriveClient = createGoogleDriveClient(authToken);
+    }
+    return __googleDriveClient;
+}
+
+export function getGoogleDriveDirectoryContents(googleDriveClient = getGoogleDriveClient()) {
+    const generateParentPath = items => (items.length === 0 ? "/" : `/${items.join("/")}`);
+    const convertNode = (node, parentPath = []) => [
+        ...node.children.map(dirItem => ({
+            filename: generateParentPath([...parentPath, dirItem.filename]),
+            basename: dirItem.filename,
+            parent: generateParentPath(parentPath),
+            type: "directory",
+            size: 0,
+            googleFileID: dirItem.id,
+            key: dirItem.id
+        })),
+        ...node.files.map(fileItem => ({
+            filename: generateParentPath([...parentPath, fileItem.filename]),
+            basename: fileItem.filename,
+            parent: generateParentPath(parentPath),
+            type: "file",
+            size: fileItem.size,
+            googleFileID: fileItem.id,
+            key: fileItem.id
+        })),
+        ...node.children.reduce(
+            (convertedChildren, child) => [
+                ...convertedChildren,
+                ...convertNode(child, [...parentPath, child.filename])
+            ],
+            []
+        )
+    ];
+    return googleDriveClient.getDirectoryContents({ tree: true }).then(convertNode);
 }
 
 export function getWebDAVClient() {

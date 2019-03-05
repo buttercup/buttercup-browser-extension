@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import VError from "verror";
 import UnlockAllArchivesPage from "../components/UnlockAllArchivesPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
 import { unlockArchive } from "../library/messaging.js";
@@ -36,7 +37,13 @@ export default connect(
                 })
                 .catch(err => {
                     console.error(err);
-                    notifyError("Failed unlocking archive", `Unable to unlock archive (${sourceID}): ${err.message}`);
+                    const { hush } = VError.info(err);
+                    if (!hush) {
+                        notifyError(
+                            "Failed unlocking archive",
+                            `Unable to unlock archive (${sourceID}): ${err.message}`
+                        );
+                    }
                     return false;
                 });
         }

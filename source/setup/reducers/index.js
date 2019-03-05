@@ -5,6 +5,7 @@ import archives from "../../shared/reducers/archives.js";
 import app from "../../shared/reducers/app.js";
 import addArchive from "./addArchive.js";
 import dropbox from "../../shared/reducers/dropbox.js";
+import googleDrive from "../../shared/reducers/googleDrive.js";
 import manageArchive from "./manageArchive.js";
 import releaseNotes from "./releaseNotes.js";
 import remoteFiles from "./remoteFiles.js";
@@ -15,6 +16,7 @@ const appReducer = combineReducers({
     addArchive,
     archives,
     dropbox,
+    googleDrive,
     manageArchive,
     releaseNotes,
     remoteFiles,

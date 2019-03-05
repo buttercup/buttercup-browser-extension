@@ -24,17 +24,21 @@ class AddArchivePage extends PureComponent {
     static propTypes = {
         dropboxAuthID: PropTypes.string,
         dropboxAuthToken: PropTypes.string,
+        googleDriveAuthID: PropTypes.string,
+        googleDriveAuthToken: PropTypes.string,
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
         localAuthStatus: PropTypes.string.isRequired,
         onAuthenticateDesktop: PropTypes.func.isRequired,
         onAuthenticateDropbox: PropTypes.func.isRequired,
         onChooseDropboxBasedArchive: PropTypes.func.isRequired,
+        onChooseGoogleDriveBasedArchive: PropTypes.func.isRequired,
         onChooseLocallyBasedArchive: PropTypes.func.isRequired,
         onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
         onConnectDesktop: PropTypes.func.isRequired,
         onConnectWebDAVBasedSource: PropTypes.func.isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
+        onReady: PropTypes.func.isRequired,
         onSelectRemotePath: PropTypes.func.isRequired,
         selectedArchiveType: PropTypes.string,
         selectedFilename: PropTypes.string,
@@ -46,6 +50,7 @@ class AddArchivePage extends PureComponent {
     state = {
         archiveName: "",
         dropboxAuthenticationID: "",
+        googleDriveAuthenticationID: "",
         localCode: "",
         masterPassword: "",
         remoteURL: "",
@@ -55,8 +60,10 @@ class AddArchivePage extends PureComponent {
 
     componentDidMount() {
         this.setState({
-            dropboxAuthenticationID: uuid()
+            dropboxAuthenticationID: uuid(),
+            googleDriveAuthenticationID: uuid()
         });
+        this.props.onReady();
     }
 
     handleLocalAuth(event) {
@@ -70,10 +77,19 @@ class AddArchivePage extends PureComponent {
         this.props.onAuthenticateDropbox(this.state.dropboxAuthenticationID);
     }
 
+    handleGoogleDriveAuth(event) {
+        event.preventDefault();
+        this.props.onAuthenticateGoogleDrive(this.state.googleDriveAuthenticationID);
+    }
+
     handleChooseDropboxBasedFile(event) {
         event.preventDefault();
-        // We send the remote credentials as these should never touch Redux
         this.props.onChooseDropboxBasedArchive(this.state.archiveName, this.state.masterPassword);
+    }
+
+    handleChooseGoogleDriveBasedFile(event) {
+        event.preventDefault();
+        this.props.onChooseGoogleDriveBasedArchive(this.state.archiveName, this.state.masterPassword);
     }
 
     handleChooseLocalBasedFile(event) {
@@ -118,15 +134,19 @@ class AddArchivePage extends PureComponent {
     render() {
         const isTargetingWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
         const isTargetingDropbox = this.props.selectedArchiveType === "dropbox";
+        const isTargetingGoogleDrive = this.props.selectedArchiveType === "googledrive";
         const isTargetingLocal = this.props.selectedArchiveType === "localfile";
         const hasAuthenticatedDropbox = typeof this.props.dropboxAuthToken === "string";
+        const hasAuthenticatedGoogleDrive = typeof this.props.googleDriveAuthToken === "string";
         const hasAuthenticated =
             (isTargetingWebDAV && this.props.isConnected) ||
             (isTargetingDropbox && hasAuthenticatedDropbox) ||
+            (isTargetingGoogleDrive && hasAuthenticatedGoogleDrive) ||
             (isTargetingLocal && this.props.localAuthStatus === "authenticated");
         const fetchTypeSwitch = switchcase()
             .case(/webdav|owncloud|nextcloud/, "webdav")
             .case("dropbox", "dropbox")
+            .case("googledrive", "googledrive")
             .case("localfile", "localfile");
         const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
         // // Currently waiting for this to be fixed:
@@ -171,13 +191,9 @@ class AddArchivePage extends PureComponent {
         const onClickTypeSwitch = switchcase()
             .case(/webdav|owncloud|nextcloud/, ::this.handleChooseWebDAVBasedFile)
             .case("dropbox", ::this.handleChooseDropboxBasedFile)
+            .case("googledrive", ::this.handleChooseGoogleDriveBasedFile)
             .case("localfile", ::this.handleChooseLocalBasedFile);
         const onClickHandler = onClickTypeSwitch(this.props.selectedArchiveType);
-        // const onClickHandler = switchcase({
-        //     [/webdav|owncloud|nextcloud/]: ::this.handleChooseWebDAVBasedFile,
-        //     dropbox: ::this.handleChooseDropboxBasedFile,
-        //     localfile: ::this.handleChooseLocalBasedFile
-        // })(this.props.selectedArchiveType);
         return (
             <Fragment>
                 <FormGroup full label="Name" labelInfo="(required)" disabled={disabled}>
@@ -212,6 +228,8 @@ class AddArchivePage extends PureComponent {
             this.props.selectedArchiveType === "dropbox" ? "Authenticate Cloud Source" : "Enter Connection Details";
         const isAuthenticatingDropbox = this.props.dropboxAuthID === this.state.dropboxAuthenticationID;
         const hasAuthenticatedDropbox = isAuthenticatingDropbox && this.props.dropboxAuthToken;
+        const isAuthenticatingGoogleDrive = this.props.googleDriveAuthID === this.state.googleDriveAuthenticationID;
+        const hasAuthenticatedGoogleDrive = isAuthenticatingGoogleDrive && this.props.googleDriveAuthToken;
         const isAuthenticatingDesktop = this.props.localAuthStatus === "authenticating";
         const hasAuthenticatedDesktop = this.props.localAuthStatus === "authenticated";
         const isWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
@@ -274,6 +292,23 @@ class AddArchivePage extends PureComponent {
                                 loading={isAuthenticatingDropbox && !hasAuthenticatedDropbox}
                             >
                                 Grant Dropbox Access
+                            </Button>
+                        </Card>
+                    </When>
+                    <When condition={this.props.selectedArchiveType === "googledrive"}>
+                        <Card>
+                            <H4>Google Drive</H4>
+                            <p>
+                                To start, please grant Buttercup access to your Google Drive account. This access will
+                                be only used to store and read a Buttercup Vault that you choose or create.
+                            </p>
+                            <Button
+                                icon="key"
+                                onClick={::this.handleGoogleDriveAuth}
+                                disabled={hasAuthenticatedGoogleDrive}
+                                loading={isAuthenticatingGoogleDrive && !hasAuthenticatedGoogleDrive}
+                            >
+                                Grant Google Drive Access
                             </Button>
                         </Card>
                     </When>

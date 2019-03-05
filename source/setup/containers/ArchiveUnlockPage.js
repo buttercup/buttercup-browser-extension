@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import delay from "yoctodelay";
+import VError from "verror";
 import ArchiveUnlockPage from "../components/ArchiveUnlockPage.js";
 import { getArchiveTitle } from "../../shared/selectors/archives.js";
 import { lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
@@ -77,7 +78,10 @@ export default connect(
                     dispatch(setEditing(false));
                     dispatch(unsetBusy());
                     console.error(err);
-                    notifyError("Failed unlocking archive", `Unable to unlock archive: ${err.message}`);
+                    const { hush } = VError.info(err);
+                    if (!hush) {
+                        notifyError("Failed unlocking archive", `Unable to unlock archive: ${err.message}`);
+                    }
                 });
         }
     }

@@ -1,6 +1,8 @@
+import { basename, dirname } from "path";
 import { connect } from "react-redux";
 import stripTags from "striptags";
 import joinURL from "url-join";
+import { createClient as createGoogleDriveClient } from "@buttercup/googledrive-client";
 import AddArchivePage from "../components/AddArchivePage.js";
 import {
     getLocalAuthKey,
@@ -11,6 +13,7 @@ import {
     isConnecting,
     selectedFileNeedsCreation
 } from "../selectors/addArchive.js";
+import { getDirectoryContents } from "../selectors/remoteFiles.js";
 import {
     createRemoteFile,
     selectRemoteFile,
@@ -18,12 +21,14 @@ import {
     setConnected,
     setConnecting,
     setLocalAuthKey,
-    setLocalAuthStatus
+    setLocalAuthStatus,
+    setSelectedArchiveType
 } from "../actions/addArchive.js";
 import { connectWebDAV } from "../library/remote.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
 import {
     addDropboxArchive,
+    addGoogleDriveArchive,
     addLocalArchive,
     addNextcloudArchive,
     addOwnCloudArchive,
@@ -31,8 +36,14 @@ import {
 } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
-import { setAuthID } from "../../shared/actions/dropbox.js";
+import { performAuthentication as performGoogleDriveAuthentication } from "../../shared/library/googleDrive.js";
+import { setAuthID as setGoogleDriveAuthID } from "../../shared/actions/googleDrive.js";
+import { setAuthID as setDropboxAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
+import {
+    getAuthID as getGoogleDriveAuthID,
+    getAuthToken as getGoogleDriveAuthToken
+} from "../../shared/selectors/googleDrive";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
     createNewClient as createLocalClient,
@@ -46,6 +57,8 @@ export default connect(
     (state, ownProps) => ({
         dropboxAuthID: getDropboxAuthID(state),
         dropboxAuthToken: getDropboxAuthToken(state),
+        googleDriveAuthID: getGoogleDriveAuthID(state),
+        googleDriveAuthToken: getGoogleDriveAuthToken(state),
         localAuthStatus: getLocalAuthStatus(state),
         isConnected: isConnected(state),
         isConnecting: isConnecting(state),
@@ -72,13 +85,17 @@ export default connect(
                 });
         },
         onAuthenticateDropbox: dropboxAuthID => dispatch => {
-            dispatch(setAuthID(dropboxAuthID));
+            dispatch(setDropboxAuthID(dropboxAuthID));
             performDropboxAuthentication();
+        },
+        onAuthenticateGoogleDrive: googleDriveAuthID => dispatch => {
+            dispatch(setGoogleDriveAuthID(googleDriveAuthID));
+            performGoogleDriveAuthentication();
         },
         onChooseDropboxBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
             const name = stripTags(archiveName);
             if (/^[^\s]/.test(name) !== true) {
-                notifyError(`Failed selecting ${type} vault`, `Vault name is invalid: ${name}`);
+                notifyError("Failed selecting Dropbox vault", `Vault name is invalid: ${name}`);
                 return;
             }
             const state = getState();
@@ -104,6 +121,83 @@ export default connect(
                     );
                     dispatch(setAdding(false));
                 });
+        },
+        onChooseGoogleDriveBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
+            const name = stripTags(archiveName);
+            if (/^[^\s]/.test(name) !== true) {
+                notifyError("Failed selecting Google Drive vault", `Vault name is invalid: ${name}`);
+                return;
+            }
+            const state = getState();
+            const remoteFilename = getSelectedFilename(state);
+            const shouldCreate = selectedFileNeedsCreation(state);
+            const googleDriveToken = getGoogleDriveAuthToken(state);
+            dispatch(setAdding(true));
+            dispatch(setBusy(shouldCreate ? "Adding new vault..." : "Adding existing vault..."));
+            return Promise.resolve()
+                .then(async () => {
+                    let fileID;
+                    if (shouldCreate) {
+                        const client = createGoogleDriveClient(googleDriveToken);
+                        const containingDirectory = dirname(remoteFilename);
+                        const putOptions = {
+                            contents: "\n",
+                            name: basename(remoteFilename)
+                        };
+                        if (containingDirectory !== "/") {
+                            const upperContainer = dirname(containingDirectory);
+                            const containingDirectoryNode = getDirectoryContents(state, upperContainer).find(
+                                node => node.type === "directory" && node.basename === basename(containingDirectory)
+                            );
+                            if (!containingDirectoryNode) {
+                                throw new Error(`Failed to find Google node ID for parent of file: ${remoteFilename}`);
+                            }
+                            putOptions.parent = containingDirectoryNode.googleFileID;
+                        }
+                        fileID = await client.putFileContents(putOptions);
+                    } else {
+                        const remoteFiles = getDirectoryContents(state, dirname(remoteFilename));
+                        const ourFile = remoteFiles.find(file => file.filename === remoteFilename);
+                        if (!ourFile) {
+                            throw new Error(`No matching file found for existing path: ${remoteFilename}`);
+                        }
+                        fileID = ourFile.googleFileID;
+                    }
+                    return addGoogleDriveArchive(name, masterPassword, fileID, googleDriveToken, shouldCreate);
+                })
+                .then(() => {
+                    dispatch(unsetBusy());
+                    notifySuccess("Successfully added vault", `The vault '${archiveName}' was successfully added.`);
+                    setTimeout(() => {
+                        // closeCurrentTab();
+                    }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
+                })
+                .catch(err => {
+                    dispatch(unsetBusy());
+                    console.error(err);
+                    notifyError(
+                        "Failed selecting Google Drive vault",
+                        `An error occurred when adding the vault: ${err.message}`
+                    );
+                    dispatch(setAdding(false));
+                });
+            // return addDropboxArchive(name, masterPassword, remoteFilename, dropboxToken, shouldCreate)
+            //     .then(() => {
+            //         dispatch(unsetBusy());
+            //         notifySuccess("Successfully added vault", `The vault '${archiveName}' was successfully added.`);
+            //         setTimeout(() => {
+            //             closeCurrentTab();
+            //         }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
+            //     })
+            //     .catch(err => {
+            //         dispatch(unsetBusy());
+            //         console.error(err);
+            //         notifyError(
+            //             "Failed selecting Dropbox vault",
+            //             `An error occurred when adding the vault: ${err.message}`
+            //         );
+            //         dispatch(setAdding(false));
+            //     });
         },
         onChooseLocallyBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
             const name = stripTags(archiveName);
@@ -226,6 +320,10 @@ export default connect(
         },
         onCreateRemotePath: filename => dispatch => {
             dispatch(createRemoteFile(filename));
+        },
+        onReady: () => dispatch => {
+            dispatch(setAdding(false));
+            dispatch(setSelectedArchiveType(null));
         },
         onSelectRemotePath: filename => dispatch => {
             dispatch(selectRemoteFile(filename));
