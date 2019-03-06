@@ -1,6 +1,7 @@
 import watch from "redux-watch";
 import ms from "ms";
 import uuid from "uuid/v4";
+import sleep from "sleep-promise";
 import store, { dispatch, getState } from "../redux/index.js";
 import { clearGoogleDriveState, setAuthID, setAuthToken } from "../../shared/actions/googleDrive.js";
 import { performAuthentication } from "../../shared/library/googleDrive.js";
@@ -29,6 +30,7 @@ export async function reAuthGoogleDrive(sourceID, masterPassword) {
             }
         })
     );
+    await sleep(3000);
     const timeout = setTimeout(cleanup, ms("5m"));
     const tab = await performAuthentication();
 }
@@ -48,4 +50,5 @@ async function updateGoogleAuthToken(sourceID, masterPassword, token) {
             datasource.token = token;
         }
     });
+    await archiveManager.dehydrateSource(source);
 }

@@ -10,10 +10,15 @@ export function addNewEntry(sourceID, groupID, details) {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "add-new-entry", payload }, resp => {
             if (resp && resp.ok) {
-                resolve();
-            } else {
-                reject(new Error(`Failed adding new entry: ${(resp && resp.error) || "Unknown error"}`));
+                return resolve();
             }
+            const error = new VError(
+                {
+                    info: { authFailure: resp.authFailure }
+                },
+                `Failed adding new entry: ${(resp && resp.error) || "Unknown error"}`
+            );
+            reject(error);
         });
     });
 }

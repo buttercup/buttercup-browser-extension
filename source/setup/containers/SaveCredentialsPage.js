@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import VError from "verror";
 import { Group } from "../../shared/library/buttercup.js";
 import SaveCredentialsPage from "../components/SaveCredentialsPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
@@ -62,7 +63,15 @@ export default connect(
                         })
                         .catch(err => {
                             dispatch(unsetBusy());
-                            notifyError("Failed saving credentials", err.message);
+                            const { authFailure = false } = VError.info(err);
+                            if (authFailure) {
+                                notifyWarning(
+                                    "Authorisation failed",
+                                    "The credentials were invalid - re-authenticating"
+                                );
+                            } else {
+                                notifyError("Failed saving credentials", err.message);
+                            }
                             console.error(err);
                         });
                 } else {
