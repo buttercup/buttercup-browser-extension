@@ -169,7 +169,7 @@ export default connect(
                     dispatch(unsetBusy());
                     notifySuccess("Successfully added vault", `The vault '${archiveName}' was successfully added.`);
                     setTimeout(() => {
-                        // closeCurrentTab();
+                        closeCurrentTab();
                     }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
                 })
                 .catch(err => {
