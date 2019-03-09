@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.5.0
+_2019-03-09_
+
+ * **Google Drive** support
+ * Unlock-vaults button in popup
+
 ## v2.4.1
 _2019-02-05_
 
