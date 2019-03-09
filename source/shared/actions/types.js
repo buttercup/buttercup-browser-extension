@@ -5,6 +5,7 @@ export const APP_SET_CONFIG_VALUE = "app/config/setValue";
 export const APP_SET_USER_ACTIVITY = "app/user/setActivity";
 
 export const ARCHIVES_SET = "archives/set";
+export const ARCHIVES_UNLOCKED_SET_COUNT = "archives/unlocked/setCount";
 
 export const AUTOLOGIN_CLEAR_DETAILS = "autoLogin/details/clear";
 export const AUTOLOGIN_SET_DETAILS = "autoLogin/details/set";

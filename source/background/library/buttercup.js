@@ -3,7 +3,7 @@ import ms from "ms";
 import { ArchiveManager, vendor as ButtercupVendor } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
-import { setArchives } from "../../shared/actions/archives.js";
+import { setArchives, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
 import BrowserStorageInterface from "./BrowserStorageInterface.js";
 import { migrateLocalStorageToChromeStorage } from "./storageMigration.js";
 
@@ -21,6 +21,7 @@ function attachArchiveManagerListeners(archiveManager) {
                 }))
             )
         );
+        dispatch(setUnlockedArchivesCount(archiveManager.unlockedSources.length));
     });
 }
 

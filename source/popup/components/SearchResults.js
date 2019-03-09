@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { NonIdealState } from "@blueprintjs/core";
+import { Button, NonIdealState } from "@blueprintjs/core";
 import Entries from "../../shared/components/Entries.js";
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-standalone.png");
@@ -20,7 +20,8 @@ class SearchResults extends PureComponent {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
         sourcesUnlocked: PropTypes.number.isRequired,
-        onSelectEntry: PropTypes.func.isRequired
+        onSelectEntry: PropTypes.func.isRequired,
+        onUnlockAllArchives: PropTypes.func.isRequired
     };
 
     render() {
@@ -40,6 +41,13 @@ class SearchResults extends PureComponent {
                             title="Welcome to Buttercup"
                             description="Use the search bar to find entries in your unlocked vaults."
                             icon={<img src={BUTTERCUP_LOGO} width="64" />}
+                            action={
+                                this.props.sourcesUnlocked === 0 ? (
+                                    <Button icon="unlock" onClick={::this.props.onUnlockAllArchives}>
+                                        Unlock Vaults
+                                    </Button>
+                                ) : null
+                            }
                         />
                     </Otherwise>
                 </Choose>
