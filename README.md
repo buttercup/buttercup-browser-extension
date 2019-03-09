@@ -41,8 +41,9 @@ Other browsers will be supported in order of request/popularity. Issues created 
 The extension allows for connections to several services where your vaults can be stored:
 
  * Dropbox
- * ownCloud
- * Nextcloud
+ * Google Drive
+ * ~~ownCloud~~ ([deprecated](https://medium.com/@buttercup_pw/were-deprecating-owncloud-and-nextcloud-connections-but-it-s-still-possible-to-use-them-with-abeec4d30101))
+ * ~~Nextcloud~~ ([deprecated](https://medium.com/@buttercup_pw/were-deprecating-owncloud-and-nextcloud-connections-but-it-s-still-possible-to-use-them-with-abeec4d30101))
  * WebDAV (any service supporting WebDAV)
  * Local filesystem
 
