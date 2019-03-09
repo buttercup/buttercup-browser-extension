@@ -43,7 +43,6 @@ export default class BrowserStorageInterface extends StorageInterface {
     }
 
     setValue(name, value) {
-        console.log("SET", name, value);
         return new Promise(resolve => {
             this.storage.set({ [name]: value }, () => resolve());
         });
