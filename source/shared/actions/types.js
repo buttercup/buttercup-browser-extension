@@ -13,5 +13,9 @@ export const DROPBOX_CLEAR_STATE = "dropbox/clear";
 export const DROPBOX_SET_AUTH_ID = "dropbox/setAuthenticationID";
 export const DROPBOX_SET_AUTH_TOKEN = "dropbox/setAuthToken";
 
+export const GOOGLE_DRIVE_CLEAR_STATE = "googleDrive/clear";
+export const GOOGLE_DRIVE_SET_AUTH_ID = "googleDrive/setAuthenticationID";
+export const GOOGLE_DRIVE_SET_AUTH_TOKEN = "googleDrive/setAuthToken";
+
 export const SEARCH_SET_ENTRY_RESULTS = "searching/results/set";
 export const SEARCH_SET_SOURCES_COUNT = "searching/setSources";

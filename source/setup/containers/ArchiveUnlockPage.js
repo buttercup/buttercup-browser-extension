@@ -1,9 +1,10 @@
 import { connect } from "react-redux";
 import delay from "yoctodelay";
+import VError from "verror";
 import ArchiveUnlockPage from "../components/ArchiveUnlockPage.js";
 import { getArchiveTitle } from "../../shared/selectors/archives.js";
 import { lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
-import { notifyError, notifySuccess } from "../library/notify.js";
+import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { isEditing } from "../selectors/manageArchive.js";
 import { setEditing } from "../actions/manageArchive.js";
@@ -77,7 +78,12 @@ export default connect(
                     dispatch(setEditing(false));
                     dispatch(unsetBusy());
                     console.error(err);
-                    notifyError("Failed unlocking archive", `Unable to unlock archive: ${err.message}`);
+                    const { hush } = VError.info(err);
+                    if (hush) {
+                        notifyWarning("Authorisation failed", "The credentials were invalid - re-authenticating");
+                    } else {
+                        notifyError("Failed unlocking archive", `Unable to unlock archive: ${err.message}`);
+                    }
                 });
         }
     }

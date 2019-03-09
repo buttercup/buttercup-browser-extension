@@ -205,7 +205,7 @@ class RemoteFileTree extends Component {
 
     getTree(directory, isDir = true) {
         return {
-            id: directory.path,
+            id: directory.key || directory.path,
             label: directory.name,
             isExpanded: this.state.openDirectories.includes(directory.path),
             isSelected: directory.path === this.props.selectedFilename,

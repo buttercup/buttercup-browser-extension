@@ -10,6 +10,10 @@ export function closeCurrentTab() {
     });
 }
 
+export function closeTabs(...tabIDs) {
+    return new Promise(resolve => chrome.tabs.remove(tabIDs, resolve));
+}
+
 export function getCurrentTab() {
     return new Promise(resolve => {
         chrome.tabs.query({ active: true, currentWindow: true }, tabs => {

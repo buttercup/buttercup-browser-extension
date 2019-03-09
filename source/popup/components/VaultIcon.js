@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const ARCHIVE_IMAGES = {
     dropbox: require("../../../resources/providers/dropbox-256.png"),
+    googledrive: require("../../../resources/providers/googledrive-256.png"),
     localfile: require("../../../resources/providers/chip.svg"),
     owncloud: require("../../../resources/providers/owncloud-256.png"),
     nextcloud: require("../../../resources/providers/nextcloud-256.png"),

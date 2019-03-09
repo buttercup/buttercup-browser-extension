@@ -1,4 +1,5 @@
 import { createEntryFacade } from "@buttercup/facades";
+import VError from "verror";
 import * as Buttercup from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
@@ -26,6 +27,7 @@ import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 import { getConfig } from "../../shared/selectors/app.js";
+import { reAuthGoogleDrive } from "./googleDrive.js";
 
 const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
@@ -61,8 +63,13 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: true });
                 })
                 .catch(err => {
-                    sendResponse({ ok: false, error: err.message });
+                    const { authFailure = false } = VError.info(err);
+                    sendResponse({ ok: false, error: err.message, authFailure });
                     console.error(err);
+                    if (authFailure) {
+                        log.info(`Authentication for Google Drive failed: Reauthenticating: ${sourceID}`);
+                        reAuthGoogleDrive(sourceID, masterPassword);
+                    }
                 });
             return true;
         }
@@ -228,6 +235,14 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
+        case "set-config": {
+            dispatch(
+                setConfigValue({
+                    key: request.key,
+                    value: request.value
+                })
+            );
+        }
         case "set-generated-password": {
             const { password } = request;
             getCurrentTab().then(tab => {
@@ -239,6 +254,10 @@ function handleMessage(request, sender, sendResponse) {
             lastPassword.value = password;
             return false;
         }
+        case "set-user-activity": {
+            dispatch(setUserActivity());
+            return true;
+        }
         case "unlock-archive": {
             const { sourceID, masterPassword } = request;
             unlockSource(sourceID, masterPassword)
@@ -246,21 +265,14 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: true });
                 })
                 .catch(err => {
-                    sendResponse({ ok: false, error: err.message });
                     console.error(err);
+                    const { authFailure = false } = VError.info(err);
+                    sendResponse({ ok: false, error: err.message, hush: authFailure });
+                    if (authFailure) {
+                        log.info(`Authentication for Google Drive failed: Reauthenticating: ${sourceID}`);
+                        reAuthGoogleDrive(sourceID, masterPassword);
+                    }
                 });
-            return true;
-        }
-        case "set-config": {
-            dispatch(
-                setConfigValue({
-                    key: request.key,
-                    value: request.value
-                })
-            );
-        }
-        case "set-user-activity": {
-            dispatch(setUserActivity());
             return true;
         }
         default:

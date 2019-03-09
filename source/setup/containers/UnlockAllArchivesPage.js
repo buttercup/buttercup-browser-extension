@@ -1,8 +1,9 @@
 import { connect } from "react-redux";
+import VError from "verror";
 import UnlockAllArchivesPage from "../components/UnlockAllArchivesPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
 import { unlockArchive } from "../library/messaging.js";
-import { notifyError, notifySuccess } from "../library/notify.js";
+import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 
 function getArchivesArray(state) {
@@ -36,7 +37,15 @@ export default connect(
                 })
                 .catch(err => {
                     console.error(err);
-                    notifyError("Failed unlocking archive", `Unable to unlock archive (${sourceID}): ${err.message}`);
+                    const { hush } = VError.info(err);
+                    if (hush) {
+                        notifyWarning("Authorisation failed", "The credentials were invalid - re-authenticating");
+                    } else {
+                        notifyError(
+                            "Failed unlocking archive",
+                            `Unable to unlock archive (${sourceID}): ${err.message}`
+                        );
+                    }
                     return false;
                 });
         }

@@ -10,6 +10,11 @@ export const ARCHIVE_TYPES = [
         image: require("../../../resources/providers/dropbox-256.png")
     },
     {
+        type: "googledrive",
+        title: "Google Drive",
+        image: require("../../../resources/providers/googledrive-256.png")
+    },
+    {
         type: "owncloud",
         title: "ownCloud",
         image: require("../../../resources/providers/owncloud-256.png")
