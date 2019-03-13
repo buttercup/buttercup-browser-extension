@@ -96,6 +96,7 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
                 `Failed fetching the remote contents of '${directory}': ${err.message}`
             );
             log.error(`Failed fetching ${fetchType} contents of '${directory}': ${err.message}`);
+            console.error(err);
             dispatch(
                 setDirectoryLoading({
                     directory,
