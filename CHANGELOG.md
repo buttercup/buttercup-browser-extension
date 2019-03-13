@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.5.1
+_2019-03-13_
+
+ * **Bugfix**:
+   * ([#244](https://github.com/buttercup/buttercup-browser-extension/issues/244)) Google Drive fetching fails on large directories
+
 ## v2.5.0
 _2019-03-09_
 
