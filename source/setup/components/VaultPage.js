@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { VaultProvider, VaultUI } from "@buttercup/ui";
 
+// @TODO maybe move this somewhere better?
+import "@buttercup/ui/dist/styles.css";
+
 class VaultPage extends Component {
     static propTypes = {
         sourceID: PropTypes.string.isRequired,
