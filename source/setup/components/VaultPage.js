@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import BUI, { VaultProvider, VaultUI } from "@buttercup/ui";
+import { VaultProvider, VaultUI } from "@buttercup/ui";
 
 class VaultPage extends Component {
     static propTypes = {
@@ -17,7 +17,6 @@ class VaultPage extends Component {
     }
 
     render() {
-        console.log("COMPS", BUI);
         return (
             <div>
                 <Choose>
