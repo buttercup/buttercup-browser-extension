@@ -14,7 +14,7 @@ import {
     ControlGroup,
     Dialog
 } from "@blueprintjs/core";
-import { getIconForURL } from "../../shared/library/icons.js";
+import { SiteIcon } from "@buttercup/ui";
 import { EntryShape } from "../prop-types/entry.js";
 import { writeToClipboard } from "../library/browser.js";
 
@@ -69,6 +69,10 @@ const Details = styled.div`
     margin: 0 !important;
     padding: 20px !important;
 `;
+const EntryIcon = styled(SiteIcon)`
+    width: 100%;
+    height: auto;
+`;
 
 class SearchResult extends PureComponent {
     static propTypes = {
@@ -82,22 +86,9 @@ class SearchResult extends PureComponent {
     };
 
     state = {
-        icon: NO_ICON,
         isDetailsVisible: false,
         uncovered: []
     };
-
-    componentDidUpdate() {
-        this.processIcon();
-    }
-
-    componentDidMount() {
-        this.processIcon();
-    }
-
-    componentWillUnmount() {
-        this.mounted = false;
-    }
 
     handleCopyToClipboard(property, facade = true) {
         const { entry } = this.props;
@@ -108,16 +99,6 @@ class SearchResult extends PureComponent {
             }
         } else {
             writeToClipboard(entry[property]);
-        }
-    }
-
-    processIcon() {
-        const url = this.props.entry.url;
-        const icon = getIconForURL(url || "-");
-        if (this.state.icon !== icon) {
-            this.setState({
-                icon
-            });
         }
     }
 
@@ -185,7 +166,7 @@ class SearchResult extends PureComponent {
                 <Container isActive={isDetailsVisible}>
                     <EntryRow>
                         <EntryImageBackground>
-                            <EntryImage src={this.state.icon} />
+                            <EntryIcon domain={null} />
                         </EntryImageBackground>
                         <DetailRow onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
                             <Title title={title}>
