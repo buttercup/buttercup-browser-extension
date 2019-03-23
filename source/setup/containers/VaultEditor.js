@@ -24,6 +24,10 @@ export default connect(
         saveVaultFacade: (sourceID, facade) => dispatch => {
             dispatch(setBusy("Saving vault"));
             applyArchiveFacade(sourceID, facade)
+                .then(() => getArchiveFacade(sourceID))
+                .then(facade => {
+                    dispatch(setVaultFacade(facade));
+                })
                 .then(() => {
                     dispatch(unsetBusy());
                     notifySuccess("Save successful", "Successfully updated the vault");

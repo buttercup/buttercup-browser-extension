@@ -60,7 +60,7 @@
     "@buttercup/googledrive-client": "^0.2.1",
     "@buttercup/iconographer": "^1.1.1",
     "@buttercup/locust": "^0.10.0",
-    "@buttercup/ui": "^2.0.0-rc9",
+    "@buttercup/ui": "^2.0.0-rc9.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-jsx-control-statements": "^4.0.0",
     "browser-info": "^1.2.0",
