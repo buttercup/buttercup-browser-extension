@@ -5,10 +5,18 @@ import { Classes, Colors } from "@blueprintjs/core";
 const DialogContainer = styled.div`
     background-color: ${Colors.DARK_GRAY3};
 `;
+const Dialog = styled.div`
+    ${props =>
+        props.maximise &&
+        `
+        width: 90vw !important;
+        height: 90vh !important;
+    `};
+`;
 
-export default ({ title, children, actions }) => (
+export default ({ title, children, actions, maximise = false }) => (
     <DialogContainer className={Classes.DIALOG_CONTAINER}>
-        <div className={Classes.DIALOG}>
+        <Dialog className={Classes.DIALOG} maximise={maximise}>
             <div className={Classes.DIALOG_HEADER}>{title}</div>
             <div className={Classes.DIALOG_BODY}>{children}</div>
             <If condition={actions}>
@@ -16,6 +24,6 @@ export default ({ title, children, actions }) => (
                     <div className={Classes.DIALOG_FOOTER_ACTIONS}>{actions}</div>
                 </div>
             </If>
-        </div>
+        </Dialog>
     </DialogContainer>
 );
