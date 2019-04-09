@@ -58,8 +58,10 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
         },
 
         node: {
-            fs: "empty",
-            net: "empty"
+            child_process: "empty",
+            dns: "empty",
+            net: "empty",
+            tls: "empty"
         },
 
         resolve: {
@@ -88,6 +90,7 @@ function getBasePlugins() {
         new DefinePlugin({
             __VERSION__: JSON.stringify(version)
         }),
+        new NormalModuleReplacementPlugin(/^fs$/, path.join(SOURCE, "fsMock.js")),
         new NormalModuleReplacementPlugin(/\/iconv-loader/, "node-noop")
     ];
     if (process.env.NODE_ENV === "production") {
@@ -121,7 +124,8 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
         vendor: [...REDUX_PACKAGES, "buttercup"],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
+        google: ["google-auth-library"]
     },
 
     output: {
@@ -152,7 +156,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
             }
         ]),
         new CommonsChunkPlugin({
-            names: ["vendor", "buttercup"],
+            names: ["vendor", "buttercup", "google"],
             minChunks: Infinity
         })
     ]
