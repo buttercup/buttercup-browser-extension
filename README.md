@@ -72,7 +72,17 @@ Development of features and bugfixes is supported in the following environment:
  
 To set up your development environment:
  * Clone this repo
+ * Ensure API keys are available (Google Drive)
  * Execute `npm install` inside the project directory
+
+To use certain services like Google Drive, the client secret details must be provided in the `secrets.json` file in the root of the project. If you're not going to use services like Google Drive, an empty JSON file is fine. The file should look like the following when credentials are provided:
+
+```json
+{
+    "googleDriveClientID": "...",
+    "googleDriveClientSecret": "..."
+}
+```
 
 #### Chrome
 Run the following to develop the extension:
