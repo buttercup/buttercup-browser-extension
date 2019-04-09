@@ -9,7 +9,7 @@ import pify from "pify";
 import log from "../../shared/library/log.js";
 import { getState } from "../redux/index.js";
 import { getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
-import { getAuthToken as getGoogleDriveAuthToken } from "../../shared/selectors/googleDrive.js";
+import { getAuthCode as getGoogleDriveAuthToken } from "../../shared/selectors/googleDrive.js";
 
 let __webdavClient = null,
     __dropboxClient = null,
@@ -59,6 +59,7 @@ export function getDropboxDirectoryContents(directory, dropboxClient = getDropbo
 
 function getGoogleDriveClient() {
     if (!__googleDriveClient) {
+        // @todo
         const state = getState();
         const authToken = getGoogleDriveAuthToken(state);
         if (!authToken) {

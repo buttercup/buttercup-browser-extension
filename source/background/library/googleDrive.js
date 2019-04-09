@@ -2,53 +2,82 @@ import watch from "redux-watch";
 import ms from "ms";
 import uuid from "uuid/v4";
 import sleep from "sleep-promise";
+import { OAuth2Client } from "google-auth-library";
 import store, { dispatch, getState } from "../redux/index.js";
-import { clearGoogleDriveState, setAuthID, setAuthToken } from "../../shared/actions/googleDrive.js";
+import { clearGoogleDriveState, setAuthID, setAuthCode } from "../../shared/actions/googleDrive.js";
 import { performAuthentication } from "../../shared/library/googleDrive.js";
-import { getAuthID, getAuthToken } from "../../shared/selectors/googleDrive.js";
-import { closeTabs } from "../../shared/library/extension.js";
+import { getAuthID, getAuthCode } from "../../shared/selectors/googleDrive.js";
+import { closeTabs, createNewTab } from "../../shared/library/extension.js";
 import { getArchiveManager } from "./buttercup.js";
+import secrets from "../../../secrets.json";
+import { resolve } from "dns";
 
-export async function reAuthGoogleDrive(sourceID, masterPassword) {
-    const authID = uuid();
-    dispatch(setAuthToken(null));
-    dispatch(setAuthID(authID));
+const OAUTH_REDIRECT_URL = "https://buttercup.pw?googleauth";
+
+export async function authenticateWithoutToken() {
+    const oauth2Client = getOAuthClient();
+    const url = oauth2Client.generateAuthUrl({
+        access_type: "offline",
+        scope: ["email", "profile", "https://www.googleapis.com/auth/drive"],
+        prompt: "consent"
+    });
     const cleanup = async () => {
         clearTimeout(timeout);
+        rejectWaitingPromise(new Error("Timed-out waiting for authorisation"));
         await closeTabs(tab.id);
     };
-    const watchAuthID = watch(() => getAuthToken(getState()));
-    const unsubscribe = store.subscribe(
-        watchAuthID(token => {
-            if (token) {
-                const firedAuthID = getAuthID(getState());
-                if (firedAuthID === authID) {
-                    dispatch(clearGoogleDriveState());
-                    updateGoogleAuthToken(sourceID, masterPassword, token);
+    const authID = uuid();
+    let rejectWaitingPromise;
+    dispatch(setAuthCode(null));
+    dispatch(setAuthID(authID));
+    const waitForAuth = new Promise((resolve, reject) => {
+        rejectWaitingPromise = reject;
+        const watchAuthID = watch(() => getAuthCode(getState()));
+        const unsubscribe = store.subscribe(
+            watchAuthID(async authCode => {
+                if (authCode) {
+                    const firedAuthID = getAuthID(getState());
+                    if (firedAuthID === authID) {
+                        dispatch(clearGoogleDriveState());
+                        const tokens = await exchangeAuthCodeForTokens(oauth2Client, authCode);
+                        resolve(tokens);
+                    }
+                    cleanup();
                 }
-                cleanup();
-            }
-        })
-    );
-    await sleep(3000);
-    const timeout = setTimeout(cleanup, ms("5m"));
-    const tab = await performAuthentication();
+            })
+        );
+    });
+    const tab = await createNewTab(url);
+    const timeout = setTimeout(cleanup, ms("2m"));
+    return await waitForAuth;
 }
 
-async function updateGoogleAuthToken(sourceID, masterPassword, token) {
-    const archiveManager = await getArchiveManager();
-    const source = archiveManager.getSourceForID(sourceID);
-    await source.updateSourceCredentials(masterPassword, (sourceCredentials, datasource) => {
-        const datasourceDescriptionRaw = sourceCredentials.getValueOrFail("datasource");
-        const datasourceDescription =
-            typeof datasourceDescriptionRaw === "string"
-                ? JSON.parse(datasourceDescriptionRaw)
-                : datasourceDescriptionRaw;
-        datasourceDescription.token = token;
-        sourceCredentials.setValue("datasource", datasourceDescription);
-        if (datasource) {
-            datasource.token = token;
-        }
+export async function authenticateWithRefreshToken(accessToken, refreshToken) {
+    const oauth2Client = getOAuthClient();
+    oauth2Client.setCredentials({
+        access_token: accessToken,
+        refresh_token: refreshToken
     });
-    await archiveManager.dehydrateSource(source);
+    return await oauth2Client.refreshToken(refreshToken);
+}
+
+async function exchangeAuthCodeForTokens(oauth2Client, authCode) {
+    const response = await oauth2Client.getToken(authCode);
+    const { access_token: accessToken, refresh_token: refreshToken = null } = response.tokens;
+    console.log("RES", authCode, response);
+    if (!accessToken) {
+        throw new Error("Failed getting access token");
+    }
+    return {
+        accessToken,
+        refreshToken
+    };
+}
+
+function getOAuthClient() {
+    const { googleDriveClientID, googleDriveClientSecret } = secrets;
+    if (!googleDriveClientID || !googleDriveClientSecret) {
+        throw new Error("Failed authenticating Google Drive: Client ID or secret not provided");
+    }
+    return new OAuth2Client(googleDriveClientID, googleDriveClientSecret, OAUTH_REDIRECT_URL);
 }

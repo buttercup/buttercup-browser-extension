@@ -4,6 +4,6 @@ export function getAuthID(state) {
     return state[KEY].authenticationID;
 }
 
-export function getAuthToken(state) {
-    return state[KEY].authToken;
+export function getAuthCode(state) {
+    return state[KEY].authCode;
 }

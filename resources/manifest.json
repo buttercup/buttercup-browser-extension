@@ -25,6 +25,7 @@
 
     "background": {
         "scripts": [
+            "background-google.js",
             "background-buttercup.js",
             "background-vendor.js",
             "background-index.js"

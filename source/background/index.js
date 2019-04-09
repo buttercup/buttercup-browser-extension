@@ -7,6 +7,7 @@ import { getBrowser } from "../shared/library/browser.js";
 import { checkUnlockPossibility } from "./library/archives.js";
 import { watchForSourcesAutoLock } from "./library/autoLock.js";
 import { watchStorage as watchStorageForConfig } from "./library/config.js";
+import { registerAuthWatchers } from "./library/buttercup.js";
 import store from "./redux/index.js";
 
 log.info("Starting...");
@@ -19,5 +20,6 @@ attachBrowserStateListeners();
 updateContextMenu();
 setTimeout(checkUnlockPossibility, 2500);
 watchForSourcesAutoLock();
+registerAuthWatchers();
 
 log.info("Started successfully");

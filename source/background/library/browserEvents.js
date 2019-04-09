@@ -2,7 +2,7 @@ import ms from "ms";
 import log from "../../shared/library/log.js";
 import { dispatch, getState } from "../redux/index.js";
 import { setAuthToken as setDropboxAuthToken } from "../../shared/actions/dropbox.js";
-import { setAuthToken as setGoogleDriveAuthToken } from "../../shared/actions/googleDrive.js";
+import { setAuthCode as setGoogleDriveAuthCode } from "../../shared/actions/googleDrive.js";
 import { setUserActivity } from "../../shared/actions/app.js";
 import { getAutoLoginDetails } from "../../shared/selectors/autoLogin.js";
 import { clearAutoLogin } from "../../shared/actions/autoLogin.js";
@@ -12,7 +12,7 @@ import { getEntry } from "./archives.js";
 const AUTOLOGIN_EXPIRY = ms("45s");
 const BUTTERCUP_DOMAIN_REXP = /^https:\/\/buttercup.pw\//;
 const DROPBOX_ACCESS_TOKEN_REXP = /access_token=([^&]+)/;
-const GOOGLE_DRIVE_ACCESS_TOKEN_REXP = /\?googleauth.*access_token=([a-zA-Z0-9._-]+)&/;
+const GOOGLE_DRIVE_AUTH_CODE_REXP = /\?googleauth&code=([^&#?]+)/;
 
 export function attachBrowserStateListeners() {
     chrome.tabs.onUpdated.addListener(handleTabUpdatedEvent);
@@ -24,12 +24,12 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
     const { url } = changeInfo;
     const autoLogin = getAutoLoginDetails(getState());
     if (BUTTERCUP_DOMAIN_REXP.test(url)) {
-        const googleDriveTokenMatch = url.match(GOOGLE_DRIVE_ACCESS_TOKEN_REXP);
+        const googleDriveAuthCodeMatch = url.match(GOOGLE_DRIVE_AUTH_CODE_REXP);
         const dropboxTokenMatch = url.match(DROPBOX_ACCESS_TOKEN_REXP);
-        if (googleDriveTokenMatch) {
-            const token = googleDriveTokenMatch[1];
-            log.info(`Retrieved Google Drive access token from tab: ${tabID}`);
-            dispatch(setGoogleDriveAuthToken(token));
+        if (googleDriveAuthCodeMatch) {
+            const authCode = googleDriveAuthCodeMatch[1];
+            log.info(`Retrieved Google Drive auth code from tab: ${tabID}`);
+            dispatch(setGoogleDriveAuthCode(authCode));
             chrome.tabs.remove(tabID);
         } else if (dropboxTokenMatch) {
             const token = dropboxTokenMatch[1];
