@@ -63,13 +63,8 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: true });
                 })
                 .catch(err => {
-                    // const { authFailure = false } = VError.info(err);
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
-                    // if (authFailure) {
-                    //     log.info(`Authentication for Google Drive failed: Reauthenticating: ${sourceID}`);
-                    //     reAuthGoogleDrive(sourceID, masterPassword);
-                    // }
                 });
             return true;
         }
