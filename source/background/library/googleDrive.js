@@ -4,7 +4,7 @@ import uuid from "uuid/v4";
 import sleep from "sleep-promise";
 import { OAuth2Client } from "google-auth-library";
 import store, { dispatch, getState } from "../redux/index.js";
-import { clearGoogleDriveState, setAuthID, setAuthCode } from "../../shared/actions/googleDrive.js";
+import { setAccessToken, setAuthID, setAuthCode, setRefreshToken } from "../../shared/actions/googleDrive.js";
 import { performAuthentication } from "../../shared/library/googleDrive.js";
 import { getAuthID, getAuthCode } from "../../shared/selectors/googleDrive.js";
 import { closeTabs, createNewTab } from "../../shared/library/extension.js";
@@ -14,7 +14,7 @@ import { resolve } from "dns";
 
 const OAUTH_REDIRECT_URL = "https://buttercup.pw?googleauth";
 
-export async function authenticateWithoutToken() {
+export async function authenticateWithoutToken(authID = uuid()) {
     const oauth2Client = getOAuthClient();
     const url = oauth2Client.generateAuthUrl({
         access_type: "offline",
@@ -26,9 +26,10 @@ export async function authenticateWithoutToken() {
         rejectWaitingPromise(new Error("Timed-out waiting for authorisation"));
         await closeTabs(tab.id);
     };
-    const authID = uuid();
     let rejectWaitingPromise;
     dispatch(setAuthCode(null));
+    dispatch(setAccessToken(null));
+    dispatch(setRefreshToken(null));
     dispatch(setAuthID(authID));
     const waitForAuth = new Promise((resolve, reject) => {
         rejectWaitingPromise = reject;
@@ -38,8 +39,10 @@ export async function authenticateWithoutToken() {
                 if (authCode) {
                     const firedAuthID = getAuthID(getState());
                     if (firedAuthID === authID) {
-                        dispatch(clearGoogleDriveState());
+                        dispatch(setAuthCode(authCode));
                         const tokens = await exchangeAuthCodeForTokens(oauth2Client, authCode);
+                        dispatch(setAccessToken(tokens.accessToken));
+                        dispatch(setRefreshToken(tokens.refreshToken));
                         resolve(tokens);
                     }
                     cleanup();
@@ -53,18 +56,28 @@ export async function authenticateWithoutToken() {
 }
 
 export async function authenticateWithRefreshToken(accessToken, refreshToken) {
+    dispatch(setAuthCode(null));
+    dispatch(setAccessToken(null));
+    dispatch(setRefreshToken(null));
     const oauth2Client = getOAuthClient();
     oauth2Client.setCredentials({
         access_token: accessToken,
         refresh_token: refreshToken
     });
-    return await oauth2Client.refreshToken(refreshToken);
+    const { access_token: newAccessToken, refresh_token: newRefreshToken } = await oauth2Client.refreshToken(
+        refreshToken
+    );
+    dispatch(setAccessToken(newAccessToken));
+    dispatch(setRefreshToken(newRefreshToken));
+    return {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken
+    };
 }
 
 async function exchangeAuthCodeForTokens(oauth2Client, authCode) {
     const response = await oauth2Client.getToken(authCode);
     const { access_token: accessToken, refresh_token: refreshToken = null } = response.tokens;
-    console.log("RES", authCode, response);
     if (!accessToken) {
         throw new Error("Failed getting access token");
     }

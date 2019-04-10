@@ -36,13 +36,13 @@ import {
 } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
-import { performAuthentication as performGoogleDriveAuthentication } from "../../shared/library/googleDrive.js";
 import { setAuthID as setGoogleDriveAuthID } from "../../shared/actions/googleDrive.js";
 import { setAuthID as setDropboxAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
 import {
     getAuthID as getGoogleDriveAuthID,
-    getAuthToken as getGoogleDriveAuthToken
+    getAccessToken as getGoogleDriveAccessToken,
+    getRefreshToken as getGoogleDriveRefeshToken
 } from "../../shared/selectors/googleDrive";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
@@ -50,6 +50,7 @@ import {
     receiveAuthKey as receiveLocalKey,
     requestConnection as requestLocalConnection
 } from "../library/localFile.js";
+import { authenticateGoogleDrive } from "../library/messaging.js";
 
 const ADD_ARCHIVE_WINDOW_CLOSE_DELAY = 2000;
 
@@ -57,8 +58,8 @@ export default connect(
     (state, ownProps) => ({
         dropboxAuthID: getDropboxAuthID(state),
         dropboxAuthToken: getDropboxAuthToken(state),
+        googleDriveAccessToken: getGoogleDriveAccessToken(state),
         googleDriveAuthID: getGoogleDriveAuthID(state),
-        googleDriveAuthToken: getGoogleDriveAuthToken(state),
         localAuthStatus: getLocalAuthStatus(state),
         isConnected: isConnected(state),
         isConnecting: isConnecting(state),
@@ -90,7 +91,7 @@ export default connect(
         },
         onAuthenticateGoogleDrive: googleDriveAuthID => dispatch => {
             dispatch(setGoogleDriveAuthID(googleDriveAuthID));
-            performGoogleDriveAuthentication();
+            authenticateGoogleDrive();
         },
         onChooseDropboxBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
             const name = stripTags(archiveName);
@@ -131,7 +132,8 @@ export default connect(
             const state = getState();
             const remoteFilename = getSelectedFilename(state);
             const shouldCreate = selectedFileNeedsCreation(state);
-            const googleDriveToken = getGoogleDriveAuthToken(state);
+            const googleDriveToken = getGoogleDriveAccessToken(state);
+            const googleDriveRefreshToken = getGoogleDriveRefeshToken(state);
             dispatch(setAdding(true));
             dispatch(setBusy(shouldCreate ? "Adding new vault..." : "Adding existing vault..."));
             return Promise.resolve()
@@ -163,7 +165,14 @@ export default connect(
                         }
                         fileID = ourFile.googleFileID;
                     }
-                    return addGoogleDriveArchive(name, masterPassword, fileID, googleDriveToken, shouldCreate);
+                    return addGoogleDriveArchive(
+                        name,
+                        masterPassword,
+                        fileID,
+                        googleDriveToken,
+                        googleDriveRefreshToken,
+                        shouldCreate
+                    );
                 })
                 .then(() => {
                     dispatch(unsetBusy());

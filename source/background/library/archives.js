@@ -68,7 +68,7 @@ export function addDropboxArchive(payload) {
 }
 
 export function addGoogleDriveArchive(payload) {
-    const { name, masterPassword, fileID, googleDriveToken, create } = payload;
+    const { name, masterPassword, fileID, googleDriveToken, googleDriveRefreshToken, create } = payload;
     log.info(`Attempting to connect Google Drive archive '${fileID}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return getArchiveManager()
@@ -79,6 +79,7 @@ export function addGoogleDriveArchive(payload) {
                 JSON.stringify({
                     type: "googledrive",
                     token: googleDriveToken,
+                    refreshToken: googleDriveRefreshToken,
                     fileID
                 })
             );
