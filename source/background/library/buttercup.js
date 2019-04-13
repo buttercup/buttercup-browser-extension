@@ -70,11 +70,8 @@ export function registerAuthWatchers() {
             }
         } else {
             log.info("Datasource contains refresh token: Refreshing authorisation");
-            const { accessToken, refreshToken } = await authenticateWithRefreshToken(accessToken, refreshToken);
-            datasource.updateTokens(accessToken, refreshToken);
-            if (!refreshToken) {
-                log.warn("Updating Google Drive datasource access token without refresh token");
-            }
+            const { accessToken } = await authenticateWithRefreshToken(currentToken, currentRefreshToken);
+            datasource.updateTokens(accessToken, currentRefreshToken);
         }
         log.info("Google Drive datasource tokens updated");
     });

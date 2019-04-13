@@ -58,20 +58,17 @@ export async function authenticateWithoutToken(authID = uuid()) {
 export async function authenticateWithRefreshToken(accessToken, refreshToken) {
     dispatch(setAuthCode(null));
     dispatch(setAccessToken(null));
-    dispatch(setRefreshToken(null));
     const oauth2Client = getOAuthClient();
     oauth2Client.setCredentials({
         access_token: accessToken,
         refresh_token: refreshToken
     });
-    const { access_token: newAccessToken, refresh_token: newRefreshToken } = await oauth2Client.refreshToken(
-        refreshToken
-    );
+    const results = await oauth2Client.refreshToken(refreshToken);
+    const { access_token: newAccessToken } = results.tokens;
     dispatch(setAccessToken(newAccessToken));
-    dispatch(setRefreshToken(newRefreshToken));
     return {
         accessToken: newAccessToken,
-        refreshToken: newRefreshToken
+        refreshToken
     };
 }
 
