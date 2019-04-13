@@ -1,5 +1,7 @@
 language: node_js
-script: npm run test:ci
+script:
+  - echo '{}' > secrets.json
+  - npm run test:ci
 node_js:
   - "8"
   - "10"
