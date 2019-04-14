@@ -1,11 +1,12 @@
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
 import ms from "ms";
-import { ArchiveManager, vendor as ButtercupVendor } from "../../shared/library/buttercup.js";
+import { ArchiveManager, vendor as ButtercupVendor, Datasources } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
 import { setArchives, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
 import BrowserStorageInterface from "./BrowserStorageInterface.js";
 import { migrateLocalStorageToChromeStorage } from "./storageMigration.js";
+import { authenticateWithoutToken, authenticateWithRefreshToken } from "./googleDrive.js";
 
 let __archiveManager, __queue;
 
@@ -53,6 +54,27 @@ export function getQueue() {
         __queue = new ChannelQueue();
     }
     return __queue;
+}
+
+export function registerAuthWatchers() {
+    const { AuthManager } = Datasources;
+    AuthManager.getSharedManager().registerHandler("googledrive", async datasource => {
+        log.info("Google Drive datasource needs re-authentication");
+        const { token: currentToken, refreshToken: currentRefreshToken } = datasource;
+        if (!currentRefreshToken) {
+            log.info("Datasource does not contain a refresh token: Performing full authorisation");
+            const { accessToken, refreshToken } = await authenticateWithoutToken();
+            datasource.updateTokens(accessToken, refreshToken);
+            if (!refreshToken) {
+                log.warn("Updating Google Drive datasource access token without refresh token");
+            }
+        } else {
+            log.info("Datasource contains refresh token: Refreshing authorisation");
+            const { accessToken } = await authenticateWithRefreshToken(currentToken, currentRefreshToken);
+            datasource.updateTokens(accessToken, currentRefreshToken);
+        }
+        log.info("Google Drive datasource tokens updated");
+    });
 }
 
 migrateLocalStorageToChromeStorage(getQueue()).then(() => createArchiveManager());

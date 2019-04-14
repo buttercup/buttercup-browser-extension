@@ -24,8 +24,8 @@ class AddArchivePage extends PureComponent {
     static propTypes = {
         dropboxAuthID: PropTypes.string,
         dropboxAuthToken: PropTypes.string,
+        googleDriveAccessToken: PropTypes.string,
         googleDriveAuthID: PropTypes.string,
-        googleDriveAuthToken: PropTypes.string,
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
         localAuthStatus: PropTypes.string.isRequired,
@@ -137,7 +137,7 @@ class AddArchivePage extends PureComponent {
         const isTargetingGoogleDrive = this.props.selectedArchiveType === "googledrive";
         const isTargetingLocal = this.props.selectedArchiveType === "localfile";
         const hasAuthenticatedDropbox = typeof this.props.dropboxAuthToken === "string";
-        const hasAuthenticatedGoogleDrive = typeof this.props.googleDriveAuthToken === "string";
+        const hasAuthenticatedGoogleDrive = typeof this.props.googleDriveAccessToken === "string";
         const hasAuthenticated =
             (isTargetingWebDAV && this.props.isConnected) ||
             (isTargetingDropbox && hasAuthenticatedDropbox) ||
@@ -229,7 +229,7 @@ class AddArchivePage extends PureComponent {
         const isAuthenticatingDropbox = this.props.dropboxAuthID === this.state.dropboxAuthenticationID;
         const hasAuthenticatedDropbox = isAuthenticatingDropbox && this.props.dropboxAuthToken;
         const isAuthenticatingGoogleDrive = this.props.googleDriveAuthID === this.state.googleDriveAuthenticationID;
-        const hasAuthenticatedGoogleDrive = isAuthenticatingGoogleDrive && this.props.googleDriveAuthToken;
+        const hasAuthenticatedGoogleDrive = isAuthenticatingGoogleDrive && this.props.googleDriveAccessToken;
         const isAuthenticatingDesktop = this.props.localAuthStatus === "authenticating";
         const hasAuthenticatedDesktop = this.props.localAuthStatus === "authenticated";
         const isWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);

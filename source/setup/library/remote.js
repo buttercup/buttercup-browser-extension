@@ -9,7 +9,7 @@ import pify from "pify";
 import log from "../../shared/library/log.js";
 import { getState } from "../redux/index.js";
 import { getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
-import { getAuthToken as getGoogleDriveAuthToken } from "../../shared/selectors/googleDrive.js";
+import { getAccessToken as getGoogleDriveAccessToken } from "../../shared/selectors/googleDrive.js";
 
 let __webdavClient = null,
     __dropboxClient = null,
@@ -60,11 +60,11 @@ export function getDropboxDirectoryContents(directory, dropboxClient = getDropbo
 function getGoogleDriveClient() {
     if (!__googleDriveClient) {
         const state = getState();
-        const authToken = getGoogleDriveAuthToken(state);
-        if (!authToken) {
+        const accessToken = getGoogleDriveAccessToken(state);
+        if (!accessToken) {
             throw new Error("Unable to create Google Drive client: No token found");
         }
-        __googleDriveClient = createGoogleDriveClient(authToken);
+        __googleDriveClient = createGoogleDriveClient(accessToken);
     }
     return __googleDriveClient;
 }

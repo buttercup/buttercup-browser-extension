@@ -11,13 +11,21 @@ export function addDropboxArchive(name, masterPassword, filename, dropboxToken, 
     });
 }
 
-export function addGoogleDriveArchive(name, masterPassword, fileID, googleDriveToken, shouldCreate = false) {
+export function addGoogleDriveArchive(
+    name,
+    masterPassword,
+    fileID,
+    googleDriveToken,
+    googleDriveRefreshToken,
+    shouldCreate = false
+) {
     return makeArchiveAdditionRequest({
         type: "googledrive",
         name,
         masterPassword,
         fileID,
         googleDriveToken,
+        googleDriveRefreshToken,
         create: shouldCreate
     });
 }

@@ -23,6 +23,10 @@ export function addNewEntry(sourceID, groupID, details) {
     });
 }
 
+export function authenticateGoogleDrive(authID) {
+    chrome.runtime.sendMessage({ type: "authenticate-google-drive", authID });
+}
+
 export function clearLastLogin() {
     chrome.runtime.sendMessage({ type: "clear-used-credentials" });
 }
