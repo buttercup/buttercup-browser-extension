@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v2.6.0
+_2019-04-14_
+
+ * ([#246](https://github.com/buttercup/buttercup-browser-extension/issues/246)) Google Drive refresh token support
+
 ## v2.5.1
 _2019-03-13_
 

@@ -1,6 +1,6 @@
 {
   "name": "buttercup-browser-extension",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "Buttercup browser extension for Chrome and Firefox.",
   "main": "source/background/index.js",
   "scripts": {
@@ -64,7 +64,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "browser-info": "^1.2.0",
-    "buttercup": "^2.11.0",
+    "buttercup": "^2.12.0",
     "classnames": "^2.2.6",
     "concurrently": "^4.1.0",
     "console.style": "^0.2.2",
