@@ -23,12 +23,36 @@ export function addNewEntry(sourceID, groupID, details) {
     });
 }
 
+export function applyArchiveFacade(sourceID, facade) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "apply-vault-facade", sourceID, facade }, resp => {
+            if (resp && resp.ok) {
+                resolve(resp.facade);
+            } else {
+                reject(new Error(`Failed applying vault facade: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
+}
+
 export function authenticateGoogleDrive(authID) {
     chrome.runtime.sendMessage({ type: "authenticate-google-drive", authID });
 }
 
 export function clearLastLogin() {
     chrome.runtime.sendMessage({ type: "clear-used-credentials" });
+}
+
+export function getArchiveFacade(sourceID) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "create-vault-facade", sourceID }, resp => {
+            if (resp && resp.ok) {
+                resolve(resp.facade);
+            } else {
+                reject(new Error(`Failed getting vault facade: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
 }
 
 export function getArchivesGroupTree(sourceID) {

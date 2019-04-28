@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import { Button, Intent, Classes, FormGroup, InputGroup, Toaster, Position } from "@blueprintjs/core";
 import Dialog from "./Dialog.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
+import VaultEditor from "../containers/VaultEditor.js";
 
-class ArchiveUnlockPage extends PureComponent {
+class VaultPage extends PureComponent {
     static propTypes = {
         archiveTitle: PropTypes.string.isRequired,
         isEditing: PropTypes.bool.isRequired,
@@ -61,7 +62,7 @@ class ArchiveUnlockPage extends PureComponent {
                 action = "Unlock";
                 break;
             case "unlocked":
-                title = "Manage Vault";
+                title = "Managing Vault";
                 action = "Manage";
                 break;
             default:
@@ -96,7 +97,14 @@ class ArchiveUnlockPage extends PureComponent {
             </Fragment>
         );
         return (
-            <Dialog title={`${title}: ${this.props.archiveTitle}`} actions={actions}>
+            <Dialog
+                maximise={this.props.state === "unlocked"}
+                title={`${title}: ${this.props.archiveTitle}`}
+                actions={actions}
+            >
+                <If condition={this.props.state === "unlocked"}>
+                    <VaultEditor sourceID={this.props.sourceID} />
+                </If>
                 <If condition={this.props.state === "locked"}>
                     <form onSubmit={::this.handleUnlockArchive}>
                         <FormGroup disabled={disableForm} label="Master Password" labelFor="master-password">
@@ -119,4 +127,4 @@ class ArchiveUnlockPage extends PureComponent {
     }
 }
 
-export default ArchiveUnlockPage;
+export default VaultPage;

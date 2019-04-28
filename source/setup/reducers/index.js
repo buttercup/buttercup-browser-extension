@@ -10,6 +10,7 @@ import manageArchive from "./manageArchive.js";
 import releaseNotes from "./releaseNotes.js";
 import remoteFiles from "./remoteFiles.js";
 import searching from "../../shared/reducers/searching.js";
+import vault from "./vault.js";
 
 const appReducer = combineReducers({
     app,
@@ -21,7 +22,8 @@ const appReducer = combineReducers({
     releaseNotes,
     remoteFiles,
     searching,
-    setupRouting
+    setupRouting,
+    vault
 });
 
 export default createSyncReducer(appReducer);

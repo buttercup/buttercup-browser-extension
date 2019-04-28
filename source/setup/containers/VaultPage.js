@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import delay from "yoctodelay";
 import VError from "verror";
-import ArchiveUnlockPage from "../components/ArchiveUnlockPage.js";
+import VaultPage from "../components/VaultPage.js";
 import { getArchiveTitle } from "../../shared/selectors/archives.js";
 import { lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
@@ -9,6 +9,7 @@ import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { isEditing } from "../selectors/manageArchive.js";
 import { setEditing } from "../actions/manageArchive.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
+import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
 export default connect(
     (state, ownProps) => ({
@@ -87,4 +88,4 @@ export default connect(
                 });
         }
     }
-)(ArchiveUnlockPage);
+)(VaultPage);

@@ -14,3 +14,5 @@ export const RELEASE_NOTES_SET = "releaseNotes/set";
 export const REMOTE_FILES_RESET = "remoteFiles/reset";
 export const REMOTE_FILES_SET_CONTENTS = "remoteFiles/directory/setContents";
 export const REMOTE_FILES_SET_LOADING = "remoteFiles/directory/setLoading";
+
+export const VAULT_FACADE_SET = "vault/facade/set";

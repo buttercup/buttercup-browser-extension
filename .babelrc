@@ -1,17 +1,17 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/preset-env", {
       "targets": {
         "chrome": 60,
         "firefox": 60
       }
     }],
-    "react"
+    "@babel/preset-react"
   ],
   "plugins": [
     "jsx-control-statements",
-    "transform-class-properties",
-    "transform-object-rest-spread",
-    "transform-function-bind"
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-function-bind"
   ]
 }

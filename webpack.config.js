@@ -3,7 +3,6 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const { getResourcesPath: getIconResourcesPath } = require("@buttercup/iconographer");
 const { devDependencies, version } = require("./package.json");
 
 const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
@@ -15,6 +14,7 @@ const RESOURCES = path.resolve(__dirname, "./resources");
 const INDEX_TEMPLATE = path.resolve(RESOURCES, "./template.pug");
 const MANIFEST = path.resolve(RESOURCES, "./manifest.json");
 const CHANGELOG = path.resolve(__dirname, "./CHANGELOG.md");
+const ICONS_PATH = path.join(path.dirname(require.resolve("@buttercup/ui")), "icons");
 
 const SRC_BACKGROUND = path.resolve(SOURCE, "background");
 const SRC_POPUP = path.resolve(SOURCE, "popup");
@@ -151,8 +151,8 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
                 from: CHANGELOG
             },
             {
-                from: getIconResourcesPath(),
-                to: "site-icons"
+                from: ICONS_PATH,
+                to: "icons"
             }
         ]),
         new CommonsChunkPlugin({
