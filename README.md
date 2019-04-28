@@ -24,6 +24,10 @@ This extension uses [Locust](https://github.com/buttercup/locust) to perform log
 
 <img src="https://raw.githubusercontent.com/buttercup/buttercup-browser-extension/master/chrome-extension-2.jpg" />
 
+The extension also comes with a full-featured vault editing interface, so you can even use it as a standalone password manager.
+
+![Vault editing](https://raw.githubusercontent.com/buttercup/buttercup-browser-extension/master/chrome-vault-edit.jpg)
+
 ### Forms & Logins
 Buttercup for Browsers auto-detects some login forms and login inputs, allowing the user to auto-fill them at their discretion. This extension uses [Locust](https://github.com/buttercup/locust) under the hood to **detect forms and inputs** (any issues with detecting forms and inputs should be opened there).
 
