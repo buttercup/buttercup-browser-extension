@@ -1,5 +1,10 @@
 # Buttercup browser extension changelog
 
+## v2.7.0
+_2019-04-28_
+
+ * Vault editing interface
+
 ## v2.6.0
 _2019-04-14_
 
