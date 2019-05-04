@@ -1,7 +1,6 @@
 import ms from "ms";
 import log from "../../shared/library/log.js";
 import { dispatch, getState } from "../redux/index.js";
-import { setAuthToken as setDropboxAuthToken } from "../../shared/actions/dropbox.js";
 import { setAuthCode as setGoogleDriveAuthCode } from "../../shared/actions/googleDrive.js";
 import { setUserActivity } from "../../shared/actions/app.js";
 import { getAutoLoginDetails } from "../../shared/selectors/autoLogin.js";
