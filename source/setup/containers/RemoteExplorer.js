@@ -12,6 +12,7 @@ import {
 } from "../../shared/library/googleDrive.js";
 import { getAllDirectoryContents, getDirectoryContents, getDirectoriesLoading } from "../selectors/remoteFiles.js";
 import { getLocalDirectoryContents, localContentsToTree } from "../library/localFile.js";
+// import { myButtercupContentsToTree } from "../library/myButtercup.js";
 
 function contentsToTree(contents, fetchType) {
     switch (fetchType) {
@@ -23,6 +24,8 @@ function contentsToTree(contents, fetchType) {
             return googleDriveContentsToTree(contents);
         case "localfile":
             return localContentsToTree(contents);
+        // case "mybuttercup":
+        //     return myButtercupContentsToTree(contents);
         default:
             notifyError(
                 "Failed processing directory contents",

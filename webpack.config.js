@@ -8,9 +8,11 @@ const { devDependencies, version } = require("./package.json");
 const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
 const { CommonsChunkPlugin } = webpack.optimize;
 
+const BUTTERCUP_ENTRY = "buttercup/dist/buttercup-web.js";
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
 const RESOURCES = path.resolve(__dirname, "./resources");
+const NODE_MODULES = path.resolve(__dirname, "./node_modules");
 const INDEX_TEMPLATE = path.resolve(RESOURCES, "./template.pug");
 const MANIFEST = path.resolve(RESOURCES, "./manifest.json");
 const CHANGELOG = path.resolve(__dirname, "./CHANGELOG.md");
@@ -35,7 +37,8 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
             rules: [
                 {
                     test: /\.jsx?$/,
-                    exclude: /node_modules/,
+                    // exclude: /node_modules/,
+                    include: [SOURCE, path.join(NODE_MODULES, "buttercup")],
                     use: "babel-loader"
                 },
                 {
@@ -123,8 +126,9 @@ function getBasePlugins() {
 const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
-        vendor: [...REDUX_PACKAGES, "buttercup"],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
+        vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
+        google: ["google-auth-library"]
     },
 
     output: {
@@ -164,7 +168,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
 const popupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_POPUP, "./index.js"),
-        vendor: [...REDUX_PACKAGES, "buttercup"],
+        vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
     },
 
@@ -191,7 +195,7 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
 const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_SETUP, "./index.js"),
-        vendor: [...REACT_PACKAGES, "dropbox", "webdav", "buttercup"],
+        vendor: [...REACT_PACKAGES, "dropbox", "webdav", BUTTERCUP_ENTRY],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client"]
     },
 
@@ -218,7 +222,7 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
 const dialogConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_DIALOG, "./index.js"),
-        vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES, "buttercup"],
+        vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES, BUTTERCUP_ENTRY],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
     },
 

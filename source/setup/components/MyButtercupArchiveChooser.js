@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Icon } from "@blueprintjs/core";
+import {
+    Button,
+    ButtonGroup,
+    Card,
+    ControlGroup,
+    FormGroup,
+    Icon,
+    InputGroup,
+    Intent,
+    Spinner
+} from "@blueprintjs/core";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -20,14 +30,18 @@ const OrgnanisationShape = PropTypes.shape({
     type: PropTypes.oneOf([ORG_TYPE_PERSONAL, ORG_TYPE_TEAM]).isRequired
 });
 
-const Container = styled.div`
-    border: 1px solid #eee;
-    border-radius: 4px;
+// const Container = styled.div`
+//     border: 1px solid #eee;
+//     border-radius: 4px;
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: flex-start;
+//     align-items: flex-start;
+// `;
+const ButtonsRight = styled.div`
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    text-align: right;
 `;
 const OrganisationRow = styled.div`
     width: 100%;
@@ -88,17 +102,41 @@ const ArchiveTitle = styled.span`
     font-size: 14px;
     margin-left: 6px;
 `;
+const SectionHeader = styled.h4`
+    margin-top: 0px;
+    font-size: 16px;
+`;
+const LoadingSpinner = styled(Spinner)`
+    margin-top: 24px;
+    margin-bottom: 24px;
+`;
+const OptionCard = styled(Card)`
+    margin-bottom: 18px;
+`;
 
 class MyButtercupArchiveChooser extends Component {
     static propTypes = {
-        onReady: PropTypes.func.isRequired,
+        accountReady: PropTypes.bool.isRequired,
+        onInitialise: PropTypes.func.isRequired,
         organisationArchives: PropTypes.objectOf(PropTypes.arrayOf(ArchiveShape)).isRequired,
         organisations: PropTypes.arrayOf(OrgnanisationShape).isRequired,
         selectedArchives: PropTypes.arrayOf(PropTypes.number).isRequired
     };
 
-    componentWillMount() {
-        this.props.onReady();
+    state = {
+        editingMasterPassword: "",
+        masterPassword: null
+    };
+
+    // componentWillMount() {
+    // this.props.onInitialised();
+    // }
+
+    handleAccountInit() {
+        this.setState({
+            masterPassword: this.state.editingMasterPassword
+        });
+        this.props.onInitialise(this.state.editingMasterPassword);
     }
 
     handleArchiveRowClick(event, archiveID) {
@@ -107,40 +145,82 @@ class MyButtercupArchiveChooser extends Component {
     }
 
     render() {
+        console.log(this.props.organisationArchives);
         return (
-            <Container>
-                <For each="organisation" of={this.props.organisations}>
-                    <OrganisationRow key={`org-${organisation.id}`}>
-                        <OrganisationIcon own={organisation.type === ORG_TYPE_PERSONAL}>
-                            <Choose>
-                                <When condition={organisation.type === ORG_TYPE_PERSONAL}>
-                                    <Icon icon="person" />
-                                </When>
-                                <When condition={organisation.type === ORG_TYPE_TEAM}>
-                                    <Icon icon="people" />
-                                </When>
-                            </Choose>
-                        </OrganisationIcon>
-                        <OrganisationTitle>{organisation.name}</OrganisationTitle>
-                    </OrganisationRow>
-                    <If condition={this.props.organisationArchives.hasOwnProperty(`org-${organisation.id}`)}>
-                        <For each="archive" of={this.props.organisationArchives[`org-${organisation.id}`]}>
-                            <ArchiveRow
-                                key={`archive-${archive.id}`}
-                                onClick={event => this.handleArchiveRowClick(event, archive.id)}
-                            >
-                                <ArchiveRowCheckbox>
-                                    <If condition={this.props.selectedArchives.includes(archive.id)}>
-                                        <Icon icon="tick" />
-                                    </If>
-                                </ArchiveRowCheckbox>
-                                <ArchiveRowIcon />
-                                <ArchiveTitle>{archive.name}</ArchiveTitle>
-                            </ArchiveRow>
+            <>
+                <If
+                    condition={
+                        !this.state.masterPassword || (this.state.masterPassword && this.state.editingMasterPassword)
+                    }
+                >
+                    <OptionCard>
+                        <SectionHeader>Account Password</SectionHeader>
+                        <p>Please enter your account's master password for unlocking your vaults:</p>
+                        <FormGroup>
+                            <ControlGroup>
+                                <InputGroup
+                                    fill
+                                    onChange={evt => this.setState({ editingMasterPassword: evt.target.value })}
+                                    placeholder="Master Password"
+                                    type="password"
+                                    value={this.state.editingMasterPassword}
+                                    disabled={!!this.state.masterPassword}
+                                />
+                                <Button
+                                    disabled={
+                                        this.state.editingMasterPassword.length <= 0 || !!this.state.masterPassword
+                                    }
+                                    icon="offline"
+                                    intent={Intent.PRIMARY}
+                                    onClick={::this.handleAccountInit}
+                                >
+                                    Authenticate
+                                </Button>
+                            </ControlGroup>
+                        </FormGroup>
+                    </OptionCard>
+                </If>
+                <If condition={this.state.masterPassword && !this.props.accountReady}>
+                    <LoadingSpinner />
+                </If>
+                <If condition={this.props.accountReady}>
+                    <OptionCard>
+                        <SectionHeader>Account Vaults</SectionHeader>
+                        <p>The following organisations and vaults will be connected:</p>
+                        <For each="organisation" of={this.props.organisations}>
+                            <OrganisationRow key={`org-${organisation.id}`}>
+                                <OrganisationIcon own={organisation.type === ORG_TYPE_PERSONAL}>
+                                    <Choose>
+                                        <When condition={organisation.type === ORG_TYPE_PERSONAL}>
+                                            <Icon icon="person" />
+                                        </When>
+                                        <When condition={organisation.type === ORG_TYPE_TEAM}>
+                                            <Icon icon="people" />
+                                        </When>
+                                    </Choose>
+                                </OrganisationIcon>
+                                <OrganisationTitle>{organisation.name}</OrganisationTitle>
+                            </OrganisationRow>
+                            <If condition={this.props.organisationArchives.hasOwnProperty(`org-${organisation.id}`)}>
+                                <For each="archive" of={this.props.organisationArchives[`org-${organisation.id}`]}>
+                                    <ArchiveRow
+                                        key={`archive-${archive.id}`}
+                                        onClick={event => this.handleArchiveRowClick(event, archive.id)}
+                                    >
+                                        <ArchiveRowCheckbox>
+                                            <If condition={this.props.selectedArchives.includes(archive.id)}>
+                                                <Icon icon="tick" />
+                                            </If>
+                                        </ArchiveRowCheckbox>
+                                        <ArchiveRowIcon />
+                                        <ArchiveTitle>{archive.name}</ArchiveTitle>
+                                    </ArchiveRow>
+                                </For>
+                            </If>
                         </For>
-                    </If>
-                </For>
-            </Container>
+                    </OptionCard>
+                </If>
+            </>
         );
     }
 }

@@ -199,13 +199,13 @@ class AddArchivePage extends PureComponent {
                         <Otherwise>{this.renderConnectionInfo()}</Otherwise>
                     </Choose>
                 </If>
-                <If condition={isTargetingMyButtercup && hasAuthenticatedMyButtercup}>
+                {/* <If condition={isTargetingMyButtercup && hasAuthenticatedMyButtercup}>
                     <h3>Choose Archive(s)</h3>
                     <MyButtercupArchiveChooser />
                     <If condition={this.props.selectedMyButtercupArchives.length > 0}>
                         {this.renderArchiveNameInput()}
                     </If>
-                </If>
+                </If> */}
             </LayoutMain>
         );
     }
@@ -346,9 +346,7 @@ class AddArchivePage extends PureComponent {
                     <When condition={this.props.selectedArchiveType === "mybuttercup"}>
                         <Card>
                             <H4>My Buttercup</H4>
-                            <p>
-                                To start, please grant Buttercup access to your My Buttercup account.
-                            </p>
+                            <p>To start, please grant Buttercup access to your My Buttercup account.</p>
                             <Button
                                 icon="key"
                                 onClick={::this.handleMyButtercupAuth}

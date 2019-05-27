@@ -6,10 +6,12 @@ import {
     ADD_ARCHIVE_SET_CONNECTING,
     ADD_ARCHIVE_SET_LOCAL_AUTH_KEY,
     ADD_ARCHIVE_SET_LOCAL_AUTH_STATUS,
+    ADD_ARCHIVE_SET_MYBCUP_ACN_READY,
     ADD_ARCHIVE_SET_SELECTED_TYPE
 } from "../actions/types.js";
 
 const INITIAL = {
+    accountReady: false,
     adding: false,
     connected: false,
     connecting: false,
@@ -63,6 +65,11 @@ export default function addArchiveReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 localAuthKey: action.payload
+            };
+        case ADD_ARCHIVE_SET_MYBCUP_ACN_READY:
+            return {
+                ...state,
+                accountReady: !!action.payload
             };
 
         default:
