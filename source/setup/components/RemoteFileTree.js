@@ -212,6 +212,7 @@ class RemoteFileTree extends Component {
             hasCaret: isDir,
             icon: isDir ? "folder-close" : "document",
             nodeData: directory,
+            disabled: !isDir && !/\.bcup$/i.test(directory.name),
             childNodes: this.props.directoriesLoading.includes(directory.path)
                 ? [
                       {
