@@ -16,7 +16,7 @@ const Overlay = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 2;
+    z-index: 50;
 `;
 const LoadingText = styled.div`
     font-size: 1.2rem;
