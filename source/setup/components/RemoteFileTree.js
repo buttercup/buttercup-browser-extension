@@ -89,8 +89,13 @@ class RemoteFileTree extends Component {
         openDirectories: ["/"]
     };
 
-    handleFileClick({ nodeData }, _, e) {
-        if (!nodeData || typeof nodeData.directories !== "undefined" || !/\.bcup$/i.test(nodeData.name)) {
+    handleNodeClick({ nodeData }, _, e) {
+        // handle directories
+        if (nodeData && typeof nodeData.directories !== "undefined") {
+            this.handleNodeToggle(...arguments);
+            return;
+            // ignore if it isn't a bcup file
+        } else if (!nodeData || !/\.bcup$/i.test(nodeData.name)) {
             e.preventDefault();
             return;
         }
@@ -163,6 +168,15 @@ class RemoteFileTree extends Component {
         this.setState({
             openDirectories: this.state.openDirectories.filter(dir => dir !== nodeData.path)
         });
+    }
+
+    handleNodeToggle({ nodeData }, _, e) {
+        const isExpanded = this.state.openDirectories.includes(nodeData.path);
+        if (isExpanded) {
+            this.handleNodeCollapse(...arguments);
+        } else {
+            this.handleNodeExpand(...arguments);
+        }
     }
 
     getTreeNewItem(parentPath) {
@@ -245,8 +259,8 @@ class RemoteFileTree extends Component {
                         contents={this.getTree(this.props.rootDirectory).childNodes}
                         onNodeExpand={::this.handleNodeExpand}
                         onNodeCollapse={::this.handleNodeCollapse}
-                        onNodeDoubleClick={::this.handleNodeExpand}
-                        onNodeClick={::this.handleFileClick}
+                        onNodeDoubleClick={::this.handleNodeToggle}
+                        onNodeClick={::this.handleNodeClick}
                     />
                 </Otherwise>
             </Choose>
