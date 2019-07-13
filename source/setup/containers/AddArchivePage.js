@@ -227,7 +227,7 @@ export default connect(
         ) => {
             const name = stripTags(archiveName);
             if (/^[^\s]/.test(name) !== true) {
-                notifyError(`Failed selecting ${type} vault`, `Vault name is invalid: ${name}`);
+                notifyError(`Failed selecting WebDAV vault`, `Vault name is invalid: ${name}`);
                 return;
             }
             const state = getState();
