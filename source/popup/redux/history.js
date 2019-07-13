@@ -1,3 +1,3 @@
-import createHistory from "history/createMemoryHistory";
+import { createMemoryHistory } from "history";
 
-export default createHistory();
+export default createMemoryHistory();
