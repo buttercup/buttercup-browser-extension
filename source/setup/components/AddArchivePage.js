@@ -197,7 +197,8 @@ class AddArchivePage extends PureComponent {
             .case("dropbox", ::this.handleChooseDropboxBasedFile)
             .case("googledrive", ::this.handleChooseGoogleDriveBasedFile)
             .case("localfile", ::this.handleChooseLocalBasedFile);
-        const onClickHandler = onClickTypeSwitch(this.props.selectedArchiveType);
+        const handleSubmit = onClickTypeSwitch(this.props.selectedArchiveType);
+
         return (
             <Fragment>
                 <FormGroup full label="Name" labelInfo="(required)" disabled={disabled}>
@@ -206,6 +207,7 @@ class AddArchivePage extends PureComponent {
                         disabled={disabled}
                         placeholder="Enter vault name..."
                         onChange={event => this.handleUpdateForm("archiveName", event)}
+                        onKeyPress={event => (event.key === "Enter" ? handleSubmit(event) : true)}
                         value={this.state.archiveName}
                     />
                 </FormGroup>
@@ -216,10 +218,11 @@ class AddArchivePage extends PureComponent {
                         placeholder="Enter vault password..."
                         type="password"
                         onChange={event => this.handleUpdateForm("masterPassword", event)}
+                        onKeyPress={event => (event.key === "Enter" ? handleSubmit(event) : true)}
                         value={this.state.masterPassword}
                     />
                 </FormGroup>
-                <Button fill disabled={disabled} onClick={onClickHandler}>
+                <Button fill disabled={disabled} onClick={handleSubmit}>
                     Save Vault
                 </Button>
             </Fragment>
@@ -346,6 +349,7 @@ class AddArchivePage extends PureComponent {
                                     disabled={hasAuthenticatedDesktop || !this.props.isConnected}
                                     loading={isAuthenticatingDesktop && !hasAuthenticatedDesktop}
                                     onChange={event => this.setState({ localCode: event.target.value.toUpperCase() })}
+                                    onKeyPress={e => (e.key === "Enter" ? this.handleConnectLocal(e) : true)}
                                     value={this.state.localCode}
                                 />
                             </FormGroup>
