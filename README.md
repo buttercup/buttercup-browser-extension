@@ -88,6 +88,14 @@ To use certain services like Google Drive, the client secret details must be pro
 }
 ```
 
+**Note:** During development you may need to edit the `manifest.json` with a [Content Security Policy](https://stackoverflow.com/a/56704432) of `'unsafe-eval'`. **Do not commit this change.**
+
+```json
+{
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
+```
+
 #### Chrome
 Run the following to develop the extension:
 
