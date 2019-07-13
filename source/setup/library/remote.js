@@ -25,7 +25,6 @@ export function connectWebDAV(url, username, password) {
             return;
         }
         log.error(`Failed establishing WebDAV connection: ${url}`);
-        throw new Error(`Connection failed to WebDAV service: ${url}`);
     });
 }
 
@@ -38,7 +37,8 @@ function getDropboxFSClient() {
         const state = getState();
         const authToken = getDropboxAuthToken(state);
         if (!authToken) {
-            throw new Error("Unable to create Dropbox client: No token found");
+            log.error("Unable to create Dropbox client: No token found");
+            return;
         }
         __dropboxClient = createDropboxFSClient(createDropboxClient(authToken));
     }
@@ -62,7 +62,8 @@ function getGoogleDriveClient() {
         const state = getState();
         const accessToken = getGoogleDriveAccessToken(state);
         if (!accessToken) {
-            throw new Error("Unable to create Google Drive client: No token found");
+            log.error("Unable to create Google Drive client: No token found");
+            return;
         }
         __googleDriveClient = createGoogleDriveClient(accessToken);
     }
