@@ -91,8 +91,9 @@ To use certain services like Google Drive, the client secret details must be pro
 #### Chrome
 Run the following to develop the extension:
 
- * Execute `npm run dev` to build and watch the project (to build production code, execute `npm run build`)
- * Add the `./dist` directory to the browser of your choice as an _unpacked extension_
+ 1. Execute `npm run dev` to build and watch the project (to build production code, execute `npm run build`)
+ 2. Go to [chrome://extensions](chrome://extensions) and enable _"Developer mode"_
+ 3. Select the new button _"Load unpacked"_, then select the `./dist` directory built on step 1
 
 #### Firefox
 Run the following to develop the extension:
