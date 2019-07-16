@@ -13,6 +13,11 @@ const Container = styled.div`
     padding: 0.5rem 0.5rem 0.25rem;
 `;
 
+const ArchiveMenu = styled(Menu)`
+    max-height: 250px;
+    overflow: auto;
+`;
+
 class HeaderBar extends PureComponent {
     static propTypes = {
         archives: ArchivesShape,
@@ -46,7 +51,7 @@ class HeaderBar extends PureComponent {
     render() {
         const { archives, location, darkMode } = this.props;
         const archiveMenu = (
-            <Menu>
+            <ArchiveMenu>
                 <If condition={archives.length > 0}>
                     <MenuDivider title="Vaults:" />
                     <For each="vault" of={archives} index="index">
@@ -63,7 +68,7 @@ class HeaderBar extends PureComponent {
                 <MenuItem text="Add Vault" icon="add" onClick={::this.props.onAddVaultClick} />
                 <MenuItem text="Lock All Vaults" icon="lock" onClick={::this.props.onLockAllClick} />
                 <MenuItem icon="numbered-list" text="Manage Vaults" onClick={this.props.onVaultsClick} />
-            </Menu>
+            </ArchiveMenu>
         );
         const optionsMenu = (
             <Menu>
