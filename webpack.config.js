@@ -124,8 +124,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
         vendor: [...REDUX_PACKAGES, "buttercup"],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
-        google: ["google-auth-library"]
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
     },
 
     output: {
@@ -156,7 +155,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
             }
         ]),
         new CommonsChunkPlugin({
-            names: ["vendor", "buttercup", "google"],
+            names: ["vendor", "buttercup"],
             minChunks: Infinity
         })
     ]

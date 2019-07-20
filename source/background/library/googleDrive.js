@@ -1,8 +1,7 @@
 import watch from "redux-watch";
 import ms from "ms";
 import uuid from "uuid/v4";
-import sleep from "sleep-promise";
-import { OAuth2Client } from "google-auth-library";
+import { OAuth2Client } from "@buttercup/google-oauth2-client";
 import store, { dispatch, getState } from "../redux/index.js";
 import { setAccessToken, setAuthID, setAuthCode, setRefreshToken } from "../../shared/actions/googleDrive.js";
 import { performAuthentication } from "../../shared/library/googleDrive.js";
@@ -10,7 +9,6 @@ import { getAuthID, getAuthCode } from "../../shared/selectors/googleDrive.js";
 import { closeTabs, createNewTab } from "../../shared/library/extension.js";
 import { getArchiveManager } from "./buttercup.js";
 import secrets from "../../../secrets.json";
-import { resolve } from "dns";
 
 const OAUTH_REDIRECT_URL = "https://buttercup.pw?googleauth";
 
@@ -59,10 +57,6 @@ export async function authenticateWithRefreshToken(accessToken, refreshToken) {
     dispatch(setAuthCode(null));
     dispatch(setAccessToken(null));
     const oauth2Client = getOAuthClient();
-    oauth2Client.setCredentials({
-        access_token: accessToken,
-        refresh_token: refreshToken
-    });
     const results = await oauth2Client.refreshToken(refreshToken);
     const { access_token: newAccessToken } = results.tokens;
     dispatch(setAccessToken(newAccessToken));
