@@ -1,5 +1,17 @@
 # Buttercup browser extension changelog
 
+## v2.8.0
+_2019-07-23_
+
+ * **Bugfix**:
+   * ([#253](https://github.com/buttercup/buttercup-browser-extension/issues/253)) Vault saving via editing UI
+ * ([#259](https://github.com/buttercup/buttercup-browser-extension/pull/259)) General improvements to the add-vault page
+ * Unlock button on in-page dialog when vaults are locked
+ * Unlock button for single-vault now navigates to edit page
+ * TOTP / HOTP support via vault UI (display only, no form-fill)
+ * Entry value type support via vault UI
+ * Updated Dropbox/Google Drive clients for compatibiltiy
+
 ## v2.7.0
 _2019-04-28_
 
