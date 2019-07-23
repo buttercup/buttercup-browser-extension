@@ -3,6 +3,7 @@ import SearchPage from "../components/SearchPage.js";
 import { getSourcesCount } from "../../shared/selectors/searching.js";
 import { getTopURL } from "../library/context.js";
 import { searchEntriesForURL } from "../../shared/library/messaging.js";
+import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
 export default connect(
     (state, ownProps) => ({
@@ -15,6 +16,9 @@ export default connect(
                 .catch(err => {
                     console.error(err);
                 });
+        },
+        onUnlockAllArchives: () => () => {
+            createNewTab(getExtensionURL("setup.html#/unlock"));
         }
     }
 )(SearchPage);
