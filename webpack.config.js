@@ -163,11 +163,13 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
 
 const popupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
-        popup: path.resolve(SRC_POPUP, "./index.js")
+        index: path.resolve(SRC_POPUP, "./index.js"),
+        vendor: [...REDUX_PACKAGES, "buttercup"],
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
     },
 
     output: {
-        filename: "[name].js",
+        filename: "popup-[name].js",
         path: DIST
     },
 
@@ -178,6 +180,10 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
             template: INDEX_TEMPLATE,
             filename: "popup.html",
             inject: "body"
+        }),
+        new CommonsChunkPlugin({
+            names: ["vendor", "buttercup"],
+            minChunks: Infinity
         })
     ]
 });
