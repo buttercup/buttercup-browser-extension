@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import { push } from "react-router-redux";
 import delay from "yoctodelay";
 import VError from "verror";
 import VaultPage from "../components/VaultPage.js";
@@ -64,16 +65,21 @@ export default connect(
                     });
             }
         },
-        onUnlockArchive: (sourceID, masterPassword) => dispatch => {
+        onUnlockArchive: (sourceID, masterPassword, completeAction = "edit") => dispatch => {
             dispatch(setBusy("Unlocking archive..."));
             dispatch(setEditing(true));
             unlockArchive(sourceID, masterPassword)
                 .then(() => {
                     dispatch(unsetBusy());
+                    dispatch(setEditing(false));
                     notifySuccess("Archive unlocked", "Successfully unlocked archive");
-                    setTimeout(() => {
-                        closeCurrentTab();
-                    }, 1250);
+                    if (completeAction === "close") {
+                        setTimeout(() => {
+                            closeCurrentTab();
+                        }, 1250);
+                    } else if (completeAction === "edit") {
+                        dispatch(push(`/access-archive/${sourceID}/unlocked`));
+                    }
                 })
                 .catch(err => {
                     dispatch(setEditing(false));
