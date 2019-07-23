@@ -25,8 +25,8 @@ export default connect(
             dispatch(setBusy("Saving vault"));
             applyArchiveFacade(sourceID, facade)
                 .then(() => getArchiveFacade(sourceID))
-                .then(facade => {
-                    dispatch(setVaultFacade(facade));
+                .then(updatedFacade => {
+                    dispatch(setVaultFacade(updatedFacade));
                 })
                 .then(() => {
                     dispatch(unsetBusy());
@@ -35,6 +35,7 @@ export default connect(
                 .catch(err => {
                     console.error(err);
                     notifyError("Failed updating archive", `Unable to update archive (${sourceID}): ${err.message}`);
+                    dispatch(unsetBusy());
                 });
         }
     }

@@ -73,9 +73,7 @@ function handleMessage(request, sender, sendResponse) {
             const { sourceID, facade } = request;
             getArchive(sourceID)
                 .then(archive => {
-                    // const facade = createArchiveFacade(archive);
                     consumeArchiveFacade(archive, facade);
-                    // sendResponse({ ok: true, facade });
                     return saveSource(sourceID);
                 })
                 .then(() => {

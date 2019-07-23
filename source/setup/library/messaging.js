@@ -27,7 +27,7 @@ export function applyArchiveFacade(sourceID, facade) {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "apply-vault-facade", sourceID, facade }, resp => {
             if (resp && resp.ok) {
-                resolve(resp.facade);
+                resolve();
             } else {
                 reject(new Error(`Failed applying vault facade: ${(resp && resp.error) || "Unknown error"}`));
             }
