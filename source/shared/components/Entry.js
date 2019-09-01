@@ -15,6 +15,7 @@ import {
     Dialog
 } from "@blueprintjs/core";
 import { SiteIcon } from "@buttercup/ui";
+import { FIELD_VALUE_TYPE_PASSWORD } from "@buttercup/facades";
 import { EntryShape } from "../prop-types/entry.js";
 import { writeToClipboard } from "../library/browser.js";
 
@@ -93,7 +94,9 @@ class SearchResult extends PureComponent {
     handleCopyToClipboard(property, facade = true) {
         const { entry } = this.props;
         if (facade) {
-            const field = entry.facade.fields.find(item => item.property === property && item.field === "property");
+            const field = entry.facade.fields.find(
+                item => item.property === property && item.propertyType === "property"
+            );
             if (field) {
                 writeToClipboard(field.value);
             }
@@ -121,28 +124,32 @@ class SearchResult extends PureComponent {
     renderEntryDetails() {
         const { entry } = this.props;
         const { uncovered } = this.state;
-        const fields = entry.facade.fields.filter(field => field.removeable === false && field.property !== "title");
+        const fields = entry.facade.fields.filter(
+            field => field.removeable === false && field.property !== "title" && field.propertyType === "property"
+        );
         return (
             <Details className={Classes.DIALOG_BODY}>
                 <For each="field" of={fields}>
-                    <FormGroup key={field.property} label={field.title}>
-                        <ControlGroup>
-                            <InputGroup
-                                className={Classes.FILL}
-                                value={field.value ? field.value : ""}
-                                readOnly
-                                type={field.secret && !uncovered.includes(field.property) ? "password" : "text"}
-                            />
-                            <If condition={field.secret}>
-                                <Button
-                                    active={uncovered.includes(field.property)}
-                                    icon={uncovered.includes(field.property) ? "eye-open" : "eye-off"}
-                                    onClick={() => this.toggleSecretCover(field.property)}
+                    <With isSecret={field.valueType === FIELD_VALUE_TYPE_PASSWORD}>
+                        <FormGroup key={field.property} label={field.title}>
+                            <ControlGroup>
+                                <InputGroup
+                                    className={Classes.FILL}
+                                    value={field.value ? field.value : ""}
+                                    readOnly
+                                    type={isSecret && !uncovered.includes(field.property) ? "password" : "text"}
                                 />
-                            </If>
-                            <Button icon="clipboard" onClick={() => this.handleCopyToClipboard(field.property)} />
-                        </ControlGroup>
-                    </FormGroup>
+                                <If condition={isSecret}>
+                                    <Button
+                                        active={uncovered.includes(field.property)}
+                                        icon={uncovered.includes(field.property) ? "eye-open" : "eye-off"}
+                                        onClick={() => this.toggleSecretCover(field.property)}
+                                    />
+                                </If>
+                                <Button icon="clipboard" onClick={() => this.handleCopyToClipboard(field.property)} />
+                            </ControlGroup>
+                        </FormGroup>
+                    </With>
                 </For>
             </Details>
         );
