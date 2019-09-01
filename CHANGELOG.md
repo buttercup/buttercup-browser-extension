@@ -1,10 +1,16 @@
 # Buttercup browser extension changelog
 
+## v2.8.1
+_2019-09-01_
+
+ * **Bugfix**:
+   * ([#253](https://github.com/buttercup/buttercup-browser-extension/issues/253)) Vault saving via editing UI (second attempt)
+
 ## v2.8.0
 _2019-07-23_
 
  * **Bugfix**:
-   * ([#253](https://github.com/buttercup/buttercup-browser-extension/issues/253)) Vault saving via editing UI
+   * ~~([#253](https://github.com/buttercup/buttercup-browser-extension/issues/253)) Vault saving via editing UI~~
  * ([#259](https://github.com/buttercup/buttercup-browser-extension/pull/259)) General improvements to the add-vault page
  * Unlock button on in-page dialog when vaults are locked
  * Unlock button for single-vault now navigates to edit page
