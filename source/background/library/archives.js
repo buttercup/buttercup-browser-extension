@@ -389,6 +389,7 @@ export function removeSource(sourceID) {
 }
 
 export function saveSource(sourceID) {
+    log.info(`Preparing to save source: ${sourceID}`);
     return getArchiveManager().then(archiveManager => {
         const source = archiveManager.getSourceForID(sourceID);
         if (!source) {
@@ -398,8 +399,23 @@ export function saveSource(sourceID) {
         return archiveManager.interruptAutoUpdate(() =>
             workspace
                 .localDiffersFromRemote()
-                .then(differs => (differs ? workspace.mergeFromRemote().then(() => true) : false))
-                .then(shouldSave => (shouldSave ? workspace.save() : null))
+                .then(differs => {
+                    if (differs) {
+                        log.info(` -> Remote source differs, will merge before save: ${sourceID}`);
+                    } else {
+                        log.info(` -> Remote source is the same, no merge/save necessary: ${sourceID}`);
+                    }
+                    return differs ? workspace.mergeFromRemote().then(() => true) : false;
+                })
+                .then(shouldSave => {
+                    // (shouldSave ? workspace.save() : null)
+                    if (!shouldSave) {
+                        return null;
+                    }
+                    return workspace.save().then(() => {
+                        log.info(` -> Saved source: ${sourceID}`);
+                    });
+                })
         );
     });
 }

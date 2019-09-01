@@ -71,6 +71,7 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "apply-vault-facade": {
             const { sourceID, facade } = request;
+            log.info(`Apply vault facade update for source: ${sourceID}`);
             getArchive(sourceID)
                 .then(archive => {
                     consumeArchiveFacade(archive, facade);
