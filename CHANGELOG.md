@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.8.2
+_2019-09-01_
+
+ * **Bugfix**:
+   * ([#269](https://github.com/buttercup/buttercup-browser-extension/issues/269)) Password field in popup menu not copy-able and always visible
+
 ## v2.8.1
 _2019-09-01_
 
