@@ -7,34 +7,39 @@ export const ARCHIVE_TYPES = [
     {
         type: "mybuttercup",
         title: "My Buttercup",
-        image: require("../../../resources/providers/mybuttercup-256.png")
+        image: require("../../../resources/providers/mybuttercup-256.png"),
+        invertOnDarkMode: false
     },
     {
         type: "dropbox",
         title: "Dropbox",
-        image: require("../../../resources/providers/dropbox-256.png")
+        image: require("../../../resources/providers/dropbox-256.png"),
+        invertOnDarkMode: false
     },
     {
         type: "googledrive",
         title: "Google Drive",
-        image: require("../../../resources/providers/googledrive-256.png")
+        image: require("../../../resources/providers/googledrive-256.png"),
+        invertOnDarkMode: false
     },
     {
         type: "webdav",
         title: "WebDAV",
-        image: require("../../../resources/providers/webdav-256.png")
+        image: require("../../../resources/providers/webdav-256.png"),
+        invertOnDarkMode: true
     },
     {
         type: "localfile",
-        title: "Computer",
-        image: require("../../../resources/providers/chip.svg")
+        title: "Local Disk",
+        image: require("../../../resources/providers/chip.svg"),
+        invertOnDarkMode: true
     }
 ];
 
 const ArchiveTypeImage = styled.img`
     width: 2rem;
     height: 2rem;
-    ${p => (p.darkMode ? "filter: brightness(0) invert(1);" : "")};
+    ${p => (p.darkMode && p.invertOnDarkMode ? "filter: brightness(0) invert(1);" : "")};
 `;
 const VaultContainer = styled.div`
     display: flex;
@@ -72,7 +77,11 @@ class ArchiveTypeChooser extends PureComponent {
                         disabled={this.props.disabled}
                         icon={
                             <VaultContainer>
-                                <ArchiveTypeImage darkMode={this.props.darkMode} src={provider.image} />{" "}
+                                <ArchiveTypeImage
+                                    darkMode={this.props.darkMode}
+                                    invertOnDarkMode={provider.invertOnDarkMode}
+                                    src={provider.image}
+                                />{" "}
                                 <Text className={Classes.TEXT_MUTED}>{provider.title}</Text>
                             </VaultContainer>
                         }
