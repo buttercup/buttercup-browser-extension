@@ -128,7 +128,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
         vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
-        google: ["google-auth-library"]
+        google: ["@buttercup/google-oauth2-client"]
     },
 
     output: {
