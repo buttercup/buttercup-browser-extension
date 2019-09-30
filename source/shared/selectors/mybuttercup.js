@@ -1,21 +1,13 @@
 const KEY = "myButtercup";
 
+export function getAccessToken(state) {
+    return state[KEY].accessToken;
+}
+
 export function getAuthID(state) {
     return state[KEY].authenticationID;
 }
 
-export function getAuthToken(state) {
-    return state[KEY].authToken;
-}
-
-export function getOrganisationArchives(state) {
-    return state[KEY].organisationArchives;
-}
-
-export function getOrganisations(state) {
-    return state[KEY].organisations;
-}
-
-export function getSelectedArchives(state) {
-    return state[KEY].selectedArchives;
+export function getRefreshToken(state) {
+    return state[KEY].refreshToken;
 }

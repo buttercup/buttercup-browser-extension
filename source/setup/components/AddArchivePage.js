@@ -7,7 +7,6 @@ import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/u
 import switchcase from "switchcase";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
-import MyButtercupArchiveChooser from "../containers/MyButtercupArchiveChooser.js";
 import { ARCHIVE_TYPES } from "./ArchiveTypeChooser.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
 
@@ -34,13 +33,15 @@ class AddArchivePage extends PureComponent {
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
         localAuthStatus: PropTypes.string.isRequired,
+        myButtercupAccessToken: PropTypes.string,
+        myButtercupRefreshToken: PropTypes.string,
         onAuthenticateDesktop: PropTypes.func.isRequired,
         onAuthenticateDropbox: PropTypes.func.isRequired,
         onAuthenticateMyButtercup: PropTypes.func.isRequired,
         onChooseDropboxBasedArchive: PropTypes.func.isRequired,
         onChooseGoogleDriveBasedArchive: PropTypes.func.isRequired,
         onChooseLocallyBasedArchive: PropTypes.func.isRequired,
-        onChooseMyButtercupArchives: PropTypes.func.isRequired,
+        onChooseMyButtercupArchive: PropTypes.func.isRequired,
         onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
         onConnectDesktop: PropTypes.func.isRequired,
         onConnectWebDAVBasedSource: PropTypes.func.isRequired,
@@ -49,8 +50,7 @@ class AddArchivePage extends PureComponent {
         onSelectRemotePath: PropTypes.func.isRequired,
         selectedArchiveType: PropTypes.string,
         selectedFilename: PropTypes.string,
-        selectedFilenameNeedsCreation: PropTypes.bool.isRequired,
-        selectedMyButtercupArchives: PropTypes.arrayOf(PropTypes.number).isRequired
+        selectedFilenameNeedsCreation: PropTypes.bool.isRequired
     };
 
     // We store some details in the state, because they're sensitive. No point
@@ -61,6 +61,7 @@ class AddArchivePage extends PureComponent {
         googleDriveAuthenticationID: "",
         localCode: "",
         masterPassword: "",
+        myButtercupAuthenticationID: "",
         remoteURL: "",
         remoteUsername: "",
         remotePassword: ""
@@ -108,12 +109,11 @@ class AddArchivePage extends PureComponent {
 
     handleChooseMyButtercupBasedFile(event) {
         event.preventDefault();
-        this.props.onChooseMyButtercupArchives(this.state.masterPassword);
+        this.props.onChooseMyButtercupArchive(this.state.masterPassword);
     }
 
     handleChooseWebDAVBasedFile(event) {
         event.preventDefault();
-        // We send the remote credentials as these should never touch Redux
         this.props.onChooseWebDAVBasedArchive(
             this.props.selectedArchiveType,
             this.state.archiveName,
@@ -142,6 +142,7 @@ class AddArchivePage extends PureComponent {
     handleMyButtercupAuth(event) {
         event.preventDefault();
         this.props.onAuthenticateMyButtercup(this.state.myButtercupAuthenticationID);
+        this.props.onSelectRemotePath("-");
     }
 
     handleUpdateForm(property, event) {
@@ -160,7 +161,7 @@ class AddArchivePage extends PureComponent {
         const hasAuthenticatedGoogleDrive = typeof this.props.googleDriveAccessToken === "string";
         const hasAuthenticatedMyButtercup =
             this.props.myButtercupAuthID === this.state.myButtercupAuthenticationID &&
-            !!this.props.myButtercupAuthToken;
+            !!this.props.myButtercupAccessToken;
         const hasAuthenticated =
             (isTargetingWebDAV && this.props.isConnected) ||
             (isTargetingDropbox && hasAuthenticatedDropbox) ||
@@ -184,28 +185,35 @@ class AddArchivePage extends PureComponent {
                         <When condition={hasAuthenticated}>
                             <H4>Choose or Create Vault</H4>
                             <SplitView>
-                                <RemoteExplorerCard>
-                                    <RemoteExplorer
-                                        onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
-                                        onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
-                                        selectedFilename={this.props.selectedFilename}
-                                        selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
-                                        fetchType={fetchType}
-                                    />
-                                </RemoteExplorerCard>
+                                <Choose>
+                                    <When condition={this.props.selectedArchiveType === "mybuttercup"}>
+                                        <Card>
+                                            <H4>Your Buttercup Account</H4>
+                                            <p>
+                                                Your vault is ready to be connected! The last step is to enter your
+                                                master password, which is used for local encryption/decryption of your
+                                                vault.
+                                            </p>
+                                        </Card>
+                                    </When>
+                                    <Otherwise>
+                                        <RemoteExplorerCard>
+                                            <RemoteExplorer
+                                                onCreateRemotePath={path => this.props.onCreateRemotePath(path)}
+                                                onSelectRemotePath={path => this.props.onSelectRemotePath(path)}
+                                                selectedFilename={this.props.selectedFilename}
+                                                selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
+                                                fetchType={fetchType}
+                                            />
+                                        </RemoteExplorerCard>
+                                    </Otherwise>
+                                </Choose>
                                 <Card>{this.renderArchiveNameInput()}</Card>
                             </SplitView>
                         </When>
                         <Otherwise>{this.renderConnectionInfo()}</Otherwise>
                     </Choose>
                 </If>
-                {/* <If condition={isTargetingMyButtercup && hasAuthenticatedMyButtercup}>
-                    <h3>Choose Archive(s)</h3>
-                    <MyButtercupArchiveChooser />
-                    <If condition={this.props.selectedMyButtercupArchives.length > 0}>
-                        {this.renderArchiveNameInput()}
-                    </If>
-                </If> */}
             </LayoutMain>
         );
     }
@@ -220,19 +228,20 @@ class AddArchivePage extends PureComponent {
             .case("mybuttercup", ::this.handleChooseMyButtercupBasedFile)
             .case("localfile", ::this.handleChooseLocalBasedFile);
         const handleSubmit = onClickTypeSwitch(this.props.selectedArchiveType);
-
         return (
             <Fragment>
-                <FormGroup full label="Name" labelInfo="(required)" disabled={disabled}>
-                    <InputGroup
-                        leftIcon="tag"
-                        disabled={disabled}
-                        placeholder="Enter vault name..."
-                        onChange={event => this.handleUpdateForm("archiveName", event)}
-                        onKeyPress={event => (event.key === "Enter" ? handleSubmit(event) : true)}
-                        value={this.state.archiveName}
-                    />
-                </FormGroup>
+                <If condition={this.props.selectedArchiveType !== "mybuttercup"}>
+                    <FormGroup full label="Name" labelInfo="(required)" disabled={disabled}>
+                        <InputGroup
+                            leftIcon="tag"
+                            disabled={disabled}
+                            placeholder="Enter vault name..."
+                            onChange={event => this.handleUpdateForm("archiveName", event)}
+                            onKeyPress={event => (event.key === "Enter" ? handleSubmit(event) : true)}
+                            value={this.state.archiveName}
+                        />
+                    </FormGroup>
+                </If>
                 <FormGroup full label="Master Password" labelInfo="(required)" disabled={disabled}>
                     <InputGroup
                         leftIcon="lock"
@@ -260,7 +269,7 @@ class AddArchivePage extends PureComponent {
         const isAuthenticatingGoogleDrive = this.props.googleDriveAuthID === this.state.googleDriveAuthenticationID;
         const hasAuthenticatedGoogleDrive = isAuthenticatingGoogleDrive && this.props.googleDriveAccessToken;
         const isAuthenticatingMyButtercup = this.props.myButtercupAuthID === this.state.myButtercupAuthenticationID;
-        const hasAuthenticatedMyButtercup = isAuthenticatingMyButtercup && this.props.myButtercupAuthToken;
+        const hasAuthenticatedMyButtercup = isAuthenticatingMyButtercup && this.props.myButtercupAccessToken;
         const isAuthenticatingDesktop = this.props.localAuthStatus === "authenticating";
         const hasAuthenticatedDesktop = this.props.localAuthStatus === "authenticated";
         const isWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);

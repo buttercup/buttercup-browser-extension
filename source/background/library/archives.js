@@ -13,6 +13,7 @@ import { getState } from "../redux/index.js";
 import { getConfigKey } from "../../shared/selectors/app.js";
 import "../../shared/library/LocalFileDatasource.js";
 import log from "../../shared/library/log.js";
+import { MYBUTTERCUP_CLIENT_ID, MYBUTTERCUP_CLIENT_SECRET } from "../../shared/library/myButtercup.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 
 const { WebDAVDatasource } = Datasources;
@@ -150,29 +151,24 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
 }
 
 export function addMyButtercupArchive(payload) {
-    const { archives, masterPassword, authToken } = payload;
-    log.info("Attempting to connect My Buttercup archive(s)");
+    const { masterPassword, accessToken, refreshToken } = payload;
+    log.info("Attempting to connect My Buttercup vault");
     return getArchiveManager().then(archiveManager => {
-        let additionsWork = Promise.resolve();
-        archives.forEach(({ orgID, archiveID, name }) => {
-            additionsWork = additionsWork.then(() => {
-                log.info(` -> My Buttercup archive: ${name} (${archiveID})`);
-                const myBcupCreds = new Credentials("mybuttercup");
-                myBcupCreds.setValue("datasource", {
-                    type: "mybuttercup",
-                    token: authToken,
-                    archiveID
-                });
-                return Promise.all([
-                    myBcupCreds.toSecureString(masterPassword),
-                    Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
-                ]).then(([sourceCreds, archiveCreds]) => {
-                    const source = new ArchiveSource(name, sourceCreds, archiveCreds);
-                    return archiveManager.addSource(source).then(() => source.unlock(masterPassword));
-                });
-            });
+        const myBcupCreds = new Credentials("mybuttercup");
+        myBcupCreds.setValue("datasource", {
+            type: "mybuttercup",
+            accessToken,
+            refreshToken,
+            clientID: MYBUTTERCUP_CLIENT_ID,
+            clientSecret: MYBUTTERCUP_CLIENT_SECRET
         });
-        return additionsWork;
+        return Promise.all([
+            myBcupCreds.toSecureString(masterPassword),
+            Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+        ]).then(([sourceCreds, archiveCreds]) => {
+            const source = new ArchiveSource("Test MyBcup Name", sourceCreds, archiveCreds);
+            return archiveManager.addSource(source).then(() => source.unlock(masterPassword));
+        });
     });
 }
 

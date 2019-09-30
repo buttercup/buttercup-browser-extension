@@ -14,7 +14,7 @@ export const ARCHIVE_TYPES = [
         type: "dropbox",
         title: "Dropbox",
         image: require("../../../resources/providers/dropbox-256.png"),
-        invertOnDarkMode: false
+        invertOnDarkMode: true
     },
     {
         type: "googledrive",

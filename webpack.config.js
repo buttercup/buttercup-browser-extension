@@ -38,7 +38,11 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
                 {
                     test: /\.jsx?$/,
                     // exclude: /node_modules/,
-                    include: [SOURCE, path.join(NODE_MODULES, "buttercup")],
+                    include: [
+                        SOURCE,
+                        // path.join(NODE_MODULES, "buttercup"),
+                        require.resolve("buttercup/dist/buttercup-web.min.js")
+                    ],
                     use: "babel-loader"
                 },
                 {

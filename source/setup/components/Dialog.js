@@ -11,12 +11,12 @@ const Dialog = styled.div`
         `
         box-sizing: border-box;
         width: 90vw !important;
-        height: 81vh !important;
+        height: 90vh !important;
     `} ${props =>
         props.maximise &&
         `
         .${Classes.DIALOG_BODY} {
-            max-height: 64vh;
+            max-height: 74vh;
         }
     `};
 `;

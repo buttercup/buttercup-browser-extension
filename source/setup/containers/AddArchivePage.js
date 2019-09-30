@@ -47,13 +47,9 @@ import {
 import { performAuthentication as performMyButtercupAuthentication } from "../library/myButtercup.js";
 import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButtercup.js";
 import {
-    getOrganisations,
-    getOrganisationArchives,
-    getSelectedArchives as getSelectedMyButtercupArchives
-} from "../../shared/selectors/myButtercup.js";
-import {
     getAuthID as getMyButtercupAuthID,
-    getAuthToken as getMyButtercupAuthToken
+    getAccessToken as getMyButtercupAccessToken,
+    getRefreshToken as getMyButtercupRefreshToken
 } from "../../shared/selectors/myButtercup.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
@@ -75,11 +71,11 @@ export default connect(
         isConnected: isConnected(state),
         isConnecting: isConnecting(state),
         myButtercupAuthID: getMyButtercupAuthID(state),
-        myButtercupAuthToken: getMyButtercupAuthToken(state),
+        myButtercupAccessToken: getMyButtercupAccessToken(state),
+        myButtercupRefreshToken: getMyButtercupRefreshToken(state),
         selectedArchiveType: getSelectedArchiveType(state),
         selectedFilename: getSelectedFilename(state),
-        selectedFilenameNeedsCreation: selectedFileNeedsCreation(state),
-        selectedMyButtercupArchives: getSelectedMyButtercupArchives(state)
+        selectedFilenameNeedsCreation: selectedFileNeedsCreation(state)
     }),
     {
         onAuthenticateDesktop: code => dispatch => {
@@ -239,42 +235,40 @@ export default connect(
                     dispatch(setAdding(false));
                 });
         },
-        onChooseMyButtercupArchives: masterPassword => (dispatch, getState) => {
+        onChooseMyButtercupArchive: masterPassword => (dispatch, getState) => {
             const state = getState();
-            const token = getMyButtercupAuthToken(state);
-            const selectedArchives = getSelectedMyButtercupArchives(state);
-            const orgArchives = getOrganisationArchives(state);
-            const orgs = getOrganisations(state);
+            const accessToken = getMyButtercupAccessToken(state);
+            const refreshToken = getMyButtercupRefreshToken(state);
+            // const selectedArchives = getSelectedMyButtercupArchives(state);
+            // const orgArchives = getOrganisationArchives(state);
+            // const orgs = getOrganisations(state);
             dispatch(setAdding(true));
-            dispatch(setBusy("Adding archives"));
+            dispatch(setBusy("Adding vault"));
             return Promise.resolve()
                 .then(() => {
-                    if (selectedArchives.length <= 0) {
-                        throw new Error("No archives selected");
-                    }
-                    const selections = selectedArchives.map(archiveID => {
-                        const org = orgs.find(
-                            org => !!orgArchives[`org-${org.id}`].find(arch => arch.id === archiveID)
-                        );
-                        if (!org) {
-                            throw new Error("Failed locating organisation for selected archives");
-                        }
-                        const { id: orgID } = org;
-                        const { name } = orgArchives[`org-${orgID}`].find(arch => arch.id === archiveID);
-                        return {
-                            orgID,
-                            archiveID,
-                            name
-                        };
-                    });
-                    return addMyButtercupArchives(token, selections, masterPassword);
+                    // if (selectedArchives.length <= 0) {
+                    //     throw new Error("No archives selected");
+                    // }
+                    // const selections = selectedArchives.map(archiveID => {
+                    //     const org = orgs.find(
+                    //         org => !!orgArchives[`org-${org.id}`].find(arch => arch.id === archiveID)
+                    //     );
+                    //     if (!org) {
+                    //         throw new Error("Failed locating organisation for selected archives");
+                    //     }
+                    //     const { id: orgID } = org;
+                    //     const { name } = orgArchives[`org-${orgID}`].find(arch => arch.id === archiveID);
+                    //     return {
+                    //         orgID,
+                    //         archiveID,
+                    //         name
+                    //     };
+                    // });
+                    return addMyButtercupArchives(accessToken, refreshToken, masterPassword);
                 })
                 .then(() => {
                     dispatch(unsetBusy());
-                    notifySuccess(
-                        "Successfully added archive(s)",
-                        `${selectedArchives.length} archives were successfully added.`
-                    );
+                    notifySuccess("Successfully added vault", "My Buttercup vault successfully added.");
                     setTimeout(() => {
                         closeCurrentTab();
                     }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
@@ -283,8 +277,8 @@ export default connect(
                     dispatch(unsetBusy());
                     console.error(err);
                     notifyError(
-                        "Failed selecting My Buttercup archives",
-                        `An error occurred when adding the archive(s): ${err.message}`
+                        "Failed selecting My Buttercup vault",
+                        `An error occurred when adding the vault: ${err.message}`
                     );
                     dispatch(setAdding(false));
                 });

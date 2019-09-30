@@ -24,10 +24,6 @@ export function isConnecting(state) {
     return state[KEY].connecting;
 }
 
-export function myButtercupAccountReady(state) {
-    return state[KEY].accountReady;
-}
-
 export function selectedFileNeedsCreation(state) {
     return state[KEY].shouldCreateRemoteFile;
 }
