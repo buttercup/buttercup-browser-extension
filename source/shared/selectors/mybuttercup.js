@@ -11,3 +11,7 @@ export function getAuthID(state) {
 export function getRefreshToken(state) {
     return state[KEY].refreshToken;
 }
+
+export function getVaultID(state) {
+    return state[KEY].vaultID;
+}

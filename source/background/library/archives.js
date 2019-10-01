@@ -151,7 +151,7 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
 }
 
 export function addMyButtercupArchive(payload) {
-    const { masterPassword, accessToken, refreshToken } = payload;
+    const { masterPassword, accessToken, refreshToken, vaultID } = payload;
     log.info("Attempting to connect My Buttercup vault");
     return getArchiveManager().then(archiveManager => {
         const myBcupCreds = new Credentials("mybuttercup");
@@ -160,13 +160,18 @@ export function addMyButtercupArchive(payload) {
             accessToken,
             refreshToken,
             clientID: MYBUTTERCUP_CLIENT_ID,
-            clientSecret: MYBUTTERCUP_CLIENT_SECRET
+            clientSecret: MYBUTTERCUP_CLIENT_SECRET,
+            vaultID
         });
         return Promise.all([
             myBcupCreds.toSecureString(masterPassword),
             Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
         ]).then(([sourceCreds, archiveCreds]) => {
-            const source = new ArchiveSource("Test MyBcup Name", sourceCreds, archiveCreds);
+            const source = new ArchiveSource("Test MyBcup Name", sourceCreds, archiveCreds, {
+                meta: {
+                    vaultID
+                }
+            });
             return archiveManager.addSource(source).then(() => source.unlock(masterPassword));
         });
     });

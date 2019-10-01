@@ -8,7 +8,10 @@ import { clearAutoLogin } from "../../shared/actions/autoLogin.js";
 import { sendTabMessage } from "../../shared/library/extension.js";
 import { getEntry } from "./archives.js";
 import { setAuthToken as setDropboxAuthToken } from "../../shared/actions/dropbox.js";
-import { getTokens as getMyButtercupTokens } from "./myButtercup.js";
+import {
+    getTokens as getMyButtercupTokens,
+    processNewVaultDetails as processMyButtercupVaultDetails
+} from "./myButtercup.js";
 import {
     setAccessToken as setMyButtercupAccessToken,
     setRefreshToken as setMyButtercupRefreshToken
@@ -70,9 +73,14 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
             const authCode = authCodeMatch[1];
             log.info(`Retrieved MyButtercup auth code from tab: ${tabID}`);
             chrome.tabs.remove(tabID);
+            log.info("Exchanging My Buttercup authorisation code for tokens");
             getMyButtercupTokens(authCode)
                 .then(tokens => {
-                    log.info("Exchanged MyButtercup authorisation code for tokens");
+                    log.info("Fetching My Buttercup vault details");
+                    return processMyButtercupVaultDetails(tokens.accessToken, tokens.refreshToken).then(() => tokens);
+                })
+                .then(tokens => {
+                    log.info("My Buttercup authorisation complete");
                     dispatch(setMyButtercupAccessToken(tokens.accessToken));
                     dispatch(setMyButtercupRefreshToken(tokens.refreshToken));
                 })

@@ -41,12 +41,13 @@ export function addLocalArchive(name, masterPassword, filename, key, shouldCreat
     });
 }
 
-export function addMyButtercupArchives(accessToken, refreshToken, masterPassword) {
+export function addMyButtercupArchives(vaultID, accessToken, refreshToken, masterPassword) {
     return makeArchiveAdditionRequest({
         type: "mybuttercup",
         accessToken,
         refreshToken,
-        masterPassword
+        masterPassword,
+        vaultID
     });
 }
 

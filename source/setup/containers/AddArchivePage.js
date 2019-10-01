@@ -49,7 +49,8 @@ import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButter
 import {
     getAuthID as getMyButtercupAuthID,
     getAccessToken as getMyButtercupAccessToken,
-    getRefreshToken as getMyButtercupRefreshToken
+    getRefreshToken as getMyButtercupRefreshToken,
+    getVaultID as getMyButtercupVaultID
 } from "../../shared/selectors/myButtercup.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
@@ -239,33 +240,10 @@ export default connect(
             const state = getState();
             const accessToken = getMyButtercupAccessToken(state);
             const refreshToken = getMyButtercupRefreshToken(state);
-            // const selectedArchives = getSelectedMyButtercupArchives(state);
-            // const orgArchives = getOrganisationArchives(state);
-            // const orgs = getOrganisations(state);
+            const vaultID = getMyButtercupVaultID(state);
             dispatch(setAdding(true));
             dispatch(setBusy("Adding vault"));
-            return Promise.resolve()
-                .then(() => {
-                    // if (selectedArchives.length <= 0) {
-                    //     throw new Error("No archives selected");
-                    // }
-                    // const selections = selectedArchives.map(archiveID => {
-                    //     const org = orgs.find(
-                    //         org => !!orgArchives[`org-${org.id}`].find(arch => arch.id === archiveID)
-                    //     );
-                    //     if (!org) {
-                    //         throw new Error("Failed locating organisation for selected archives");
-                    //     }
-                    //     const { id: orgID } = org;
-                    //     const { name } = orgArchives[`org-${orgID}`].find(arch => arch.id === archiveID);
-                    //     return {
-                    //         orgID,
-                    //         archiveID,
-                    //         name
-                    //     };
-                    // });
-                    return addMyButtercupArchives(accessToken, refreshToken, masterPassword);
-                })
+            return addMyButtercupArchives(vaultID, accessToken, refreshToken, masterPassword)
                 .then(() => {
                     dispatch(unsetBusy());
                     notifySuccess("Successfully added vault", "My Buttercup vault successfully added.");
