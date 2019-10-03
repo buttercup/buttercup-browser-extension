@@ -87,4 +87,4 @@ trackScrolling();
 trackKeydownEvent();
 
 // Setup My Buttercup integrations
-watchForRegistrationPossibility();
+setTimeout(watchForRegistrationPossibility, 100);

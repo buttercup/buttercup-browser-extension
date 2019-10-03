@@ -168,6 +168,7 @@ export function addMyButtercupArchive(payload) {
             Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
         ]).then(([sourceCreds, archiveCreds]) => {
             const source = new ArchiveSource("Test MyBcup Name", sourceCreds, archiveCreds, {
+                type: "mybuttercup",
                 meta: {
                     vaultID
                 }
@@ -370,6 +371,18 @@ export function getNameForSource(sourceID) {
             throw new Error(`Unable to fetch source information: No source found for ID: ${sourceID}`);
         }
         return source.name;
+    });
+}
+
+export function getSourcesInfo() {
+    return getArchiveManager().then(archiveManager => {
+        return archiveManager.sources.map(source => ({
+            id: source.id,
+            name: source.name,
+            meta: source.meta || {},
+            status: source.status,
+            order: source.order
+        }));
     });
 }
 

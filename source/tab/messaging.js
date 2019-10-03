@@ -41,6 +41,17 @@ export function getSourcesStats() {
     });
 }
 
+export function getVaults() {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-vaultsinfo" }, resp => {
+            if (resp.ok) {
+                return resolve(resp.items.map(item => item.id));
+            }
+            reject(new Error(resp.error || "Unknown error when fetching sources info"));
+        });
+    });
+}
+
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
         case "enter-details": {
