@@ -1,1 +1,1 @@
-export * from "buttercup/dist/buttercup-web.min.js";
+module.exports = require(_BUTTERCUP_WEB_IMPORT_);

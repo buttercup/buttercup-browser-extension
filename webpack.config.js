@@ -8,7 +8,14 @@ const { devDependencies, version } = require("./package.json");
 const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
 const { CommonsChunkPlugin } = webpack.optimize;
 
-const BUTTERCUP_ENTRY = "buttercup/dist/buttercup-web.js";
+const configDefines = Object.keys(process.env).reduce((output, key) => {
+    if (/^_.+_$/.test(key)) {
+        output[key] = JSON.stringify(process.env[key]);
+    }
+    return output;
+}, {});
+
+const BUTTERCUP_ENTRY = process.env._BUTTERCUP_WEB_IMPORT_;
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
 const RESOURCES = path.resolve(__dirname, "./resources");
@@ -37,12 +44,7 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
             rules: [
                 {
                     test: /\.jsx?$/,
-                    // exclude: /node_modules/,
-                    include: [
-                        SOURCE,
-                        // path.join(NODE_MODULES, "buttercup"),
-                        require.resolve("buttercup/dist/buttercup-web.min.js")
-                    ],
+                    include: [SOURCE, require.resolve(BUTTERCUP_ENTRY)],
                     use: "babel-loader"
                 },
                 {
@@ -94,6 +96,7 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
 
 function getBasePlugins() {
     const common = [
+        new DefinePlugin(configDefines),
         new DefinePlugin({
             __VERSION__: JSON.stringify(version)
         }),
@@ -104,9 +107,7 @@ function getBasePlugins() {
         return [
             ...common,
             new DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-                }
+                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
             }),
             new UglifyJsPlugin({
                 test: /\.js($|\?)/i,
