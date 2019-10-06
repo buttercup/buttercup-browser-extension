@@ -21,7 +21,7 @@ function buildMyButtercupFrame(container) {
             width: "100%",
             height: "100%"
         },
-        src: getExtensionURL(`setup.html#/access-archive/${"f3b91f9b-4f7e-475f-968d-b7d656f97239"}/unlocked`),
+        src: getExtensionURL(`setup.html#/mybuttercup-vault/${__matchedVaultData.id}`),
         frameBorder: "0"
     });
     mount(container, frame);
@@ -59,7 +59,7 @@ export function watchForRegistrationPossibility() {
     );
     const checkForVaultContainer = () => {
         const vaultContainerEl = document.getElementById("vaultInjection");
-        if (vaultContainerEl && vaultInjection.dataset.filled === "false") {
+        if (vaultContainerEl && vaultInjection.dataset.filled === "false" && __matchedVaultData) {
             buildMyButtercupFrame(vaultContainerEl);
         }
     };
