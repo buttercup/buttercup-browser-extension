@@ -8,7 +8,7 @@ import { performAuthentication } from "../../shared/library/googleDrive.js";
 import { getAuthID, getAuthCode } from "../../shared/selectors/googleDrive.js";
 import { closeTabs, createNewTab } from "../../shared/library/extension.js";
 import { getArchiveManager } from "./buttercup.js";
-import secrets from "../../../secrets.json";
+import secrets from "../../shared/google-client.json";
 
 const OAUTH_REDIRECT_URL = "https://buttercup.pw?googleauth";
 
