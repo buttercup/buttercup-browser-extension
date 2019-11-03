@@ -65,7 +65,7 @@
     "babel-loader": "^8.0.5",
     "babel-plugin-jsx-control-statements": "^4.0.0",
     "browser-info": "^1.2.0",
-    "buttercup": "^2.15.2",
+    "buttercup": "^3.0.0-rc1.0",
     "classnames": "^2.2.6",
     "concurrently": "^4.1.0",
     "console.style": "^0.2.2",
