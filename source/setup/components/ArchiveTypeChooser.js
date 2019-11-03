@@ -8,7 +8,8 @@ export const ARCHIVE_TYPES = [
         type: "mybuttercup",
         title: "My Buttercup",
         image: require("../../../resources/providers/mybuttercup-256.png"),
-        invertOnDarkMode: false
+        invertOnDarkMode: false,
+        disabled: true
     },
     {
         type: "dropbox",
@@ -39,7 +40,11 @@ export const ARCHIVE_TYPES = [
 const ArchiveTypeImage = styled.img`
     width: 2rem;
     height: 2rem;
-    ${p => (p.darkMode && p.invertOnDarkMode ? "filter: brightness(0) invert(1);" : "")};
+    ${p => (p.darkMode && p.invertOnDarkMode ? "filter: brightness(0) invert(1);" : "")} ${p =>
+        p.disabled ? "opacity: 0.4;" : ""};
+`;
+const ArchiveText = styled(Text)`
+    ${p => (p.disabled ? "opacity: 0.4;" : "")};
 `;
 const VaultContainer = styled.div`
     display: flex;
@@ -70,22 +75,27 @@ class ArchiveTypeChooser extends PureComponent {
         return (
             <ButtonGroup fill large minimal>
                 <For each="provider" of={ARCHIVE_TYPES}>
-                    <Button
-                        key={provider.type}
-                        onClick={() => this.handleArchiveTypeSelection(provider.type)}
-                        active={this.props.selectedArchiveType === provider.type}
-                        disabled={this.props.disabled}
-                        icon={
-                            <VaultContainer>
-                                <ArchiveTypeImage
-                                    darkMode={this.props.darkMode}
-                                    invertOnDarkMode={provider.invertOnDarkMode}
-                                    src={provider.image}
-                                />{" "}
-                                <Text className={Classes.TEXT_MUTED}>{provider.title}</Text>
-                            </VaultContainer>
-                        }
-                    />
+                    <With disabled={!!(this.props.disabled || provider.disabled)}>
+                        <Button
+                            key={provider.type}
+                            onClick={() => this.handleArchiveTypeSelection(provider.type)}
+                            active={this.props.selectedArchiveType === provider.type}
+                            disabled={disabled}
+                            icon={
+                                <VaultContainer title="Coming soon...">
+                                    <ArchiveTypeImage
+                                        darkMode={this.props.darkMode}
+                                        invertOnDarkMode={provider.invertOnDarkMode}
+                                        src={provider.image}
+                                        disabled={disabled}
+                                    />{" "}
+                                    <ArchiveText className={Classes.TEXT_MUTED} disabled={disabled}>
+                                        {provider.title}
+                                    </ArchiveText>
+                                </VaultContainer>
+                            }
+                        />
+                    </With>
                 </For>
             </ButtonGroup>
         );
