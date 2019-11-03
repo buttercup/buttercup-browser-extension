@@ -39,6 +39,7 @@ import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { setAuthID as setGoogleDriveAuthID } from "../../shared/actions/googleDrive.js";
 import { setAuthID as setDropboxAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
+import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
 import {
     getAuthID as getGoogleDriveAuthID,
     getAccessToken as getGoogleDriveAccessToken,
