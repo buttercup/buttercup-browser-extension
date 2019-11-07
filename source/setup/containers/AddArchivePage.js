@@ -52,7 +52,7 @@ import {
     getAccessToken as getMyButtercupAccessToken,
     getRefreshToken as getMyButtercupRefreshToken,
     getVaultID as getMyButtercupVaultID
-} from "../../shared/selectors/myButtercupx.js/index.js";
+} from "../../shared/selectors/myButtercup.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
     createNewClient as createLocalClient,
