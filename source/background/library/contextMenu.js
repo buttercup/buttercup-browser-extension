@@ -1,6 +1,7 @@
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 import { getBrowser } from "../../shared/library/browser.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
+import { getFacades } from "./archives.js";
 
 const CONTEXT_SHARED_ALL = {
     contexts: ["all"]
@@ -11,7 +12,23 @@ const CONTEXT_SHARED_EDITABLE = {
 
 let __menu = null;
 
-export function updateContextMenu() {
+async function buildEntryExplorerMenu(parentMenu) {
+    const facades = await getFacades();
+    if (facades.length === 0) {
+        chrome.contextMenus.create({
+            title: "No vaults available",
+            parentId: parentMenu,
+            enabled: false,
+            ...CONTEXT_SHARED_EDITABLE
+        });
+        return;
+    }
+    facades.forEach(archiveFacade => {
+        console.log(archiveFacade);
+    });
+}
+
+async function performUpdate() {
     // **
     // ** Init
     // **
@@ -103,4 +120,14 @@ export function updateContextMenu() {
         },
         ...CONTEXT_SHARED_EDITABLE
     });
+    const enterLoginMenu = chrome.contextMenus.create({
+        title: "Enter login details",
+        parentId: __menu,
+        ...CONTEXT_SHARED_EDITABLE
+    });
+    buildEntryExplorerMenu(enterLoginMenu);
+}
+
+export function updateContextMenu() {
+    performUpdate();
 }
