@@ -16,7 +16,7 @@ let __webdavClient = null,
     __googleDriveClient = null;
 
 export function connectWebDAV(url, username, password) {
-    const client = createWebDAVClient(url, username, password);
+    const client = createWebDAVClient(url, { username, password });
     log.info(`Creating WebDAV connection to: ${url}`);
     return testWebDAVConnection(client).then(succeeded => {
         if (succeeded) {

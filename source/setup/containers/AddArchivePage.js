@@ -348,8 +348,9 @@ export default connect(
                             `Failed connecting to '${type}' resource`,
                             `A connection attempt to '${url}' has failed: ${err.message}`
                         );
+                        dispatch(setConnecting(false));
                     });
-            }, 750);
+            }, 250);
         },
         onCreateRemotePath: filename => dispatch => {
             dispatch(createRemoteFile(filename));
