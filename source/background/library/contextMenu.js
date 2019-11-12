@@ -1,7 +1,8 @@
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 import { getBrowser } from "../../shared/library/browser.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
-import { getFacades } from "./archives.js";
+import { getFacades, sendCredentialsToTab } from "./archives.js";
+import log from "../../shared/library/log.js";
 
 const CONTEXT_SHARED_ALL = {
     contexts: ["all"]
@@ -167,7 +168,12 @@ async function performUpdate() {
         parentId: __menu,
         ...CONTEXT_SHARED_EDITABLE
     });
-    await buildEntryExplorerMenu(enterLoginMenu, (sourceID, entryID) => {});
+    await buildEntryExplorerMenu(enterLoginMenu, (sourceID, entryID) => {
+        sendCredentialsToTab(sourceID, entryID, /* auto login: */ false).catch(err => {
+            log.error(`Failed sending credentials to tab: ${err.message}`);
+            console.error(err);
+        });
+    });
 }
 
 export function updateContextMenu() {
