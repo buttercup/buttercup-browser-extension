@@ -7,7 +7,8 @@ import { getBrowser } from "../shared/library/browser.js";
 import { checkUnlockPossibility } from "./library/archives.js";
 import { watchForSourcesAutoLock } from "./library/autoLock.js";
 import { watchStorage as watchStorageForConfig } from "./library/config.js";
-import { registerAuthWatchers } from "./library/buttercup.js";
+import { createArchiveManager, getQueue, registerAuthWatchers } from "./library/buttercup.js";
+import { migrateLocalStorageToChromeStorage } from "./library/storageMigration.js";
 import store from "./redux/index.js";
 
 log.info("Starting...");
@@ -17,9 +18,12 @@ initialiseCore();
 watchStorageForConfig(store);
 startMessageListener();
 attachBrowserStateListeners();
-updateContextMenu();
 setTimeout(checkUnlockPossibility, 2500);
 watchForSourcesAutoLock();
 registerAuthWatchers();
+
+migrateLocalStorageToChromeStorage(getQueue())
+    .then(() => createArchiveManager())
+    .then(() => updateContextMenu());
 
 log.info("Started successfully");

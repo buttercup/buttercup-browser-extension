@@ -1,4 +1,5 @@
 import extractDomain from "extract-domain";
+import { createArchiveFacade } from "@buttercup/facades";
 import {
     Archive,
     ArchiveSource,
@@ -15,6 +16,7 @@ import "../../shared/library/LocalFileDatasource.js";
 import log from "../../shared/library/log.js";
 import { MYBUTTERCUP_CLIENT_ID, MYBUTTERCUP_CLIENT_SECRET } from "../../shared/library/myButtercup.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
+import { updateContextMenu } from "./contextMenu.js";
 
 const { WebDAVDatasource } = Datasources;
 
@@ -323,6 +325,16 @@ export function getEntry(sourceID, entryID) {
     return getArchive(sourceID).then(archive => archive.findEntryByID(entryID));
 }
 
+export function getFacades() {
+    return getArchiveManager().then(archiveManager =>
+        Promise.all(
+            archiveManager.unlockedSources.map(source =>
+                getArchive(source.id).then(archive => createArchiveFacade(archive))
+            )
+        )
+    );
+}
+
 export function getMatchingEntriesForSearchTerm(term) {
     return getArchiveManager().then(archiveManager => {
         const unlockedSources = archiveManager.unlockedSources;
@@ -392,20 +404,24 @@ export function getUnlockedSourcesCount() {
 
 export function lockSource(sourceID) {
     log.info(`Locking source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => {
-        const source = archiveManager.getSourceForID(sourceID);
-        return source.lock();
-    });
+    return getArchiveManager()
+        .then(archiveManager => {
+            const source = archiveManager.getSourceForID(sourceID);
+            return source.lock();
+        })
+        .then(updateContextMenu);
 }
 
 export function lockSources() {
     log.info("Locking all sources");
-    return getArchiveManager().then(archiveManager => {
-        const { unlockedSources } = archiveManager;
-        return unlockedSources.length > 0
-            ? Promise.all(unlockedSources.map(source => source.lock()))
-            : Promise.resolve();
-    });
+    return getArchiveManager()
+        .then(archiveManager => {
+            const { unlockedSources } = archiveManager;
+            return unlockedSources.length > 0
+                ? Promise.all(unlockedSources.map(source => source.lock()))
+                : Promise.resolve();
+        })
+        .then(updateContextMenu);
 }
 
 export function openCredentialsPageForEntry(sourceID, entryID) {
@@ -426,41 +442,45 @@ export function openCredentialsPageForEntry(sourceID, entryID) {
 
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => {
-        return archiveManager.interruptAutoUpdate(() => archiveManager.removeSource(sourceID));
-    });
+    return getArchiveManager()
+        .then(archiveManager => {
+            return archiveManager.interruptAutoUpdate(() => archiveManager.removeSource(sourceID));
+        })
+        .then(updateContextMenu);
 }
 
 export function saveSource(sourceID) {
     log.info(`Preparing to save source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager => {
-        const source = archiveManager.getSourceForID(sourceID);
-        if (!source) {
-            throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
-        }
-        const { workspace } = source;
-        return archiveManager.interruptAutoUpdate(() =>
-            workspace
-                .localDiffersFromRemote()
-                .then(differs => {
-                    if (differs) {
-                        log.info(` -> Remote source differs, will merge before save: ${sourceID}`);
-                    } else {
-                        log.info(` -> Remote source is the same, no merge/save necessary: ${sourceID}`);
-                    }
-                    return differs ? workspace.mergeFromRemote().then(() => true) : false;
-                })
-                .then(shouldSave => {
-                    // (shouldSave ? workspace.save() : null)
-                    if (!shouldSave) {
-                        return null;
-                    }
-                    return workspace.save().then(() => {
-                        log.info(` -> Saved source: ${sourceID}`);
-                    });
-                })
-        );
-    });
+    return getArchiveManager()
+        .then(archiveManager => {
+            const source = archiveManager.getSourceForID(sourceID);
+            if (!source) {
+                throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
+            }
+            const { workspace } = source;
+            return archiveManager.interruptAutoUpdate(() =>
+                workspace
+                    .localDiffersFromRemote()
+                    .then(differs => {
+                        if (differs) {
+                            log.info(` -> Remote source differs, will merge before save: ${sourceID}`);
+                        } else {
+                            log.info(` -> Remote source is the same, no merge/save necessary: ${sourceID}`);
+                        }
+                        return differs ? workspace.mergeFromRemote().then(() => true) : false;
+                    })
+                    .then(shouldSave => {
+                        // (shouldSave ? workspace.save() : null)
+                        if (!shouldSave) {
+                            return null;
+                        }
+                        return workspace.save().then(() => {
+                            log.info(` -> Saved source: ${sourceID}`);
+                        });
+                    })
+            );
+        })
+        .then(updateContextMenu);
 }
 
 export function sendCredentialsToTab(sourceID, entryID, signIn) {
@@ -479,14 +499,16 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
 
 export function unlockSource(sourceID, masterPassword) {
     log.info(`Unlocking source: ${sourceID}`);
-    return getArchiveManager().then(archiveManager =>
-        archiveManager
-            .getSourceForID(sourceID)
-            .unlock(
-                masterPassword,
-                /* init remote: */ false,
-                /* content override: */ null,
-                /* store offline content: */ false
-            )
-    );
+    return getArchiveManager()
+        .then(archiveManager =>
+            archiveManager
+                .getSourceForID(sourceID)
+                .unlock(
+                    masterPassword,
+                    /* init remote: */ false,
+                    /* content override: */ null,
+                    /* store offline content: */ false
+                )
+        )
+        .then(updateContextMenu);
 }
