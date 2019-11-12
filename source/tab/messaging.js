@@ -68,7 +68,7 @@ function handleMessage(request, sender, sendResponse) {
         case "auto-login": {
             const { username, password } = request;
             autoLogin(username, password);
-            break;
+            return false;
         }
         default:
             // ignore
