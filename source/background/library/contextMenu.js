@@ -97,42 +97,11 @@ async function performUpdate() {
         },
         ...CONTEXT_SHARED_ALL
     });
-    // const unlockArchiveMenu = chrome.contextMenus.create({
-    //     title: "Unlock archive",
-    //     parentId: __menu,
-    //     ...CONTEXT_SHARED_ALL
-    // });
-    // chrome.contextMenus.create({
-    //     title: "Lock all archives",
-    //     parentId: __menu,
-    //     onclick: () => {
-    //         createNewTab(getExtensionURL("setup.html#/lock-archives"));
-    //     },
-    //     ...CONTEXT_SHARED_ALL
-    // });
     chrome.contextMenus.create({
         parentId: __menu,
         type: "separator",
         ...CONTEXT_SHARED_ALL
     });
-    // chrome.contextMenus.create({
-    //     title: "Log in using",
-    //     parentId: __menu,
-    //     onclick: () => {
-    //         // todo
-    //     },
-    //     enabled: false,
-    //     ...CONTEXT_SHARED_ALL
-    // });
-    // chrome.contextMenus.create({
-    //     title: "Enter login details",
-    //     parentId: __menu,
-    //     onclick: () => {
-    //         // todo
-    //     },
-    //     enabled: false,
-    //     ...CONTEXT_SHARED_ALL
-    // });
     chrome.contextMenus.create({
         title: "Generate password",
         parentId: __menu,
@@ -168,8 +137,19 @@ async function performUpdate() {
         parentId: __menu,
         ...CONTEXT_SHARED_EDITABLE
     });
+    const autoLoginMenu = chrome.contextMenus.create({
+        title: "Log in with",
+        parentId: __menu,
+        ...CONTEXT_SHARED_EDITABLE
+    });
     await buildEntryExplorerMenu(enterLoginMenu, (sourceID, entryID) => {
         sendCredentialsToTab(sourceID, entryID, /* auto login: */ false).catch(err => {
+            log.error(`Failed sending credentials to tab: ${err.message}`);
+            console.error(err);
+        });
+    });
+    await buildEntryExplorerMenu(autoLoginMenu, (sourceID, entryID) => {
+        sendCredentialsToTab(sourceID, entryID, /* auto login: */ true).catch(err => {
             log.error(`Failed sending credentials to tab: ${err.message}`);
             console.error(err);
         });
