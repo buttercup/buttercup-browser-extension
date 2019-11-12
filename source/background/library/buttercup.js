@@ -5,7 +5,6 @@ import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
 import { setArchives, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
 import BrowserStorageInterface from "./BrowserStorageInterface.js";
-// import { migrateLocalStorageToChromeStorage } from "./storageMigration.js";
 import { authenticateWithoutToken, authenticateWithRefreshToken } from "./googleDrive.js";
 
 let __archiveManager, __queue;
@@ -76,5 +75,3 @@ export function registerAuthWatchers() {
         log.info("Google Drive datasource tokens updated");
     });
 }
-
-// migrateLocalStorageToChromeStorage(getQueue()).then(() => createArchiveManager());
