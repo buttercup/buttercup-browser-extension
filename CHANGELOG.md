@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.9.0
+_2019-11-12_
+
+ * My Buttercup preparation
+ * ownCloud/Nextcloud removed in favour of WebDAV (existing connections should still function)
+ * ([#95](https://github.com/buttercup/buttercup-browser-extension/issues/95)) Context menus to choose credentials for form-filling and login
+
 ## v2.8.2
 _2019-09-01_
 
