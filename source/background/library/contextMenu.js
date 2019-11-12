@@ -12,7 +12,7 @@ const CONTEXT_SHARED_EDITABLE = {
 
 let __menu = null;
 
-async function buildEntryExplorerMenu(parentMenu) {
+async function buildEntryExplorerMenu(parentMenu, clickHandler) {
     const facades = await getFacades();
     if (facades.length === 0) {
         chrome.contextMenus.create({
@@ -24,7 +24,49 @@ async function buildEntryExplorerMenu(parentMenu) {
         return;
     }
     facades.forEach(archiveFacade => {
-        console.log(archiveFacade);
+        const sourceMenu = chrome.contextMenus.create({
+            title: `🗃 ${archiveFacade.sourceName}`,
+            parentId: parentMenu,
+            ...CONTEXT_SHARED_EDITABLE
+        });
+        if (archiveFacade.groups.length === 0) {
+            chrome.contextMenus.create({
+                title: "No groups",
+                parentId: sourceMenu,
+                enabled: false,
+                ...CONTEXT_SHARED_EDITABLE
+            });
+            return;
+        }
+        archiveFacade.groups.forEach(group => {
+            const groupMenu = chrome.contextMenus.create({
+                title: `📂 ${group.title}`,
+                parentId: sourceMenu,
+                ...CONTEXT_SHARED_EDITABLE
+            });
+            const groupEntries = archiveFacade.entries.filter(entry => entry.parentID === group.id);
+            if (groupEntries.length === 0) {
+                chrome.contextMenus.create({
+                    title: "No entries",
+                    parentId: groupMenu,
+                    enabled: false,
+                    ...CONTEXT_SHARED_EDITABLE
+                });
+                return;
+            }
+            groupEntries.forEach(entry => {
+                const titleField = entry.fields.find(field => field.property === "title");
+                const title = (titleField && titleField.value) || `(Entry ${entry.id})`;
+                chrome.contextMenus.create({
+                    title,
+                    parentId: groupMenu,
+                    onclick: () => {
+                        clickHandler(archiveFacade.sourceID, entry.id);
+                    },
+                    ...CONTEXT_SHARED_EDITABLE
+                });
+            });
+        });
     });
 }
 
@@ -125,7 +167,7 @@ async function performUpdate() {
         parentId: __menu,
         ...CONTEXT_SHARED_EDITABLE
     });
-    buildEntryExplorerMenu(enterLoginMenu);
+    await buildEntryExplorerMenu(enterLoginMenu, (sourceID, entryID) => {});
 }
 
 export function updateContextMenu() {

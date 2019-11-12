@@ -329,7 +329,11 @@ export function getFacades() {
     return getArchiveManager().then(archiveManager =>
         Promise.all(
             archiveManager.unlockedSources.map(source =>
-                getArchive(source.id).then(archive => createArchiveFacade(archive))
+                getArchive(source.id).then(archive => ({
+                    ...createArchiveFacade(archive),
+                    sourceID: source.id,
+                    sourceName: source.name
+                }))
             )
         )
     );
