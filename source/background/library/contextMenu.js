@@ -11,7 +11,8 @@ const CONTEXT_SHARED_EDITABLE = {
     contexts: getBrowser() === "firefox" ? ["editable", "password"] : ["editable"]
 };
 
-let __menu = null;
+let __menu = null,
+    __buildPromise = null;
 
 async function buildEntryExplorerMenu(parentMenu, clickHandler) {
     const facades = await getFacades();
@@ -157,5 +158,10 @@ async function performUpdate() {
 }
 
 export function updateContextMenu() {
-    performUpdate();
+    if (__buildPromise) {
+        return __buildPromise;
+    }
+    __buildPromise = performUpdate().finally(() => {
+        __buildPromise = null;
+    });
 }
