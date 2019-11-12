@@ -12,6 +12,7 @@ import {
     getMatchingEntriesForSearchTerm,
     getMatchingEntriesForURL,
     getNameForSource,
+    getSourcesInfo,
     getUnlockedSourcesCount,
     lockSource,
     lockSources,
@@ -119,6 +120,17 @@ function handleMessage(request, sender, sendResponse) {
                 .then(archive => {
                     const obj = archiveToObjectGroupsOnly(archive);
                     sendResponse({ ok: true, groups: obj.groups });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
+        }
+        case "get-vaultsinfo": {
+            getSourcesInfo()
+                .then(items => {
+                    sendResponse({ ok: true, items });
                 })
                 .catch(err => {
                     sendResponse({ ok: false, error: err.message });

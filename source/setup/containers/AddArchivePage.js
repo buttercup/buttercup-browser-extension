@@ -30,20 +30,29 @@ import {
     addDropboxArchive,
     addGoogleDriveArchive,
     addLocalArchive,
+    addMyButtercupArchives,
     addNextcloudArchive,
     addOwnCloudArchive,
     addWebDAVArchive
 } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
-import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
 import { setAuthID as setGoogleDriveAuthID } from "../../shared/actions/googleDrive.js";
 import { setAuthID as setDropboxAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
+import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
 import {
     getAuthID as getGoogleDriveAuthID,
     getAccessToken as getGoogleDriveAccessToken,
     getRefreshToken as getGoogleDriveRefeshToken
 } from "../../shared/selectors/googleDrive";
+import { performAuthentication as performMyButtercupAuthentication } from "../library/myButtercup.js";
+import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButtercup.js";
+import {
+    getAuthID as getMyButtercupAuthID,
+    getAccessToken as getMyButtercupAccessToken,
+    getRefreshToken as getMyButtercupRefreshToken,
+    getVaultID as getMyButtercupVaultID
+} from "../../shared/selectors/myButtercup.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
     createNewClient as createLocalClient,
@@ -63,6 +72,9 @@ export default connect(
         localAuthStatus: getLocalAuthStatus(state),
         isConnected: isConnected(state),
         isConnecting: isConnecting(state),
+        myButtercupAuthID: getMyButtercupAuthID(state),
+        myButtercupAccessToken: getMyButtercupAccessToken(state),
+        myButtercupRefreshToken: getMyButtercupRefreshToken(state),
         selectedArchiveType: getSelectedArchiveType(state),
         selectedFilename: getSelectedFilename(state),
         selectedFilenameNeedsCreation: selectedFileNeedsCreation(state)
@@ -92,6 +104,10 @@ export default connect(
         onAuthenticateGoogleDrive: googleDriveAuthID => dispatch => {
             dispatch(setGoogleDriveAuthID(googleDriveAuthID));
             authenticateGoogleDrive();
+        },
+        onAuthenticateMyButtercup: myButtercupAuthID => dispatch => {
+            dispatch(setMyButtercupAuthID(myButtercupAuthID));
+            performMyButtercupAuthentication();
         },
         onChooseDropboxBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
             const name = stripTags(archiveName);
@@ -216,6 +232,31 @@ export default connect(
                     console.error(err);
                     notifyError(
                         "Failed selecting local vault",
+                        `An error occurred when adding the vault: ${err.message}`
+                    );
+                    dispatch(setAdding(false));
+                });
+        },
+        onChooseMyButtercupArchive: masterPassword => (dispatch, getState) => {
+            const state = getState();
+            const accessToken = getMyButtercupAccessToken(state);
+            const refreshToken = getMyButtercupRefreshToken(state);
+            const vaultID = getMyButtercupVaultID(state);
+            dispatch(setAdding(true));
+            dispatch(setBusy("Adding vault"));
+            return addMyButtercupArchives(vaultID, accessToken, refreshToken, masterPassword)
+                .then(() => {
+                    dispatch(unsetBusy());
+                    notifySuccess("Successfully added vault", "My Buttercup vault successfully added.");
+                    setTimeout(() => {
+                        closeCurrentTab();
+                    }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
+                })
+                .catch(err => {
+                    dispatch(unsetBusy());
+                    console.error(err);
+                    notifyError(
+                        "Failed selecting My Buttercup vault",
                         `An error occurred when adding the vault: ${err.message}`
                     );
                     dispatch(setAdding(false));

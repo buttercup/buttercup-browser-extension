@@ -11,6 +11,7 @@ import LoadingModal from "./containers/LoadingModal.js";
 import SaveCredentialsPage from "./containers/SaveCredentialsPage.js";
 import AboutPage from "./components/AboutPage.js";
 import UnlockAllArchivesPage from "./containers/UnlockAllArchivesPage.js";
+import MyBcupVaultPage from "./containers/MyBcupVaultPage.js";
 import App from "../shared/containers/App.js";
 import { trackMouseMovement } from "../shared/library/mouseEvents.js";
 import { trackKeydownEvent } from "../shared/library/keyboardEvents.js";
@@ -26,6 +27,7 @@ ReactDOM.render(
             <App>
                 <Route path="/add-archive" component={AddArchivePage} />
                 <Route path="/access-archive/:id/:state" component={VaultPage} />
+                <Route path="/mybuttercup-vault/:id" component={MyBcupVaultPage} />
                 <Route path="/save-new-credentials" component={SaveCredentialsPage} />
                 <Route path="/about" component={AboutPage} />
                 <Route path="/unlock" component={UnlockAllArchivesPage} />

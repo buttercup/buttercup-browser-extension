@@ -11,6 +11,7 @@ import releaseNotes from "./releaseNotes.js";
 import remoteFiles from "./remoteFiles.js";
 import searching from "../../shared/reducers/searching.js";
 import vault from "./vault.js";
+import myButtercup from "../../shared/reducers/mybuttercup.js";
 
 const appReducer = combineReducers({
     app,
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
     dropbox,
     googleDrive,
     manageArchive,
+    myButtercup,
     releaseNotes,
     remoteFiles,
     searching,

@@ -61,7 +61,7 @@
     
     "web_accessible_resources": [
         "dialog.html",
-        "dialog.js",
-        "resources/*"
+        "resources/*",
+        "setup.html"
     ]
 }

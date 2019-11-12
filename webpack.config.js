@@ -8,9 +8,18 @@ const { devDependencies, version } = require("./package.json");
 const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
 const { CommonsChunkPlugin } = webpack.optimize;
 
+const configDefines = Object.keys(process.env).reduce((output, key) => {
+    if (/^_.+_$/.test(key)) {
+        output[key] = JSON.stringify(process.env[key]);
+    }
+    return output;
+}, {});
+
+const BUTTERCUP_ENTRY = process.env._BUTTERCUP_WEB_IMPORT_;
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
 const RESOURCES = path.resolve(__dirname, "./resources");
+const NODE_MODULES = path.resolve(__dirname, "./node_modules");
 const INDEX_TEMPLATE = path.resolve(RESOURCES, "./template.pug");
 const MANIFEST = path.resolve(RESOURCES, "./manifest.json");
 const CHANGELOG = path.resolve(__dirname, "./CHANGELOG.md");
@@ -35,7 +44,7 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
             rules: [
                 {
                     test: /\.jsx?$/,
-                    exclude: /node_modules/,
+                    include: [SOURCE, require.resolve(BUTTERCUP_ENTRY)],
                     use: "babel-loader"
                 },
                 {
@@ -87,6 +96,7 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
 
 function getBasePlugins() {
     const common = [
+        new DefinePlugin(configDefines),
         new DefinePlugin({
             __VERSION__: JSON.stringify(version)
         }),
@@ -97,9 +107,7 @@ function getBasePlugins() {
         return [
             ...common,
             new DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-                }
+                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
             }),
             new UglifyJsPlugin({
                 test: /\.js($|\?)/i,
@@ -123,8 +131,9 @@ function getBasePlugins() {
 const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
-        vendor: [...REDUX_PACKAGES, "buttercup"],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
+        vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
+        google: ["@buttercup/google-oauth2-client"]
     },
 
     output: {
@@ -164,7 +173,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
 const popupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_POPUP, "./index.js"),
-        vendor: [...REDUX_PACKAGES, "buttercup"],
+        vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
     },
 
@@ -191,7 +200,7 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
 const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_SETUP, "./index.js"),
-        vendor: [...REACT_PACKAGES, "dropbox", "webdav", "buttercup"],
+        vendor: [...REACT_PACKAGES, "dropbox", "webdav", BUTTERCUP_ENTRY],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client"]
     },
 
@@ -218,7 +227,7 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
 const dialogConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_DIALOG, "./index.js"),
-        vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES, "buttercup"],
+        vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES, BUTTERCUP_ENTRY],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
     },
 

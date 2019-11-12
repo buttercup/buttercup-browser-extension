@@ -13,6 +13,7 @@ import { getState } from "../redux/index.js";
 import { getConfigKey } from "../../shared/selectors/app.js";
 import "../../shared/library/LocalFileDatasource.js";
 import log from "../../shared/library/log.js";
+import { MYBUTTERCUP_CLIENT_ID, MYBUTTERCUP_CLIENT_SECRET } from "../../shared/library/myButtercup.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 
 const { WebDAVDatasource } = Datasources;
@@ -31,6 +32,8 @@ export function addArchiveByRequest(payload) {
             return addWebDAVArchive(payload);
         case "localfile":
             return addLocalArchive(payload);
+        case "mybuttercup":
+            return addMyButtercupArchive(payload);
         default:
             return Promise.reject(new Error(`Unable to add archive: Unknown type: ${payload.type}`));
     }
@@ -145,6 +148,34 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
             }
         })
         .then(() => saveSource(sourceID));
+}
+
+export function addMyButtercupArchive(payload) {
+    const { masterPassword, accessToken, refreshToken, vaultID } = payload;
+    log.info("Attempting to connect My Buttercup vault");
+    return getArchiveManager().then(archiveManager => {
+        const myBcupCreds = new Credentials("mybuttercup");
+        myBcupCreds.setValue("datasource", {
+            type: "mybuttercup",
+            accessToken,
+            refreshToken,
+            clientID: MYBUTTERCUP_CLIENT_ID,
+            clientSecret: MYBUTTERCUP_CLIENT_SECRET,
+            vaultID
+        });
+        return Promise.all([
+            myBcupCreds.toSecureString(masterPassword),
+            Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
+        ]).then(([sourceCreds, archiveCreds]) => {
+            const source = new ArchiveSource("Test MyBcup Name", sourceCreds, archiveCreds, {
+                type: "mybuttercup",
+                meta: {
+                    vaultID
+                }
+            });
+            return archiveManager.addSource(source).then(() => source.unlock(masterPassword));
+        });
+    });
 }
 
 export function addNextcloudArchive(payload) {
@@ -340,6 +371,18 @@ export function getNameForSource(sourceID) {
             throw new Error(`Unable to fetch source information: No source found for ID: ${sourceID}`);
         }
         return source.name;
+    });
+}
+
+export function getSourcesInfo() {
+    return getArchiveManager().then(archiveManager => {
+        return archiveManager.sources.map(source => ({
+            id: source.id,
+            name: source.name,
+            meta: source.meta || {},
+            status: source.status,
+            order: source.order
+        }));
     });
 }
 
