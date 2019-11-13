@@ -50,6 +50,7 @@ The extension allows for connections to several services where your vaults can b
  * ~~Nextcloud~~ ([deprecated](https://medium.com/@buttercup_pw/were-deprecating-owncloud-and-nextcloud-connections-but-it-s-still-possible-to-use-them-with-abeec4d30101))
  * WebDAV (any service supporting WebDAV)
  * Local filesystem
+ * _Buttercup hosting_ (coming soon!)
 
 #### Supported platforms
 The browsers listed above, running on Windows, Mac or Linux on a desktop platform. This extension is not supported on any mobile or tablet devices.
