@@ -18,7 +18,9 @@ class VaultPage extends PureComponent {
 
     // We store some details in the state, because they're sensitive:
     state = {
-        masterPassword: ""
+        changingMasterPassword: false,
+        masterPassword: "",
+        newMasterPassword: ""
     };
 
     componentDidMount() {
@@ -35,6 +37,18 @@ class VaultPage extends PureComponent {
     handleLockArchive(event) {
         event.preventDefault();
         this.props.onLockArchive(this.props.sourceID);
+    }
+
+    handlePasswordChange(event) {
+        event.preventDefault();
+        this.setState({
+            changingMasterPassword: true,
+            newMasterPassword: ""
+        });
+    }
+
+    handlePasswordChangeSubmit(event) {
+        event.preventDefault();
     }
 
     handleRemoveArchive(event) {
@@ -89,6 +103,9 @@ class VaultPage extends PureComponent {
                         </Button>
                     </When>
                     <Otherwise>
+                        <Button icon="text-highlight" onClick={::this.handlePasswordChange} disabled={disableForm}>
+                            Change Password
+                        </Button>
                         <Button icon="lock" onClick={::this.handleLockArchive} disabled={disableForm}>
                             Lock
                         </Button>
@@ -97,32 +114,89 @@ class VaultPage extends PureComponent {
             </Fragment>
         );
         return (
-            <Dialog
-                maximise={this.props.state === "unlocked"}
-                title={`${title}: ${this.props.archiveTitle}`}
-                actions={actions}
-            >
-                <If condition={this.props.state === "unlocked"}>
-                    <VaultEditor sourceID={this.props.sourceID} />
+            <Fragment>
+                <Dialog
+                    maximise={this.props.state === "unlocked"}
+                    title={`${title}: ${this.props.archiveTitle}`}
+                    actions={actions}
+                >
+                    <If condition={this.props.state === "unlocked"}>
+                        <VaultEditor sourceID={this.props.sourceID} />
+                    </If>
+                    <If condition={this.props.state === "locked"}>
+                        <form onSubmit={::this.handleUnlockArchive}>
+                            <FormGroup disabled={disableForm} label="Master Password" labelFor="master-password">
+                                <InputGroup
+                                    id="master-password"
+                                    type="password"
+                                    placeholder="Enter your password..."
+                                    disabled={disableForm}
+                                    large
+                                    onChange={event => this.handleUpdateForm("masterPassword", event)}
+                                    inputRef={input => {
+                                        this._passwordInput = input;
+                                    }}
+                                />
+                            </FormGroup>
+                        </form>
+                    </If>
+                </Dialog>
+                <If condition={this.state.changingMasterPassword}>
+                    <Dialog
+                        title={`Change Password: ${this.props.archiveTitle}`}
+                        actions={
+                            <Fragment>
+                                <Button
+                                    // className="ml-auto"
+                                    onClick={() => this.setState({ changingMasterPassword: false })}
+                                    disabled={disableForm}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    // className="ml-0"
+                                    intent={Intent.DANGER}
+                                    icon="confirm"
+                                    onClick={() => {}}
+                                    disabled={disableForm}
+                                >
+                                    Change Password
+                                </Button>
+                            </Fragment>
+                        }
+                        zIndex={2}
+                    >
+                        <form onSubmit={::this.handlePasswordChangeSubmit}>
+                            <FormGroup disabled={disableForm} label="Current Password" labelFor="old-master-password">
+                                <InputGroup
+                                    id="old-master-password"
+                                    type="password"
+                                    placeholder="Enter your current password..."
+                                    disabled={disableForm}
+                                    large
+                                    onChange={event => this.handleUpdateForm("masterPassword", event)}
+                                    inputRef={input => {
+                                        this._passwordInput = input;
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup disabled={disableForm} label="New Password" labelFor="new-master-password">
+                                <InputGroup
+                                    id="new-master-password"
+                                    type="password"
+                                    placeholder="Enter new password..."
+                                    disabled={disableForm}
+                                    large
+                                    onChange={event => this.handleUpdateForm("masterPassword", event)}
+                                    inputRef={input => {
+                                        this._passwordInput = input;
+                                    }}
+                                />
+                            </FormGroup>
+                        </form>
+                    </Dialog>
                 </If>
-                <If condition={this.props.state === "locked"}>
-                    <form onSubmit={::this.handleUnlockArchive}>
-                        <FormGroup disabled={disableForm} label="Master Password" labelFor="master-password">
-                            <InputGroup
-                                id="master-password"
-                                type="password"
-                                placeholder="Enter your password..."
-                                disabled={disableForm}
-                                large
-                                onChange={event => this.handleUpdateForm("masterPassword", event)}
-                                inputRef={input => {
-                                    this._passwordInput = input;
-                                }}
-                            />
-                        </FormGroup>
-                    </form>
-                </If>
-            </Dialog>
+            </Fragment>
         );
     }
 }
