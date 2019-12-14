@@ -141,6 +141,13 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
         path: DIST
     },
 
+    resolve: {
+        alias: {
+            src: path.resolve(__dirname, "source")
+        },
+        extensions: [".js", ".jsx", ".json"]
+    },
+
     plugins: [
         ...getBasePlugins(),
         new CopyWebpackPlugin([
