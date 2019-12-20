@@ -20,6 +20,7 @@ export default connect(
         sourceID: ownProps.match.params.id
     }),
     {
+        onChangePassword: (sourceID, oldPassword, newPassword) => dispatch => {},
         onLockArchive: sourceID => dispatch => {
             dispatch(setBusy("Locking archive..."));
             dispatch(setEditing(true));
