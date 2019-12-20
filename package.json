@@ -90,7 +90,7 @@
     "ms": "^2.1.1",
     "mucus": "^1.0.0",
     "node-noop": "^1.0.0",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.13.0",
     "npm-run-all": "^4.1.3",
     "object-hash": "^1.3.0",
     "path.join": "^1.0.0",
