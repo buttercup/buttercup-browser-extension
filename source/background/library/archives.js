@@ -283,6 +283,16 @@ export function archiveToObjectGroupsOnly(archive) {
     return archive.toObject(Group.OutputFlag.Groups);
 }
 
+export function changeVaultPassword(sourceID, password) {
+    return getArchiveManager().then(archiveManager => {
+        const source = archiveManager.getSourceForID(sourceID);
+        if (!source) {
+            throw new Error(`No source found for ID: ${sourceID}`);
+        }
+        return source.updateArchiveCredentials(password).then(() => archiveManager.dehydrateSource(source));
+    });
+}
+
 export function checkUnlockPossibility() {
     const canAutoUnlock = getConfigKey(getState(), "autoUnlockVaults");
     if (!canAutoUnlock) {
@@ -442,6 +452,17 @@ export function openCredentialsPageForEntry(sourceID, entryID) {
             }
             return null;
         });
+}
+
+export function passwordValidForSource(sourceID, password) {
+    return getArchiveManager().then(archiveManager => {
+        const source = archiveManager.getSourceForID(sourceID);
+        if (!source) {
+            throw new Error(`No source found for ID: ${sourceID}`);
+        }
+        const currentPassword = source.workspace.masterCredentials.password;
+        return password && currentPassword === password;
+    });
 }
 
 export function removeSource(sourceID) {

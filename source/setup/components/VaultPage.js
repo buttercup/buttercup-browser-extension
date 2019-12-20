@@ -5,9 +5,16 @@ import Dialog from "./Dialog.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import VaultEditor from "../containers/VaultEditor.js";
 
+const CLEAR_PASSWORD_CHANGE = {
+    oldMasterPassword: "",
+    newMasterPassword: "",
+    newMasterPassword2: ""
+};
+
 class VaultPage extends PureComponent {
     static propTypes = {
         archiveTitle: PropTypes.string.isRequired,
+        changePassword: PropTypes.func.isRequired,
         isEditing: PropTypes.bool.isRequired,
         onLockArchive: PropTypes.func.isRequired,
         onRemoveArchive: PropTypes.func.isRequired,
@@ -16,11 +23,12 @@ class VaultPage extends PureComponent {
         state: PropTypes.oneOf(["locked", "unlocked"]).isRequired
     };
 
-    // We store some details in the state, because they're sensitive:
     state = {
         changingMasterPassword: false,
         masterPassword: "",
-        newMasterPassword: ""
+        oldMasterPassword: "",
+        newMasterPassword: "",
+        newMasterPassword2: ""
     };
 
     componentDidMount() {
@@ -43,12 +51,23 @@ class VaultPage extends PureComponent {
         event.preventDefault();
         this.setState({
             changingMasterPassword: true,
-            newMasterPassword: ""
+            ...CLEAR_PASSWORD_CHANGE
         });
     }
 
     handlePasswordChangeSubmit(event) {
         event.preventDefault();
+        this.props.changePassword(
+            this.props.sourceID,
+            this.state.oldMasterPassword,
+            this.state.newMasterPassword,
+            () => {
+                this.setState({
+                    changingMasterPassword: false,
+                    ...CLEAR_PASSWORD_CHANGE
+                });
+            }
+        );
     }
 
     handleRemoveArchive(event) {
@@ -147,17 +166,17 @@ class VaultPage extends PureComponent {
                         actions={
                             <Fragment>
                                 <Button
-                                    // className="ml-auto"
-                                    onClick={() => this.setState({ changingMasterPassword: false })}
+                                    onClick={() =>
+                                        this.setState({ changingMasterPassword: false, ...CLEAR_PASSWORD_CHANGE })
+                                    }
                                     disabled={disableForm}
                                 >
                                     Cancel
                                 </Button>
                                 <Button
-                                    // className="ml-0"
                                     intent={Intent.DANGER}
                                     icon="confirm"
-                                    onClick={() => {}}
+                                    onClick={::this.handlePasswordChangeSubmit}
                                     disabled={disableForm}
                                 >
                                     Change Password
@@ -174,10 +193,7 @@ class VaultPage extends PureComponent {
                                     placeholder="Enter your current password..."
                                     disabled={disableForm}
                                     large
-                                    onChange={event => this.handleUpdateForm("masterPassword", event)}
-                                    inputRef={input => {
-                                        this._passwordInput = input;
-                                    }}
+                                    onChange={event => this.handleUpdateForm("oldMasterPassword", event)}
                                 />
                             </FormGroup>
                             <FormGroup disabled={disableForm} label="New Password" labelFor="new-master-password">
@@ -187,10 +203,21 @@ class VaultPage extends PureComponent {
                                     placeholder="Enter new password..."
                                     disabled={disableForm}
                                     large
-                                    onChange={event => this.handleUpdateForm("masterPassword", event)}
-                                    inputRef={input => {
-                                        this._passwordInput = input;
-                                    }}
+                                    onChange={event => this.handleUpdateForm("newMasterPassword", event)}
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                disabled={disableForm}
+                                label="New Password (confirm)"
+                                labelFor="new-master-password-2"
+                            >
+                                <InputGroup
+                                    id="new-master-password-2"
+                                    type="password"
+                                    placeholder="Enter new password again..."
+                                    disabled={disableForm}
+                                    large
+                                    onChange={event => this.handleUpdateForm("newMasterPassword2", event)}
                                 />
                             </FormGroup>
                         </form>
