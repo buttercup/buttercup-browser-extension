@@ -31,6 +31,14 @@ class VaultPage extends PureComponent {
         newMasterPassword2: ""
     };
 
+    get passwordChangeValid() {
+        return (
+            this.state.oldMasterPassword &&
+            this.state.newMasterPassword &&
+            this.state.newMasterPassword === this.state.newMasterPassword2
+        );
+    }
+
     componentDidMount() {
         if (this._passwordInput) {
             this._passwordInput.focus();
@@ -177,7 +185,7 @@ class VaultPage extends PureComponent {
                                     intent={Intent.DANGER}
                                     icon="confirm"
                                     onClick={::this.handlePasswordChangeSubmit}
-                                    disabled={disableForm}
+                                    disabled={disableForm || !this.passwordChangeValid}
                                 >
                                     Change Password
                                 </Button>
