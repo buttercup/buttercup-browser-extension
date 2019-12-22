@@ -4,7 +4,7 @@ import delay from "yoctodelay";
 import VError from "verror";
 import VaultPage from "../components/VaultPage.js";
 import { getArchiveTitle } from "../../shared/selectors/archives.js";
-import { lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
+import { changeSourcePassword, lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { isEditing } from "../selectors/manageArchive.js";
@@ -20,6 +20,27 @@ export default connect(
         sourceID: ownProps.match.params.id
     }),
     {
+        changePassword: (sourceID, oldPassword, newPassword, onSuccessCB) => dispatch => {
+            if (oldPassword.length <= 0 || newPassword.length <= 0) {
+                notifyError("Password empty", "Both old and new passwords must be specified");
+                return;
+            }
+            dispatch(setBusy("Changing password..."));
+            changeSourcePassword(sourceID, oldPassword, newPassword)
+                .then(() => {
+                    dispatch(unsetBusy());
+                    notifySuccess("Vault password changed", "Successfully changed vault password");
+                    onSuccessCB();
+                })
+                .catch(err => {
+                    dispatch(unsetBusy());
+                    console.error(err);
+                    notifyError(
+                        "Failed changing password",
+                        `Failed changing vault password for source (${sourceID}): ${err.message}`
+                    );
+                });
+        },
         onLockArchive: sourceID => dispatch => {
             dispatch(setBusy("Locking archive..."));
             dispatch(setEditing(true));

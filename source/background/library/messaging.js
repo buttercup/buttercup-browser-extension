@@ -7,6 +7,7 @@ import {
     addArchiveByRequest,
     addNewEntry,
     archiveToObjectGroupsOnly,
+    changeVaultPassword,
     generateEntryPath,
     getArchive,
     getMatchingEntriesForSearchTerm,
@@ -17,6 +18,7 @@ import {
     lockSource,
     lockSources,
     openCredentialsPageForEntry,
+    passwordValidForSource,
     removeSource,
     saveSource,
     sendCredentialsToTab,
@@ -91,6 +93,24 @@ function handleMessage(request, sender, sendResponse) {
             const { authID } = request;
             authenticateGoogleDrive(authID);
             return false;
+        }
+        case "change-vault-password": {
+            const { sourceID, oldPassword, newPassword } = request;
+            passwordValidForSource(sourceID, oldPassword)
+                .then(passwordsMatch => {
+                    if (!passwordsMatch) {
+                        throw new Error("Current vault password does not match that which was provided");
+                    }
+                    return changeVaultPassword(sourceID, newPassword);
+                })
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
         }
         case "clear-search":
             clearSearchResults();

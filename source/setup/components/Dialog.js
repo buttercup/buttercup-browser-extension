@@ -1,9 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import { Classes, Colors } from "@blueprintjs/core";
+import colour from "color";
+
+const BACKGROUND_BASE = Colors.DARK_GRAY3;
+const BACKGROUND_OVERLAY = colour(BACKGROUND_BASE)
+    .alpha(0.7)
+    .rgb()
+    .string();
 
 const DialogContainer = styled.div`
-    background-color: ${Colors.DARK_GRAY3};
+    background-color: ${props => (props.zIndex > 1 ? BACKGROUND_OVERLAY : BACKGROUND_BASE)};
+    z-index: ${props => props.zIndex};
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: auto !important;
 `;
 const Dialog = styled.div`
     ${props =>
@@ -21,8 +35,8 @@ const Dialog = styled.div`
     `};
 `;
 
-export default ({ title, children, actions, maximise = false }) => (
-    <DialogContainer className={Classes.DIALOG_CONTAINER}>
+export default ({ title, children, actions, maximise = false, zIndex = 1 }) => (
+    <DialogContainer className={Classes.DIALOG_CONTAINER} zIndex={zIndex}>
         <Dialog className={Classes.DIALOG} maximise={maximise}>
             <div className={Classes.DIALOG_HEADER}>{title}</div>
             <div className={Classes.DIALOG_BODY}>{children}</div>

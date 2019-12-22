@@ -39,6 +39,18 @@ export function authenticateGoogleDrive(authID) {
     chrome.runtime.sendMessage({ type: "authenticate-google-drive", authID });
 }
 
+export function changeSourcePassword(sourceID, oldPassword, newPassword) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "change-vault-password", sourceID, oldPassword, newPassword }, resp => {
+            if (resp && resp.ok) {
+                resolve(resp.facade);
+            } else {
+                reject(new Error(`Failed changing vault password: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
+}
+
 export function clearLastLogin() {
     chrome.runtime.sendMessage({ type: "clear-used-credentials" });
 }
