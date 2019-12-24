@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.10.0
+_2019-12-24_
+
+ * Ability to change vault password
+ * **Bugfix**:
+   * ([#307](https://github.com/buttercup/buttercup-browser-extension/issues/307)) Cannot save new note-type entry (or any other custom types)
+
 ## v2.9.0
 _2019-11-12_
 
