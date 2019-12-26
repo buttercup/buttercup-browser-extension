@@ -18,7 +18,7 @@ class ReleaseNotes extends Component {
             return null;
         }
         return (
-            <Dialog title={`⚡️ What's New - v${__VERSION__}`}>
+            <Dialog title={`⚡️ What's New - v${__VERSION__}`} overlay={false}>
                 <div dangerouslySetInnerHTML={{ __html: this.props.releaseNotes }} />
             </Dialog>
         );

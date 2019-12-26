@@ -12,7 +12,7 @@ const BACKGROUND_OVERLAY = colour(BACKGROUND_BASE)
 const DialogContainer = styled.div`
     background-color: ${props => (props.zIndex > 1 ? BACKGROUND_OVERLAY : BACKGROUND_BASE)};
     z-index: ${props => props.zIndex};
-    position: fixed;
+    position: ${props => (props.overlay ? "fixed" : "relative")};
     left: 0;
     right: 0;
     top: 0;
@@ -35,8 +35,8 @@ const Dialog = styled.div`
     `};
 `;
 
-export default ({ title, children, actions, maximise = false, zIndex = 1 }) => (
-    <DialogContainer className={Classes.DIALOG_CONTAINER} zIndex={zIndex}>
+export default ({ title, children, actions, maximise = false, zIndex = 1, overlay = true }) => (
+    <DialogContainer className={Classes.DIALOG_CONTAINER} zIndex={zIndex} overlay={overlay}>
         <Dialog className={Classes.DIALOG} maximise={maximise}>
             <div className={Classes.DIALOG_HEADER}>{title}</div>
             <div className={Classes.DIALOG_BODY}>{children}</div>

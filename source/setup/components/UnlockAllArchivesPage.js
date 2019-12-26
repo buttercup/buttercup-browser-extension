@@ -120,7 +120,7 @@ class UnlockAllArchivesPage extends Component {
         const firstLockedIndex = this.props.archives.findIndex(archive => archive.state === "locked");
         return (
             <DualColumnLayout>
-                <Dialog title="Unlock archives">
+                <Dialog title="Unlock archives" overlay={false}>
                     <For each="archive" of={this.props.archives} index="archiveIndex">
                         <With
                             unlocking={this.state.unlocking.includes(archive.sourceID)}
