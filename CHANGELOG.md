@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.10.1
+_2019-12-26_
+
+ * **Bugfix**:
+   * ([#312](https://github.com/buttercup/buttercup-browser-extension/issues/312)) No login prompt visible on Firefox
+
 ## v2.10.0
 _2019-12-24_
 
