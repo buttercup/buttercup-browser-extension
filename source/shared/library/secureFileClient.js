@@ -1,17 +1,18 @@
 import joinURL from "url-join";
+import { getSharedAppEnv } from "@buttercup/app-env";
 import { vendor as ButtercupVendor } from "./buttercup.js";
 import log from "./log.js";
 
-const { createSession } = ButtercupVendor.iocane;
+// const { createSession } = ButtercupVendor.iocane;
 
 const BASE_URL = "http://localhost:12821";
 
 export function buildClient(token) {
+    const encrypt = getSharedAppEnv().getProperty("crypto/v1/encryptText");
     return {
         readdir: (remotePath, callback) => {
             const url = joinURL(BASE_URL, "/get/directory");
-            createSession()
-                .encrypt(remotePath, token)
+            encrypt(remotePath, token)
                 .then(payload =>
                     fetch(url, {
                         method: "POST",
@@ -36,10 +37,10 @@ export function buildClient(token) {
         },
 
         readFile: (remotePath, options, callback) => {
+            const encrypt = getSharedAppEnv().getProperty("crypto/v1/encryptText");
             const cb = typeof options === "function" ? options : callback;
             const url = joinURL(BASE_URL, "/get/file");
-            createSession()
-                .encrypt(remotePath, token)
+            encrypt(remotePath, token)
                 .then(payload =>
                     fetch(url, {
                         method: "POST",
@@ -65,19 +66,19 @@ export function buildClient(token) {
         },
 
         writeFile: (remotePath, data, options, callback) => {
+            const encrypt = getSharedAppEnv().getProperty("crypto/v1/encryptText");
             const cb = typeof options === "function" ? options : callback;
             if (typeof data !== "string") {
                 throw new Error("Failed writing file: Expected data to be of type string");
             }
             const url = joinURL(BASE_URL, "/put/file");
-            createSession()
-                .encrypt(
-                    JSON.stringify({
-                        filename: remotePath,
-                        contents: data
-                    }),
-                    token
-                )
+            encrypt(
+                JSON.stringify({
+                    filename: remotePath,
+                    contents: data
+                }),
+                token
+            )
                 .then(payload =>
                     fetch(url, {
                         method: "POST",
@@ -105,6 +106,7 @@ export function completeConnection(code) {
     if (!code) {
         return Promise.reject(new Error("Code is required"));
     }
+    const decrypt = getSharedAppEnv().getProperty("crypto/v1/decryptText");
     const codeURL = joinURL(BASE_URL, `/connect/${code}`);
     log.info("Completing handshake using code");
     return fetch(codeURL)
@@ -114,12 +116,10 @@ export function completeConnection(code) {
                 throw new Error("Connection response status was not OK");
             }
             const { payload } = resp;
-            return createSession()
-                .decrypt(payload, code)
-                .then(key => {
-                    log.info("Received key: Handshake complete");
-                    return key;
-                });
+            return decrypt(payload, code).then(key => {
+                log.info("Received key: Handshake complete");
+                return key;
+            });
         });
 }
 
