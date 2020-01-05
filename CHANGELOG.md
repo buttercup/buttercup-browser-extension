@@ -1,5 +1,14 @@
 # Buttercup browser extension changelog
 
+## v2.11.0
+_2020-01-05_
+
+ * Core integration with App-Env for web-based crypto improvement
+ * ([#270](https://github.com/buttercup/buttercup-browser-extension/issues/270)) Prompt for account-selection on Google authentication (Google Drive) to support multiple accounts
+ * ([#245](https://github.com/buttercup/buttercup-browser-extension/issues/245)) Google Drive permissions reduced - Only files touched by Buttercup are accessible to the application
+ * **Bugfix**:
+   * ([#314](https://github.com/buttercup/buttercup-browser-extension/issues/314)) Unable to open Google Drive vault
+
 ## v2.10.1
 _2019-12-26_
 
