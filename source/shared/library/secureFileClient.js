@@ -3,8 +3,6 @@ import { getSharedAppEnv } from "@buttercup/app-env";
 import { vendor as ButtercupVendor } from "./buttercup.js";
 import log from "./log.js";
 
-// const { createSession } = ButtercupVendor.iocane;
-
 const BASE_URL = "http://localhost:12821";
 
 export function buildClient(token) {
