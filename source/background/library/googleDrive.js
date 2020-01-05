@@ -10,14 +10,19 @@ import { closeTabs, createNewTab } from "../../shared/library/extension.js";
 import { getArchiveManager } from "./buttercup.js";
 import secrets from "../../shared/google-client.json";
 
+const GOOGLE_DRIVE_SCOPES = [
+    "email",
+    "profile",
+    "https://www.googleapis.com/auth/drive.file" // Per-file access
+];
 const OAUTH_REDIRECT_URL = "https://buttercup.pw?googleauth";
 
 export async function authenticateWithoutToken(authID = uuid()) {
     const oauth2Client = getOAuthClient();
     const url = oauth2Client.generateAuthUrl({
         access_type: "offline",
-        scope: ["email", "profile", "https://www.googleapis.com/auth/drive"],
-        prompt: "consent"
+        scope: [...GOOGLE_DRIVE_SCOPES],
+        prompt: "consent select_account"
     });
     const cleanup = async () => {
         clearTimeout(timeout);
