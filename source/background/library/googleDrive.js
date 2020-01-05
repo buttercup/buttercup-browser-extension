@@ -22,7 +22,7 @@ export async function authenticateWithoutToken(authID = uuid()) {
     const url = oauth2Client.generateAuthUrl({
         access_type: "offline",
         scope: [...GOOGLE_DRIVE_SCOPES],
-        prompt: "consent"
+        prompt: "consent select_account"
     });
     const cleanup = async () => {
         clearTimeout(timeout);
