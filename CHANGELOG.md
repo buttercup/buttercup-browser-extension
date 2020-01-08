@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.11.1
+_2020-01-08_
+
+ * **Bugfix**:
+   * ([#316](https://github.com/buttercup/buttercup-browser-extension/issues/316)) `createSession` is not defined (local file host vaults)
+
 ## v2.11.0
 _2020-01-05_
 
