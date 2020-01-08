@@ -15,7 +15,7 @@ class SearchPage extends PureComponent {
         onUnlockAllArchives: PropTypes.func.isRequired
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.onPrepareFirstResults();
     }
 
