@@ -7,6 +7,7 @@ const BASE_URL = "http://localhost:12821";
 
 export function buildClient(token) {
     const encrypt = getSharedAppEnv().getProperty("crypto/v1/encryptText");
+    const decrypt = getSharedAppEnv().getProperty("crypto/v1/decryptText");
     return {
         readdir: (remotePath, callback) => {
             const url = joinURL(BASE_URL, "/get/directory");
@@ -28,7 +29,7 @@ export function buildClient(token) {
                     }
                     throw new Error(`Failed reading remote file: ${remotePath}`);
                 })
-                .then(response => createSession().decrypt(response.payload, token))
+                .then(response => decrypt(response.payload, token))
                 .then(JSON.parse)
                 .then(results => callback(null, results))
                 .catch(callback);
@@ -36,6 +37,7 @@ export function buildClient(token) {
 
         readFile: (remotePath, options, callback) => {
             const encrypt = getSharedAppEnv().getProperty("crypto/v1/encryptText");
+            const decrypt = getSharedAppEnv().getProperty("crypto/v1/decryptText");
             const cb = typeof options === "function" ? options : callback;
             const url = joinURL(BASE_URL, "/get/file");
             encrypt(remotePath, token)
@@ -56,7 +58,7 @@ export function buildClient(token) {
                     }
                     throw new Error(`Failed reading remote file: ${remotePath}`);
                 })
-                .then(response => createSession().decrypt(response.payload, token))
+                .then(response => decrypt(response.payload, token))
                 .then(data => {
                     cb(null, data);
                 })
