@@ -37,7 +37,7 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
         const googleDriveAuthCodeMatch = url.match(GOOGLE_DRIVE_AUTH_CODE_REXP);
         const dropboxTokenMatch = url.match(DROPBOX_ACCESS_TOKEN_REXP);
         if (googleDriveAuthCodeMatch) {
-            const authCode = googleDriveAuthCodeMatch[1];
+            const authCode = decodeURIComponent(googleDriveAuthCodeMatch[1]);
             log.info(`Retrieved Google Drive auth code from tab: ${tabID}`);
             dispatch(setGoogleDriveAuthCode(authCode));
             chrome.tabs.remove(tabID);
