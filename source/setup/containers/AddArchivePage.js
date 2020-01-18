@@ -36,7 +36,10 @@ import {
     addWebDAVArchive
 } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
-import { setAuthID as setGoogleDriveAuthID } from "../../shared/actions/googleDrive.js";
+import {
+    setAuthID as setGoogleDriveAuthID,
+    setAccessToken as setGoogleDriveAccessToken
+} from "../../shared/actions/googleDrive.js";
 import { setAuthID as setDropboxAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
 import { performAuthentication as performDropboxAuthentication } from "../library/dropbox.js";
@@ -101,9 +104,9 @@ export default connect(
             dispatch(setDropboxAuthID(dropboxAuthID));
             performDropboxAuthentication();
         },
-        onAuthenticateGoogleDrive: googleDriveAuthID => dispatch => {
+        onAuthenticateGoogleDrive: (googleDriveAuthID, useOpenPermissions = false) => dispatch => {
             dispatch(setGoogleDriveAuthID(googleDriveAuthID));
-            authenticateGoogleDrive();
+            authenticateGoogleDrive(useOpenPermissions);
         },
         onAuthenticateMyButtercup: myButtercupAuthID => dispatch => {
             dispatch(setMyButtercupAuthID(myButtercupAuthID));
@@ -191,6 +194,8 @@ export default connect(
                     );
                 })
                 .then(() => {
+                    dispatch(setGoogleDriveAuthID(null));
+                    dispatch(setGoogleDriveAccessToken(null));
                     dispatch(unsetBusy());
                     notifySuccess("Successfully added vault", `The vault '${archiveName}' was successfully added.`);
                     setTimeout(() => {

@@ -35,8 +35,8 @@ export function applyArchiveFacade(sourceID, facade) {
     });
 }
 
-export function authenticateGoogleDrive(authID) {
-    chrome.runtime.sendMessage({ type: "authenticate-google-drive", authID });
+export function authenticateGoogleDrive(useOpenPermissions = false) {
+    chrome.runtime.sendMessage({ type: "authenticate-google-drive", useOpenPermissions });
 }
 
 export function changeSourcePassword(sourceID, oldPassword, newPassword) {

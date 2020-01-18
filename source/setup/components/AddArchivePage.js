@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Card, Button, H3, H4, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
+import { Button, Callout, Card, Checkbox, H3, H4, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import uuid from "uuid/v4";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
 import switchcase from "switchcase";
@@ -10,6 +10,9 @@ import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
 import { ARCHIVE_TYPES } from "./ArchiveTypeChooser.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
 
+const CalloutWithSpacing = styled(Callout)`
+    margin-bottom: 10px;
+`;
 const Spacer = styled.div`
     width: 100%;
     height: 2rem;
@@ -59,6 +62,7 @@ class AddArchivePage extends PureComponent {
         archiveName: "",
         dropboxAuthenticationID: "",
         googleDriveAuthenticationID: "",
+        googleDriveOpenPermissions: false,
         localCode: "",
         masterPassword: "",
         myButtercupAuthenticationID: "",
@@ -89,7 +93,10 @@ class AddArchivePage extends PureComponent {
 
     handleGoogleDriveAuth(event) {
         event.preventDefault();
-        this.props.onAuthenticateGoogleDrive(this.state.googleDriveAuthenticationID);
+        this.props.onAuthenticateGoogleDrive(
+            this.state.googleDriveAuthenticationID,
+            this.state.googleDriveOpenPermissions
+        );
     }
 
     handleChooseDropboxBasedFile(event) {
@@ -176,7 +183,7 @@ class AddArchivePage extends PureComponent {
             .case("localfile", "localfile");
         const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
         return (
-            <LayoutMain title="Add Archive">
+            <LayoutMain title="Add Vault">
                 <H4>Choose Vault Type</H4>
                 <ArchiveTypeChooser disabled={hasAuthenticated} />
                 <Spacer />
@@ -342,6 +349,24 @@ class AddArchivePage extends PureComponent {
                                 To start, please grant Buttercup access to your Google Drive account. This access will
                                 be only used to store and read a Buttercup Vault that you choose or create.
                             </p>
+                            <CalloutWithSpacing intent={Intent.PRIMARY}>
+                                <p>
+                                    Buttercup, by default, will use permissions that only allow connecting to new vaults
+                                    or existing vaults that were created or accessed by Buttercup previously.
+                                </p>
+                                <p>
+                                    If you wish to connect to an existing vault that was{" "}
+                                    <strong>uploaded manually</strong>, you'll need to grant additional permissions to
+                                    connect it.
+                                </p>
+                                <Checkbox
+                                    checked={this.state.googleDriveOpenPermissions}
+                                    label="Grant access to all Google Drive contents"
+                                    onChange={evt =>
+                                        this.setState({ googleDriveOpenPermissions: !!evt.target.checked })
+                                    }
+                                />
+                            </CalloutWithSpacing>
                             <Button
                                 icon="key"
                                 onClick={::this.handleGoogleDriveAuth}
