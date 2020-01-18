@@ -90,8 +90,8 @@ function handleMessage(request, sender, sendResponse) {
             return true;
         }
         case "authenticate-google-drive": {
-            const { authID } = request;
-            authenticateGoogleDrive(authID);
+            const { useOpenPermissions = false } = request;
+            authenticateGoogleDrive(undefined, useOpenPermissions);
             return false;
         }
         case "change-vault-password": {

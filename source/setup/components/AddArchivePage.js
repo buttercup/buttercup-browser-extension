@@ -93,7 +93,10 @@ class AddArchivePage extends PureComponent {
 
     handleGoogleDriveAuth(event) {
         event.preventDefault();
-        this.props.onAuthenticateGoogleDrive(this.state.googleDriveAuthenticationID);
+        this.props.onAuthenticateGoogleDrive(
+            this.state.googleDriveAuthenticationID,
+            this.state.googleDriveOpenPermissions
+        );
     }
 
     handleChooseDropboxBasedFile(event) {

@@ -101,9 +101,9 @@ export default connect(
             dispatch(setDropboxAuthID(dropboxAuthID));
             performDropboxAuthentication();
         },
-        onAuthenticateGoogleDrive: googleDriveAuthID => dispatch => {
+        onAuthenticateGoogleDrive: (googleDriveAuthID, useOpenPermissions = false) => dispatch => {
             dispatch(setGoogleDriveAuthID(googleDriveAuthID));
-            authenticateGoogleDrive();
+            authenticateGoogleDrive(useOpenPermissions);
         },
         onAuthenticateMyButtercup: myButtercupAuthID => dispatch => {
             dispatch(setMyButtercupAuthID(myButtercupAuthID));
