@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v2.12.0
+_2020-01-18_
+
+ * ([#320](https://github.com/buttercup/buttercup-browser-extension/issues/320)) Open permissions option when adding Google Drive vaults
+ * **Bugfix**:
+   * ([#270](https://github.com/buttercup/buttercup-browser-extension/issues/270)) _(2nd attempt)_: Support multiple Google accounts
+   * ([#319](https://github.com/buttercup/buttercup-browser-extension/issues/319)) Google Drive authentication not working in Microsoft Edge (unofficial patch - pre-release)
+
 ## v2.11.1
 _2020-01-08_
 
