@@ -146,7 +146,7 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
             const entry = targetGroup.createEntry(title);
             entry.setProperty("username", username).setProperty("password", password);
             if (url && url.length > 0) {
-                entry.setMeta("URL", url);
+                entry.setProperty("URL", url);
             }
         })
         .then(() => saveSource(sourceID));
@@ -374,8 +374,8 @@ export function getMatchingEntriesForURL(url) {
         const entries = [];
         unlockedSources.forEach(source => {
             const archive = source.workspace.archive;
-            const newEntries = archive.findEntriesByMeta("url", /.+/).filter(entry => {
-                const entryURL = entry.getMeta("url");
+            const newEntries = archive.findEntriesByProperty("url", /.+/).filter(entry => {
+                const entryURL = entry.getProperty("url");
                 const entryDomain = extractDomain(entryURL);
                 return entryDomain.length > 0 && entryDomain === extractDomain(url) && entry.isInTrash() === false;
             });

@@ -1,5 +1,15 @@
 # Buttercup browser extension changelog
 
+## v2.13.0
+_2020-01-22_
+
+ * Group context menu: creation, renaming, moving and deletion
+ * New group in root button
+ * Entry field history (basic)
+ * **Bugfix**:
+   * Credit card entry type would crash application
+   * State sync for vault management interface inconsistent
+
 ## v2.12.0
 _2020-01-18_
 
