@@ -20,6 +20,8 @@ import { updateContextMenu } from "./contextMenu.js";
 
 const { WebDAVDatasource } = Datasources;
 
+const URL_SEARCH_REXP = /^ur[li]$/i;
+
 export function addArchiveByRequest(payload) {
     switch (payload.type) {
         case "dropbox":
@@ -369,15 +371,19 @@ export function getMatchingEntriesForSearchTerm(term) {
 }
 
 export function getMatchingEntriesForURL(url) {
+    const domain = extractDomain(url);
     return getArchiveManager().then(archiveManager => {
         const unlockedSources = archiveManager.unlockedSources;
         const entries = [];
         unlockedSources.forEach(source => {
             const archive = source.workspace.archive;
-            const newEntries = archive.findEntriesByProperty("url", /.+/).filter(entry => {
-                const entryURL = entry.getProperty("url");
-                const entryDomain = extractDomain(entryURL);
-                return entryDomain.length > 0 && entryDomain === extractDomain(url) && entry.isInTrash() === false;
+            const newEntries = archive.findEntriesByProperty(URL_SEARCH_REXP, /.+/).filter(entry => {
+                const props = entry.getProperties(URL_SEARCH_REXP);
+                const propKeys = Object.keys(props);
+                return (
+                    entry.isInTrash() === false &&
+                    (propKeys.length > 0 && propKeys.some(propKey => extractDomain(props[propKey]) === domain))
+                );
             });
             entries.push(
                 ...newEntries.map(entry => ({
