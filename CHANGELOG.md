@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v2.13.1
+_2020-01-24_
+
+ * **Bugfix**:
+   * ([#324](https://github.com/buttercup/buttercup-browser-extension/issues/324)) Very slow vault contents navigation
+   * ([#323](https://github.com/buttercup/buttercup-browser-extension/issues/323)) OTP (HOTP) failures crashing entire vault management UI
+   * ([#322](https://github.com/buttercup/buttercup-browser-extension/issues/322)) Auto-update of search results by URL not working
+
 ## v2.13.0
 _2020-01-22_
 
