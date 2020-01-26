@@ -1,4 +1,4 @@
-import { createClient as createWebDAVClient } from "webdav";
+import { getSharedAppEnv } from "@buttercup/app-env";
 import {
     createClient as createDropboxClient,
     createFsInterface as createDropboxFSClient
@@ -16,7 +16,8 @@ let __webdavClient = null,
     __googleDriveClient = null;
 
 export function connectWebDAV(url, username, password) {
-    const client = createWebDAVClient(url, { username, password });
+    const createClient = getSharedAppEnv().getProperty("net/webdav/v1/newClient");
+    const client = createClient(url, { username, password });
     log.info(`Creating WebDAV connection to: ${url}`);
     return testWebDAVConnection(client).then(succeeded => {
         if (succeeded) {

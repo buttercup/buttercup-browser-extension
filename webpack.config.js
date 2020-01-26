@@ -132,7 +132,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
         vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer", "@buttercup/app-env/web"],
         google: ["@buttercup/google-oauth2-client"]
     },
 
@@ -200,8 +200,8 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
 const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_SETUP, "./index.js"),
-        vendor: [...REACT_PACKAGES, "dropbox", "webdav", BUTTERCUP_ENTRY],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client"]
+        vendor: [...REACT_PACKAGES, "dropbox", BUTTERCUP_ENTRY],
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client", "@buttercup/app-env/web"]
     },
 
     output: {

@@ -54,7 +54,7 @@
     "@babel/preset-react": "^7.0.0",
     "@blueprintjs/core": "^3.10.0",
     "@blueprintjs/icons": "^3.1.0",
-    "@buttercup/app-env": "^0.1.1",
+    "@buttercup/app-env": "^0.2.0",
     "@buttercup/channel-queue": "^0.4.0",
     "@buttercup/config": "^0.1.0",
     "@buttercup/dropbox-client": "^0.3.2",
@@ -67,7 +67,7 @@
     "babel-loader": "^8.0.5",
     "babel-plugin-jsx-control-statements": "^4.0.0",
     "browser-info": "^1.2.0",
-    "buttercup": "^3.0.0-rc3.1",
+    "buttercup": "^3.0.0-rc3.2",
     "classnames": "^2.2.6",
     "color": "^3.1.2",
     "concurrently": "^4.1.0",
@@ -132,7 +132,6 @@
     "uuid": "^3.3.2",
     "verror": "^1.10.0",
     "web-ext": "^4.0.0",
-    "webdav": "2.10.0",
     "webpack": "^3.12.0",
     "yoctodelay": "^1.1.0"
   }
