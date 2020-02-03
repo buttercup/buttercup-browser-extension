@@ -1,6 +1,11 @@
 const NOOP = () => {};
 
 export function createNewTab(url) {
+    if (!chrome.tabs) {
+        // Handle non-background scripts
+        chrome.runtime.sendMessage({ type: "open-tab", url });
+        return Promise.resolve();
+    }
     return new Promise(resolve => chrome.tabs.create({ url }, resolve));
 }
 
