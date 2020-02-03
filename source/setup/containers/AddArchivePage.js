@@ -31,8 +31,6 @@ import {
     addGoogleDriveArchive,
     addLocalArchive,
     addMyButtercupArchives,
-    addNextcloudArchive,
-    addOwnCloudArchive,
     addWebDAVArchive
 } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
@@ -279,25 +277,9 @@ export default connect(
             const state = getState();
             const remoteFilename = getSelectedFilename(state);
             const shouldCreate = selectedFileNeedsCreation(state);
-            let addArchive;
-            switch (type) {
-                case "nextcloud":
-                    addArchive = addNextcloudArchive;
-                    break;
-                case "owncloud":
-                    addArchive = addOwnCloudArchive;
-                    break;
-                case "webdav":
-                    addArchive = addWebDAVArchive;
-                    break;
-                default:
-                    console.error(`Unable to add vault: Invalid vault type: ${type}`);
-                    notifyError("Failed adding vault", `An error occurred when adding the vault: ${err.message}`);
-                    return;
-            }
             dispatch(setAdding(true));
             dispatch(setBusy(shouldCreate ? "Adding new vault..." : "Adding existing vault..."));
-            return addArchive(name, masterPassword, remoteFilename, url, username, password, shouldCreate)
+            return addWebDAVArchive(name, masterPassword, remoteFilename, url, username, password, shouldCreate)
                 .then(() => {
                     dispatch(unsetBusy());
                     notifySuccess("Successfully added vault", `The vault '${archiveName}' was successfully added.`);
@@ -329,20 +311,9 @@ export default connect(
                 });
         },
         onConnectWebDAVBasedSource: (type, url, username, password) => dispatch => {
-            let webdavURL;
-            switch (type) {
-                case "owncloud":
-                /* falls-through */
-                case "nextcloud":
-                    webdavURL = joinURL(url, "/remote.php/webdav");
-                    break;
-                default:
-                    webdavURL = url;
-                    break;
-            }
             dispatch(setConnecting(true));
             setTimeout(() => {
-                connectWebDAV(webdavURL, username, password)
+                connectWebDAV(url, username, password)
                     .then(() => {
                         dispatch(setConnected(true));
                         dispatch(setConnecting(false));

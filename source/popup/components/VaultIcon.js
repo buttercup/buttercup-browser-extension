@@ -6,8 +6,6 @@ const ARCHIVE_IMAGES = {
     googledrive: require("../../../resources/providers/googledrive-256.png"),
     localfile: require("../../../resources/providers/chip.svg"),
     mybuttercup: require("../../../resources/providers/mybuttercup-256.png"),
-    owncloud: require("../../../resources/providers/owncloud-256.png"),
-    nextcloud: require("../../../resources/providers/nextcloud-256.png"),
     webdav: require("../../../resources/providers/webdav-white-256.png")
 };
 

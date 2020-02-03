@@ -28,10 +28,6 @@ export function addArchiveByRequest(payload) {
             return addDropboxArchive(payload);
         case "googledrive":
             return addGoogleDriveArchive(payload);
-        case "nextcloud":
-            return addNextcloudArchive(payload);
-        case "owncloud":
-            return addOwnCloudArchive(payload);
         case "webdav":
             return addWebDAVArchive(payload);
         case "localfile":
@@ -68,7 +64,7 @@ export function addDropboxArchive(payload) {
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)
-                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
                     .then(() => archiveManager.dehydrateSource(source))
             );
         });
@@ -100,7 +96,7 @@ export function addGoogleDriveArchive(payload) {
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)
-                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
                     .then(() => archiveManager.dehydrateSource(source))
             );
         });
@@ -131,7 +127,7 @@ export function addLocalArchive(payload) {
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)
-                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
                     .then(() => archiveManager.dehydrateSource(source))
             );
         });
@@ -182,72 +178,6 @@ export function addMyButtercupArchive(payload) {
     });
 }
 
-export function addNextcloudArchive(payload) {
-    const { name, masterPassword, filename, url, username, password, create } = payload;
-    log.info(`Attempting to connect Nextcloud archive '${filename}' from: ${url} (${name})`);
-    log.info(`New archive will be created for request: ${create}`);
-    return getArchiveManager()
-        .then(archiveManager => {
-            const nextcloudCreds = new Credentials("nextcloud");
-            nextcloudCreds.username = username;
-            nextcloudCreds.password = password;
-            nextcloudCreds.setValue(
-                "datasource",
-                JSON.stringify({
-                    type: "nextcloud",
-                    endpoint: url,
-                    path: filename
-                })
-            );
-            return Promise.all([
-                nextcloudCreds.toSecureString(masterPassword),
-                Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
-            ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
-        })
-        .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "nextcloud" });
-            return archiveManager.interruptAutoUpdate(() =>
-                archiveManager
-                    .addSource(source)
-                    .then(() => source.unlock(masterPassword, create))
-                    .then(() => archiveManager.dehydrateSource(source))
-            );
-        });
-}
-
-export function addOwnCloudArchive(payload) {
-    const { name, masterPassword, filename, url, username, password, create } = payload;
-    log.info(`Attempting to connect ownCloud archive '${filename}' from: ${url} (${name})`);
-    log.info(`New archive will be created for request: ${create}`);
-    return getArchiveManager()
-        .then(archiveManager => {
-            const owncloudCreds = new Credentials("owncloud");
-            owncloudCreds.username = username;
-            owncloudCreds.password = password;
-            owncloudCreds.setValue(
-                "datasource",
-                JSON.stringify({
-                    type: "owncloud",
-                    endpoint: url,
-                    path: filename
-                })
-            );
-            return Promise.all([
-                owncloudCreds.toSecureString(masterPassword),
-                Credentials.fromPassword(masterPassword).toSecureString(masterPassword)
-            ]).then(([sourceCreds, archiveCreds]) => [archiveManager, sourceCreds, archiveCreds]);
-        })
-        .then(([archiveManager, sourceCredentials, archiveCredentials]) => {
-            const source = new ArchiveSource(name, sourceCredentials, archiveCredentials, { type: "owncloud" });
-            return archiveManager.interruptAutoUpdate(() =>
-                archiveManager
-                    .addSource(source)
-                    .then(() => source.unlock(masterPassword, create))
-                    .then(() => archiveManager.dehydrateSource(source))
-            );
-        });
-}
-
 export function addWebDAVArchive(payload) {
     const { name, masterPassword, filename, url, username, password, create } = payload;
     log.info(`Attempting to connect WebDAV archive '${filename}' from: ${url} (${name})`);
@@ -275,7 +205,7 @@ export function addWebDAVArchive(payload) {
             return archiveManager.interruptAutoUpdate(() =>
                 archiveManager
                     .addSource(source)
-                    .then(() => source.unlock(masterPassword, create))
+                    .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
                     .then(() => archiveManager.dehydrateSource(source))
             );
         });
