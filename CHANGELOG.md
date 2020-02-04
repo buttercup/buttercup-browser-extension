@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v2.14.0
+_2020-02-03_
+
+ * Upgrade webdav for reduced application size
+ * **Bugfix**:
+   * ([#325](https://github.com/buttercup/buttercup-browser-extension/issues/325)) New vaults fail to create
+   * ([#286](https://github.com/buttercup/buttercup-browser-extension/issues/286)) Unlock-vaults page not opening in FF after clicking button in on-page dialog
+
 ## v2.13.1
 _2020-01-24_
 
