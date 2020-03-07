@@ -33,7 +33,7 @@ import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
-import { disableLoginsOnDomain } from "./disabledLogin.js";
+import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
 
 const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
@@ -145,12 +145,25 @@ function handleMessage(request, sender, sendResponse) {
                 }
             }
             log.info(`Disabling save-login prompt for domain: ${domain}`);
-            disableLoginsOnDomain(domain);
-            return false;
+            disableLoginsOnDomain(domain)
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
         }
         case "get-config":
             sendResponse({ config: getConfig(getState()) });
             return false;
+        case "get-disabled-save-prompt-domains": {
+            getDisabledDomains().then(domains => {
+                sendResponse({ domains });
+            });
+            return true;
+        }
         case "get-groups-tree": {
             const { sourceID } = request;
             getArchive(sourceID)
@@ -256,6 +269,19 @@ function handleMessage(request, sender, sendResponse) {
             const { sourceID } = request;
             log.info(`Received request to remove source: ${sourceID}`);
             removeSource(sourceID)
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
+        }
+        case "remove-disabled-login-domain": {
+            const { domain } = request;
+            log.info(`Removing disabled-flag for save-login prompt for domain: ${domain}`);
+            removeDisabledFlagForDomain(domain)
                 .then(() => {
                     sendResponse({ ok: true });
                 })
