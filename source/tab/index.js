@@ -20,7 +20,7 @@ function checkForLoginSaveAbility() {
             const unlockedCount = sourceStats.unlocked;
             const canShowSaveDialog =
                 config.showSaveDialog === "always" || (config.showSaveDialog === "unlocked" && unlockedCount > 0);
-            if (true || (loginStatus.credentials && canShowSaveDialog)) {
+            if (loginStatus.credentials && canShowSaveDialog) {
                 showSaveDialog();
             }
         })

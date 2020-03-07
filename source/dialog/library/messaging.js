@@ -4,6 +4,10 @@ export function destroyLastLogin() {
     chrome.runtime.sendMessage({ type: "clear-used-credentials" });
 }
 
+export function disableLoginForDomain(domain) {
+    chrome.runtime.sendMessage({ type: "disable-login-domain", domain });
+}
+
 export function getLastLogin() {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "get-used-credentials" }, resp => {
