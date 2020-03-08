@@ -1,6 +1,6 @@
 import { consumeArchiveFacade, createArchiveFacade, createEntryFacade } from "@buttercup/facades";
 import VError from "verror";
-import extractDomain from "extract-domain";
+import { extractDomain } from "../../shared/library/domain.js";
 import * as Buttercup from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";

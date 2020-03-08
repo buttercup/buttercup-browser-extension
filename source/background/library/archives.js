@@ -1,4 +1,3 @@
-import extractDomain from "extract-domain";
 import { createArchiveFacade } from "@buttercup/facades";
 import {
     Archive,
@@ -9,6 +8,7 @@ import {
     Workspace,
     Group
 } from "../../shared/library/buttercup.js";
+import { extractDomain } from "../../shared/library/domain.js";
 import { getArchiveManager } from "./buttercup.js";
 import { getState } from "../redux/index.js";
 import { getConfigKey } from "../../shared/selectors/app.js";
