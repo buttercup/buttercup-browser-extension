@@ -17,6 +17,9 @@ export default withRouter(
             onItemsClick: () => dispatch => {
                 dispatch(push("/"));
             },
+            onManageDisabledLoginPromps: () => () => {
+                createNewTab(getExtensionURL("setup.html#/settings/disabled-login-domains"));
+            },
             onVaultsClick: () => dispatch => {
                 dispatch(push("/vaults"));
             },
