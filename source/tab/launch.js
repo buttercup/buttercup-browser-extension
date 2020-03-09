@@ -4,6 +4,7 @@ import { DIALOG_TYPE_ENTRY_PICKER, toggleInputDialog } from "./inputDialog.js";
 import { onBodyWidthResize } from "./resize.js";
 import { getExtensionURL } from "../shared/library/extension.js";
 import { itemIsIgnored } from "./disable.js";
+import { onElementDismount } from "./dismount.js";
 
 const BUTTON_BACKGROUND_IMAGE = getExtensionURL(require("../../resources/content-button-background.png"));
 
@@ -11,8 +12,7 @@ export function attachLaunchButton(input) {
     if (input.dataset.bcup === "attached" || itemIsIgnored(input)) {
         return;
     }
-    const { backgroundColor, borderTopLeftRadius, borderBottomLeftRadius } = window.getComputedStyle(input, null);
-
+    const { borderTopLeftRadius, borderBottomLeftRadius } = window.getComputedStyle(input, null);
     const tryToAttach = () => {
         const bounds = input.getBoundingClientRect();
         const { width, height } = bounds;
@@ -63,6 +63,9 @@ export function attachLaunchButton(input) {
             toggleInputDialog(input, DIALOG_TYPE_ENTRY_PICKER);
         };
         mount(input.offsetParent, button);
+        onElementDismount(button, () => {
+            tryToAttach();
+        });
         const reprocessButton = () => {
             try {
                 left = input.offsetLeft + newInputWidth;
