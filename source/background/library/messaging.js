@@ -1,5 +1,6 @@
 import { consumeArchiveFacade, createArchiveFacade, createEntryFacade } from "@buttercup/facades";
 import VError from "verror";
+import { extractDomain } from "../../shared/library/domain.js";
 import * as Buttercup from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
@@ -32,6 +33,7 @@ import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
+import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
 
 const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
@@ -116,6 +118,7 @@ function handleMessage(request, sender, sendResponse) {
             clearSearchResults();
             return false;
         case "clear-used-credentials":
+            log.info("Clearing last-login details");
             clearLastLogin();
             return false;
         case "create-vault-facade": {
@@ -131,15 +134,20 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
-        case "get-config":
-            sendResponse({ config: getConfig(getState()) });
-            return false;
-        case "get-groups-tree": {
-            const { sourceID } = request;
-            getArchive(sourceID)
-                .then(archive => {
-                    const obj = archiveToObjectGroupsOnly(archive);
-                    sendResponse({ ok: true, groups: obj.groups });
+        case "disable-login-domain": {
+            const lastLogin = getLastLogin();
+            let domain = request.domain;
+            if (!domain) {
+                if (lastLogin) {
+                    domain = extractDomain(lastLogin.url);
+                } else {
+                    log.error("No domain or last-login available to disable");
+                }
+            }
+            log.info(`Disabling save-login prompt for domain: ${domain}`);
+            disableLoginsOnDomain(domain)
+                .then(() => {
+                    sendResponse({ ok: true });
                 })
                 .catch(err => {
                     sendResponse({ ok: false, error: err.message });
@@ -147,10 +155,21 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
-        case "get-vaultsinfo": {
-            getSourcesInfo()
-                .then(items => {
-                    sendResponse({ ok: true, items });
+        case "get-config":
+            sendResponse({ config: getConfig(getState()) });
+            return false;
+        case "get-disabled-save-prompt-domains": {
+            getDisabledDomains().then(domains => {
+                sendResponse({ domains });
+            });
+            return true;
+        }
+        case "get-groups-tree": {
+            const { sourceID } = request;
+            getArchive(sourceID)
+                .then(archive => {
+                    const obj = archiveToObjectGroupsOnly(archive);
+                    sendResponse({ ok: true, groups: obj.groups });
                 })
                 .catch(err => {
                     sendResponse({ ok: false, error: err.message });
@@ -188,6 +207,17 @@ function handleMessage(request, sender, sendResponse) {
                 sendResponse({ ok: true, credentials: null });
             }
             return false;
+        }
+        case "get-vaultsinfo": {
+            getSourcesInfo()
+                .then(items => {
+                    sendResponse({ ok: true, items });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
         }
         case "lock-all-archives": {
             clearSearchResults();
@@ -239,6 +269,19 @@ function handleMessage(request, sender, sendResponse) {
             const { sourceID } = request;
             log.info(`Received request to remove source: ${sourceID}`);
             removeSource(sourceID)
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
+        }
+        case "remove-disabled-login-domain": {
+            const { domain } = request;
+            log.info(`Removing disabled-flag for save-login prompt for domain: ${domain}`);
+            removeDisabledFlagForDomain(domain)
                 .then(() => {
                     sendResponse({ ok: true });
                 })

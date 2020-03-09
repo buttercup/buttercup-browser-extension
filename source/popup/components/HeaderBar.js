@@ -23,15 +23,16 @@ class HeaderBar extends PureComponent {
         archives: ArchivesShape,
         current: PropTypes.string,
         darkMode: PropTypes.bool,
-        onItemsClick: PropTypes.func.isRequired,
-        onVaultsClick: PropTypes.func.isRequired,
-        onSettingsClick: PropTypes.func.isRequired,
-        onAddVaultClick: PropTypes.func.isRequired,
-        onUnlockVaultClick: PropTypes.func.isRequired,
-        onLockAllClick: PropTypes.func.isRequired,
-        onOtherSoftwareClick: PropTypes.func.isRequired,
         onAboutClick: PropTypes.func.isRequired,
-        onToggleDarkMode: PropTypes.func.isRequired
+        onAddVaultClick: PropTypes.func.isRequired,
+        onItemsClick: PropTypes.func.isRequired,
+        onLockAllClick: PropTypes.func.isRequired,
+        onManageDisabledLoginPromps: PropTypes.func.isRequired,
+        onOtherSoftwareClick: PropTypes.func.isRequired,
+        onSettingsClick: PropTypes.func.isRequired,
+        onToggleDarkMode: PropTypes.func.isRequired,
+        onUnlockVaultClick: PropTypes.func.isRequired,
+        onVaultsClick: PropTypes.func.isRequired
     };
 
     handleItemsClick(event) {
@@ -81,7 +82,13 @@ class HeaderBar extends PureComponent {
                 <MenuDivider />
                 <MenuItem text="About Buttercup" icon="info-sign" onClick={::this.props.onAboutClick} />
                 <MenuItem text="Other Applications" icon="mobile-phone" onClick={::this.props.onOtherSoftwareClick} />
+                <MenuDivider />
                 <MenuItem text="Settings" icon="cog" onClick={::this.props.onSettingsClick} />
+                <MenuItem
+                    text="Manage Disabled Login Prompts"
+                    icon="exclude-row"
+                    onClick={::this.props.onManageDisabledLoginPromps}
+                />
             </Menu>
         );
         return (

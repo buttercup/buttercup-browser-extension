@@ -13,6 +13,18 @@ export function getConfig() {
     });
 }
 
+export function getDisabledSavePromptDomains() {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-disabled-save-prompt-domains" }, resp => {
+            if (resp && resp.domains) {
+                resolve(resp.domains);
+            } else {
+                reject(new Error("Failed getting disable domain prompts"));
+            }
+        });
+    });
+}
+
 export function getLastLoginStatus() {
     return new Promise(resolve => {
         chrome.runtime.sendMessage({ type: "get-used-credentials" }, resp => {

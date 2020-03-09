@@ -14,11 +14,23 @@ export default withRouter(
             darkMode: getConfigKey(state, "darkMode")
         }),
         {
+            onAboutClick: () => () => {
+                createNewTab(getExtensionURL("setup.html#/about"));
+            },
+            onAddVaultClick: () => () => {
+                createNewTab(getExtensionURL("setup.html#/add-archive"));
+            },
             onItemsClick: () => dispatch => {
                 dispatch(push("/"));
             },
-            onVaultsClick: () => dispatch => {
-                dispatch(push("/vaults"));
+            onLockAllClick: () => dispatch => {
+                dispatch(push("/vaults/lock", { lockAll: true }));
+            },
+            onManageDisabledLoginPromps: () => () => {
+                createNewTab(getExtensionURL("setup.html#/settings/disabled-login-domains"));
+            },
+            onOtherSoftwareClick: () => () => {
+                createNewTab("https://buttercup.pw");
             },
             onSettingsClick: () => dispatch => {
                 dispatch(push("/settings"));
@@ -31,17 +43,8 @@ export default withRouter(
             onUnlockVaultClick: (archiveID, state) => () => {
                 createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}/${state}`));
             },
-            onAddVaultClick: () => () => {
-                createNewTab(getExtensionURL("setup.html#/add-archive"));
-            },
-            onAboutClick: () => () => {
-                createNewTab(getExtensionURL("setup.html#/about"));
-            },
-            onLockAllClick: () => dispatch => {
-                dispatch(push("/vaults/lock", { lockAll: true }));
-            },
-            onOtherSoftwareClick: () => () => {
-                createNewTab("https://buttercup.pw");
+            onVaultsClick: () => dispatch => {
+                dispatch(push("/vaults"));
             }
         }
     )(HeaderBar)

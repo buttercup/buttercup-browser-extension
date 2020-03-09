@@ -1,35 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Card as CardBase, H4, H5, Classes, Button, Intent, ButtonGroup } from "@blueprintjs/core";
-
-const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    padding: 2rem;
-`;
-const Card = styled(CardBase)`
-    flex: 1;
-    flex-direction: column;
-    display: flex;
-`;
-const CardBody = styled.div`
-    flex: 1;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-`;
-const CardFooter = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;
-`;
+import { H5, Classes, Button, Intent } from "@blueprintjs/core";
+import InPagePopupBody from "./InPagePopupBody.js";
 
 class SaveNewCredentialsPage extends Component {
     static propTypes = {
         cancelSavingCredentials: PropTypes.func.isRequired,
+        disableSavePrompt: PropTypes.func.isRequired,
         fetchCredentials: PropTypes.func.isRequired,
         openSaveForm: PropTypes.func.isRequired
     };
@@ -51,6 +28,11 @@ class SaveNewCredentialsPage extends Component {
         this.props.cancelSavingCredentials();
     }
 
+    handleDisableClick(event) {
+        event.preventDefault();
+        this.props.disableSavePrompt();
+    }
+
     handleSaveClick(event) {
         event.preventDefault();
         this.props.openSaveForm();
@@ -58,13 +40,10 @@ class SaveNewCredentialsPage extends Component {
 
     render() {
         return (
-            <Container>
-                <Card interactive>
-                    <CardBody>
-                        <H4>Save in Buttercup?</H4>
-                        <H5 className={Classes.TEXT_MUTED}>{this.state.credentialsTitle}</H5>
-                    </CardBody>
-                    <CardFooter>
+            <InPagePopupBody
+                title="Save Login Details?"
+                footer={
+                    <Fragment>
                         <Button
                             fill
                             text="Save"
@@ -72,10 +51,13 @@ class SaveNewCredentialsPage extends Component {
                             onClick={::this.handleSaveClick}
                             intent={Intent.PRIMARY}
                         />
+                        <Button small icon="disable" onClick={::this.handleDisableClick} />
                         <Button fill text="Cancel" onClick={::this.handleCancelClick} />
-                    </CardFooter>
-                </Card>
-            </Container>
+                    </Fragment>
+                }
+            >
+                <H5 className={Classes.TEXT_MUTED}>{this.state.credentialsTitle}</H5>
+            </InPagePopupBody>
         );
     }
 }

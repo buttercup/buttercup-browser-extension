@@ -2,6 +2,7 @@ import { onIdentifiedTarget, watchLogin } from "./login.js";
 import { attachLaunchButton } from "./launch.js";
 import {
     getConfig,
+    getDisabledSavePromptDomains,
     getLastLoginStatus,
     getSourcesStats,
     startMessageListeners,
@@ -13,10 +14,12 @@ import { watchInputs } from "./generator.js";
 import { trackMouseMovement, trackScrolling } from "../shared/library/mouseEvents.js";
 import { trackKeydownEvent } from "../shared/library/keyboardEvents.js";
 import { watchForRegistrationPossibility } from "./myButtercup.js";
+import { currentDomainDisabled } from "./page.js";
 
 function checkForLoginSaveAbility() {
-    return Promise.all([getLastLoginStatus(), getConfig(), getSourcesStats()])
-        .then(([loginStatus, config, sourceStats]) => {
+    return Promise.all([getLastLoginStatus(), getConfig(), getSourcesStats(), getDisabledSavePromptDomains()])
+        .then(([loginStatus, config, sourceStats, disabledDomains]) => {
+            if (currentDomainDisabled(disabledDomains)) return;
             const unlockedCount = sourceStats.unlocked;
             const canShowSaveDialog =
                 config.showSaveDialog === "always" || (config.showSaveDialog === "unlocked" && unlockedCount > 0);
@@ -82,7 +85,6 @@ checkForLoginSaveAbility();
 // Track mousemove events for user activity tracking
 trackMouseMovement();
 trackScrolling();
-
 // Track keystrokes for user activity tracking
 trackKeydownEvent();
 

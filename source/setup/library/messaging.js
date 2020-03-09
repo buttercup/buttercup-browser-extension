@@ -55,6 +55,14 @@ export function clearLastLogin() {
     chrome.runtime.sendMessage({ type: "clear-used-credentials" });
 }
 
+export function disableDomainForSavePrompt(domain) {
+    return new Promise(resolve => {
+        chrome.runtime.sendMessage({ type: "disable-login-domain", domain }, () => {
+            resolve();
+        });
+    });
+}
+
 export function getArchiveFacade(sourceID) {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "create-vault-facade", sourceID }, resp => {
@@ -74,6 +82,18 @@ export function getArchivesGroupTree(sourceID) {
                 resolve(resp.groups);
             } else {
                 reject(new Error(`Failed getting archive contents: ${(resp && resp.error) || "Unknown error"}`));
+            }
+        });
+    });
+}
+
+export function getDisabledSavePromptDomains() {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-disabled-save-prompt-domains" }, resp => {
+            if (resp && resp.domains) {
+                resolve(resp.domains);
+            } else {
+                reject(new Error("Failed getting disable domain prompts"));
             }
         });
     });
@@ -126,6 +146,14 @@ export function removeArchive(sourceID) {
                 return resolve();
             }
             return reject(new Error(`Adding removal failed: ${error}`));
+        });
+    });
+}
+
+export function removeDisabledDomainForSavePrompt(domain) {
+    return new Promise(resolve => {
+        chrome.runtime.sendMessage({ type: "remove-disabled-login-domain", domain }, () => {
+            resolve();
         });
     });
 }
