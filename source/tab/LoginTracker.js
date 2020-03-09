@@ -3,10 +3,9 @@ import { getCurrentTitle, getCurrentURL } from "./page.js";
 let __sharedTracker = null;
 
 export default class LoginTracker {
-    username = "";
-    password = "";
     _url = getCurrentURL();
     _title = getCurrentTitle();
+    _connections = [];
 
     get title() {
         return this._title;
@@ -14,6 +13,18 @@ export default class LoginTracker {
 
     get url() {
         return this._url;
+    }
+
+    getConnection(loginTarget) {
+        return this._connections.find(conn => conn.loginTarget === loginTarget);
+    }
+
+    registerConnection(loginTarget) {
+        this._connections.push({
+            loginTarget,
+            username: "",
+            password: ""
+        });
     }
 }
 

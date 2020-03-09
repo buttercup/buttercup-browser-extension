@@ -36,6 +36,8 @@ function checkForLoginSaveAbility() {
 // Wait for a target
 function waitAndAttachLaunchButtons() {
     onIdentifiedTarget(loginTarget => {
+        const tracker = getSharedTracker();
+        tracker.registerConnection(loginTarget);
         const { usernameField, passwordField } = loginTarget;
         if (passwordField) {
             attachLaunchButton(passwordField);
@@ -46,18 +48,18 @@ function waitAndAttachLaunchButtons() {
         watchLogin(
             loginTarget,
             username => {
-                const tracker = getSharedTracker();
-                tracker.username = username;
+                const connection = tracker.getConnection(loginTarget);
+                connection.username = username;
             },
             password => {
-                const tracker = getSharedTracker();
-                tracker.password = password;
+                const connection = tracker.getConnection(loginTarget);
+                connection.password = password;
             },
             () => {
-                const tracker = getSharedTracker();
+                const connection = tracker.getConnection(loginTarget);
                 transferLoginCredentials({
-                    username: tracker.username,
-                    password: tracker.password,
+                    username: connection.username,
+                    password: connection.password,
                     url: tracker.url,
                     title: tracker.title,
                     timestamp: Date.now()
