@@ -18,12 +18,12 @@ import { currentDomainDisabled } from "./page.js";
 
 function checkForLoginSaveAbility() {
     return Promise.all([getLastLoginStatus(), getConfig(), getSourcesStats(), getDisabledSavePromptDomains()])
-        .then(([loginStatus, config, sourceStats, disabledDomains]) => {
+        .then(([loginAvailable, config, sourceStats, disabledDomains]) => {
             if (currentDomainDisabled(disabledDomains)) return;
             const unlockedCount = sourceStats.unlocked;
             const canShowSaveDialog =
                 config.showSaveDialog === "always" || (config.showSaveDialog === "unlocked" && unlockedCount > 0);
-            if (loginStatus.credentials && canShowSaveDialog) {
+            if (loginAvailable && canShowSaveDialog) {
                 showSaveDialog();
             }
         })
@@ -45,6 +45,16 @@ function waitAndAttachLaunchButtons() {
         if (usernameField) {
             attachLaunchButton(usernameField);
         }
+        const connection = tracker.getConnection(loginTarget);
+        tracker.on("credentialsChanged", creds => {
+            transferLoginCredentials({
+                ...creds, // username & password
+                id: connection.id,
+                url: tracker.url,
+                title: tracker.title,
+                timestamp: Date.now()
+            });
+        });
         watchLogin(
             loginTarget,
             username => {
@@ -56,14 +66,6 @@ function waitAndAttachLaunchButtons() {
                 connection.password = password;
             },
             () => {
-                const connection = tracker.getConnection(loginTarget);
-                transferLoginCredentials({
-                    username: connection.username,
-                    password: connection.password,
-                    url: tracker.url,
-                    title: tracker.title,
-                    timestamp: Date.now()
-                });
                 setTimeout(() => {
                     checkForLoginSaveAbility();
                 }, 300);

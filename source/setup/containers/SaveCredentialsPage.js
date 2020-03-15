@@ -3,7 +3,7 @@ import VError from "verror";
 import { Group } from "../../shared/library/buttercup.js";
 import SaveCredentialsPage from "../components/SaveCredentialsPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
-import { addNewEntry, clearLastLogin, getArchivesGroupTree, getLastLogin } from "../library/messaging.js";
+import { addNewEntry, clearLastLogin, getArchivesGroupTree, getLastUsedCredentials } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
@@ -46,7 +46,7 @@ export default connect(
                     return [];
                 });
         },
-        fetchLoginDetails: () => () => getLastLogin(),
+        fetchLoginDetails: () => () => getLastUsedCredentials(),
         saveNewCredentials: (sourceID, groupID, entryDetails) => dispatch => {
             if (sourceID && groupID) {
                 const { username, password, title, url } = entryDetails;

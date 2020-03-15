@@ -99,10 +99,10 @@ export function getDisabledSavePromptDomains() {
     });
 }
 
-export function getLastLogin() {
+export function getLastUsedCredentials() {
     return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ type: "get-used-credentials", force: true }, resp => {
-            if (resp && resp.credentials && resp.credentials.title) {
+        chrome.runtime.sendMessage({ type: "get-used-credentials", mode: "all" }, resp => {
+            if (Array.isArray(resp.credentials)) {
                 resolve(resp.credentials);
             } else {
                 reject(new Error("Failed getting last login details"));

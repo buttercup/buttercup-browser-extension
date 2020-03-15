@@ -78,6 +78,7 @@
     "dropbox": "^2.5.12",
     "env-cmd": "^10.0.1",
     "event-listener": "^1.1.0",
+    "eventemitter3": "^4.0.0",
     "extract-domain": "^2.0.4",
     "file-loader": "^1.1.11",
     "history": "^4.7.2",

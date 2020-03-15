@@ -28,16 +28,7 @@ export function getDisabledSavePromptDomains() {
 export function getLastLoginStatus() {
     return new Promise(resolve => {
         chrome.runtime.sendMessage({ type: "get-used-credentials" }, resp => {
-            resolve(
-                resp && !!resp.credentials
-                    ? {
-                          credentials: true,
-                          title: resp.credentials.title
-                      }
-                    : {
-                          credentials: false
-                      }
-            );
+            resolve(!!(resp.credentials && resp.credentials.length > 0));
         });
     });
 }

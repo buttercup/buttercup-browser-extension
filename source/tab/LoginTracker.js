@@ -1,8 +1,10 @@
+import uuid from "uuid/v4";
+import EventEmitter from "eventemitter3";
 import { getCurrentTitle, getCurrentURL } from "./page.js";
 
 let __sharedTracker = null;
 
-export default class LoginTracker {
+export default class LoginTracker extends EventEmitter {
     _url = getCurrentURL();
     _title = getCurrentTitle();
     _connections = [];
@@ -20,11 +22,34 @@ export default class LoginTracker {
     }
 
     registerConnection(loginTarget) {
-        this._connections.push({
+        const _this = this;
+        const connection = {
+            id: uuid(),
             loginTarget,
-            username: "",
-            password: ""
-        });
+            _username: "",
+            _password: "",
+            get username() {
+                return connection._username;
+            },
+            get password() {
+                return connection._password;
+            },
+            set username(un) {
+                connection._username = un;
+                _this.emit("credentialsChanged", {
+                    username: connection.username,
+                    password: connection.password
+                });
+            },
+            set password(pw) {
+                connection._password = pw;
+                _this.emit("credentialsChanged", {
+                    username: connection.username,
+                    password: connection.password
+                });
+            }
+        };
+        this._connections.push(connection);
     }
 }
 
