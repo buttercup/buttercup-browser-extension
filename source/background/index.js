@@ -8,6 +8,7 @@ import { watchForSourcesAutoLock } from "./library/autoLock.js";
 import { watchStorage as watchStorageForConfig } from "./library/config.js";
 import { createArchiveManager, getQueue, registerAuthWatchers } from "./library/buttercup.js";
 import { migrateLocalStorageToChromeStorage } from "./library/storageMigration.js";
+import { cleanLogins, updateLoginsState } from "./library/loginMemory.js";
 import store from "./redux/index.js";
 
 log.info("Starting...");
@@ -23,5 +24,8 @@ registerAuthWatchers();
 migrateLocalStorageToChromeStorage(getQueue())
     .then(() => createArchiveManager())
     .then(() => updateContextMenu());
+
+setInterval(cleanLogins, 30000);
+setInterval(updateLoginsState, 5000);
 
 log.info("Started successfully");

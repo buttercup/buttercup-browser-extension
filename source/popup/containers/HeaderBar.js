@@ -3,7 +3,7 @@ import { push } from "react-router-redux";
 import { withRouter } from "react-router";
 import HeaderBar from "../components/HeaderBar.js";
 import { getArchives } from "../../shared/selectors/archives.js";
-import { getConfigKey } from "../../shared/selectors/app.js";
+import { getConfigKey, getUnsavedLoginsCount } from "../../shared/selectors/app.js";
 import { setConfig } from "../../shared/library/messaging.js";
 import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
@@ -11,7 +11,8 @@ export default withRouter(
     connect(
         (state, ownProps) => ({
             archives: getArchives(state),
-            darkMode: getConfigKey(state, "darkMode")
+            darkMode: getConfigKey(state, "darkMode"),
+            unsavedLogins: getUnsavedLoginsCount(state)
         }),
         {
             onAboutClick: () => () => {
@@ -31,6 +32,9 @@ export default withRouter(
             },
             onOtherSoftwareClick: () => () => {
                 createNewTab("https://buttercup.pw");
+            },
+            onSaveUnsavedClick: () => () => {
+                createNewTab(getExtensionURL("setup.html#/save-new-credentials"));
             },
             onSettingsClick: () => dispatch => {
                 dispatch(push("/settings"));

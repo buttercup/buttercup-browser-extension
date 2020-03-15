@@ -4,10 +4,6 @@ export function getBusyMessage(state) {
     return state[KEY].busyMessage;
 }
 
-export function shouldShowBusyModal(state) {
-    return state[KEY].busy;
-}
-
 export function getConfig(state) {
     return state[KEY].config;
 }
@@ -24,6 +20,14 @@ export function getConfigSource(state) {
     return state[KEY].configSource;
 }
 
+export function getUnsavedLoginsCount(state) {
+    return state[KEY].unsavedLogins || 0;
+}
+
 export function getUserActivity(state) {
     return state[KEY].userActivityTimestamp;
+}
+
+export function shouldShowBusyModal(state) {
+    return state[KEY].busy;
 }

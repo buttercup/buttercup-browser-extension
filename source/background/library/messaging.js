@@ -33,7 +33,7 @@ import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/librar
 import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
-import { cleanLogins, getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
+import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
 
 const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
