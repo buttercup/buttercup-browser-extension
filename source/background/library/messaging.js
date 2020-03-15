@@ -28,12 +28,12 @@ import {
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 import { setConfigValue, setUserActivity } from "../../shared/actions/app.js";
 import { setAutoLogin } from "../../shared/actions/autoLogin.js";
-import { cleanLogins, getLogins, updateLogin } from "./loginMemory.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
+import { cleanLogins, getLogins, stopPromptForTab, updateLogin } from "./loginMemory.js";
 
 const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
@@ -339,6 +339,12 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "set-user-activity": {
             dispatch(setUserActivity());
+            return true;
+        }
+        case "stop-prompt-saved-credentials": {
+            const tabID = sender.tab.id;
+            log.info(`Clearing save prompt for current credentials on tab: ${tabID}`);
+            stopPromptForTab(tabID);
             return true;
         }
         case "unlock-archive": {

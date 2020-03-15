@@ -40,3 +40,8 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
         }
     );
 }
+
+export function stopCurrentSavePrompt() {
+    // Cancel save for current tab
+    chrome.runtime.sendMessage({ type: "stop-prompt-saved-credentials" });
+}
