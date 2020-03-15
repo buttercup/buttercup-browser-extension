@@ -51,10 +51,6 @@ export function changeSourcePassword(sourceID, oldPassword, newPassword) {
     });
 }
 
-export function clearLastLogin() {
-    chrome.runtime.sendMessage({ type: "clear-used-credentials" });
-}
-
 export function disableDomainForSavePrompt(domain) {
     return new Promise(resolve => {
         chrome.runtime.sendMessage({ type: "disable-login-domain", domain }, () => {
@@ -156,6 +152,10 @@ export function removeDisabledDomainForSavePrompt(domain) {
             resolve();
         });
     });
+}
+
+export function removeSavedCredentials(id) {
+    chrome.runtime.sendMessage({ type: "remove-saved-credentials", id });
 }
 
 export function unlockArchive(sourceID, masterPassword) {

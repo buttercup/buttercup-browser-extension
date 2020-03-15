@@ -3,7 +3,12 @@ import VError from "verror";
 import { Group } from "../../shared/library/buttercup.js";
 import SaveCredentialsPage from "../components/SaveCredentialsPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
-import { addNewEntry, clearLastLogin, getArchivesGroupTree, getLastUsedCredentials } from "../library/messaging.js";
+import {
+    addNewEntry,
+    getArchivesGroupTree,
+    getLastUsedCredentials,
+    removeSavedCredentials
+} from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
@@ -34,7 +39,6 @@ export default connect(
     }),
     {
         cancel: () => () => {
-            clearLastLogin();
             setTimeout(closeCurrentTab, 100);
         },
         fetchGroupsForArchive: sourceID => () => {
@@ -47,7 +51,7 @@ export default connect(
                 });
         },
         fetchLoginDetails: () => () => getLastUsedCredentials(),
-        saveNewCredentials: (sourceID, groupID, entryDetails) => dispatch => {
+        saveNewCredentials: (sourceID, groupID, entryDetails, savedCredentialsID) => dispatch => {
             if (sourceID && groupID) {
                 const { username, password, title, url } = entryDetails;
                 if (stringsAreSet(username, password, title)) {
@@ -55,7 +59,7 @@ export default connect(
                     addNewEntry(sourceID, groupID, entryDetails)
                         .then(() => {
                             notifySuccess("Save successful", "Successfully saved new credentials.");
-                            clearLastLogin();
+                            removeSavedCredentials(savedCredentialsID);
                             dispatch(unsetBusy());
                             setTimeout(() => {
                                 closeCurrentTab();

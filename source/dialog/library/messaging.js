@@ -1,9 +1,5 @@
 import log from "../../shared/library/log.js";
 
-export function destroyLastLogin() {
-    chrome.runtime.sendMessage({ type: "clear-used-credentials" });
-}
-
 export function disableLoginForDomain(domain) {
     chrome.runtime.sendMessage({ type: "disable-login-domain", domain });
 }

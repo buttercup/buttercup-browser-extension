@@ -35,8 +35,18 @@ function checkForLoginSaveAbility() {
 
 // Wait for a target
 function waitAndAttachLaunchButtons() {
+    const tracker = getSharedTracker();
+    tracker.on("credentialsChanged", connection => {
+        transferLoginCredentials({
+            username: connection.username,
+            password: connection.password,
+            id: connection.id,
+            url: tracker.url,
+            title: tracker.title,
+            timestamp: Date.now()
+        });
+    });
     onIdentifiedTarget(loginTarget => {
-        const tracker = getSharedTracker();
         tracker.registerConnection(loginTarget);
         const { usernameField, passwordField } = loginTarget;
         if (passwordField) {
@@ -45,16 +55,6 @@ function waitAndAttachLaunchButtons() {
         if (usernameField) {
             attachLaunchButton(usernameField);
         }
-        const connection = tracker.getConnection(loginTarget);
-        tracker.on("credentialsChanged", creds => {
-            transferLoginCredentials({
-                ...creds, // username & password
-                id: connection.id,
-                url: tracker.url,
-                title: tracker.title,
-                timestamp: Date.now()
-            });
-        });
         watchLogin(
             loginTarget,
             username => {

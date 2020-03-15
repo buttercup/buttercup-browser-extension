@@ -178,12 +178,17 @@ class SaveCredentialsPage extends PureComponent {
 
     handleSaveClicked(event) {
         event.preventDefault();
-        this.props.saveNewCredentials(this.state.sourceID, this.state.groupID, {
-            username: this.state.username,
-            password: this.state.password,
-            title: this.state.title,
-            url: this.state.url
-        });
+        this.props.saveNewCredentials(
+            this.state.sourceID,
+            this.state.groupID,
+            {
+                username: this.state.username,
+                password: this.state.password,
+                title: this.state.title,
+                url: this.state.url
+            },
+            this.state.loginID
+        );
     }
 
     handleShowPasswordClick(event) {

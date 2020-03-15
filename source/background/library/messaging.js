@@ -33,7 +33,7 @@ import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/librar
 import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
-import { cleanLogins, getLogins, stopPromptForTab, updateLogin } from "./loginMemory.js";
+import { cleanLogins, getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
 
 const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
@@ -116,10 +116,6 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "clear-search":
             clearSearchResults();
-            return false;
-        case "clear-used-credentials":
-            log.info("Clearing last-login details");
-            cleanLogins();
             return false;
         case "create-vault-facade": {
             const { sourceID } = request;
@@ -280,6 +276,11 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             return true;
+        }
+        case "remove-saved-credentials": {
+            const { id } = request;
+            removeLogin(id);
+            return false;
         }
         case "save-used-credentials": {
             const tabID = sender.tab.id;

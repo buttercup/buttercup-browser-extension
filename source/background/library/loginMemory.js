@@ -19,6 +19,10 @@ export function getLogins(tabID) {
     return tabID === null ? [...__items] : __items.filter(item => item.tabID === tabID && item.prompt === true);
 }
 
+export function removeLogin(id) {
+    __items = __items.filter(item => item.id !== id);
+}
+
 export function stopPromptForTab(tabID) {
     __items = __items.map(
         item =>

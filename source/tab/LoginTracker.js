@@ -36,17 +36,11 @@ export default class LoginTracker extends EventEmitter {
             },
             set username(un) {
                 connection._username = un;
-                _this.emit("credentialsChanged", {
-                    username: connection.username,
-                    password: connection.password
-                });
+                _this.emit("credentialsChanged", connection);
             },
             set password(pw) {
                 connection._password = pw;
-                _this.emit("credentialsChanged", {
-                    username: connection.username,
-                    password: connection.password
-                });
+                _this.emit("credentialsChanged", connection);
             }
         };
         this._connections.push(connection);
