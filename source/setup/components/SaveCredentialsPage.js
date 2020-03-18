@@ -218,6 +218,7 @@ class SaveCredentialsPage extends PureComponent {
                                     autoload={true}
                                     cache={false}
                                     searchable={false}
+                                    clearable={false}
                                     loadOptions={() =>
                                         Promise.resolve({
                                             options: this.state.logins.map(login => ({
