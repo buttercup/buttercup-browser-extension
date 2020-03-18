@@ -131,13 +131,17 @@ function handleMessage(request, sender, sendResponse) {
             return true;
         }
         case "disable-login-domain": {
-            const lastLogin = getLastLogin();
+            const [lastLogin] = getLogins();
             let domain = request.domain;
             if (!domain) {
                 if (lastLogin) {
                     domain = extractDomain(lastLogin.url);
+                } else if (sender.tab.url) {
+                    domain = extractDomain(sender.tab.url);
                 } else {
                     log.error("No domain or last-login available to disable");
+                    sendResponse({ ok: false, error: "No domain found" });
+                    return true;
                 }
             }
             log.info(`Disabling save-login prompt for domain: ${domain}`);
