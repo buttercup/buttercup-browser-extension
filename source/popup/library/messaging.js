@@ -4,15 +4,6 @@ export function clearSearchResults() {
     chrome.runtime.sendMessage({ type: "clear-search" });
 }
 
-export function requestCredentialsOpening(sourceID, entryID, autoLogin = false) {
-    chrome.runtime.sendMessage({
-        type: "open-credentials-url",
-        sourceID,
-        entryID,
-        autoLogin
-    });
-}
-
 export function lockAllArchives() {
     log.info("Sending request to background to lock all archives");
     return new Promise((resolve, reject) => {
@@ -49,6 +40,15 @@ export function removeArchive(sourceID) {
             }
             return reject(new Error(`Adding removal failed: ${error}`));
         });
+    });
+}
+
+export function requestCredentialsOpening(sourceID, entryID, autoLogin = false) {
+    chrome.runtime.sendMessage({
+        type: "open-credentials-url",
+        sourceID,
+        entryID,
+        autoLogin
     });
 }
 

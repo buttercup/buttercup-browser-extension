@@ -16,9 +16,10 @@ class SaveNewCredentialsPage extends Component {
     };
 
     componentDidMount() {
-        this.props.fetchCredentials().then(details => {
+        this.props.fetchCredentials().then(items => {
+            const [item] = items;
             this.setState({
-                credentialsTitle: details.title
+                credentialsTitle: item.title
             });
         });
     }

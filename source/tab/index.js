@@ -18,12 +18,12 @@ import { currentDomainDisabled } from "./page.js";
 
 function checkForLoginSaveAbility() {
     return Promise.all([getLastLoginStatus(), getConfig(), getSourcesStats(), getDisabledSavePromptDomains()])
-        .then(([loginStatus, config, sourceStats, disabledDomains]) => {
+        .then(([loginAvailable, config, sourceStats, disabledDomains]) => {
             if (currentDomainDisabled(disabledDomains)) return;
             const unlockedCount = sourceStats.unlocked;
             const canShowSaveDialog =
                 config.showSaveDialog === "always" || (config.showSaveDialog === "unlocked" && unlockedCount > 0);
-            if (loginStatus.credentials && canShowSaveDialog) {
+            if (loginAvailable && canShowSaveDialog) {
                 showSaveDialog();
             }
         })
@@ -35,7 +35,19 @@ function checkForLoginSaveAbility() {
 
 // Wait for a target
 function waitAndAttachLaunchButtons() {
+    const tracker = getSharedTracker();
+    tracker.on("credentialsChanged", connection => {
+        transferLoginCredentials({
+            username: connection.username,
+            password: connection.password,
+            id: connection.id,
+            url: tracker.url,
+            title: tracker.title,
+            timestamp: Date.now()
+        });
+    });
     onIdentifiedTarget(loginTarget => {
+        tracker.registerConnection(loginTarget);
         const { usernameField, passwordField } = loginTarget;
         if (passwordField) {
             attachLaunchButton(passwordField);
@@ -46,22 +58,14 @@ function waitAndAttachLaunchButtons() {
         watchLogin(
             loginTarget,
             username => {
-                const tracker = getSharedTracker();
-                tracker.username = username;
+                const connection = tracker.getConnection(loginTarget);
+                connection.username = username;
             },
             password => {
-                const tracker = getSharedTracker();
-                tracker.password = password;
+                const connection = tracker.getConnection(loginTarget);
+                connection.password = password;
             },
             () => {
-                const tracker = getSharedTracker();
-                transferLoginCredentials({
-                    username: tracker.username,
-                    password: tracker.password,
-                    url: tracker.url,
-                    title: tracker.title,
-                    timestamp: Date.now()
-                });
                 setTimeout(() => {
                     checkForLoginSaveAbility();
                 }, 300);

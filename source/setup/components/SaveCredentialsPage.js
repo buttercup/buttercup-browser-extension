@@ -2,17 +2,18 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Async as Select } from "react-select";
 import styled from "styled-components";
+import classNames from "classnames";
 import {
-    FormGroup,
-    InputGroup,
-    ControlGroup,
     Button,
-    Classes,
-    H4,
+    Callout,
     Card,
+    Classes,
+    ControlGroup,
+    FormGroup,
+    H4,
+    InputGroup,
     Intent,
-    Spinner,
-    Callout
+    Spinner
 } from "@blueprintjs/core";
 import { notifyError } from "../library/notify.js";
 import LayoutMain from "./LayoutMain.js";
@@ -37,7 +38,6 @@ function titleCompare(a, b) {
 
 const ButtonRow = styled.div`
     margin-top: 1rem;
-
     button {
         margin-right: 0.5rem;
     }
@@ -46,6 +46,9 @@ const SelectColumns = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1rem;
+`;
+const RaisedSelect = styled(Select)`
+    z-index: 10;
 `;
 
 const ArchiveShape = PropTypes.shape({
@@ -66,6 +69,8 @@ class SaveCredentialsPage extends PureComponent {
     state = {
         groupID: "",
         loading: true,
+        loginID: null,
+        logins: [],
         password: "",
         showPassword: false,
         sourceID: "",
@@ -74,18 +79,27 @@ class SaveCredentialsPage extends PureComponent {
         username: ""
     };
 
+    applyLogin(loginID) {
+        const login = this.state.logins.find(item => item.id === loginID);
+        const { id, username, password, url, title } = login;
+        this.setState({
+            loginID: id,
+            username,
+            password,
+            url,
+            title,
+            loading: false
+        });
+    }
+
     componentDidMount() {
         this.props
             .fetchLoginDetails()
-            .then(details => {
-                const { username, password, url, title } = details;
+            .then(logins => {
                 this.setState({
-                    username,
-                    password,
-                    url,
-                    title,
-                    loading: false
+                    logins
                 });
+                this.applyLogin(logins[0].id);
             })
             .catch(err => {
                 console.error(err);
@@ -164,12 +178,17 @@ class SaveCredentialsPage extends PureComponent {
 
     handleSaveClicked(event) {
         event.preventDefault();
-        this.props.saveNewCredentials(this.state.sourceID, this.state.groupID, {
-            username: this.state.username,
-            password: this.state.password,
-            title: this.state.title,
-            url: this.state.url
-        });
+        this.props.saveNewCredentials(
+            this.state.sourceID,
+            this.state.groupID,
+            {
+                username: this.state.username,
+                password: this.state.password,
+                title: this.state.title,
+                url: this.state.url
+            },
+            this.state.loginID
+        );
     }
 
     handleShowPasswordClick(event) {
@@ -191,6 +210,24 @@ class SaveCredentialsPage extends PureComponent {
                             <Spinner size="20" />
                         </When>
                         <Otherwise>
+                            <FormGroup label="Recorded Login Details">
+                                <RaisedSelect
+                                    name="loginDetails"
+                                    value={this.state.loginID}
+                                    onChange={selected => this.applyLogin(selected.value)}
+                                    autoload={true}
+                                    cache={false}
+                                    searchable={false}
+                                    loadOptions={() =>
+                                        Promise.resolve({
+                                            options: this.state.logins.map(login => ({
+                                                label: `${login.username || "?"} @ ${login.title}`,
+                                                value: login.id
+                                            }))
+                                        })
+                                    }
+                                />
+                            </FormGroup>
                             <FormGroup label="Title">
                                 <InputGroup
                                     leftIcon="new-text-box"

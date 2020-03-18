@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { Button, Icon, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
+import { Button, Icon, Menu, MenuDivider, MenuItem, Popover, Position, Tag } from "@blueprintjs/core";
 import styled from "styled-components";
 import { version } from "../../../package.json";
 import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
@@ -29,10 +29,12 @@ class HeaderBar extends PureComponent {
         onLockAllClick: PropTypes.func.isRequired,
         onManageDisabledLoginPromps: PropTypes.func.isRequired,
         onOtherSoftwareClick: PropTypes.func.isRequired,
+        onSaveUnsavedClick: PropTypes.func.isRequired,
         onSettingsClick: PropTypes.func.isRequired,
         onToggleDarkMode: PropTypes.func.isRequired,
         onUnlockVaultClick: PropTypes.func.isRequired,
-        onVaultsClick: PropTypes.func.isRequired
+        onVaultsClick: PropTypes.func.isRequired,
+        unsavedLogins: PropTypes.number.isRequired
     };
 
     handleItemsClick(event) {
@@ -74,6 +76,7 @@ class HeaderBar extends PureComponent {
         const optionsMenu = (
             <Menu>
                 <MenuItem text={`Buttercup v${version}`} icon="updated" disabled />
+                <MenuItem text="Settings" icon="cog" onClick={::this.props.onSettingsClick} />
                 <MenuItem
                     text={darkMode ? "Light theme" : "Dark theme"}
                     icon={darkMode ? "flash" : "moon"}
@@ -83,11 +86,17 @@ class HeaderBar extends PureComponent {
                 <MenuItem text="About Buttercup" icon="info-sign" onClick={::this.props.onAboutClick} />
                 <MenuItem text="Other Applications" icon="mobile-phone" onClick={::this.props.onOtherSoftwareClick} />
                 <MenuDivider />
-                <MenuItem text="Settings" icon="cog" onClick={::this.props.onSettingsClick} />
                 <MenuItem
                     text="Manage Disabled Login Prompts"
                     icon="exclude-row"
                     onClick={::this.props.onManageDisabledLoginPromps}
+                />
+                <MenuItem
+                    text="Save Stored Logins"
+                    icon="saved"
+                    disabled={this.props.unsavedLogins === 0}
+                    labelElement={this.props.unsavedLogins > 0 ? <Tag round>{this.props.unsavedLogins}</Tag> : null}
+                    onClick={::this.props.onSaveUnsavedClick}
                 />
             </Menu>
         );

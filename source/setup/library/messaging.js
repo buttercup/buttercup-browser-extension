@@ -51,10 +51,6 @@ export function changeSourcePassword(sourceID, oldPassword, newPassword) {
     });
 }
 
-export function clearLastLogin() {
-    chrome.runtime.sendMessage({ type: "clear-used-credentials" });
-}
-
 export function disableDomainForSavePrompt(domain) {
     return new Promise(resolve => {
         chrome.runtime.sendMessage({ type: "disable-login-domain", domain }, () => {
@@ -99,10 +95,10 @@ export function getDisabledSavePromptDomains() {
     });
 }
 
-export function getLastLogin() {
+export function getLastUsedCredentials() {
     return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ type: "get-used-credentials", force: true }, resp => {
-            if (resp && resp.credentials && resp.credentials.title) {
+        chrome.runtime.sendMessage({ type: "get-used-credentials", mode: "all" }, resp => {
+            if (Array.isArray(resp.credentials)) {
                 resolve(resp.credentials);
             } else {
                 reject(new Error("Failed getting last login details"));
@@ -156,6 +152,10 @@ export function removeDisabledDomainForSavePrompt(domain) {
             resolve();
         });
     });
+}
+
+export function removeSavedCredentials(id) {
+    chrome.runtime.sendMessage({ type: "remove-saved-credentials", id });
 }
 
 export function unlockArchive(sourceID, masterPassword) {

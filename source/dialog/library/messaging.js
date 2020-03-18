@@ -1,17 +1,13 @@
 import log from "../../shared/library/log.js";
 
-export function destroyLastLogin() {
-    chrome.runtime.sendMessage({ type: "clear-used-credentials" });
-}
-
 export function disableLoginForDomain(domain) {
     chrome.runtime.sendMessage({ type: "disable-login-domain", domain });
 }
 
-export function getLastLogin() {
+export function getLastLogins() {
     return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ type: "get-used-credentials" }, resp => {
-            if (resp && resp.credentials.title) {
+        chrome.runtime.sendMessage({ type: "get-used-credentials", mode: "all" }, resp => {
+            if (Array.isArray(resp.credentials) && resp.credentials.length > 0) {
                 resolve(resp.credentials);
             } else {
                 reject(new Error("Failed getting last login details"));
@@ -39,4 +35,9 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
             }
         }
     );
+}
+
+export function stopCurrentSavePrompt() {
+    // Cancel save for current tab
+    chrome.runtime.sendMessage({ type: "stop-prompt-saved-credentials" });
 }

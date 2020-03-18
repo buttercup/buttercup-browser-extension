@@ -28,12 +28,12 @@ import {
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 import { setConfigValue, setUserActivity } from "../../shared/actions/app.js";
 import { setAutoLogin } from "../../shared/actions/autoLogin.js";
-import { clearLastLogin, getLastLogin, saveLastLogin } from "./lastLogin.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
 import { createNewTab, getCurrentTab, sendTabMessage } from "../../shared/library/extension.js";
 import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
+import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
 
 const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
 
@@ -117,10 +117,6 @@ function handleMessage(request, sender, sendResponse) {
         case "clear-search":
             clearSearchResults();
             return false;
-        case "clear-used-credentials":
-            log.info("Clearing last-login details");
-            clearLastLogin();
-            return false;
         case "create-vault-facade": {
             const { sourceID } = request;
             getArchive(sourceID)
@@ -191,21 +187,11 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         case "get-used-credentials": {
-            const force = !!request.force;
-            const currentID = sender.tab.id;
-            const lastLogin = getLastLogin();
-            if (lastLogin && (lastLogin.tabID === currentID || force)) {
-                const now = new Date();
-                const lastLoginAge = now - lastLogin.timestamp;
-                if (lastLoginAge <= LAST_LOGIN_MAX_AGE || force) {
-                    sendResponse({ ok: true, credentials: lastLogin });
-                } else {
-                    clearLastLogin();
-                    sendResponse({ ok: true, credentials: null });
-                }
-            } else {
-                sendResponse({ ok: true, credentials: null });
-            }
+            const { mode = "tab" } = request;
+            sendResponse({
+                ok: true,
+                credentials: getLogins(mode === "tab" ? sender.tab.id : null)
+            });
             return false;
         }
         case "get-vaultsinfo": {
@@ -291,24 +277,16 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
+        case "remove-saved-credentials": {
+            const { id } = request;
+            removeLogin(id);
+            return false;
+        }
         case "save-used-credentials": {
+            const tabID = sender.tab.id;
             const { credentials } = request;
-            const { url, username } = credentials;
-            getMatchingEntriesForURL(url)
-                .then(entries => entries.filter(entryResult => entryResult.entry.getProperty("username") === username))
-                .then(entries => {
-                    if (entries.length > 0) {
-                        log.info("Provided login details already exist for URL that was requested to be saved.");
-                        log.info(`Will not save login credentials from tab: ${sender.tab.id}`);
-                    } else {
-                        // No existing entries, ok to save
-                        log.info(`Saved login credentials from tab: ${sender.tab.id}`);
-                        saveLastLogin({
-                            ...credentials,
-                            tabID: sender.tab.id
-                        });
-                    }
-                });
+            const { id } = credentials;
+            updateLogin(id, tabID, credentials);
             return false;
         }
         case "search-entries-for-term": {
@@ -362,6 +340,12 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "set-user-activity": {
             dispatch(setUserActivity());
+            return true;
+        }
+        case "stop-prompt-saved-credentials": {
+            const tabID = sender.tab.id;
+            log.info(`Clearing save prompt for current credentials on tab: ${tabID}`);
+            stopPromptForTab(tabID);
             return true;
         }
         case "unlock-archive": {
