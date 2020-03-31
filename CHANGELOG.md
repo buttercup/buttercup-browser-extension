@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v2.15.0
+_2020-03-18_
+
+ * Disable save prompt for domains
+ * Memory for all login form inputs
+ * **Bugfix**:
+   * Buttons would disappear from some forms (Dropbox)
+
 ## v2.14.0
 _2020-02-03_
 
