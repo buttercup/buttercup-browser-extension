@@ -71,7 +71,7 @@ You can **block** Buttercup from detecting forms and inputs by applying the attr
 ### Development
 Development of features and bugfixes is supported in the following environment:
 
- * NodeJS version 8 (latest minor version)
+ * NodeJS version 12 (latest minor version)
  * Linux / Mac
  * Tested in at least Chrome / Firefox
  
