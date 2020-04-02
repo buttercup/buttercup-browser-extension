@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Button, Callout, Card, Checkbox, H3, H4, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import uuid from "uuid/v4";
 import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/ui";
-import switchcase from "switchcase";
+import { switchValue } from "../../shared/library/switch.js";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
 import { ARCHIVE_TYPES } from "./ArchiveTypeChooser.js";
@@ -175,12 +175,13 @@ class AddArchivePage extends PureComponent {
             (isTargetingMyButtercup && hasAuthenticatedMyButtercup) ||
             (isTargetingGoogleDrive && hasAuthenticatedGoogleDrive) ||
             (isTargetingLocal && this.props.localAuthStatus === "authenticated");
-        const fetchTypeSwitch = switchcase()
-            .case(/webdav|owncloud|nextcloud/, "webdav")
-            .case("dropbox", "dropbox")
-            .case("googledrive", "googledrive")
-            .case("mybuttercup", "mybuttercup")
-            .case("localfile", "localfile");
+        const fetchTypeSwitch = switchValue([
+            [/webdav|owncloud|nextcloud/, "webdav"],
+            ["dropbox", "dropbox"],
+            ["googledrive", "googledrive"],
+            ["mybuttercup", "mybuttercup"],
+            ["localfile", "localfile"]
+        ]);
         const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
         return (
             <LayoutMain title="Add Vault">
@@ -228,12 +229,13 @@ class AddArchivePage extends PureComponent {
     renderArchiveNameInput() {
         const { selectedFilename } = this.props;
         const disabled = !selectedFilename;
-        const onClickTypeSwitch = switchcase()
-            .case(/webdav|owncloud|nextcloud/, ::this.handleChooseWebDAVBasedFile)
-            .case("dropbox", ::this.handleChooseDropboxBasedFile)
-            .case("googledrive", ::this.handleChooseGoogleDriveBasedFile)
-            .case("mybuttercup", ::this.handleChooseMyButtercupBasedFile)
-            .case("localfile", ::this.handleChooseLocalBasedFile);
+        const onClickTypeSwitch = switchValue([
+            [/webdav|owncloud|nextcloud/, ::this.handleChooseWebDAVBasedFile],
+            ["dropbox", ::this.handleChooseDropboxBasedFile],
+            ["googledrive", ::this.handleChooseGoogleDriveBasedFile],
+            ["mybuttercup", ::this.handleChooseMyButtercupBasedFile],
+            ["localfile", ::this.handleChooseLocalBasedFile]
+        ]);
         const handleSubmit = onClickTypeSwitch(this.props.selectedArchiveType);
         return (
             <Fragment>
