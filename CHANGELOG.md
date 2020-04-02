@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.15.1
+_2020-04-02_
+
+ * **Bugfix**:
+   * WebDAV would fail to connect on some services, such as ownCloud
+
 ## v2.15.0
 _2020-03-18_
 
