@@ -1,6 +1,4 @@
-import { storage } from "../../shared/library/buttercup.js";
-
-const { StorageInterface } = storage;
+import { StorageInterface } from "../../shared/library/buttercup.js";
 
 export function getSyncStorage() {
     return chrome.storage.sync;

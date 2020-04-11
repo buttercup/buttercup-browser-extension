@@ -1,16 +1,16 @@
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
 import ms from "ms";
-import { ArchiveManager, vendor as ButtercupVendor, Datasources } from "../../shared/library/buttercup.js";
+import { DatasourceAuthManager, VaultManager } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
 import { setArchives, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
 import BrowserStorageInterface from "./BrowserStorageInterface.js";
 import { authenticateWithoutToken, authenticateWithRefreshToken } from "./googleDrive.js";
 
-let __archiveManager, __queue;
+let __vaultManager, __queue;
 
-function attachArchiveManagerListeners(archiveManager) {
-    archiveManager.on("sourcesUpdated", sources => {
+function attachArchiveManagerListeners(vaultManager) {
+    vaultManager.on("sourcesUpdated", sources => {
         dispatch(
             setArchives(
                 sources.map(source => ({
@@ -21,19 +21,19 @@ function attachArchiveManagerListeners(archiveManager) {
                 }))
             )
         );
-        dispatch(setUnlockedArchivesCount(archiveManager.unlockedSources.length));
+        dispatch(setUnlockedArchivesCount(vaultManager.unlockedSources.length));
     });
 }
 
 export function createArchiveManager() {
     const queue = getQueue();
     return queue.channel("archiveManager").enqueue(() => {
-        const am = new ArchiveManager(new BrowserStorageInterface());
-        attachArchiveManagerListeners(am);
-        return am.rehydrate().then(() => {
+        const vm = new VaultManager(new BrowserStorageInterface());
+        attachArchiveManagerListeners(vm);
+        return vm.rehydrate().then(() => {
             log.info("Rehydrated archive manager");
-            __archiveManager = am;
-            am.toggleAutoUpdating(true, ms("2m"));
+            __vaultManager = vm;
+            vm.toggleAutoUpdating(true, ms("2m"));
             am.on("autoUpdateStop", () => {
                 log.info("Completed auto-update");
             });
@@ -45,7 +45,7 @@ export function createArchiveManager() {
 export function getArchiveManager() {
     return getQueue()
         .channel("archiveManager")
-        .enqueue(() => __archiveManager);
+        .enqueue(() => __vaultManager);
 }
 
 export function getQueue() {
@@ -56,8 +56,7 @@ export function getQueue() {
 }
 
 export function registerAuthWatchers() {
-    const { AuthManager } = Datasources;
-    AuthManager.getSharedManager().registerHandler("googledrive", async datasource => {
+    DatasourceAuthManager.getSharedManager().registerHandler("googledrive", async datasource => {
         log.info("Google Drive datasource needs re-authentication");
         const { token: currentToken, refreshToken: currentRefreshToken } = datasource;
         if (!currentRefreshToken) {

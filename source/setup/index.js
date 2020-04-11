@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
-import "../shared/library/buttercup.js"; // App-env
 import store from "./redux/index.js";
 import history from "./redux/history.js";
 import AddArchivePage from "./containers/AddArchivePage.js";

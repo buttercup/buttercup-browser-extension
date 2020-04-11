@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import cx from "classnames";
 import {
-    Colors,
     Text,
     Classes,
     ButtonGroup,
@@ -15,11 +14,9 @@ import {
     Dialog
 } from "@blueprintjs/core";
 import { SiteIcon } from "@buttercup/ui";
-import { FIELD_VALUE_TYPE_PASSWORD } from "@buttercup/facades";
 import { EntryShape } from "../prop-types/entry.js";
 import { writeToClipboard } from "../library/browser.js";
-
-const NO_ICON = require("../../../resources/no-icon.svg");
+import { FIELD_VALUE_TYPE_PASSWORD } from "../library/buttercup.js";
 
 const Container = styled.div`
     border-radius: 3px;

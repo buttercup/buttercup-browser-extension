@@ -19,7 +19,6 @@ const BUTTERCUP_ENTRY = process.env._BUTTERCUP_WEB_IMPORT_;
 const DIST = path.resolve(__dirname, "./dist");
 const SOURCE = path.resolve(__dirname, "./source");
 const RESOURCES = path.resolve(__dirname, "./resources");
-const NODE_MODULES = path.resolve(__dirname, "./node_modules");
 const INDEX_TEMPLATE = path.resolve(RESOURCES, "./template.pug");
 const MANIFEST = path.resolve(RESOURCES, "./manifest.json");
 const CHANGELOG = path.resolve(__dirname, "./CHANGELOG.md");
@@ -132,7 +131,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
         vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer", "@buttercup/app-env/web"],
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
         google: ["@buttercup/google-oauth2-client"]
     },
 
@@ -201,7 +200,7 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_SETUP, "./index.js"),
         vendor: [...REACT_PACKAGES, "dropbox", BUTTERCUP_ENTRY],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client", "@buttercup/app-env/web"]
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client"]
     },
 
     output: {
