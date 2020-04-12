@@ -10,17 +10,8 @@ import { authenticateWithoutToken, authenticateWithRefreshToken } from "./google
 let __vaultManager, __queue;
 
 function attachArchiveManagerListeners(vaultManager) {
-    vaultManager.on("sourcesUpdated", sources => {
-        dispatch(
-            setArchives(
-                sources.map(source => ({
-                    ...source,
-                    // Compatibility:
-                    title: source.name,
-                    state: source.status
-                }))
-            )
-        );
+    vaultManager.on("sourcesUpdated", () => {
+        dispatch(setArchives(vaultManager.sources.map(source => describeSource(source))));
         dispatch(setUnlockedArchivesCount(vaultManager.unlockedSources.length));
     });
 }
@@ -34,7 +25,7 @@ export function createArchiveManager() {
             log.info("Rehydrated archive manager");
             __vaultManager = vm;
             vm.toggleAutoUpdating(true, ms("2m"));
-            am.on("autoUpdateStop", () => {
+            vm.on("autoUpdateStop", () => {
                 log.info("Completed auto-update");
             });
             log.info("Activated auto updating");
@@ -42,7 +33,16 @@ export function createArchiveManager() {
     }, TASK_TYPE_HIGH_PRIORITY);
 }
 
-export function getArchiveManager() {
+function describeSource(source) {
+    return {
+        id: source.id,
+        title: source.name,
+        state: source.state,
+        type: source.type
+    };
+}
+
+export function getVaultManager() {
     return getQueue()
         .channel("archiveManager")
         .enqueue(() => __vaultManager);

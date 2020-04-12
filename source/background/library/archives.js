@@ -1,6 +1,6 @@
 import { Credentials, EntryFinder, VaultSource, Group, createVaultFacade } from "../../shared/library/buttercup.js";
 import { extractDomain } from "../../shared/library/domain.js";
-import { getArchiveManager } from "./buttercup.js";
+import { getVaultManager } from "./buttercup.js";
 import { getState } from "../redux/index.js";
 import { getConfigKey } from "../../shared/selectors/app.js";
 import "../../shared/library/LocalFileDatasource.js";
@@ -33,7 +33,7 @@ export function addDropboxArchive(payload) {
     log.info(`Attempting to connect Dropbox archive '${filename}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return Promise.all([
-        getArchiveManager(),
+        getVaultManager(),
         Credentials.fromDatasource(
             {
                 type: "dropbox",
@@ -42,13 +42,13 @@ export function addDropboxArchive(payload) {
             },
             masterPassword
         ).toSecureString()
-    ]).then(([archiveManager, sourceCredentials]) => {
+    ]).then(([vaultManager, sourceCredentials]) => {
         const source = new VaultSource(name, "dropbox", sourceCredentials);
-        return archiveManager.interruptAutoUpdate(() =>
-            archiveManager
+        return vaultManager.interruptAutoUpdate(() =>
+            vaultManager
                 .addSource(source)
                 .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => archiveManager.dehydrateSource(source))
+                .then(() => vaultManager.dehydrateSource(source))
         );
     });
 }
@@ -58,7 +58,7 @@ export function addGoogleDriveArchive(payload) {
     log.info(`Attempting to connect Google Drive archive '${fileID}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return Promise.all([
-        getArchiveManager(),
+        getVaultManager(),
         Credentials.fromDatasource(
             {
                 type: "googledrive",
@@ -68,13 +68,13 @@ export function addGoogleDriveArchive(payload) {
             },
             masterPassword
         ).toSecureString()
-    ]).then(([archiveManager, sourceCredentials]) => {
+    ]).then(([vaultManager, sourceCredentials]) => {
         const source = new VaultSource(name, "googledrive", sourceCredentials);
-        return archiveManager.interruptAutoUpdate(() =>
-            archiveManager
+        return vaultManager.interruptAutoUpdate(() =>
+            vaultManager
                 .addSource(source)
                 .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => archiveManager.dehydrateSource(source))
+                .then(() => vaultManager.dehydrateSource(source))
         );
     });
 }
@@ -84,7 +84,7 @@ export function addLocalArchive(payload) {
     log.info(`Attempting to connect local archive '${filename}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return Promise.all([
-        getArchiveManager(),
+        getVaultManager(),
         Credentials.fromDatasource(
             {
                 type: "localfile",
@@ -93,13 +93,13 @@ export function addLocalArchive(payload) {
             },
             masterPassword
         ).toSecureString()
-    ]).then(([archiveManager, sourceCredentials]) => {
+    ]).then(([vaultManager, sourceCredentials]) => {
         const source = new VaultSource(name, "localfile", sourceCredentials);
-        return archiveManager.interruptAutoUpdate(() =>
-            archiveManager
+        return vaultManager.interruptAutoUpdate(() =>
+            vaultManager
                 .addSource(source)
                 .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => archiveManager.dehydrateSource(source))
+                .then(() => vaultManager.dehydrateSource(source))
         );
     });
 }
@@ -125,7 +125,7 @@ export function addMyButtercupArchive(payload) {
     const { masterPassword, accessToken, refreshToken, vaultID } = payload;
     log.info("Attempting to connect My Buttercup vault");
     return Promise.all([
-        getArchiveManager(),
+        getVaultManager(),
         Credentials.fromDatasource(
             {
                 type: "mybuttercup",
@@ -137,13 +137,13 @@ export function addMyButtercupArchive(payload) {
             },
             masterPassword
         ).toSecureString()
-    ]).then(([archiveManager, sourceCredentials]) => {
+    ]).then(([vaultManager, sourceCredentials]) => {
         const source = new VaultSource(name, "mybuttercup", sourceCredentials);
-        return archiveManager.interruptAutoUpdate(() =>
-            archiveManager
+        return vaultManager.interruptAutoUpdate(() =>
+            vaultManager
                 .addSource(source)
                 .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => archiveManager.dehydrateSource(source))
+                .then(() => vaultManager.dehydrateSource(source))
         );
     });
 }
@@ -153,23 +153,26 @@ export function addWebDAVArchive(payload) {
     log.info(`Attempting to connect WebDAV archive '${filename}' from: ${url} (${name})`);
     log.info(`New archive will be created for request: ${create}`);
     return Promise.all([
-        getArchiveManager(),
-        new Credentials({
-            database: {
-                type: "webdav",
-                endpoint: url,
-                path: filename
+        getVaultManager(),
+        new Credentials(
+            {
+                database: {
+                    type: "webdav",
+                    endpoint: url,
+                    path: filename,
+                    username,
+                    password
+                }
             },
-            username,
-            password
-        }).toSecureString()
-    ]).then(([archiveManager, sourceCredentials]) => {
+            masterPassword
+        ).toSecureString()
+    ]).then(([vaultManager, sourceCredentials]) => {
         const source = new VaultSource(name, "webdav", sourceCredentials);
-        return archiveManager.interruptAutoUpdate(() =>
-            archiveManager
+        return vaultManager.interruptAutoUpdate(() =>
+            vaultManager
                 .addSource(source)
                 .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => archiveManager.dehydrateSource(source))
+                .then(() => vaultManager.dehydrateSource(source))
         );
     });
 }
@@ -179,12 +182,12 @@ export function archiveToObjectGroupsOnly(archive) {
 }
 
 export function changeVaultPassword(sourceID, password) {
-    return getArchiveManager().then(archiveManager => {
-        const source = archiveManager.getSourceForID(sourceID);
+    return getVaultManager().then(vaultManager => {
+        const source = vaultManager.getSourceForID(sourceID);
         if (!source) {
             throw new Error(`No source found for ID: ${sourceID}`);
         }
-        return source.updateArchiveCredentials(password).then(() => archiveManager.dehydrateSource(source));
+        return source.updateArchiveCredentials(password).then(() => vaultManager.dehydrateSource(source));
     });
 }
 
@@ -193,8 +196,8 @@ export function checkUnlockPossibility() {
     if (!canAutoUnlock) {
         return Promise.resolve();
     }
-    return getArchiveManager().then(archiveManager => {
-        if (archiveManager.sources.length > 0) {
+    return getVaultManager().then(vaultManager => {
+        if (vaultManager.sources.length > 0) {
             createNewTab(getExtensionURL("setup.html#/unlock"));
         }
     });
@@ -212,8 +215,8 @@ export function generateEntryPath(entry) {
 }
 
 export function getArchive(sourceID) {
-    return getArchiveManager().then(archiveManager => {
-        const source = archiveManager.getSourceForID(sourceID);
+    return getVaultManager().then(vaultManager => {
+        const source = vaultManager.getSourceForID(sourceID);
         if (!source) {
             throw new Error(`Unable to fetch archive: No source found for ID: ${sourceID}`);
         }
@@ -231,9 +234,9 @@ export function getEntry(sourceID, entryID) {
 }
 
 export function getFacades() {
-    return getArchiveManager().then(archiveManager =>
+    return getVaultManager().then(vaultManager =>
         Promise.all(
-            archiveManager.unlockedSources.map(source =>
+            vaultManager.unlockedSources.map(source =>
                 getArchive(source.id).then(archive => ({
                     ...createVaultFacade(archive),
                     sourceID: source.id,
@@ -245,8 +248,8 @@ export function getFacades() {
 }
 
 export function getMatchingEntriesForSearchTerm(term) {
-    return getArchiveManager().then(archiveManager => {
-        const unlockedSources = archiveManager.unlockedSources;
+    return getVaultManager().then(vaultManager => {
+        const unlockedSources = vaultManager.unlockedSources;
         const lookup = unlockedSources.reduce(
             (current, next) => ({
                 ...current,
@@ -265,8 +268,8 @@ export function getMatchingEntriesForSearchTerm(term) {
 
 export function getMatchingEntriesForURL(url) {
     const domain = extractDomain(url);
-    return getArchiveManager().then(archiveManager => {
-        const unlockedSources = archiveManager.unlockedSources;
+    return getVaultManager().then(vaultManager => {
+        const unlockedSources = vaultManager.unlockedSources;
         const entries = [];
         unlockedSources.forEach(source => {
             const archive = source.workspace.archive;
@@ -290,8 +293,8 @@ export function getMatchingEntriesForURL(url) {
 }
 
 export function getNameForSource(sourceID) {
-    return getArchiveManager().then(archiveManager => {
-        const source = archiveManager.getSourceForID(sourceID);
+    return getVaultManager().then(vaultManager => {
+        const source = vaultManager.getSourceForID(sourceID);
         if (!source) {
             throw new Error(`Unable to fetch source information: No source found for ID: ${sourceID}`);
         }
@@ -300,8 +303,8 @@ export function getNameForSource(sourceID) {
 }
 
 export function getSourcesInfo() {
-    return getArchiveManager().then(archiveManager => {
-        return archiveManager.sources.map(source => ({
+    return getVaultManager().then(vaultManager => {
+        return vaultManager.sources.map(source => ({
             id: source.id,
             name: source.name,
             meta: source.meta || {},
@@ -312,14 +315,14 @@ export function getSourcesInfo() {
 }
 
 export function getUnlockedSourcesCount() {
-    return getArchiveManager().then(archiveManager => archiveManager.unlockedSources.length);
+    return getVaultManager().then(vaultManager => vaultManager.unlockedSources.length);
 }
 
 export function lockSource(sourceID) {
     log.info(`Locking source: ${sourceID}`);
-    return getArchiveManager()
-        .then(archiveManager => {
-            const source = archiveManager.getSourceForID(sourceID);
+    return getVaultManager()
+        .then(vaultManager => {
+            const source = vaultManager.getSourceForID(sourceID);
             return source.lock();
         })
         .then(updateContextMenu);
@@ -327,9 +330,9 @@ export function lockSource(sourceID) {
 
 export function lockSources() {
     log.info("Locking all sources");
-    return getArchiveManager()
-        .then(archiveManager => {
-            const { unlockedSources } = archiveManager;
+    return getVaultManager()
+        .then(vaultManager => {
+            const { unlockedSources } = vaultManager;
             return unlockedSources.length > 0
                 ? Promise.all(unlockedSources.map(source => source.lock()))
                 : Promise.resolve();
@@ -354,8 +357,8 @@ export function openCredentialsPageForEntry(sourceID, entryID) {
 }
 
 export function passwordValidForSource(sourceID, password) {
-    return getArchiveManager().then(archiveManager => {
-        const source = archiveManager.getSourceForID(sourceID);
+    return getVaultManager().then(vaultManager => {
+        const source = vaultManager.getSourceForID(sourceID);
         if (!source) {
             throw new Error(`No source found for ID: ${sourceID}`);
         }
@@ -366,23 +369,23 @@ export function passwordValidForSource(sourceID, password) {
 
 export function removeSource(sourceID) {
     log.info(`Removing source: ${sourceID}`);
-    return getArchiveManager()
-        .then(archiveManager => {
-            return archiveManager.interruptAutoUpdate(() => archiveManager.removeSource(sourceID));
+    return getVaultManager()
+        .then(vaultManager => {
+            return vaultManager.interruptAutoUpdate(() => vaultManager.removeSource(sourceID));
         })
         .then(updateContextMenu);
 }
 
 export function saveSource(sourceID) {
     log.info(`Preparing to save source: ${sourceID}`);
-    return getArchiveManager()
-        .then(archiveManager => {
-            const source = archiveManager.getSourceForID(sourceID);
+    return getVaultManager()
+        .then(vaultManager => {
+            const source = vaultManager.getSourceForID(sourceID);
             if (!source) {
                 throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
             }
             const { workspace } = source;
-            return archiveManager.interruptAutoUpdate(() =>
+            return vaultManager.interruptAutoUpdate(() =>
                 workspace
                     .localDiffersFromRemote()
                     .then(differs => {
@@ -423,9 +426,9 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
 
 export function unlockSource(sourceID, masterPassword) {
     log.info(`Unlocking source: ${sourceID}`);
-    return getArchiveManager()
-        .then(archiveManager =>
-            archiveManager
+    return getVaultManager()
+        .then(vaultManager =>
+            vaultManager
                 .getSourceForID(sourceID)
                 .unlock(
                     masterPassword,

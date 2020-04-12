@@ -7,7 +7,7 @@ import { setAccessToken, setAuthID, setAuthCode, setRefreshToken } from "../../s
 import { performAuthentication } from "../../shared/library/googleDrive.js";
 import { getAuthID, getAuthCode } from "../../shared/selectors/googleDrive.js";
 import { closeTabs, createNewTab } from "../../shared/library/extension.js";
-import { getArchiveManager } from "./buttercup.js";
+import { getVaultManager } from "./buttercup.js";
 import secrets from "../../shared/google-client.json";
 
 const GOOGLE_DRIVE_BASE_SCOPES = ["email", "profile"];

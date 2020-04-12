@@ -1,6 +1,12 @@
 import VError from "verror";
 import { extractDomain } from "../../shared/library/domain.js";
-import * as Buttercup from "../../shared/library/buttercup.js";
+import {
+    ENTRY_URL_TYPE_LOGIN,
+    consumeArchiveFacade,
+    createArchiveFacade,
+    createEntryFacade,
+    getEntryURLs
+} from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import {
@@ -33,11 +39,6 @@ import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
 import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
-
-const { consumeArchiveFacade, createArchiveFacade, createEntryFacade } = Buttercup;
-const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
-
-const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
 export function clearSearchResults() {
     return getUnlockedSourcesCount().then(unlockedSources => {
