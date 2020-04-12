@@ -10,6 +10,8 @@ import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
 import { ARCHIVE_TYPES } from "./ArchiveTypeChooser.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
 
+const ENTER_KEY = 13;
+
 const CalloutWithSpacing = styled(Callout)`
     margin-bottom: 10px;
 `;
@@ -296,6 +298,7 @@ class AddArchivePage extends PureComponent {
                                     disabled={connectionOptionsDisabled}
                                     onChange={event => this.handleUpdateForm("remoteURL", event)}
                                     value={this.state.remoteURL}
+                                    onKeyDown={evt => evt.keyCode === ENTER_KEY && this.handleConnectWebDAV(evt)}
                                 />
                             </FormGroup>
                             <FormGroup full label={`${title} Username`} labelInfo="(required)">
@@ -305,6 +308,7 @@ class AddArchivePage extends PureComponent {
                                     disabled={connectionOptionsDisabled}
                                     onChange={event => this.handleUpdateForm("remoteUsername", event)}
                                     value={this.state.remoteUsername}
+                                    onKeyDown={evt => evt.keyCode === ENTER_KEY && this.handleConnectWebDAV(evt)}
                                 />
                             </FormGroup>
                             <FormGroup full label={`${title} Password`} labelInfo="(required)">
@@ -315,6 +319,7 @@ class AddArchivePage extends PureComponent {
                                     disabled={connectionOptionsDisabled}
                                     onChange={event => this.handleUpdateForm("remotePassword", event)}
                                     value={this.state.remotePassword}
+                                    onKeyDown={evt => evt.keyCode === ENTER_KEY && this.handleConnectWebDAV(evt)}
                                 />
                             </FormGroup>
                             <Button
