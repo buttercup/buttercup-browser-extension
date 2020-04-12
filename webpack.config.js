@@ -130,7 +130,7 @@ function getBasePlugins() {
 const backgroundConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
-        vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
+        vendor: [...REDUX_PACKAGES],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
         google: ["@buttercup/google-oauth2-client"]
     },
@@ -172,7 +172,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
 const popupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_POPUP, "./index.js"),
-        vendor: [...REDUX_PACKAGES, BUTTERCUP_ENTRY],
+        vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
     },
 
@@ -199,7 +199,7 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
 const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_SETUP, "./index.js"),
-        vendor: [...REACT_PACKAGES, "dropbox", BUTTERCUP_ENTRY],
+        vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES, "dropbox"],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client"]
     },
 
@@ -226,7 +226,7 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
 const dialogConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_DIALOG, "./index.js"),
-        vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES, BUTTERCUP_ENTRY],
+        vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
     },
 
