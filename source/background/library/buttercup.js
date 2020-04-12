@@ -4,7 +4,7 @@ import { DatasourceAuthManager, VaultManager } from "../../shared/library/butter
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
 import { setArchives, setArchivesCount, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
-import BrowserStorageInterface from "./BrowserStorageInterface.js";
+import BrowserStorageInterface, { getNonSyncStorage, getSyncStorage } from "./BrowserStorageInterface.js";
 import { authenticateWithoutToken, authenticateWithRefreshToken } from "./googleDrive.js";
 
 let __vaultManager, __queue;
@@ -20,7 +20,10 @@ function attachArchiveManagerListeners(vaultManager) {
 export function createArchiveManager() {
     const queue = getQueue();
     return queue.channel("archiveManager").enqueue(() => {
-        const vm = new VaultManager(new BrowserStorageInterface());
+        const vm = new VaultManager({
+            cacheStorage: new BrowserStorageInterface(getNonSyncStorage()),
+            sourceStorage: new BrowserStorageInterface(getSyncStorage())
+        });
         attachArchiveManagerListeners(vm);
         return vm.rehydrate().then(() => {
             log.info("Rehydrated archive manager");
