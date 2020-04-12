@@ -6,6 +6,7 @@ export const APP_SET_UNSAVED_LOGINS_COUNT = "app/unsavedLogins/setCount";
 export const APP_SET_USER_ACTIVITY = "app/user/setActivity";
 
 export const ARCHIVES_SET = "archives/set";
+export const ARCHIVES_SET_COUNT = "archives/setCount";
 export const ARCHIVES_UNLOCKED_SET_COUNT = "archives/unlocked/setCount";
 
 export const AUTOLOGIN_CLEAR_DETAILS = "autoLogin/details/clear";

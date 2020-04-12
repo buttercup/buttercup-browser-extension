@@ -3,7 +3,7 @@ import ms from "ms";
 import { DatasourceAuthManager, VaultManager } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
-import { setArchives, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
+import { setArchives, setArchivesCount, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
 import BrowserStorageInterface from "./BrowserStorageInterface.js";
 import { authenticateWithoutToken, authenticateWithRefreshToken } from "./googleDrive.js";
 
@@ -12,6 +12,7 @@ let __vaultManager, __queue;
 function attachArchiveManagerListeners(vaultManager) {
     vaultManager.on("sourcesUpdated", () => {
         dispatch(setArchives(vaultManager.sources.map(source => describeSource(source))));
+        dispatch(setArchivesCount(vaultManager.sources.length));
         dispatch(setUnlockedArchivesCount(vaultManager.unlockedSources.length));
     });
 }

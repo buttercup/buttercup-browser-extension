@@ -14,6 +14,10 @@ export function getArchiveTitle(state, id) {
     return (archive && archive.title) || "";
 }
 
+export function getTotalArchivesCount(state) {
+    return state[KEY].total;
+}
+
 export function getUnlockedArchivesCount(state) {
     return state[KEY].unlocked;
 }
