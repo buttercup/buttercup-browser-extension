@@ -127,7 +127,7 @@ class UnlockAllArchivesPage extends Component {
                             unlocked={archive.state === "unlocked"}
                         >
                             <FormGroup
-                                label={`Unlock "${archive.title}"`}
+                                label={`Unlock "${archive.name}"`}
                                 disabled={unlocked}
                                 helperText={unlocked ? "Vault is unlocked." : null}
                                 key={`archive-${archive.sourceID}`}

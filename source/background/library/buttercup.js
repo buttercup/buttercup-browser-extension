@@ -40,8 +40,8 @@ export function createArchiveManager() {
 function describeSource(source) {
     return {
         id: source.id,
-        title: source.name,
-        state: source.state,
+        name: source.name,
+        state: source.status,
         type: source.type
     };
 }

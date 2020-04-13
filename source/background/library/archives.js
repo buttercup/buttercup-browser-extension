@@ -32,76 +32,76 @@ export function addDropboxArchive(payload) {
     const { name, masterPassword, filename, dropboxToken, create } = payload;
     log.info(`Attempting to connect Dropbox archive '${filename}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
-    return Promise.all([
-        getVaultManager(),
-        Credentials.fromDatasource(
-            {
-                type: "dropbox",
-                token: dropboxToken,
-                path: filename
-            },
-            masterPassword
-        ).toSecureString()
-    ]).then(([vaultManager, sourceCredentials]) => {
-        const source = new VaultSource(name, "dropbox", sourceCredentials);
-        return vaultManager.interruptAutoUpdate(() =>
-            vaultManager
-                .addSource(source)
-                .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => vaultManager.dehydrateSource(source))
-        );
-    });
+    const rawCredentials = Credentials.fromDatasource(
+        {
+            type: "dropbox",
+            token: dropboxToken,
+            path: filename
+        },
+        masterPassword
+    );
+    return Promise.all([getVaultManager(), rawCredentials.toSecureString()]).then(
+        ([vaultManager, sourceCredentials]) => {
+            const source = new VaultSource(name, "dropbox", sourceCredentials);
+            return vaultManager.interruptAutoUpdate(() =>
+                vaultManager
+                    .addSource(source)
+                    .then(() => source.unlock(rawCredentials, { initialiseRemote: create }))
+                    .then(() => vaultManager.dehydrateSource(source))
+            );
+        }
+    );
 }
 
 export function addGoogleDriveArchive(payload) {
     const { name, masterPassword, fileID, googleDriveToken, googleDriveRefreshToken, create } = payload;
     log.info(`Attempting to connect Google Drive archive '${fileID}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
-    return Promise.all([
-        getVaultManager(),
-        Credentials.fromDatasource(
-            {
-                type: "googledrive",
-                token: googleDriveToken,
-                refreshToken: googleDriveRefreshToken,
-                fileID
-            },
-            masterPassword
-        ).toSecureString()
-    ]).then(([vaultManager, sourceCredentials]) => {
-        const source = new VaultSource(name, "googledrive", sourceCredentials);
-        return vaultManager.interruptAutoUpdate(() =>
-            vaultManager
-                .addSource(source)
-                .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => vaultManager.dehydrateSource(source))
-        );
-    });
+    const rawCredentials = Credentials.fromDatasource(
+        {
+            type: "googledrive",
+            token: googleDriveToken,
+            refreshToken: googleDriveRefreshToken,
+            fileID
+        },
+        masterPassword
+    );
+    return Promise.all([getVaultManager(), rawCredentials.toSecureString()]).then(
+        ([vaultManager, sourceCredentials]) => {
+            const source = new VaultSource(name, "googledrive", sourceCredentials);
+            return vaultManager.interruptAutoUpdate(() =>
+                vaultManager
+                    .addSource(source)
+                    .then(() => source.unlock(rawCredentials, { initialiseRemote: create }))
+                    .then(() => vaultManager.dehydrateSource(source))
+            );
+        }
+    );
 }
 
 export function addLocalArchive(payload) {
     const { name, masterPassword, filename, key, create } = payload;
     log.info(`Attempting to connect local archive '${filename}' (${name})`);
     log.info(`New archive will be created for request: ${create}`);
-    return Promise.all([
-        getVaultManager(),
-        Credentials.fromDatasource(
-            {
-                type: "localfile",
-                path: filename,
-                token: key
-            },
-            masterPassword
-        ).toSecureString()
-    ]).then(([vaultManager, sourceCredentials]) => {
-        const source = new VaultSource(name, "localfile", sourceCredentials);
-        return vaultManager.interruptAutoUpdate(() =>
-            vaultManager
-                .addSource(source)
-                .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => vaultManager.dehydrateSource(source))
-        );
-    });
+    const rawCredentials = Credentials.fromDatasource(
+        {
+            type: "localfile",
+            path: filename,
+            token: key
+        },
+        masterPassword
+    );
+    return Promise.all([getVaultManager(), rawCredentials.toSecureString()]).then(
+        ([vaultManager, sourceCredentials]) => {
+            const source = new VaultSource(name, "localfile", sourceCredentials);
+            return vaultManager.interruptAutoUpdate(() =>
+                vaultManager
+                    .addSource(source)
+                    .then(() => source.unlock(rawCredentials, { initialiseRemote: create }))
+                    .then(() => vaultManager.dehydrateSource(source))
+            );
+        }
+    );
 }
 
 export function addNewEntry(sourceID, groupID, title, username, password, url) {
@@ -124,57 +124,57 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
 export function addMyButtercupArchive(payload) {
     const { masterPassword, accessToken, refreshToken, vaultID } = payload;
     log.info("Attempting to connect My Buttercup vault");
-    return Promise.all([
-        getVaultManager(),
-        Credentials.fromDatasource(
-            {
-                type: "mybuttercup",
-                accessToken,
-                refreshToken,
-                clientID: MYBUTTERCUP_CLIENT_ID,
-                clientSecret: MYBUTTERCUP_CLIENT_SECRET,
-                vaultID
-            },
-            masterPassword
-        ).toSecureString()
-    ]).then(([vaultManager, sourceCredentials]) => {
-        const source = new VaultSource(name, "mybuttercup", sourceCredentials);
-        return vaultManager.interruptAutoUpdate(() =>
-            vaultManager
-                .addSource(source)
-                .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => vaultManager.dehydrateSource(source))
-        );
-    });
+    const rawCredentials = Credentials.fromDatasource(
+        {
+            type: "mybuttercup",
+            accessToken,
+            refreshToken,
+            clientID: MYBUTTERCUP_CLIENT_ID,
+            clientSecret: MYBUTTERCUP_CLIENT_SECRET,
+            vaultID
+        },
+        masterPassword
+    );
+    return Promise.all([getVaultManager(), rawCredentials.toSecureString()]).then(
+        ([vaultManager, sourceCredentials]) => {
+            const source = new VaultSource(name, "mybuttercup", sourceCredentials);
+            return vaultManager.interruptAutoUpdate(() =>
+                vaultManager
+                    .addSource(source)
+                    .then(() => source.unlock(rawCredentials, { initialiseRemote: create }))
+                    .then(() => vaultManager.dehydrateSource(source))
+            );
+        }
+    );
 }
 
 export function addWebDAVArchive(payload) {
     const { name, masterPassword, filename, url, username, password, create } = payload;
     log.info(`Attempting to connect WebDAV archive '${filename}' from: ${url} (${name})`);
     log.info(`New archive will be created for request: ${create}`);
-    return Promise.all([
-        getVaultManager(),
-        new Credentials(
-            {
-                database: {
-                    type: "webdav",
-                    endpoint: url,
-                    path: filename,
-                    username,
-                    password
-                }
-            },
-            masterPassword
-        ).toSecureString()
-    ]).then(([vaultManager, sourceCredentials]) => {
-        const source = new VaultSource(name, "webdav", sourceCredentials);
-        return vaultManager.interruptAutoUpdate(() =>
-            vaultManager
-                .addSource(source)
-                .then(() => source.unlock(masterPassword, { initialiseRemote: create }))
-                .then(() => vaultManager.dehydrateSource(source))
-        );
-    });
+    const rawCredentials = new Credentials(
+        {
+            datasource: {
+                type: "webdav",
+                endpoint: url,
+                path: filename,
+                username,
+                password
+            }
+        },
+        masterPassword
+    );
+    return Promise.all([getVaultManager(), rawCredentials.toSecureString()]).then(
+        ([vaultManager, sourceCredentials]) => {
+            const source = new VaultSource(name, "webdav", sourceCredentials);
+            return vaultManager.interruptAutoUpdate(() =>
+                vaultManager
+                    .addSource(source)
+                    .then(() => source.unlock(rawCredentials, { initialiseRemote: create }))
+                    .then(() => vaultManager.dehydrateSource(source))
+            );
+        }
+    );
 }
 
 export function archiveToObjectGroupsOnly(archive) {
@@ -225,7 +225,7 @@ export function getArchive(sourceID) {
                 `Unable fetch archive: Invalid source state (should be unlocked: ${sourceID}): ${source.status}`
             );
         }
-        return source.workspace.archive;
+        return source.vault;
     });
 }
 
@@ -376,8 +376,18 @@ export function removeSource(sourceID) {
         .then(updateContextMenu);
 }
 
-export function saveSource(sourceID) {
+export async function saveSource(sourceID) {
     log.info(`Preparing to save source: ${sourceID}`);
+    const vaultManager = await getVaultManager();
+    const source = vaultManager.getSourceForID(sourceID);
+    if (!source) {
+        throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
+    }
+    // await vaultManager.interruptAutoUpdate(async () => {
+    //     if (await source.localDiffersFromRemote()) {
+
+    //     }
+    // });
     return getVaultManager()
         .then(vaultManager => {
             const source = vaultManager.getSourceForID(sourceID);
@@ -424,18 +434,12 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
         });
 }
 
-export function unlockSource(sourceID, masterPassword) {
+export async function unlockSource(sourceID, masterPassword) {
     log.info(`Unlocking source: ${sourceID}`);
-    return getVaultManager()
-        .then(vaultManager =>
-            vaultManager
-                .getSourceForID(sourceID)
-                .unlock(
-                    masterPassword,
-                    /* init remote: */ false,
-                    /* content override: */ null,
-                    /* store offline content: */ false
-                )
-        )
-        .then(updateContextMenu);
+    const vaultManager = await getVaultManager();
+    const source = vaultManager.getSourceForID(sourceID);
+    await source.unlock(Credentials.fromPassword(masterPassword), {
+        storeOfflineCopy: false
+    });
+    updateContextMenu();
 }

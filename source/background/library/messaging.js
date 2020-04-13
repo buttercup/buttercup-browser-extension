@@ -2,9 +2,9 @@ import VError from "verror";
 import { extractDomain } from "../../shared/library/domain.js";
 import {
     ENTRY_URL_TYPE_LOGIN,
-    consumeArchiveFacade,
-    createArchiveFacade,
+    consumeVaultFacade,
     createEntryFacade,
+    createVaultFacade,
     getEntryURLs
 } from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
@@ -80,7 +80,7 @@ function handleMessage(request, sender, sendResponse) {
             log.info(`Apply vault facade update for source: ${sourceID}`);
             getArchive(sourceID)
                 .then(archive => {
-                    consumeArchiveFacade(archive, facade);
+                    consumeVaultFacade(archive, facade);
                     return saveSource(sourceID);
                 })
                 .then(() => {
@@ -122,7 +122,7 @@ function handleMessage(request, sender, sendResponse) {
             const { sourceID } = request;
             getArchive(sourceID)
                 .then(archive => {
-                    const facade = createArchiveFacade(archive);
+                    const facade = createVaultFacade(archive);
                     sendResponse({ ok: true, facade });
                 })
                 .catch(err => {
