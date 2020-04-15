@@ -383,41 +383,10 @@ export async function saveSource(sourceID) {
     if (!source) {
         throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
     }
-    // await vaultManager.interruptAutoUpdate(async () => {
-    //     if (await source.localDiffersFromRemote()) {
-
-    //     }
-    // });
-    return getVaultManager()
-        .then(vaultManager => {
-            const source = vaultManager.getSourceForID(sourceID);
-            if (!source) {
-                throw new Error(`Unable to save source: No unlocked source found for ID: ${sourceID}`);
-            }
-            const { workspace } = source;
-            return vaultManager.interruptAutoUpdate(() =>
-                workspace
-                    .localDiffersFromRemote()
-                    .then(differs => {
-                        if (differs) {
-                            log.info(` -> Remote source differs, will merge before save: ${sourceID}`);
-                        } else {
-                            log.info(` -> Remote source is the same, no merge/save necessary: ${sourceID}`);
-                        }
-                        return differs ? workspace.mergeFromRemote().then(() => true) : false;
-                    })
-                    .then(shouldSave => {
-                        // (shouldSave ? workspace.save() : null)
-                        if (!shouldSave) {
-                            return null;
-                        }
-                        return workspace.save().then(() => {
-                            log.info(` -> Saved source: ${sourceID}`);
-                        });
-                    })
-            );
-        })
-        .then(updateContextMenu);
+    await vaultManager.interruptAutoUpdate(async () => {
+        log.info(`Saving source: ${sourceID}`);
+        await source.save();
+    });
 }
 
 export function sendCredentialsToTab(sourceID, entryID, signIn) {
