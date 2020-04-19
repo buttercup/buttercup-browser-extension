@@ -253,12 +253,12 @@ export function getMatchingEntriesForSearchTerm(term) {
         const lookup = unlockedSources.reduce(
             (current, next) => ({
                 ...current,
-                [next.workspace.archive.id]: next.id
+                [next.vault.id]: next.id
             }),
             {}
         );
-        const archives = unlockedSources.map(source => source.workspace.archive);
-        const finder = new EntryFinder(archives);
+        const vaults = unlockedSources.map(source => source.vault);
+        const finder = new EntryFinder(vaults);
         return finder.search(term).map(result => ({
             entry: result.entry,
             sourceID: lookup[result.archive.id]
@@ -272,8 +272,8 @@ export function getMatchingEntriesForURL(url) {
         const unlockedSources = vaultManager.unlockedSources;
         const entries = [];
         unlockedSources.forEach(source => {
-            const archive = source.workspace.archive;
-            const newEntries = archive.findEntriesByProperty(URL_SEARCH_REXP, /.+/).filter(entry => {
+            const vault = source.vault;
+            const newEntries = vault.findEntriesByProperty(URL_SEARCH_REXP, /.+/).filter(entry => {
                 const props = entry.getProperties(URL_SEARCH_REXP);
                 const propKeys = Object.keys(props);
                 return (
