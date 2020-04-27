@@ -8,8 +8,7 @@ export const ARCHIVE_TYPES = [
         type: "mybuttercup",
         title: "My Buttercup",
         image: require("../../../resources/providers/mybuttercup-256.png"),
-        invertOnDarkMode: false,
-        disabled: true
+        invertOnDarkMode: false
     },
     {
         type: "dropbox",

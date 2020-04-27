@@ -12,6 +12,21 @@ async function attemptVaultIDMatch(vaultID) {
     const matchingVault = vaults.find(vault => vault.meta && vault.meta.vaultID === vaultID);
     if (matchingVault) {
         __matchedVaultData = matchingVault;
+        window.top.postMessage(
+            `bcup_ext:${JSON.stringify({
+                type: "vault-match",
+                result: "found"
+            })}`,
+            "*"
+        );
+    } else {
+        window.top.postMessage(
+            `bcup_ext:${JSON.stringify({
+                type: "vault-match",
+                result: "none"
+            })}`,
+            "*"
+        );
     }
 }
 
@@ -34,13 +49,13 @@ function handleWindowMessageResponse(evt) {
         const payload = JSON.parse(data.replace(BCUP_MESSAGE_PREFIX, ""));
         const { type } = payload;
         switch (type) {
-            case "reply-vault-id": {
-                const { id: vaultID } = payload;
-                attemptVaultIDMatch(vaultID);
+            case "target-vault-id": {
+                const { id: myBcupVaultID } = payload;
+                attemptVaultIDMatch(myBcupVaultID);
                 break;
             }
             default:
-                console.error("Unrecognised message frome extension:", payload);
+                console.error("Unrecognised message from MyButtercup:", payload);
                 break;
         }
     }

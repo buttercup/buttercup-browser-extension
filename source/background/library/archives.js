@@ -122,8 +122,8 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
 }
 
 export function addMyButtercupArchive(payload) {
-    const { masterPassword, accessToken, refreshToken, vaultID } = payload;
-    log.info("Attempting to connect My Buttercup vault");
+    const { name, masterPassword, accessToken, refreshToken, vaultID, create } = payload;
+    log.info(`Attempting to connect My Buttercup vault: ${name}`);
     const rawCredentials = Credentials.fromDatasource(
         {
             type: "mybuttercup",
@@ -137,7 +137,11 @@ export function addMyButtercupArchive(payload) {
     );
     return Promise.all([getVaultManager(), rawCredentials.toSecureString()]).then(
         ([vaultManager, sourceCredentials]) => {
-            const source = new VaultSource(name, "mybuttercup", sourceCredentials);
+            const source = new VaultSource(name, "mybuttercup", sourceCredentials, {
+                meta: {
+                    vaultID
+                }
+            });
             return vaultManager.interruptAutoUpdate(() =>
                 vaultManager
                     .addSource(source)
