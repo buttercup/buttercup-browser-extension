@@ -7,7 +7,7 @@ const MYBUTTERCUP_DOMAIN_REXP = /^https?:\/\/(my\.buttercup\.pw|localhost:8000)/
 
 let __matchedVaultData = null;
 
-async function attemptVaultIDMatch(vaultID) {
+export async function attemptVaultIDMatch(vaultID) {
     const vaults = await getVaults();
     const matchingVault = vaults.find(vault => vault.meta && vault.meta.vaultID === vaultID);
     if (matchingVault) {
@@ -27,6 +27,13 @@ async function attemptVaultIDMatch(vaultID) {
             })}`,
             "*"
         );
+    }
+}
+
+export function checkForVaultContainer() {
+    const vaultContainerEl = document.getElementById("vaultInjection");
+    if (vaultContainerEl && vaultContainerEl.dataset.filled === "false" && __matchedVaultData) {
+        buildMyButtercupFrame(vaultContainerEl);
     }
 }
 
@@ -72,12 +79,19 @@ export function watchForRegistrationPossibility() {
         })}`,
         "*"
     );
-    const checkForVaultContainer = () => {
-        const vaultContainerEl = document.getElementById("vaultInjection");
-        if (vaultContainerEl && vaultInjection.dataset.filled === "false" && __matchedVaultData) {
-            buildMyButtercupFrame(vaultContainerEl);
-        }
-    };
+    window.top.postMessage(
+        `bcup_ext:${JSON.stringify({
+            type: "set-extension-setup-url",
+            url: chrome.runtime.getURL("/setup.html")
+        })}`,
+        "*"
+    );
+    // const checkForVaultContainer = () => {
+    //     const vaultContainerEl = document.getElementById("vaultInjection");
+    //     if (vaultContainerEl && vaultContainerEl.dataset.filled === "false" && __matchedVaultData) {
+    //         buildMyButtercupFrame(vaultContainerEl);
+    //     }
+    // };
     checkForVaultContainer();
     const mutationObserverConfig = { attributes: false, childList: true, subtree: true };
     const onMutation = mutations => {

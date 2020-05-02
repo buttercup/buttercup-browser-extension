@@ -147,6 +147,7 @@ export function addMyButtercupArchive(payload) {
                     .addSource(source)
                     .then(() => source.unlock(rawCredentials, { initialiseRemote: create }))
                     .then(() => vaultManager.dehydrateSource(source))
+                    .then(() => signalMyButtercupTabConnections(vaultID))
             );
         }
     );
@@ -405,6 +406,23 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
                 });
             });
         });
+}
+
+function signalMyButtercupTabConnections(vaultID) {
+    const tabsQuery = new Promise(resolve => {
+        chrome.tabs.query(
+            {
+                currentWindow: true,
+                url: ["http://localhost:8000/*", "https://my.buttercup.pw/*"]
+            },
+            resolve
+        );
+    });
+    return tabsQuery.then(tabs => {
+        tabs.forEach(tab => {
+            chrome.tabs.sendMessage(tab.id, { type: "check-mybcup-vault", vaultID });
+        });
+    });
 }
 
 export async function unlockSource(sourceID, masterPassword) {
