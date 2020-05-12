@@ -2,39 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Button, ButtonGroup, Text, Classes } from "@blueprintjs/core";
-
-export const ARCHIVE_TYPES = [
-    {
-        type: "mybuttercup",
-        title: "My Buttercup",
-        image: require("../../../resources/providers/mybuttercup-256.png"),
-        invertOnDarkMode: false
-    },
-    {
-        type: "dropbox",
-        title: "Dropbox",
-        image: require("../../../resources/providers/dropbox-256.png"),
-        invertOnDarkMode: true
-    },
-    {
-        type: "googledrive",
-        title: "Google Drive",
-        image: require("../../../resources/providers/googledrive-256.png"),
-        invertOnDarkMode: false
-    },
-    {
-        type: "webdav",
-        title: "WebDAV",
-        image: require("../../../resources/providers/webdav-256.png"),
-        invertOnDarkMode: true
-    },
-    {
-        type: "localfile",
-        title: "Local Disk",
-        image: require("../../../resources/providers/chip.svg"),
-        invertOnDarkMode: true
-    }
-];
+import { VAULT_TYPES } from "../../shared/library/icons.js";
 
 const ArchiveTypeImage = styled.img`
     width: 2rem;
@@ -73,7 +41,7 @@ class ArchiveTypeChooser extends PureComponent {
     render() {
         return (
             <ButtonGroup fill large minimal>
-                <For each="provider" of={ARCHIVE_TYPES}>
+                <For each="provider" of={VAULT_TYPES}>
                     <With disabled={!!(this.props.disabled || provider.disabled)}>
                         <Button
                             key={provider.type}

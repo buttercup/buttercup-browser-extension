@@ -55,6 +55,7 @@ const IconWrapper = styled.div`
 class ArchivesListPage extends PureComponent {
     static propTypes = {
         archives: ArchivesShape,
+        darkMode: PropTypes.bool,
         onArchiveClick: PropTypes.func.isRequired,
         onAddArchiveClick: PropTypes.func.isRequired,
         onLockArchive: PropTypes.func.isRequired,
@@ -161,7 +162,7 @@ class ArchivesListPage extends PureComponent {
                     </Choose>
                     <TitleContainer onClick={e => this.props.onArchiveClick(vault.id, vault.state)}>
                         <Text>
-                            {vault.title}
+                            {vault.name}
                             <If condition={vault.status === "locked"}>
                                 {" "}
                                 <Icon icon="lock" color={Colors.GRAY3} iconSize={12} />

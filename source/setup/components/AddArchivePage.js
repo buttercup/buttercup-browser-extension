@@ -7,7 +7,7 @@ import { Input as ButtercupInput, Button as ButtercupButton } from "@buttercup/u
 import { switchValue } from "../../shared/library/switch.js";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
-import { ARCHIVE_TYPES } from "./ArchiveTypeChooser.js";
+import { VAULT_TYPES } from "../../shared/library/icons.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
 
 const ENTER_KEY = 13;
@@ -284,7 +284,7 @@ class AddArchivePage extends PureComponent {
         const isAuthenticatingDesktop = this.props.localAuthStatus === "authenticating";
         const hasAuthenticatedDesktop = this.props.localAuthStatus === "authenticated";
         const isWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
-        const title = ARCHIVE_TYPES.find(archiveType => archiveType.type === this.props.selectedArchiveType).title;
+        const title = VAULT_TYPES.find(archiveType => archiveType.type === this.props.selectedArchiveType).title;
         return (
             <Fragment>
                 <H4>{sectionTitle}</H4>

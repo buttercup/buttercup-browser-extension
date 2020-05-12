@@ -59,7 +59,7 @@ class HeaderBar extends PureComponent {
                     <MenuDivider title="Vaults:" />
                     <For each="vault" of={archives} index="index">
                         <MenuItem
-                            icon={<VaultIcon vault={vault} />}
+                            icon={<VaultIcon vault={vault} darkMode={this.props.darkMode} />}
                             label={vault.status === "locked" ? <Icon icon="lock" /> : null}
                             text={vault.name}
                             key={index}
