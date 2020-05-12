@@ -49,7 +49,7 @@ class ArchiveTypeChooser extends PureComponent {
                             active={this.props.selectedArchiveType === provider.type}
                             disabled={disabled}
                             icon={
-                                <VaultContainer title="Coming soon...">
+                                <VaultContainer>
                                     <ArchiveTypeImage
                                         darkMode={this.props.darkMode}
                                         invertOnDarkMode={provider.invertOnDarkMode}

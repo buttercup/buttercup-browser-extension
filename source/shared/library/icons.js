@@ -30,7 +30,7 @@ export const VAULT_TYPES = [
     },
     {
         type: "localfile",
-        title: "Local Disk",
+        title: "Local File",
         image: require("../../../resources/providers/chip.svg"),
         invertOnDarkMode: true
     }
