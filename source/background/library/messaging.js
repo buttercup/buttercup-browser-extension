@@ -24,7 +24,6 @@ import {
     lockSource,
     lockSources,
     openCredentialsPageForEntry,
-    passwordValidForSource,
     removeSource,
     saveSource,
     sendCredentialsToTab,
@@ -98,14 +97,8 @@ function handleMessage(request, sender, sendResponse) {
             return false;
         }
         case "change-vault-password": {
-            const { sourceID, oldPassword, newPassword } = request;
-            passwordValidForSource(sourceID, oldPassword)
-                .then(passwordsMatch => {
-                    if (!passwordsMatch) {
-                        throw new Error("Current vault password does not match that which was provided");
-                    }
-                    return changeVaultPassword(sourceID, newPassword);
-                })
+            const { sourceID, oldPassword, newPassword, meta = {} } = request;
+            changeVaultPassword(sourceID, oldPassword, newPassword, meta)
                 .then(() => {
                     sendResponse({ ok: true });
                 })

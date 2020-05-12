@@ -14,6 +14,11 @@ export function getArchiveTitle(state, id) {
     return (archive && archive.name) || "";
 }
 
+export function getArchiveType(state, id) {
+    const archive = getArchives(state).find(archive => archive.id === id);
+    return (archive && archive.type) || null;
+}
+
 export function getTotalArchivesCount(state) {
     return state[KEY].total;
 }

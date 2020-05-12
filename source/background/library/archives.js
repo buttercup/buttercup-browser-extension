@@ -186,13 +186,13 @@ export function archiveToObjectGroupsOnly(archive) {
     return archive.toObject(Group.OutputFlag.Groups);
 }
 
-export function changeVaultPassword(sourceID, password) {
+export function changeVaultPassword(sourceID, oldPassword, newPassword, meta) {
     return getVaultManager().then(vaultManager => {
         const source = vaultManager.getSourceForID(sourceID);
         if (!source) {
             throw new Error(`No source found for ID: ${sourceID}`);
         }
-        return source.updateArchiveCredentials(password).then(() => vaultManager.dehydrateSource(source));
+        return source.changeMasterPassword(oldPassword, newPassword, meta);
     });
 }
 
@@ -359,17 +359,6 @@ export function openCredentialsPageForEntry(sourceID, entryID) {
             }
             return null;
         });
-}
-
-export function passwordValidForSource(sourceID, password) {
-    return getVaultManager().then(vaultManager => {
-        const source = vaultManager.getSourceForID(sourceID);
-        if (!source) {
-            throw new Error(`No source found for ID: ${sourceID}`);
-        }
-        const currentPassword = source.workspace.masterCredentials.password;
-        return password && currentPassword === password;
-    });
 }
 
 export function removeSource(sourceID) {

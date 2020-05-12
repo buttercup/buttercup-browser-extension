@@ -14,6 +14,7 @@ const CLEAR_PASSWORD_CHANGE = {
 class VaultPage extends PureComponent {
     static propTypes = {
         archiveTitle: PropTypes.string.isRequired,
+        archiveType: PropTypes.string.isRequired,
         changePassword: PropTypes.func.isRequired,
         isEditing: PropTypes.bool.isRequired,
         onLockArchive: PropTypes.func.isRequired,
@@ -26,6 +27,7 @@ class VaultPage extends PureComponent {
     state = {
         changingMasterPassword: false,
         masterPassword: "",
+        passwordToken: "",
         oldMasterPassword: "",
         newMasterPassword: "",
         newMasterPassword2: ""
@@ -69,6 +71,9 @@ class VaultPage extends PureComponent {
             this.props.sourceID,
             this.state.oldMasterPassword,
             this.state.newMasterPassword,
+            {
+                passwordToken: this.state.passwordToken
+            },
             () => {
                 this.setState({
                     changingMasterPassword: false,
@@ -204,6 +209,22 @@ class VaultPage extends PureComponent {
                                     onChange={event => this.handleUpdateForm("oldMasterPassword", event)}
                                 />
                             </FormGroup>
+                            <If condition={this.props.archiveType === "mybuttercup"}>
+                                <FormGroup
+                                    disabled={disableForm}
+                                    label="Password Reset Token"
+                                    labelFor="password-token"
+                                >
+                                    <InputGroup
+                                        id="password-token"
+                                        type="text"
+                                        placeholder="Enter password reset token..."
+                                        disabled={disableForm}
+                                        large
+                                        onChange={event => this.handleUpdateForm("passwordToken", event)}
+                                    />
+                                </FormGroup>
+                            </If>
                             <FormGroup disabled={disableForm} label="New Password" labelFor="new-master-password">
                                 <InputGroup
                                     id="new-master-password"

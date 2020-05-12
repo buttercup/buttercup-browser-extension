@@ -39,15 +39,18 @@ export function authenticateGoogleDrive(useOpenPermissions = false) {
     chrome.runtime.sendMessage({ type: "authenticate-google-drive", useOpenPermissions });
 }
 
-export function changeSourcePassword(sourceID, oldPassword, newPassword) {
+export function changeSourcePassword(sourceID, oldPassword, newPassword, meta = {}) {
     return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ type: "change-vault-password", sourceID, oldPassword, newPassword }, resp => {
-            if (resp && resp.ok) {
-                resolve(resp.facade);
-            } else {
-                reject(new Error(`Failed changing vault password: ${(resp && resp.error) || "Unknown error"}`));
+        chrome.runtime.sendMessage(
+            { type: "change-vault-password", sourceID, oldPassword, newPassword, meta },
+            resp => {
+                if (resp && resp.ok) {
+                    resolve(resp.facade);
+                } else {
+                    reject(new Error(`Failed changing vault password: ${(resp && resp.error) || "Unknown error"}`));
+                }
             }
-        });
+        );
     });
 }
 
