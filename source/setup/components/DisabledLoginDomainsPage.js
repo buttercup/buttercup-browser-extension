@@ -14,7 +14,7 @@ const Table = styled.table`
 `;
 
 function isDomain(str) {
-    return /^[^\/:_]+(\.[^\/:_]+)+$/.test(str);
+    return /^[^\/:_]+(\.[^\/:_]+)+$/.test(str) || str === "localhost";
 }
 
 export default function DisabledLoginDomainsPage() {
