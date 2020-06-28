@@ -4,6 +4,7 @@ import { Button, Icon, Menu, MenuDivider, MenuItem, Popover, Position, Tag } fro
 import styled from "styled-components";
 import { version } from "../../../package.json";
 import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
+import { VAULT_TYPES } from "../../shared/library/icons.js";
 import { VaultIcon } from "./VaultIcon";
 
 const Container = styled.div`
@@ -58,13 +59,15 @@ class HeaderBar extends PureComponent {
                 <If condition={archives.length > 0}>
                     <MenuDivider title="Vaults:" />
                     <For each="vault" of={archives} index="index">
-                        <MenuItem
-                            icon={<VaultIcon vault={vault} darkMode={this.props.darkMode} />}
-                            label={vault.status === "locked" ? <Icon icon="lock" /> : null}
-                            text={vault.name}
-                            key={index}
-                            onClick={() => this.handleVaultClick(vault)}
-                        />
+                        <If condition={!!VAULT_TYPES.find(({ type }) => type === vault.type)}>
+                            <MenuItem
+                                icon={<VaultIcon vault={vault} darkMode={this.props.darkMode} />}
+                                label={vault.status === "locked" ? <Icon icon="lock" /> : null}
+                                text={vault.name}
+                                key={index}
+                                onClick={() => this.handleVaultClick(vault)}
+                            />
+                        </If>
                     </For>
                     <MenuDivider />
                 </If>
