@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.16.0
+_2020-06-30_
+
+ * Core version 4
+ * My Buttercup datasource support
+ * ([#340](https://github.com/buttercup/buttercup-browser-extension/pull/340)) Allow localhost in disabled domains
+
 ## v2.15.1
 _2020-04-02_
 
