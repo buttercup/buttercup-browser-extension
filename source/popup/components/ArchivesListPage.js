@@ -150,32 +150,36 @@ class ArchivesListPage extends PureComponent {
     renderArchivesList() {
         return (
             <For each="vault" of={this.props.archives}>
-                <With vaultTypeInfo={VAULT_TYPES.find(item => item.type === vault.type)}>
-                    <ListItem key={vault.id}>
-                        <Choose>
-                            <When condition={this.state.lockingAll}>
-                                <Spinner size={40} />
-                            </When>
-                            <Otherwise>
-                                <VaultIcon vault={vault} isLarge />
-                            </Otherwise>
-                        </Choose>
-                        <TitleContainer onClick={e => this.props.onArchiveClick(vault.id, vault.state)}>
-                            <Text>
-                                {vault.name}
-                                <If condition={vault.status === "locked"}>
-                                    {" "}
-                                    <Icon icon="lock" color={Colors.GRAY3} iconSize={12} />
-                                </If>
-                            </Text>
-                            <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>{vaultTypeInfo.title}</Text>
-                        </TitleContainer>
-                        <Popover content={this.renderContextMenu(vault)} minimal position={Position.BOTTOM_RIGHT}>
-                            <Button icon="chevron-down" minimal />
-                        </Popover>
-                    </ListItem>
-                    <Divider />
-                </With>
+                <If condition={!!VAULT_TYPES.find(({ type }) => type === vault.type)}>
+                    <With vaultTypeInfo={VAULT_TYPES.find(item => item.type === vault.type)}>
+                        <ListItem key={vault.id}>
+                            <Choose>
+                                <When condition={this.state.lockingAll}>
+                                    <Spinner size={40} />
+                                </When>
+                                <Otherwise>
+                                    <VaultIcon vault={vault} isLarge darkMode={this.props.darkMode} />
+                                </Otherwise>
+                            </Choose>
+                            <TitleContainer onClick={e => this.props.onArchiveClick(vault.id, vault.state)}>
+                                <Text>
+                                    {vault.name}
+                                    <If condition={vault.status === "locked"}>
+                                        {" "}
+                                        <Icon icon="lock" color={Colors.GRAY3} iconSize={12} />
+                                    </If>
+                                </Text>
+                                <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
+                                    {vaultTypeInfo.title}
+                                </Text>
+                            </TitleContainer>
+                            <Popover content={this.renderContextMenu(vault)} minimal position={Position.BOTTOM_RIGHT}>
+                                <Button icon="chevron-down" minimal />
+                            </Popover>
+                        </ListItem>
+                        <Divider />
+                    </With>
+                </If>
             </For>
         );
     }
