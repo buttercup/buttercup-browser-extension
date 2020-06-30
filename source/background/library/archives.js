@@ -3,7 +3,6 @@ import { extractDomain } from "../../shared/library/domain.js";
 import { getVaultManager } from "./buttercup.js";
 import { getState } from "../redux/index.js";
 import { getConfigKey } from "../../shared/selectors/app.js";
-import "../../shared/library/LocalFileDatasource.js";
 import log from "../../shared/library/log.js";
 import { MYBUTTERCUP_CLIENT_ID, MYBUTTERCUP_CLIENT_SECRET } from "../../shared/library/myButtercup.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";

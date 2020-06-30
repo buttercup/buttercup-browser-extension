@@ -1,6 +1,7 @@
 import { basename, join } from "path";
-import { buildClient, completeConnection, initiateConnection } from "../../shared/library/secureFileClient.js";
+import { localFileClient } from "../../shared/library/buttercup.js";
 
+const { buildClient, completeConnection, initiateConnection } = localFileClient;
 let __client;
 
 export function createNewClient(key) {
