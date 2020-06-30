@@ -86,12 +86,6 @@ export function watchForRegistrationPossibility() {
         })}`,
         "*"
     );
-    // const checkForVaultContainer = () => {
-    //     const vaultContainerEl = document.getElementById("vaultInjection");
-    //     if (vaultContainerEl && vaultContainerEl.dataset.filled === "false" && __matchedVaultData) {
-    //         buildMyButtercupFrame(vaultContainerEl);
-    //     }
-    // };
     checkForVaultContainer();
     const mutationObserverConfig = { attributes: false, childList: true, subtree: true };
     const onMutation = mutations => {
