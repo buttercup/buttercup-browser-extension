@@ -14,7 +14,6 @@ const Wrapper = styled.div`
     img {
         width: ${p => (p.isLarge ? "28px" : "14px")};
         height: auto;
-        // filter: brightness(0) invert(1);
         ${p => (p.darkMode && p.invertOnDarkMode ? "filter: brightness(0) invert(1);" : "")};
     }
 `;
