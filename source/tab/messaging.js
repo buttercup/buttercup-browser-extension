@@ -4,6 +4,7 @@ import { hideInputDialog } from "./inputDialog.js";
 import { hideSaveDialog } from "./saveDialog.js";
 import { openGeneratorForCurrentInput, setPasswordForCurrentInput } from "./generator.js";
 import { autoLogin } from "./autoLogin.js";
+import { attemptVaultIDMatch, checkForVaultContainer } from "./myButtercup.js";
 
 export function getConfig() {
     return new Promise(resolve => {
@@ -57,6 +58,27 @@ export function getVaults() {
 
 function handleMessage(request, sender, sendResponse) {
     switch (request.type) {
+        case "auto-login": {
+            const { username, password } = request;
+            autoLogin(username, password);
+            return false;
+        }
+        case "check-mybcup-vault": {
+            const { vaultID } = request;
+            attemptVaultIDMatch(vaultID);
+            if (!document.hidden) {
+                setTimeout(checkForVaultContainer, 500);
+            } else {
+                const onChange = () => {
+                    if (!document.hidden) {
+                        document.removeEventListener("visibilitychange", onChange, false);
+                        checkForVaultContainer();
+                    }
+                };
+                document.addEventListener("visibilitychange", onChange, false);
+            }
+            break;
+        }
         case "enter-details": {
             const { signIn, entry } = request;
             enterLoginDetails(entry.properties.username, entry.properties.password, signIn);
@@ -68,11 +90,6 @@ function handleMessage(request, sender, sendResponse) {
         case "set-generated-password":
             setPasswordForCurrentInput(request.password);
             break;
-        case "auto-login": {
-            const { username, password } = request;
-            autoLogin(username, password);
-            return false;
-        }
         default:
             // ignore
             break;

@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
-const ARCHIVE_IMAGES = {
-    dropbox: require("../../../resources/providers/dropbox-256.png"),
-    googledrive: require("../../../resources/providers/googledrive-256.png"),
-    localfile: require("../../../resources/providers/chip.svg"),
-    mybuttercup: require("../../../resources/providers/mybuttercup-256.png"),
-    webdav: require("../../../resources/providers/webdav-white-256.png")
-};
+import { VAULT_TYPES } from "../../shared/library/icons.js";
 
 const Wrapper = styled.div`
     width: ${p => (p.isLarge ? "40px" : "20px")};
@@ -21,12 +14,14 @@ const Wrapper = styled.div`
     img {
         width: ${p => (p.isLarge ? "28px" : "14px")};
         height: auto;
-        filter: brightness(0) invert(1);
+        ${p => (p.darkMode && p.invertOnDarkMode ? "filter: brightness(0) invert(1);" : "")};
     }
 `;
 
-export const VaultIcon = ({ vault, isLarge = false }) => (
-    <Wrapper vault={vault} isLarge={isLarge}>
-        <img src={ARCHIVE_IMAGES[vault.type]} />
-    </Wrapper>
+export const VaultIcon = ({ vault, darkMode = false, isLarge = false }) => (
+    <With vaultImg={VAULT_TYPES.find(item => item.type === vault.type)}>
+        <Wrapper vault={vault} isLarge={isLarge} darkMode={darkMode} invertOnDarkMode={vaultImg.invertOnDarkMode}>
+            <img src={vaultImg.image} />
+        </Wrapper>
+    </With>
 );

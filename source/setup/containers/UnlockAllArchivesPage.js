@@ -10,7 +10,7 @@ function getArchivesArray(state) {
     return getArchives(state)
         .sort((a, b) => (a.order || 0) - (b.order || 0))
         .map(source => ({
-            title: source.title,
+            name: source.name,
             sourceID: source.id,
             state: source.state
         }));

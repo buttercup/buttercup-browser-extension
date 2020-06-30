@@ -1,11 +1,10 @@
-import { getSharedAppEnv } from "@buttercup/app-env";
 import {
     createClient as createDropboxClient,
     createFsInterface as createDropboxFSClient
 } from "@buttercup/dropbox-client";
 import { createClient as createGoogleDriveClient } from "@buttercup/googledrive-client";
-import joinPath from "path.join";
 import pify from "pify";
+import { getSharedAppEnv } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { getState } from "../redux/index.js";
 import { getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";

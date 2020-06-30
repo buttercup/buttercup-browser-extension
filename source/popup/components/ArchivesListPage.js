@@ -18,8 +18,8 @@ import {
     MenuItem,
     Position
 } from "@blueprintjs/core";
-import HeaderBar from "../containers/HeaderBar.js";
-import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
+import { ArchivesShape } from "../../shared/prop-types/archive.js";
+import { VAULT_TYPES } from "../../shared/library/icons.js";
 import { VaultIcon } from "./VaultIcon.js";
 import { lockAllArchives } from "../library/messaging.js";
 
@@ -55,6 +55,7 @@ const IconWrapper = styled.div`
 class ArchivesListPage extends PureComponent {
     static propTypes = {
         archives: ArchivesShape,
+        darkMode: PropTypes.bool,
         onArchiveClick: PropTypes.func.isRequired,
         onAddArchiveClick: PropTypes.func.isRequired,
         onLockArchive: PropTypes.func.isRequired,
@@ -146,34 +147,39 @@ class ArchivesListPage extends PureComponent {
         );
     }
 
-    //  onClick={() => this.props.onArchiveClick(vault.id, vault.state)}
     renderArchivesList() {
         return (
             <For each="vault" of={this.props.archives}>
-                <ListItem key={vault.id}>
-                    <Choose>
-                        <When condition={this.state.lockingAll}>
-                            <Spinner size={40} />
-                        </When>
-                        <Otherwise>
-                            <VaultIcon vault={vault} isLarge />
-                        </Otherwise>
-                    </Choose>
-                    <TitleContainer onClick={e => this.props.onArchiveClick(vault.id, vault.state)}>
-                        <Text>
-                            {vault.title}
-                            <If condition={vault.status === "locked"}>
-                                {" "}
-                                <Icon icon="lock" color={Colors.GRAY3} iconSize={12} />
-                            </If>
-                        </Text>
-                        <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>{vault.type}</Text>
-                    </TitleContainer>
-                    <Popover content={this.renderContextMenu(vault)} minimal position={Position.BOTTOM_RIGHT}>
-                        <Button icon="chevron-down" minimal />
-                    </Popover>
-                </ListItem>
-                <Divider />
+                <If condition={!!VAULT_TYPES.find(({ type }) => type === vault.type)}>
+                    <With vaultTypeInfo={VAULT_TYPES.find(item => item.type === vault.type)}>
+                        <ListItem key={vault.id}>
+                            <Choose>
+                                <When condition={this.state.lockingAll}>
+                                    <Spinner size={40} />
+                                </When>
+                                <Otherwise>
+                                    <VaultIcon vault={vault} isLarge darkMode={this.props.darkMode} />
+                                </Otherwise>
+                            </Choose>
+                            <TitleContainer onClick={e => this.props.onArchiveClick(vault.id, vault.state)}>
+                                <Text>
+                                    {vault.name}
+                                    <If condition={vault.status === "locked"}>
+                                        {" "}
+                                        <Icon icon="lock" color={Colors.GRAY3} iconSize={12} />
+                                    </If>
+                                </Text>
+                                <Text className={cx(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
+                                    {vaultTypeInfo.title}
+                                </Text>
+                            </TitleContainer>
+                            <Popover content={this.renderContextMenu(vault)} minimal position={Position.BOTTOM_RIGHT}>
+                                <Button icon="chevron-down" minimal />
+                            </Popover>
+                        </ListItem>
+                        <Divider />
+                    </With>
+                </If>
             </For>
         );
     }

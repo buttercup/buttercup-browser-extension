@@ -1,7 +1,12 @@
-import { consumeArchiveFacade, createArchiveFacade, createEntryFacade } from "@buttercup/facades";
 import VError from "verror";
 import { extractDomain } from "../../shared/library/domain.js";
-import * as Buttercup from "../../shared/library/buttercup.js";
+import {
+    ENTRY_URL_TYPE_LOGIN,
+    consumeVaultFacade,
+    createEntryFacade,
+    createVaultFacade,
+    getEntryURLs
+} from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import {
@@ -19,7 +24,6 @@ import {
     lockSource,
     lockSources,
     openCredentialsPageForEntry,
-    passwordValidForSource,
     removeSource,
     saveSource,
     sendCredentialsToTab,
@@ -34,10 +38,6 @@ import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
 import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
-
-const { ENTRY_URL_TYPE_GENERAL, ENTRY_URL_TYPE_ICON, ENTRY_URL_TYPE_LOGIN, getEntryURLs } = Buttercup.tools.entry;
-
-const LAST_LOGIN_MAX_AGE = 0.5 * 60 * 1000; // 30 seconds
 
 export function clearSearchResults() {
     return getUnlockedSourcesCount().then(unlockedSources => {
@@ -79,7 +79,7 @@ function handleMessage(request, sender, sendResponse) {
             log.info(`Apply vault facade update for source: ${sourceID}`);
             getArchive(sourceID)
                 .then(archive => {
-                    consumeArchiveFacade(archive, facade);
+                    consumeVaultFacade(archive, facade);
                     return saveSource(sourceID);
                 })
                 .then(() => {
@@ -97,14 +97,8 @@ function handleMessage(request, sender, sendResponse) {
             return false;
         }
         case "change-vault-password": {
-            const { sourceID, oldPassword, newPassword } = request;
-            passwordValidForSource(sourceID, oldPassword)
-                .then(passwordsMatch => {
-                    if (!passwordsMatch) {
-                        throw new Error("Current vault password does not match that which was provided");
-                    }
-                    return changeVaultPassword(sourceID, newPassword);
-                })
+            const { sourceID, oldPassword, newPassword, meta = {} } = request;
+            changeVaultPassword(sourceID, oldPassword, newPassword, meta)
                 .then(() => {
                     sendResponse({ ok: true });
                 })
@@ -121,7 +115,7 @@ function handleMessage(request, sender, sendResponse) {
             const { sourceID } = request;
             getArchive(sourceID)
                 .then(archive => {
-                    const facade = createArchiveFacade(archive);
+                    const facade = createVaultFacade(archive);
                     sendResponse({ ok: true, facade });
                 })
                 .catch(err => {

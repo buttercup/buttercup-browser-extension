@@ -19,7 +19,9 @@ const EntryShape = PropTypes.shape({
 class SearchResults extends PureComponent {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
+        sourcesTotal: PropTypes.number.isRequired,
         sourcesUnlocked: PropTypes.number.isRequired,
+        onAddVault: PropTypes.func.isRequired,
         onSelectEntry: PropTypes.func.isRequired,
         onUnlockAllArchives: PropTypes.func.isRequired
     };
@@ -43,9 +45,15 @@ class SearchResults extends PureComponent {
                             icon={<img src={BUTTERCUP_LOGO} width="64" />}
                             action={
                                 this.props.sourcesUnlocked === 0 ? (
-                                    <Button icon="unlock" onClick={::this.props.onUnlockAllArchives}>
-                                        Unlock Vaults
-                                    </Button>
+                                    this.props.sourcesTotal === 0 ? (
+                                        <Button icon="add" onClick={::this.props.onAddVault}>
+                                            Add Vault
+                                        </Button>
+                                    ) : (
+                                        <Button icon="unlock" onClick={::this.props.onUnlockAllArchives}>
+                                            Unlock Vaults
+                                        </Button>
+                                    )
                                 ) : null
                             }
                         />

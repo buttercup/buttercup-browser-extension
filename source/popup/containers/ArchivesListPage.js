@@ -4,11 +4,13 @@ import ArchivesListPage from "../components/ArchivesListPage.js";
 import { getArchives, getArchiveTitle } from "../../shared/selectors/archives.js";
 import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 import { lockArchive, removeArchive } from "../library/messaging";
+import { getConfigKey } from "../../shared/selectors/app.js";
 
 export default withRouter(
     connect(
         (state, ownProps) => ({
-            archives: getArchives(state)
+            archives: getArchives(state),
+            darkMode: getConfigKey(state, "darkMode")
         }),
         {
             onArchiveClick: (archiveID, state) => () => {

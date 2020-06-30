@@ -1,7 +1,5 @@
-import { Datasources } from "./buttercup.js";
+import { TextDatasource, registerDatasource } from "./buttercup.js";
 import { buildClient } from "./secureFileClient.js";
-
-const { TextDatasource, registerDatasource } = Datasources;
 
 export default class LocalFileDatasource extends TextDatasource {
     constructor(token, filePath) {

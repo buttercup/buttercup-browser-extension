@@ -1,6 +1,5 @@
 import joinURL from "url-join";
-import { getSharedAppEnv } from "@buttercup/app-env";
-import { vendor as ButtercupVendor } from "./buttercup.js";
+import { getSharedAppEnv } from "./buttercup.js";
 import log from "./log.js";
 
 const BASE_URL = "http://localhost:12821";

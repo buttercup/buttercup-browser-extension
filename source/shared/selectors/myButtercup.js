@@ -8,6 +8,10 @@ export function getAuthID(state) {
     return state[KEY].authenticationID;
 }
 
+export function getName(state) {
+    return state[KEY].name;
+}
+
 export function getRefreshToken(state) {
     return state[KEY].refreshToken;
 }

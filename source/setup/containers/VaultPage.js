@@ -3,30 +3,30 @@ import { push } from "react-router-redux";
 import delay from "yoctodelay";
 import VError from "verror";
 import VaultPage from "../components/VaultPage.js";
-import { getArchiveTitle } from "../../shared/selectors/archives.js";
+import { getArchiveTitle, getArchiveType } from "../../shared/selectors/archives.js";
 import { changeSourcePassword, lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { isEditing } from "../selectors/manageArchive.js";
 import { setEditing } from "../actions/manageArchive.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
-import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
 export default connect(
     (state, ownProps) => ({
         archiveTitle: getArchiveTitle(state, ownProps.match.params.id),
+        archiveType: getArchiveType(state, ownProps.match.params.id),
         isEditing: isEditing(state),
         state: ownProps.match.params.state,
         sourceID: ownProps.match.params.id
     }),
     {
-        changePassword: (sourceID, oldPassword, newPassword, onSuccessCB) => dispatch => {
+        changePassword: (sourceID, oldPassword, newPassword, meta, onSuccessCB) => dispatch => {
             if (oldPassword.length <= 0 || newPassword.length <= 0) {
                 notifyError("Password empty", "Both old and new passwords must be specified");
                 return;
             }
             dispatch(setBusy("Changing password..."));
-            changeSourcePassword(sourceID, oldPassword, newPassword)
+            changeSourcePassword(sourceID, oldPassword, newPassword, meta)
                 .then(() => {
                     dispatch(unsetBusy());
                     notifySuccess("Vault password changed", "Successfully changed vault password");

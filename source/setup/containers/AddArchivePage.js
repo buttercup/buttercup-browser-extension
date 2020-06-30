@@ -51,6 +51,7 @@ import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButter
 import {
     getAuthID as getMyButtercupAuthID,
     getAccessToken as getMyButtercupAccessToken,
+    getName as getMyButtercupName,
     getRefreshToken as getMyButtercupRefreshToken,
     getVaultID as getMyButtercupVaultID
 } from "../../shared/selectors/myButtercup.js";
@@ -245,9 +246,10 @@ export default connect(
             const accessToken = getMyButtercupAccessToken(state);
             const refreshToken = getMyButtercupRefreshToken(state);
             const vaultID = getMyButtercupVaultID(state);
+            const name = getMyButtercupName(state);
             dispatch(setAdding(true));
             dispatch(setBusy("Adding vault"));
-            return addMyButtercupArchives(vaultID, accessToken, refreshToken, masterPassword)
+            return addMyButtercupArchives(name, vaultID, accessToken, refreshToken, masterPassword)
                 .then(() => {
                     dispatch(unsetBusy());
                     notifySuccess("Successfully added vault", "My Buttercup vault successfully added.");

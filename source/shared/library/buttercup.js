@@ -1,3 +1,3 @@
-require("@buttercup/app-env/web");
+const { init } = (module.exports = require(_BUTTERCUP_WEB_IMPORT_));
 
-module.exports = require(_BUTTERCUP_WEB_IMPORT_);
+init();

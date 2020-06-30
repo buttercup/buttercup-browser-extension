@@ -4,6 +4,7 @@ import app from "../../shared/reducers/app.js";
 import autoLogin from "../../shared/reducers/autoLogin.js";
 import dropbox from "../../shared/reducers/dropbox.js";
 import googleDrive from "../../shared/reducers/googleDrive.js";
+import myButtercup from "../../shared/reducers/mybuttercup.js";
 import searching from "../../shared/reducers/searching.js";
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
     autoLogin,
     dropbox,
     googleDrive,
+    myButtercup,
     searching
 });
 
