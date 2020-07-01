@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v2.16.1
+_2020-07-01_
+
+ * **Bugfix**:
+   * Unable to select vault in save credentials form
+   * No search results in popup dialog
+   * Broken vault lock state in menu
+
 ## v2.16.0
 _2020-06-30_
 
