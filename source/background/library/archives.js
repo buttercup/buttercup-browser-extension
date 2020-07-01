@@ -182,7 +182,7 @@ export function addWebDAVArchive(payload) {
 }
 
 export function archiveToObjectGroupsOnly(archive) {
-    return archive.toObject(Group.OutputFlag.Groups);
+    return createVaultFacade(archive);
 }
 
 export function changeVaultPassword(sourceID, oldPassword, newPassword, meta) {
@@ -211,7 +211,7 @@ export function generateEntryPath(entry) {
     let group = entry.getGroup(),
         entryPath = [group];
     let parent;
-    while ((parent = group.getGroup()) !== null) {
+    while ((parent = group.getParentGroup()) !== null) {
         entryPath.unshift(parent);
         group = parent;
     }

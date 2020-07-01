@@ -20,7 +20,7 @@ function processArchives(state) {
 function processGroups(groups) {
     const groupIsTrash = group => {
         const attributes = group.attributes || {};
-        return attributes[Group.Attributes.Role] === "trash";
+        return attributes[Group.Attribute.Role] === "trash";
     };
     return groups.filter(group => !groupIsTrash(group)).map(group => ({
         id: group.id,

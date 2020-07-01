@@ -164,7 +164,7 @@ class ArchivesListPage extends PureComponent {
                             <TitleContainer onClick={e => this.props.onArchiveClick(vault.id, vault.state)}>
                                 <Text>
                                     {vault.name}
-                                    <If condition={vault.status === "locked"}>
+                                    <If condition={vault.state === "locked"}>
                                         {" "}
                                         <Icon icon="lock" color={Colors.GRAY3} iconSize={12} />
                                     </If>

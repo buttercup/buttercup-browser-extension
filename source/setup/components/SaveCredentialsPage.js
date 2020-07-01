@@ -53,7 +53,7 @@ const RaisedSelect = styled(Select)`
 
 const ArchiveShape = PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired
 });
 
@@ -123,7 +123,7 @@ class SaveCredentialsPage extends PureComponent {
         return Promise.resolve({
             options: this.props.archives.map(archive => ({
                 value: archive.id,
-                label: archive.title
+                label: archive.name
             }))
         });
     }

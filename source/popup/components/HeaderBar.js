@@ -62,7 +62,7 @@ class HeaderBar extends PureComponent {
                         <If condition={!!VAULT_TYPES.find(({ type }) => type === vault.type)}>
                             <MenuItem
                                 icon={<VaultIcon vault={vault} darkMode={this.props.darkMode} />}
-                                label={vault.status === "locked" ? <Icon icon="lock" /> : null}
+                                label={vault.state === "locked" ? <Icon icon="lock" /> : null}
                                 text={vault.name}
                                 key={index}
                                 onClick={() => this.handleVaultClick(vault)}
