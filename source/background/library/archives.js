@@ -1,4 +1,10 @@
-import { Credentials, EntryFinder, VaultSource, Group, createVaultFacade } from "../../shared/library/buttercup.js";
+import {
+    Credentials,
+    EntryFinder,
+    VaultSource,
+    createEntryFacade,
+    createVaultFacade
+} from "../../shared/library/buttercup.js";
 import { extractDomain } from "../../shared/library/domain.js";
 import { getVaultManager } from "./buttercup.js";
 import { getState } from "../redux/index.js";
@@ -384,13 +390,21 @@ export async function saveSource(sourceID) {
 
 export function sendCredentialsToTab(sourceID, entryID, signIn) {
     return getEntry(sourceID, entryID)
-        .then(entry => entry.toObject())
-        .then(entryData => {
+        .then(entry => createEntryFacade(entry))
+        .then(entryFacade => {
+            const properties = entryFacade.fields.reduce((output, field) => {
+                if (field.propertyType !== "property") return output;
+                output[field.property] = field.value;
+                return output;
+            }, {});
             return getCurrentTab().then(tab => {
                 return sendTabMessage(tab.id, {
                     type: "enter-details",
                     signIn,
-                    entry: entryData
+                    entry: {
+                        id: entryFacade.id,
+                        properties
+                    }
                 });
             });
         });
