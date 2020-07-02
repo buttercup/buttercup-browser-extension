@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.16.2
+_2020-07-02_
+
+ * **Bugfix**:
+   * Unable to enter form details when selecting entry result in dialog
+
 ## v2.16.1
 _2020-07-01_
 
