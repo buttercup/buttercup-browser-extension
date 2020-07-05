@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.17.0
+_2020-07-05_
+
+ * New search functionality
+   * Result scoring per domain
+ * Vault type icons on unlock-all-vaults page
+
 ## v2.16.2
 _2020-07-02_
 
