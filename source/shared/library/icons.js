@@ -3,6 +3,7 @@ import { getIconFilename } from "@buttercup/iconographer";
 import extractDomain from "extract-domain";
 import { getExtensionURL } from "./extension.js";
 
+export const DATASOURCE_TYPES = ["mybuttercup", "dropbox", "googledrive", "webdav", "localfile"];
 export const VAULT_TYPES = [
     {
         type: "mybuttercup",

@@ -6,6 +6,7 @@ import Dialog from "./Dialog.js";
 import LayoutMain from "./LayoutMain.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import ReleaseNotes from "../containers/ReleaseNotes.js";
+import { VAULT_TYPES } from "../../shared/library/icons.js";
 
 const DualColumnLayout = styled.div`
     width: 100%;
@@ -40,9 +41,21 @@ const ButtonsRow = styled.div`
         margin-left: 12px;
     }
 `;
+const VaultIcon = styled.img`
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    ${p => (p.darkMode && p.invertOnDarkMode ? "filter: brightness(0) invert(1);" : "")};
+`;
+const VaultLabel = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+`;
 
 const ArchiveShape = PropTypes.shape({
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     sourceID: PropTypes.string.isRequired,
     state: PropTypes.string.isRequired
 });
@@ -50,6 +63,7 @@ const ArchiveShape = PropTypes.shape({
 class UnlockAllArchivesPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
+        darkMode: PropTypes.bool.isRequired,
         onUnlockArchive: PropTypes.func.isRequired
     };
 
@@ -120,14 +134,24 @@ class UnlockAllArchivesPage extends Component {
         const firstLockedIndex = this.props.archives.findIndex(archive => archive.state === "locked");
         return (
             <DualColumnLayout>
-                <Dialog title="Unlock archives" overlay={false}>
+                <Dialog title="Unlock vaults" overlay={false}>
                     <For each="archive" of={this.props.archives} index="archiveIndex">
                         <With
+                            iconInfo={VAULT_TYPES.find(item => item.type === archive.type)}
                             unlocking={this.state.unlocking.includes(archive.sourceID)}
                             unlocked={archive.state === "unlocked"}
                         >
                             <FormGroup
-                                label={`Unlock "${archive.name}"`}
+                                label={
+                                    <VaultLabel>
+                                        <VaultIcon
+                                            darkMode={this.props.darkMode}
+                                            invertOnDarkMode={iconInfo.invertOnDarkMode}
+                                            src={iconInfo.image}
+                                        />{" "}
+                                        {archive.name}
+                                    </VaultLabel>
+                                }
                                 disabled={unlocked}
                                 helperText={unlocked ? "Vault is unlocked." : null}
                                 key={`archive-${archive.sourceID}`}

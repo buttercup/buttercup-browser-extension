@@ -5,20 +5,25 @@ import { getArchives } from "../../shared/selectors/archives.js";
 import { unlockArchive } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
+import { getConfigKey } from "../../shared/selectors/app.js";
+import { DATASOURCE_TYPES } from "../../shared/library/icons.js";
 
 function getArchivesArray(state) {
     return getArchives(state)
+        .filter(source => DATASOURCE_TYPES.includes(source.type))
         .sort((a, b) => (a.order || 0) - (b.order || 0))
         .map(source => ({
             name: source.name,
             sourceID: source.id,
-            state: source.state
+            state: source.state,
+            type: source.type
         }));
 }
 
 export default connect(
     (state, ownProps) => ({
-        archives: getArchivesArray(state)
+        archives: getArchivesArray(state),
+        darkMode: getConfigKey(state, "darkMode")
     }),
     {
         onUnlockArchive: (sourceID, masterPassword) => (dispatch, getState) => {
