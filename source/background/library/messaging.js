@@ -16,9 +16,9 @@ import {
     changeVaultPassword,
     generateEntryPath,
     getArchive,
-    getMatchingEntriesForSearchTerm,
-    getMatchingEntriesForURL,
+    getEntry,
     getNameForSource,
+    getSourceIDForVaultID,
     getSourcesInfo,
     getUnlockedSourcesCount,
     lockSource,
@@ -38,6 +38,7 @@ import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
 import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
+import { getSearch } from "./search.js";
 
 export function clearSearchResults() {
     return getUnlockedSourcesCount().then(unlockedSources => {
@@ -289,7 +290,7 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "search-entries-for-term": {
             const { term } = request;
-            Promise.all([getMatchingEntriesForSearchTerm(term), getUnlockedSourcesCount()])
+            Promise.all([getSearch().then(search => search.searchByTerm(term)), getUnlockedSourcesCount()])
                 .then(processSearchResults)
                 .catch(err => {
                     console.error(err);
@@ -298,7 +299,7 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "search-entries-for-url": {
             const { url } = request;
-            Promise.all([getMatchingEntriesForURL(url), getUnlockedSourcesCount()])
+            Promise.all([getSearch().then(search => search.searchByURL(url)), getUnlockedSourcesCount()])
                 .then(processSearchResults)
                 .catch(err => {
                     console.error(err);
@@ -364,35 +365,27 @@ function handleMessage(request, sender, sendResponse) {
     }
 }
 
-function processSearchResults([entries, sources]) {
-    return Promise.all(
-        entries.map(info =>
-            getNameForSource(info.sourceID).then(name => ({
-                ...info,
-                sourceName: name
-            }))
-        )
-    ).then(entries => {
-        dispatch(
-            setEntrySearchResults(
-                entries.map(({ entry, sourceID, sourceName }) => {
-                    const facade = createEntryFacade(entry);
-                    const urls = getEntryURLs(entry.getProperty(), ENTRY_URL_TYPE_LOGIN);
-                    return {
-                        title: entry.getProperty("title"),
-                        id: entry.id,
-                        entryPath: generateEntryPath(entry),
-                        sourceID,
-                        sourceName,
-                        facade,
-                        url: urls[0] || null,
-                        urls
-                    };
-                })
-            )
-        );
-        dispatch(setSourcesCount(sources));
-    });
+async function processSearchResults([entryResults, sources]) {
+    const results = await Promise.all(
+        entryResults.map(async entryResult => {
+            const sourceID = await getSourceIDForVaultID(entryResult.vaultID);
+            const sourceName = await getNameForSource(sourceID);
+            const entry = await getEntry(sourceID, entryResult.id);
+            const facade = createEntryFacade(entry);
+            return {
+                title: entryResult.properties.title,
+                id: entryResult.id,
+                entryPath: generateEntryPath(entry),
+                facade,
+                sourceID,
+                sourceName,
+                url: entryResult.urls[0] || null,
+                urls: entryResult.urls
+            };
+        })
+    );
+    dispatch(setEntrySearchResults(results));
+    dispatch(setSourcesCount(sources));
 }
 
 export function startMessageListener() {

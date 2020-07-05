@@ -1,4 +1,5 @@
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
+import debounce from "debounce";
 import ms from "ms";
 import { DatasourceAuthManager, VaultManager } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
@@ -6,14 +7,25 @@ import { dispatch } from "../redux/index.js";
 import { setArchives, setArchivesCount, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
 import BrowserStorageInterface, { getNonSyncStorage, getSyncStorage } from "./BrowserStorageInterface.js";
 import { authenticateWithoutToken, authenticateWithRefreshToken } from "./googleDrive.js";
+import { updateSearch } from "./search.js";
 
-let __vaultManager, __queue;
+let __vaultManager, __queue, __updateSearch;
 
 function attachArchiveManagerListeners(vaultManager) {
+    if (!__updateSearch) {
+        __updateSearch = debounce(
+            () => {
+                updateSearch(vaultManager.unlockedSources.map(src => src.vault));
+            },
+            250,
+            false
+        );
+    }
     vaultManager.on("sourcesUpdated", () => {
         dispatch(setArchives(vaultManager.sources.map(source => describeSource(source))));
         dispatch(setArchivesCount(vaultManager.sources.length));
         dispatch(setUnlockedArchivesCount(vaultManager.unlockedSources.length));
+        __updateSearch();
     });
 }
 

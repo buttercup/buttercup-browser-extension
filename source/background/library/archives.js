@@ -257,51 +257,6 @@ export function getFacades() {
     );
 }
 
-export function getMatchingEntriesForSearchTerm(term) {
-    return getVaultManager().then(vaultManager => {
-        const unlockedSources = vaultManager.unlockedSources;
-        const lookup = unlockedSources.reduce(
-            (current, next) => ({
-                ...current,
-                [next.vault.id]: next.id
-            }),
-            {}
-        );
-        const vaults = unlockedSources.map(source => source.vault);
-        const finder = new EntryFinder(vaults);
-        return finder.search(term).map(result => ({
-            entry: result.entry,
-            sourceID: lookup[result.archive.id]
-        }));
-    });
-}
-
-export function getMatchingEntriesForURL(url) {
-    const domain = extractDomain(url);
-    return getVaultManager().then(vaultManager => {
-        const unlockedSources = vaultManager.unlockedSources;
-        const entries = [];
-        unlockedSources.forEach(source => {
-            const vault = source.vault;
-            const newEntries = vault.findEntriesByProperty(URL_SEARCH_REXP, /.+/).filter(entry => {
-                const props = entry.getProperties(URL_SEARCH_REXP);
-                const propKeys = Object.keys(props);
-                return (
-                    entry.isInTrash() === false &&
-                    (propKeys.length > 0 && propKeys.some(propKey => extractDomain(props[propKey]) === domain))
-                );
-            });
-            entries.push(
-                ...newEntries.map(entry => ({
-                    entry,
-                    sourceID: source.id
-                }))
-            );
-        });
-        return entries;
-    });
-}
-
 export function getNameForSource(sourceID) {
     return getVaultManager().then(vaultManager => {
         const source = vaultManager.getSourceForID(sourceID);
@@ -309,6 +264,16 @@ export function getNameForSource(sourceID) {
             throw new Error(`Unable to fetch source information: No source found for ID: ${sourceID}`);
         }
         return source.name;
+    });
+}
+
+export function getSourceIDForVaultID(vaultID) {
+    return getVaultManager().then(vaultManager => {
+        const source = vaultManager.unlockedSources.find(source => source.vault.id === vaultID);
+        if (!source) {
+            throw new Error(`Unable to fetch source information: No source found for vault ID: ${vaultID}`);
+        }
+        return source.id;
     });
 }
 
