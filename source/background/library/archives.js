@@ -13,6 +13,7 @@ import log from "../../shared/library/log.js";
 import { MYBUTTERCUP_CLIENT_ID, MYBUTTERCUP_CLIENT_SECRET } from "../../shared/library/myButtercup.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 import { updateContextMenu } from "./contextMenu.js";
+import { getSearch } from "./search.js";
 
 const URL_SEARCH_REXP = /^ur[li]$/i;
 
@@ -353,26 +354,35 @@ export async function saveSource(sourceID) {
     });
 }
 
-export function sendCredentialsToTab(sourceID, entryID, signIn) {
-    return getEntry(sourceID, entryID)
-        .then(entry => createEntryFacade(entry))
-        .then(entryFacade => {
-            const properties = entryFacade.fields.reduce((output, field) => {
-                if (field.propertyType !== "property") return output;
-                output[field.property] = field.value;
-                return output;
-            }, {});
-            return getCurrentTab().then(tab => {
-                return sendTabMessage(tab.id, {
-                    type: "enter-details",
-                    signIn,
-                    entry: {
-                        id: entryFacade.id,
-                        properties
-                    }
-                });
-            });
-        });
+export async function sendCredentialsToTab(sourceID, entryID, signIn) {
+    const entry = await getEntry(sourceID, entryID);
+    const entryFacade = createEntryFacade(entry);
+    const properties = entryFacade.fields.reduce((output, field) => {
+        if (field.propertyType !== "property") return output;
+        output[field.property] = field.value;
+        return output;
+    }, {});
+    // Get target tab
+    const tab = await getCurrentTab();
+    // Handle search update (measure loads of an item)
+    try {
+        const search = await getSearch();
+        const vault = await getArchive(sourceID);
+        await search.incrementScore(vault.id, entryID, tab.url);
+        const vaultManager = await getVaultManager();
+        vaultManager.emit("sourcesUpdated");
+    } catch (err) {
+        console.error("Failed updating search scores", err);
+    }
+    // Send info to tab
+    sendTabMessage(tab.id, {
+        type: "enter-details",
+        signIn,
+        entry: {
+            id: entryFacade.id,
+            properties
+        }
+    });
 }
 
 function signalMyButtercupTabConnections(vaultID) {
