@@ -18,7 +18,9 @@ export default class LoginTracker extends EventEmitter {
     }
 
     getConnection(loginTarget) {
-        return this._connections.find(conn => conn.loginTarget === loginTarget);
+        return this._connections.find(
+            conn => conn.loginTarget === loginTarget || conn.loginTarget.form === loginTarget.form
+        );
     }
 
     registerConnection(loginTarget) {
@@ -26,6 +28,7 @@ export default class LoginTracker extends EventEmitter {
         const connection = {
             id: uuid(),
             loginTarget,
+            entry: false,
             _username: "",
             _password: "",
             get username() {

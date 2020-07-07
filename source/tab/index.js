@@ -43,7 +43,8 @@ function waitAndAttachLaunchButtons() {
             id: connection.id,
             url: tracker.url,
             title: tracker.title,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            fromEntry: connection.entry
         });
     });
     onIdentifiedTarget(loginTarget => {
