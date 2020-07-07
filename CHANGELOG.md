@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.18.0
+_2020-07-07_
+
+ * Search results won't show items in trash
+ * **Bugfix**:
+   * ([#337](https://github.com/buttercup/buttercup-browser-extension/pull/337)) No login-save-prompt when entry selected for login form (includes auto login)
+
 ## v2.17.0
 _2020-07-05_
 
