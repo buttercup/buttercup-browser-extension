@@ -33,18 +33,22 @@ export function createArchiveManager() {
     const queue = getQueue();
     return queue.channel("archiveManager").enqueue(() => {
         const vm = new VaultManager({
+            autoUpdate: true,
+            autoUpdateDelay: ms("2m"),
             cacheStorage: new BrowserStorageInterface(getNonSyncStorage()),
             sourceStorage: new BrowserStorageInterface(getSyncStorage())
         });
         attachArchiveManagerListeners(vm);
+        vm.initialise();
         return vm.rehydrate().then(() => {
             log.info("Rehydrated archive manager");
             __vaultManager = vm;
-            vm.toggleAutoUpdating(true, ms("2m"));
+            vm.on("autoUpdateFailed", ({ source }) => {
+                log.error(`Auto-update failed for source: ${source.id} (${source.name})`);
+            });
             vm.on("autoUpdateStop", () => {
                 log.info("Completed auto-update");
             });
-            log.info("Activated auto updating");
         });
     }, TASK_TYPE_HIGH_PRIORITY);
 }
