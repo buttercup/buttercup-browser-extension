@@ -12,7 +12,13 @@ export function attachLaunchButton(input) {
     if (input.dataset.bcup === "attached" || itemIsIgnored(input)) {
         return;
     }
-    const { borderTopLeftRadius, borderBottomLeftRadius } = window.getComputedStyle(input, null);
+    const {
+        borderTopLeftRadius,
+        borderBottomLeftRadius,
+        boxSizing,
+        paddingLeft,
+        paddingRight
+    } = window.getComputedStyle(input, null);
     const tryToAttach = () => {
         const bounds = input.getBoundingClientRect();
         const { width, height } = bounds;
@@ -23,18 +29,23 @@ export function attachLaunchButton(input) {
             setTimeout(tryToAttach, 250);
             return;
         }
+        // Calculate button location
+        const inputLeftPadding = parseInt(paddingLeft, 10) || 0;
+        const inputRightPadding = parseInt(paddingRight, 10) || 0;
         const buttonWidth = 0.8 * height;
-        const newInputWidth = width - buttonWidth;
-        let left = input.offsetLeft + newInputWidth;
+        const calculateLeft = () =>
+            input.offsetLeft +
+            width +
+            (boxSizing === "border-box" ? 0 - buttonWidth : inputLeftPadding - inputRightPadding);
+        let left = calculateLeft();
         let top = input.offsetTop;
         const buttonZ = findBestZIndexInContainer(input.offsetParent);
+        // Input padding
+        setStyle(input, {
+            paddingRight: `${inputRightPadding + buttonWidth}px`
+        });
         // Update input style
         updateOffsetParentPositioning(input.offsetParent);
-        setStyle(input, {
-            width: `${newInputWidth}px`,
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0
-        });
         // Create and add button
         const button = el("button", {
             type: "button",
@@ -68,7 +79,7 @@ export function attachLaunchButton(input) {
         });
         const reprocessButton = () => {
             try {
-                left = input.offsetLeft + newInputWidth;
+                left = calculateLeft();
                 top = input.offsetTop;
                 setStyle(button, {
                     top: `${top}px`,
