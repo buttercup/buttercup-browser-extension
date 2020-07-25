@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.19.0
+_2020-07-25_
+
+ * New Buttercup form button behaviour (to improve login form stability)
+ * Clipboard-writing permission for certain browsers
+ * Improved auto-update stability
+
 ## v2.18.0
 _2020-07-07_
 
