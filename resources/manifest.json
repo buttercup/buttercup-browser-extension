@@ -41,6 +41,7 @@
 
     "permissions": [
         "activeTab",
+        "clipboardWrite",
         "contextMenus",
         "http://*/*",
         "https://*/*",
