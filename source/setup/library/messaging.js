@@ -1,6 +1,17 @@
 import VError from "verror";
 import log from "../../shared/library/log.js";
 
+export function addAttachments(sourceID, entryID, files) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "add-attachments", sourceID, entryID, files }, resp => {
+            if (resp && resp.ok) {
+                return resolve();
+            }
+            reject(resp.error ? new Error(resp.error) : new Error("Failed adding attachments"));
+        });
+    });
+}
+
 export function addNewEntry(sourceID, groupID, details) {
     const payload = {
         sourceID,
@@ -54,6 +65,17 @@ export function changeSourcePassword(sourceID, oldPassword, newPassword, meta = 
     });
 }
 
+export function deleteAttachment(sourceID, entryID, attachmentID) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "delete-attachment", sourceID, entryID, attachmentID }, resp => {
+            if (resp && resp.ok) {
+                return resolve();
+            }
+            reject(resp.error ? new Error(resp.error) : new Error("Failed deleting attachment"));
+        });
+    });
+}
+
 export function disableDomainForSavePrompt(domain) {
     return new Promise(resolve => {
         chrome.runtime.sendMessage({ type: "disable-login-domain", domain }, () => {
@@ -82,6 +104,28 @@ export function getArchivesGroupTree(sourceID) {
             } else {
                 reject(new Error(`Failed getting archive contents: ${(resp && resp.error) || "Unknown error"}`));
             }
+        });
+    });
+}
+
+export function getAttachmentData(sourceID, entryID, attachmentID) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-attachment", sourceID, entryID, attachmentID }, resp => {
+            if (resp && resp.ok) {
+                return resolve(resp.data);
+            }
+            reject(resp.error ? new Error(resp.error) : new Error("Failed getting attachment"));
+        });
+    });
+}
+
+export function getAttachmentDetails(sourceID, entryID, attachmentID) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-attachment-details", sourceID, entryID, attachmentID }, resp => {
+            if (resp && resp.ok) {
+                return resolve(resp.details);
+            }
+            reject(resp.error ? new Error(resp.error) : new Error("Failed getting attachment details"));
         });
     });
 }

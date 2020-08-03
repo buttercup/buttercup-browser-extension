@@ -30,6 +30,11 @@ export default {
                 separatorTextColor: Colors.GRAY3,
                 separatorBorder: Colors.GRAY1,
                 fieldHoverBorder: Colors.GRAY1
+            },
+            attachment: {
+                dropBackground: Colors.DARK_GRAY3,
+                dropBorder: Colors.DARK_GRAY5,
+                dropText: Colors.GRAY2
             }
         }
     },
@@ -62,6 +67,11 @@ export default {
                 separatorTextColor: Colors.GRAY3,
                 separatorBorder: Colors.LIGHT_GRAY2,
                 fieldHoverBorder: Colors.LIGHT_GRAY1
+            },
+            attachment: {
+                dropBackground: Colors.LIGHT_GRAY5,
+                dropBorder: Colors.LIGHT_GRAY2,
+                dropText: Colors.GRAY4
             }
         }
     }
