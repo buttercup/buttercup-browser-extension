@@ -39,6 +39,7 @@ import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDri
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
 import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
 import { getSearch } from "./search.js";
+import { addAttachments, deleteAttachment, getAttachment } from "./attachments.js";
 
 export function clearSearchResults() {
     return getUnlockedSourcesCount().then(unlockedSources => {
@@ -60,6 +61,19 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             // Async
+            return true;
+        }
+        case "add-attachments": {
+            const { sourceID, entryID, files } = request;
+            log.info(`Adding ${files.length} attachments to source: ${sourceID}`);
+            addAttachments(sourceID, entryID, files)
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
             return true;
         }
         case "add-new-entry": {
@@ -125,6 +139,19 @@ function handleMessage(request, sender, sendResponse) {
                 });
             return true;
         }
+        case "delete-attachment": {
+            const { sourceID, entryID, attachmentID } = request;
+            log.info(`Deleting attachment: ${attachmentID} (from source/entry: ${sourceID}/${entryID})`);
+            deleteAttachment(sourceID, entryID, attachmentID)
+                .then(() => {
+                    sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
+        }
         case "disable-login-domain": {
             const [lastLogin] = getLogins();
             let domain = request.domain;
@@ -143,6 +170,19 @@ function handleMessage(request, sender, sendResponse) {
             disableLoginsOnDomain(domain)
                 .then(() => {
                     sendResponse({ ok: true });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
+        }
+        case "get-attachment": {
+            const { sourceID, entryID, attachmentID } = request;
+            log.info(`Fetching attachment: ${attachmentID} (from source/entry: ${sourceID}/${entryID})`);
+            getAttachment(sourceID, entryID, attachmentID)
+                .then(data => {
+                    sendResponse({ ok: true, data });
                 })
                 .catch(err => {
                     sendResponse({ ok: false, error: err.message });
