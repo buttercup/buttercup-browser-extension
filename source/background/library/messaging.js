@@ -39,7 +39,7 @@ import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDri
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
 import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
 import { getSearch } from "./search.js";
-import { addAttachments, deleteAttachment, getAttachment } from "./attachments.js";
+import { addAttachments, deleteAttachment, getAttachment, getAttachmentDetails } from "./attachments.js";
 
 export function clearSearchResults() {
     return getUnlockedSourcesCount().then(unlockedSources => {
@@ -183,6 +183,19 @@ function handleMessage(request, sender, sendResponse) {
             getAttachment(sourceID, entryID, attachmentID)
                 .then(data => {
                     sendResponse({ ok: true, data });
+                })
+                .catch(err => {
+                    sendResponse({ ok: false, error: err.message });
+                    console.error(err);
+                });
+            return true;
+        }
+        case "get-attachment-details": {
+            const { sourceID, entryID, attachmentID } = request;
+            log.info(`Retrieving attachment details: ${attachmentID} (from source/entry: ${sourceID}/${entryID})`);
+            getAttachmentDetails(sourceID, entryID, attachmentID)
+                .then(details => {
+                    sendResponse({ ok: true, details });
                 })
                 .catch(err => {
                     sendResponse({ ok: false, error: err.message });

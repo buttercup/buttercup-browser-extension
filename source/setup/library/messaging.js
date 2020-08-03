@@ -119,6 +119,17 @@ export function getAttachmentData(sourceID, entryID, attachmentID) {
     });
 }
 
+export function getAttachmentDetails(sourceID, entryID, attachmentID) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ type: "get-attachment-details", sourceID, entryID, attachmentID }, resp => {
+            if (resp && resp.ok) {
+                return resolve(resp.details);
+            }
+            reject(resp.error ? new Error(resp.error) : new Error("Failed getting attachment details"));
+        });
+    });
+}
+
 export function getDisabledSavePromptDomains() {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "get-disabled-save-prompt-domains" }, resp => {

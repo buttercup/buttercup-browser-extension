@@ -33,3 +33,10 @@ export async function getAttachment(sourceID, entryID, attachmentID) {
     const buff = await source.attachmentManager.getAttachment(entry, attachmentID);
     return arrayBufferToBase64(buff);
 }
+
+export async function getAttachmentDetails(sourceID, entryID, attachmentID) {
+    const vm = await getVaultManager();
+    const source = vm.getSourceForID(sourceID);
+    const entry = source.vault.findEntryByID(entryID);
+    return source.attachmentManager.getAttachmentDetails(entry, attachmentID);
+}
