@@ -13,6 +13,7 @@ const CLEAR_PASSWORD_CHANGE = {
 
 class VaultPage extends PureComponent {
     static propTypes = {
+        attachments: PropTypes.bool.isRequired,
         archiveTitle: PropTypes.string.isRequired,
         archiveType: PropTypes.string.isRequired,
         changePassword: PropTypes.func.isRequired,
@@ -153,7 +154,7 @@ class VaultPage extends PureComponent {
                     actions={actions}
                 >
                     <If condition={this.props.state === "unlocked"}>
-                        <VaultEditor sourceID={this.props.sourceID} />
+                        <VaultEditor attachments={this.props.attachments} sourceID={this.props.sourceID} />
                     </If>
                     <If condition={this.props.state === "locked"}>
                         <form onSubmit={::this.handleUnlockArchive}>

@@ -18,6 +18,7 @@ const Loader = styled.div`
 
 class VaultEditor extends Component {
     static propTypes = {
+        attachments: PropTypes.bool.isRequired,
         fetchVaultFacade: PropTypes.func.isRequired,
         handlePreviewAttachmentError: PropTypes.func.isRequired,
         saveVaultFacade: PropTypes.func.isRequired,
@@ -53,7 +54,7 @@ class VaultEditor extends Component {
             <Choose>
                 <When condition={this.props.vault}>
                     <VaultProvider
-                        attachments
+                        attachments={this.props.attachments}
                         attachmentPreviews={this.state.attachmentPreviews}
                         onAddAttachments={(entryID, files) =>
                             this.props.addAttachments(this.props.sourceID, entryID, files)

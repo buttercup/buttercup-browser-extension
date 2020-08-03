@@ -3,7 +3,7 @@ import { push } from "react-router-redux";
 import delay from "yoctodelay";
 import VError from "verror";
 import VaultPage from "../components/VaultPage.js";
-import { getArchiveTitle, getArchiveType } from "../../shared/selectors/archives.js";
+import { getArchiveAttachmentsSupport, getArchiveTitle, getArchiveType } from "../../shared/selectors/archives.js";
 import { changeSourcePassword, lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
@@ -15,6 +15,7 @@ export default connect(
     (state, ownProps) => ({
         archiveTitle: getArchiveTitle(state, ownProps.match.params.id),
         archiveType: getArchiveType(state, ownProps.match.params.id),
+        attachments: getArchiveAttachmentsSupport(state, ownProps.match.params.id),
         isEditing: isEditing(state),
         state: ownProps.match.params.state,
         sourceID: ownProps.match.params.id

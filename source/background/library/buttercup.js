@@ -1,7 +1,7 @@
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
 import debounce from "debounce";
 import ms from "ms";
-import { DatasourceAuthManager, VaultManager } from "../../shared/library/buttercup.js";
+import { DatasourceAuthManager, VaultManager, VaultSource } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
 import { setArchives, setArchivesCount, setUnlockedArchivesCount } from "../../shared/actions/archives.js";
@@ -54,11 +54,16 @@ export function createArchiveManager() {
 }
 
 function describeSource(source) {
+    let attachments = false;
+    if (source.status === VaultSource.STATUS_UNLOCKED) {
+        attachments = source._datasource.supportsAttachments();
+    }
     return {
         id: source.id,
         name: source.name,
         state: source.status,
-        type: source.type
+        type: source.type,
+        attachments
     };
 }
 

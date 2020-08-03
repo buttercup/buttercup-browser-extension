@@ -4,6 +4,11 @@ export function getArchives(state) {
     return state[KEY].archives;
 }
 
+export function getArchiveAttachmentsSupport(state, id) {
+    const archive = getArchives(state).find(archive => archive.id === id);
+    return !!(archive && archive.attachments);
+}
+
 export function getArchiveState(state, id) {
     const archive = getArchives(state).find(archive => archive.id === id);
     return (archive && archive.state) || "unknown";
