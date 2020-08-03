@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.20.0
+_2020-08-03_
+
+ * **Attachments** (My Buttercup)
+   * Add, remove, preview and download attachments when using My Buttercup vaults
+ * Core memory/stability improvements when merging vault changes from remote sources
+
 ## v2.19.0
 _2020-07-25_
 
