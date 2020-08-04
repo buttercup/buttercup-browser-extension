@@ -1,6 +1,6 @@
 # Buttercup browser extension changelog
 
-## v2.20.0
+## v2.20.1
 _2020-08-03_
 
  * **Attachments** (My Buttercup)
