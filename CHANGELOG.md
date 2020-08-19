@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.20.2
+_2020-08-19_
+
+ * **Bugfix**:
+   * ([buttercup-core#287](https://github.com/buttercup/buttercup-core/issues/287)) Vaults grow to enormous size
+
 ## v2.20.1
 _2020-08-03_
 
