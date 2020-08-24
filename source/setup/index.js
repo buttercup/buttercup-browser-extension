@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route } from "react-router";
-import { ConnectedRouter } from "react-router-redux";
+import { ConnectedRouter } from "connected-react-router";
 import "../shared/library/buttercup.js";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
@@ -17,8 +17,6 @@ import DisabledLoginDomainsPage from "./components/DisabledLoginDomainsPage.js";
 import App from "../shared/containers/App.js";
 import { trackMouseMovement } from "../shared/library/mouseEvents.js";
 import { trackKeydownEvent } from "../shared/library/keyboardEvents.js";
-
-import "react-select/dist/react-select.css";
 
 import "../shared/styles/base.sass";
 import "./styles/setup.sass";

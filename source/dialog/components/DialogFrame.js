@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Colors } from "@blueprintjs/core";
 
 const Container = styled.div`
     width: 100%;

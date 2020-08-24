@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Icon, Menu, MenuDivider, MenuItem, Popover, Position, Tag } from "@blueprintjs/core";
 import styled from "styled-components";
 import { version } from "../../../package.json";
-import { ArchiveShape, ArchivesShape } from "../../shared/prop-types/archive.js";
+import { ArchivesShape } from "../../shared/prop-types/archive.js";
 import { VAULT_TYPES } from "../../shared/library/icons.js";
 import { VaultIcon } from "./VaultIcon";
 

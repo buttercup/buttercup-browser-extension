@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const { devDependencies, version } = require("./package.json");
 
 const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
@@ -36,9 +36,18 @@ const BASE_CONFIG_DEFAULTS = {
 const REACT_PACKAGES = Object.keys(devDependencies).filter((name) => /^react(-|$)/.test(name));
 const REDUX_PACKAGES = Object.keys(devDependencies).filter((name) => /^redux(-|$)/.test(name));
 
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
 function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
     const config = {
+        devtool: "none",
+
         mode: process.env.NODE_ENV || "development",
+
+        optimization: {
+            minimize: IS_PRODUCTION,
+            minimizer: [new TerserPlugin()],
+        },
 
         module: {
             rules: [
@@ -46,11 +55,6 @@ function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
                     test: /\.jsx?$/,
                     include: [SOURCE, require.resolve(BUTTERCUP_ENTRY)],
                     use: "babel-loader",
-                },
-                {
-                    test: /\.json$/i,
-                    use: "json-loader",
-                    exclude: /node_modules/,
                 },
                 {
                     test: /\.s[ac]ss$/,
@@ -109,20 +113,6 @@ function getBasePlugins() {
             ...common,
             new DefinePlugin({
                 "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-            }),
-            new UglifyJsPlugin({
-                test: /\.js($|\?)/i,
-                uglifyOptions: {
-                    ie8: false,
-                    ecma: 7,
-                    warnings: false,
-                    mangle: false,
-                    compress: true,
-                    output: {
-                        ascii_only: true,
-                        beautify: false,
-                    },
-                },
             }),
         ];
     }

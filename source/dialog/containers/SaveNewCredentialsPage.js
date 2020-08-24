@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import SaveNewCredentialsPage from "../components/SaveNewCredentialsPage.js";
 import { getLastLogins, stopCurrentSavePrompt } from "../library/messaging.js";
 import { closeDialog, openURL } from "../library/context.js";

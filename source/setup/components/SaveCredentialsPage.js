@@ -1,8 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { Async as Select } from "react-select";
+import Select from 'react-select/async';
 import styled from "styled-components";
-import classNames from "classnames";
 import {
     Button,
     Callout,
@@ -17,7 +16,6 @@ import {
 } from "@blueprintjs/core";
 import { notifyError } from "../library/notify.js";
 import LayoutMain from "./LayoutMain.js";
-import { closeCurrentTab } from "../../shared/library/extension.js";
 
 function flattenGroups(groups) {
     const processed = [];

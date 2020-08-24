@@ -5,12 +5,15 @@ import app from "../../shared/reducers/app.js";
 import searching from "../../shared/reducers/searching.js";
 import dialogRouting from "./routing.js";
 
-const appReducer = combineReducers({
-    app,
-    archives: emptyReducer,
-    dialogRouting,
-    dropbox: emptyReducer,
-    searching
-});
+const appReducer = (history) =>
+    createSyncReducer(
+        combineReducers({
+            app,
+            archives: emptyReducer,
+            router: dialogRouting(history),
+            dropbox: emptyReducer,
+            searching,
+        })
+    );
 
-export default createSyncReducer(appReducer);
+export default appReducer;

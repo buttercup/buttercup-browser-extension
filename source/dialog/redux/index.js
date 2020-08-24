@@ -1,8 +1,8 @@
 import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
-import { routerMiddleware } from "react-router-redux";
+import { routerMiddleware } from "connected-react-router";
 import { createSyncMiddleware, syncStore } from "redux-browser-extension-sync";
-import reducer from "../reducers/index.js";
+import createDialogReducer from "../reducers/index.js";
 import history from "./history.js";
 
 const reduxRouterMiddleware = routerMiddleware(history);
@@ -10,7 +10,7 @@ const syncMiddleware = createSyncMiddleware();
 
 const store = syncStore(
     createStore(
-        reducer,
+        createDialogReducer(history),
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
         applyMiddleware(thunk, reduxRouterMiddleware, syncMiddleware)
     )

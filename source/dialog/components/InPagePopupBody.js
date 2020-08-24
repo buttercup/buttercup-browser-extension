@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Card as CardBase, H4, H5, Classes, Button, Intent } from "@blueprintjs/core";
+import { Card as CardBase, H4 } from "@blueprintjs/core";
 
 const Container = styled.div`
     width: 100%;

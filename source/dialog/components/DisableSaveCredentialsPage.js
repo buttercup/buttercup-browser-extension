@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { push } from "react-router-redux";
+import React from "react";
+import { push } from "connected-react-router";
 import styled from "styled-components";
 import { Button, Intent } from "@blueprintjs/core";
 import { dispatch } from "../redux/index.js";

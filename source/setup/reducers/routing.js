@@ -1,3 +1,3 @@
-import { routerReducer } from "react-router-redux";
+import { connectRouter } from "connected-react-router";
 
-export default routerReducer;
+export default connectRouter;

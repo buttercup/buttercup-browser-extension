@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Colors, Divider } from "@blueprintjs/core";
+import { Divider } from "@blueprintjs/core";
 import styled from "styled-components";
 
 const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");

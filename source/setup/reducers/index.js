@@ -13,19 +13,23 @@ import searching from "../../shared/reducers/searching.js";
 import vault from "./vault.js";
 import myButtercup from "../../shared/reducers/mybuttercup.js";
 
-const appReducer = combineReducers({
-    app,
-    addArchive,
-    archives,
-    dropbox,
-    googleDrive,
-    manageArchive,
-    myButtercup,
-    releaseNotes,
-    remoteFiles,
-    searching,
-    setupRouting,
-    vault
-});
+const createAppReducer = (history) =>
+    createSyncReducer(
+        combineReducers({
+            router: setupRouting(history),
+            app,
+            addArchive,
+            archives,
+            dropbox,
+            googleDrive,
+            manageArchive,
+            myButtercup,
+            releaseNotes,
+            remoteFiles,
+            searching,
+            setupRouting,
+            vault,
+        })
+    );
 
-export default createSyncReducer(appReducer);
+export default createAppReducer;

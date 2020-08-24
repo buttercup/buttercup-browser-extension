@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import joinPath from "path.join";
-import { Tree, Spinner, InputGroup, Colors } from "@blueprintjs/core";
+import { Tree, Spinner, Colors } from "@blueprintjs/core";
 
 const BCUP_EXTENSION = /\.bcup$/i;
 const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");

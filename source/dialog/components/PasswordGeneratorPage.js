@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Colors, Classes } from "@blueprintjs/core";
+import { Classes } from "@blueprintjs/core";
 import { GeneratorUserInterface } from "@buttercup/ui";
 import DialogFrame from "./DialogFrame.js";
 

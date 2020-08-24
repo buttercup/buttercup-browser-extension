@@ -5,11 +5,11 @@ import archives from "../../shared/reducers/archives.js";
 import app from "../../shared/reducers/app.js";
 import searching from "../../shared/reducers/searching.js";
 
-const appReducer = combineReducers({
+const appReducer = (history) => createSyncReducer(combineReducers({
     app,
     archives,
-    popupRouting,
+    router: popupRouting(history),
     searching
-});
+}));
 
-export default createSyncReducer(appReducer);
+export default appReducer;

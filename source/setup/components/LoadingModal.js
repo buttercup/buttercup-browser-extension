@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Spinner, Intent, Classes } from "@blueprintjs/core";
+import { Spinner, Intent } from "@blueprintjs/core";
 
 const Overlay = styled.div`
     position: fixed;

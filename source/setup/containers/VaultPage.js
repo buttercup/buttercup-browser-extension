@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from 'connected-react-router'
 import delay from "yoctodelay";
 import VError from "verror";
 import VaultPage from "../components/VaultPage.js";

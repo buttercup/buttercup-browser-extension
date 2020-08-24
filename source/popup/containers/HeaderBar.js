@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import { withRouter } from "react-router";
 import HeaderBar from "../components/HeaderBar.js";
 import { getArchives } from "../../shared/selectors/archives.js";
@@ -12,7 +12,7 @@ export default withRouter(
         (state, ownProps) => ({
             archives: getArchives(state),
             darkMode: getConfigKey(state, "darkMode"),
-            unsavedLogins: getUnsavedLoginsCount(state)
+            unsavedLogins: getUnsavedLoginsCount(state),
         }),
         {
             onAboutClick: () => () => {
@@ -21,10 +21,10 @@ export default withRouter(
             onAddVaultClick: () => () => {
                 createNewTab(getExtensionURL("setup.html#/add-archive"));
             },
-            onItemsClick: () => dispatch => {
+            onItemsClick: () => (dispatch) => {
                 dispatch(push("/"));
             },
-            onLockAllClick: () => dispatch => {
+            onLockAllClick: () => (dispatch) => {
                 dispatch(push("/vaults/lock", { lockAll: true }));
             },
             onManageDisabledLoginPromps: () => () => {
@@ -36,7 +36,7 @@ export default withRouter(
             onSaveUnsavedClick: () => () => {
                 createNewTab(getExtensionURL("setup.html#/save-new-credentials"));
             },
-            onSettingsClick: () => dispatch => {
+            onSettingsClick: () => (dispatch) => {
                 dispatch(push("/settings"));
             },
             onToggleDarkMode: () => (_, getState) => {
@@ -47,9 +47,9 @@ export default withRouter(
             onUnlockVaultClick: (archiveID, state) => () => {
                 createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}/${state}`));
             },
-            onVaultsClick: () => dispatch => {
+            onVaultsClick: () => (dispatch) => {
                 dispatch(push("/vaults"));
-            }
+            },
         }
     )(HeaderBar)
 );

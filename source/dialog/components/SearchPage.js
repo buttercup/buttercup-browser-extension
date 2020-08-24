@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Button, NonIdealState } from "@blueprintjs/core";
-import styled from "styled-components";
 import SearchBar from "../containers/SearchBar.js";
 import SearchResults from "../containers/SearchResults.js";
 import DialogFrame from "./DialogFrame.js";

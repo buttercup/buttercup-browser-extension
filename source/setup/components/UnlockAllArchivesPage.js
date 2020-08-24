@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FormGroup, InputGroup, Button, ControlGroup } from "@blueprintjs/core";
 import Dialog from "./Dialog.js";
-import LayoutMain from "./LayoutMain.js";
-import { closeCurrentTab } from "../../shared/library/extension.js";
 import ReleaseNotes from "../containers/ReleaseNotes.js";
 import { VAULT_TYPES } from "../../shared/library/icons.js";
 

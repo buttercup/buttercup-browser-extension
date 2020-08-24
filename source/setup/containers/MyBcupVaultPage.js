@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
-import delay from "yoctodelay";
+import { push } from 'connected-react-router'
 import VError from "verror";
 import MyBcupVaultPage from "../components/MyBcupVaultPage.js";
 import { getArchiveState, getArchiveTitle } from "../../shared/selectors/archives.js";
