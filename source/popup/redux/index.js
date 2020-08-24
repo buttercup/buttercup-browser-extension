@@ -1,18 +1,19 @@
-import { applyMiddleware, createStore } from "redux";
+import { applyMiddleware, createStore, compose } from "redux";
 import thunk from "redux-thunk";
-import { routerMiddleware } from 'connected-react-router'
+import { routerMiddleware } from "connected-react-router";
 import { createSyncMiddleware, syncStore } from "redux-browser-extension-sync";
 import createPopupReducer from "../reducers/index.js";
 import history from "./history.js";
 
+
 const reduxRouterMiddleware = routerMiddleware(history);
 const syncMiddleware = createSyncMiddleware();
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = syncStore(
     createStore(
         createPopupReducer(history),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-        applyMiddleware(thunk, reduxRouterMiddleware, syncMiddleware)
+        composeEnhancer(applyMiddleware(thunk, reduxRouterMiddleware, syncMiddleware))
     )
 );
 

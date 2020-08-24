@@ -5,7 +5,6 @@ import joinPath from "path.join";
 import { Tree, Spinner, Colors } from "@blueprintjs/core";
 
 const BCUP_EXTENSION = /\.bcup$/i;
-const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");
 const NOOP = () => {};
 
 function LazyType(f) {
@@ -25,13 +24,13 @@ function sanitiseFilename(filename) {
 const LazyDirectoryShape = LazyType(() => DirectoryShape);
 const FileShape = PropTypes.shape({
     path: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
 });
 const DirectoryShape = PropTypes.shape({
     path: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     directories: PropTypes.arrayOf(LazyDirectoryShape).isRequired,
-    files: PropTypes.arrayOf(FileShape).isRequired
+    files: PropTypes.arrayOf(FileShape).isRequired,
 });
 
 const Container = styled.div`
@@ -44,7 +43,7 @@ const Container = styled.div`
 `;
 const ItemNewText = styled.div`
     font-style: italic;
-    color: ${p => (p.selected ? "#fff" : Colors.GRAY1)};
+    color: ${(p) => (p.selected ? "#fff" : Colors.GRAY1)};
     cursor: text;
 `;
 const NewFilenameInput = styled.input`
@@ -72,21 +71,21 @@ class RemoteFileTree extends Component {
         onSelectRemotePath: PropTypes.func.isRequired,
         rootDirectory: DirectoryShape,
         selectedFilename: PropTypes.string,
-        selectedFilenameNeedsCreation: PropTypes.bool.isRequired
+        selectedFilenameNeedsCreation: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
         onCreateRemotePath: NOOP,
         onOpenDirectory: NOOP,
         onSelectRemotePath: NOOP,
-        selectedFilenameNeedsCreation: false
+        selectedFilenameNeedsCreation: false,
     };
 
     state = {
         editingNewFile: false,
         editingNewFileDirectory: null,
         editingNewFileName: "",
-        openDirectories: ["/"]
+        openDirectories: ["/"],
     };
 
     handleNodeClick({ nodeData }, _, e) {
@@ -102,7 +101,7 @@ class RemoteFileTree extends Component {
         this.setState({
             editingNewFile: false,
             editingNewFileDirectory: null,
-            editingNewFileName: ""
+            editingNewFileName: "",
         });
         this.props.onSelectRemotePath(nodeData.path);
     }
@@ -112,7 +111,7 @@ class RemoteFileTree extends Component {
         const filename = sanitiseFilename(editingNewFileName);
         this.setState({
             editingNewFile: false,
-            editingNewFileName: filename
+            editingNewFileName: filename,
         });
         this.props.onCreateRemotePath(joinPath(this.state.editingNewFileDirectory, filename));
     }
@@ -120,7 +119,7 @@ class RemoteFileTree extends Component {
     onNewFilenameChange(event) {
         const { value } = event.target;
         this.setState({
-            editingNewFileName: value
+            editingNewFileName: value,
         });
     }
 
@@ -138,7 +137,7 @@ class RemoteFileTree extends Component {
         this.setState({
             ...resetState,
             editingNewFile: true,
-            editingNewFileDirectory: directoryParent
+            editingNewFileDirectory: directoryParent,
         });
         setTimeout(() => {
             if (this._newFilenameInput) {
@@ -159,14 +158,14 @@ class RemoteFileTree extends Component {
             return;
         }
         this.setState({
-            openDirectories: [...this.state.openDirectories, nodeData.path]
+            openDirectories: [...this.state.openDirectories, nodeData.path],
         });
         this.props.onOpenDirectory(nodeData.path);
     }
 
     handleNodeCollapse({ nodeData }) {
         this.setState({
-            openDirectories: this.state.openDirectories.filter(dir => dir !== nodeData.path)
+            openDirectories: this.state.openDirectories.filter((dir) => dir !== nodeData.path),
         });
     }
 
@@ -194,7 +193,7 @@ class RemoteFileTree extends Component {
                         onChange={::this.onNewFilenameChange}
                         onBlur={::this.onBlurNewItem}
                         onKeyPress={::this.onNewItemKeyPress}
-                        innerRef={input => {
+                        innerRef={(input) => {
                             this._newFilenameInput = input;
                         }}
                     />
@@ -213,7 +212,7 @@ class RemoteFileTree extends Component {
             id: "new-vault-file",
             icon: "plus",
             label,
-            isSelected
+            isSelected,
         };
     }
 
@@ -232,14 +231,14 @@ class RemoteFileTree extends Component {
                       {
                           id: "loading" + Math.random().toString(),
                           label: "Loading",
-                          icon: <SpinnerIcon />
-                      }
+                          icon: <SpinnerIcon />,
+                      },
                   ]
                 : [
-                      ...(directory.directories || []).map(dir => this.getTree(dir)),
-                      ...(directory.files || []).map(dir => this.getTree(dir, false)),
-                      this.getTreeNewItem(directory.path)
-                  ]
+                      ...(directory.directories || []).map((dir) => this.getTree(dir)),
+                      ...(directory.files || []).map((dir) => this.getTree(dir, false)),
+                      this.getTreeNewItem(directory.path),
+                  ],
         };
     }
 

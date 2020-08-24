@@ -6,7 +6,7 @@ import { getExtensionURL } from "../shared/library/extension.js";
 import { itemIsIgnored } from "./disable.js";
 import { onElementDismount } from "./dismount.js";
 
-const BUTTON_BACKGROUND_IMAGE = getExtensionURL(require("../../resources/content-button-background.png"));
+import BUTTON_BACKGROUND_IMAGE from "../../resources/content-button-background.png";
 
 export function attachLaunchButton(input) {
     if (input.dataset.bcup === "attached" || itemIsIgnored(input)) {
@@ -17,7 +17,7 @@ export function attachLaunchButton(input) {
         borderBottomLeftRadius,
         boxSizing,
         paddingLeft,
-        paddingRight
+        paddingRight,
     } = window.getComputedStyle(input, null);
     const tryToAttach = () => {
         const bounds = input.getBoundingClientRect();
@@ -42,7 +42,7 @@ export function attachLaunchButton(input) {
         const buttonZ = findBestZIndexInContainer(input.offsetParent);
         // Input padding
         setStyle(input, {
-            paddingRight: `${inputRightPadding + buttonWidth}px`
+            paddingRight: `${inputRightPadding + buttonWidth}px`,
         });
         // Update input style
         updateOffsetParentPositioning(input.offsetParent);
@@ -58,17 +58,17 @@ export function attachLaunchButton(input) {
                 left: `${left}px`,
                 top: `${top}px`,
                 borderRadius: `0 ${borderTopLeftRadius} ${borderBottomLeftRadius} 0`,
-                background: `rgb(0, 183, 172) url(${BUTTON_BACKGROUND_IMAGE})`,
+                background: `rgb(0, 183, 172) url(${getExtensionURL(BUTTON_BACKGROUND_IMAGE)})`,
                 backgroundSize: `${Math.ceil(buttonWidth / 2)}px`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "50% 50%",
                 border: "1px solid rgb(0, 155, 145)",
                 cursor: "pointer",
                 zIndex: buttonZ,
-                outline: "none"
-            }
+                outline: "none",
+            },
         });
-        button.onclick = event => {
+        button.onclick = (event) => {
             event.preventDefault();
             event.stopPropagation();
             toggleInputDialog(input, DIALOG_TYPE_ENTRY_PICKER);
@@ -83,7 +83,7 @@ export function attachLaunchButton(input) {
                 top = input.offsetTop;
                 setStyle(button, {
                     top: `${top}px`,
-                    left: `${left}px`
+                    left: `${left}px`,
                 });
             } catch (err) {
                 clearInterval(reprocessInterval);
@@ -102,7 +102,7 @@ function updateOffsetParentPositioning(offsetParent) {
     const position = computedPosition || offsetParent.style.position || "static";
     if (position === "static") {
         setStyle(offsetParent, {
-            position: "relative"
+            position: "relative",
         });
     }
 }

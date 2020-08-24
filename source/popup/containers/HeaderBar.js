@@ -1,3 +1,4 @@
+import { compose } from "redux";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import { withRouter } from "react-router";
@@ -7,7 +8,8 @@ import { getConfigKey, getUnsavedLoginsCount } from "../../shared/selectors/app.
 import { setConfig } from "../../shared/library/messaging.js";
 import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
-export default withRouter(
+export default compose(
+    withRouter,
     connect(
         (state, ownProps) => ({
             archives: getArchives(state),
@@ -51,5 +53,5 @@ export default withRouter(
                 dispatch(push("/vaults"));
             },
         }
-    )(HeaderBar)
-);
+    )
+)(HeaderBar);

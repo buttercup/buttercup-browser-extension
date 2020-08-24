@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { InputGroup, Classes } from "@blueprintjs/core";
 
-const BUTTERCUP_ICON = require("../../../resources/buttercup-128.png");
-const SEARCH_ICON = require("../../../resources/search-icon.png");
+import BUTTERCUP_ICON from "../../../resources/buttercup-128.png";
+import SEARCH_ICON from "../../../resources/search-icon.png";
 
 const Container = styled.div`
     flex: 0 0 auto;
@@ -35,11 +35,11 @@ const SearchInput = styled.input`
 
 class SearchBar extends Component {
     static propTypes = {
-        onSearchTermChange: PropTypes.func.isRequired
+        onSearchTermChange: PropTypes.func.isRequired,
     };
 
     state = {
-        searchTerm: ""
+        searchTerm: "",
     };
 
     componentDidMount() {
@@ -51,7 +51,7 @@ class SearchBar extends Component {
     handleSearchTermChange(event) {
         const value = event.target.value;
         this.setState({
-            searchTerm: value
+            searchTerm: value,
         });
         this.props.onSearchTermChange(value);
     }
@@ -67,7 +67,7 @@ class SearchBar extends Component {
                     placeholder="Search for entries..."
                     value={this.state.searchTerm}
                     onChange={::this.handleSearchTermChange}
-                    inputRef={input => {
+                    inputRef={(input) => {
                         this._input = input;
                     }}
                 />

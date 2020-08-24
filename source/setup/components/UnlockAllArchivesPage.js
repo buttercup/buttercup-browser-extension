@@ -76,7 +76,7 @@ class UnlockAllArchivesPage extends Component {
         }, 100);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const lockedCountCurrent = this.props.archives.reduce(
             (total, ar) => total + (ar.state === "locked" ? 1 : 0),
             0
