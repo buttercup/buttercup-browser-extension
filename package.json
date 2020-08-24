@@ -69,6 +69,7 @@
         "classnames": "^2.2.6",
         "color": "^3.1.2",
         "concurrently": "^5.3.0",
+        "connected-react-router": "^6.8.0",
         "console.style": "^0.2.2",
         "copy-webpack-plugin": "^6.0.3",
         "css-loader": "^4.2.1",
@@ -105,7 +106,7 @@
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-redux": "^7.2.1",
-        "react-router": "^5.2.0",
+        "react-router-dom": "^5.2.0",
         "react-select": "^3.1.0",
         "react-spinkit": "^3.0.0",
         "react-virtualized": "^9.22.2",
@@ -130,7 +131,6 @@
         "web-ext": "^5.0.0",
         "webpack": "^4.44.1",
         "webpack-cli": "^3.3.12",
-        "yoctodelay": "^1.1.0",
-        "connected-react-router": "^6.8.0"
+        "yoctodelay": "^1.1.0"
     }
 }

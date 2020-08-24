@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { Route } from "react-router";
+import { Route } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
 import "../shared/library/buttercup.js";
 import store from "./redux/index.js";

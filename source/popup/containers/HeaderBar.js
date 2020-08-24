@@ -1,7 +1,7 @@
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.js";
 import { getArchives } from "../../shared/selectors/archives.js";
 import { getConfigKey, getUnsavedLoginsCount } from "../../shared/selectors/app.js";

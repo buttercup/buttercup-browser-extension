@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import ArchivesListPage from "../components/ArchivesListPage.js";
 import { getArchives, getArchiveTitle } from "../../shared/selectors/archives.js";
 import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
