@@ -1,13 +1,11 @@
 import watch from "redux-watch";
 import ms from "ms";
-import uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 import { OAuth2Client } from "@buttercup/google-oauth2-client";
 import store, { dispatch, getState } from "../redux/index.js";
 import { setAccessToken, setAuthID, setAuthCode, setRefreshToken } from "../../shared/actions/googleDrive.js";
-import { performAuthentication } from "../../shared/library/googleDrive.js";
 import { getAuthID, getAuthCode } from "../../shared/selectors/googleDrive.js";
 import { closeTabs, createNewTab } from "../../shared/library/extension.js";
-import { getVaultManager } from "./buttercup.js";
 import secrets from "../../shared/google-client.json";
 
 const GOOGLE_DRIVE_BASE_SCOPES = ["email", "profile"];

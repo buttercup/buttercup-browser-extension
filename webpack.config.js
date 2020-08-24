@@ -6,7 +6,6 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { devDependencies, version } = require("./package.json");
 
 const { NormalModuleReplacementPlugin, DefinePlugin, IgnorePlugin } = webpack;
-const { CommonsChunkPlugin } = webpack.optimize;
 
 const configDefines = Object.keys(process.env).reduce((output, key) => {
     if (/^_.+_$/.test(key)) {
@@ -32,62 +31,65 @@ const SRC_DIALOG = path.resolve(SOURCE, "dialog");
 
 const BASE_CONFIG_DEFAULTS = {
     addFileHash: true,
-    imageLoader: "file-loader"
+    imageLoader: "file-loader",
 };
-const REACT_PACKAGES = Object.keys(devDependencies).filter(name => /^react(-|$)/.test(name));
-const REDUX_PACKAGES = Object.keys(devDependencies).filter(name => /^redux(-|$)/.test(name));
+const REACT_PACKAGES = Object.keys(devDependencies).filter((name) => /^react(-|$)/.test(name));
+const REDUX_PACKAGES = Object.keys(devDependencies).filter((name) => /^redux(-|$)/.test(name));
 
 function getBaseConfig({ addFileHash, imageLoader } = BASE_CONFIG_DEFAULTS) {
     const config = {
+        mode: process.env.NODE_ENV || "development",
+
         module: {
             rules: [
                 {
                     test: /\.jsx?$/,
                     include: [SOURCE, require.resolve(BUTTERCUP_ENTRY)],
-                    use: "babel-loader"
+                    use: "babel-loader",
                 },
                 {
                     test: /\.json$/i,
-                    use: "json-loader"
+                    use: "json-loader",
+                    exclude: /node_modules/,
                 },
                 {
                     test: /\.s[ac]ss$/,
-                    use: ["style-loader", "css-loader", "sass-loader"]
+                    use: ["style-loader", "css-loader", "sass-loader"],
                 },
                 {
                     test: /\.css$/,
-                    use: ["style-loader", "css-loader"]
+                    use: ["style-loader", "css-loader"],
                 },
                 {
                     test: /\.pug$/,
-                    use: "pug-loader"
-                }
-            ]
+                    use: "pug-loader",
+                },
+            ],
         },
 
         node: {
             child_process: "empty",
             dns: "empty",
             net: "empty",
-            tls: "empty"
+            tls: "empty",
         },
 
         resolve: {
-            extensions: [".js", ".jsx", ".json"]
-        }
+            extensions: [".js", ".jsx", ".json"],
+        },
     };
     if (imageLoader === "file-loader") {
         config.module.rules.push({
             test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
             loader: "file-loader",
             options: {
-                name: addFileHash ? "[path][name].[hash].[ext]" : "[path][name].[ext]"
-            }
+                name: addFileHash ? "[path][name].[hash].[ext]" : "[path][name].[ext]",
+            },
         });
     } else if (imageLoader === "url-loader") {
         config.module.rules.push({
             test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
-            loader: "url-loader"
+            loader: "url-loader",
         });
     }
     return config;
@@ -97,16 +99,16 @@ function getBasePlugins() {
     const common = [
         new DefinePlugin(configDefines),
         new DefinePlugin({
-            __VERSION__: JSON.stringify(version)
+            __VERSION__: JSON.stringify(version),
         }),
         new NormalModuleReplacementPlugin(/^fs$/, path.join(SOURCE, "fsMock.js")),
-        new NormalModuleReplacementPlugin(/\/iconv-loader/, "node-noop")
+        new NormalModuleReplacementPlugin(/\/iconv-loader/, "node-noop"),
     ];
     if (process.env.NODE_ENV === "production") {
         return [
             ...common,
             new DefinePlugin({
-                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
             }),
             new UglifyJsPlugin({
                 test: /\.js($|\?)/i,
@@ -118,10 +120,10 @@ function getBasePlugins() {
                     compress: true,
                     output: {
                         ascii_only: true,
-                        beautify: false
-                    }
-                }
-            })
+                        beautify: false,
+                    },
+                },
+            }),
         ];
     }
     return [...common];
@@ -132,53 +134,69 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
         index: path.resolve(SRC_BACKGROUND, "./index.js"),
         vendor: [...REDUX_PACKAGES],
         buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
-        google: ["@buttercup/google-oauth2-client"]
+        google: ["@buttercup/google-oauth2-client"],
     },
 
     output: {
         filename: "background-[name].js",
-        path: DIST
+        path: DIST,
+    },
+
+    optimization: {
+        splitChunks: {
+            chunks(chunk) {
+                return chunk.name !== "google" && chunk.name !== "index";
+            },
+            minChunks: Infinity,
+        },
     },
 
     plugins: [
         ...getBasePlugins(),
-        new CopyWebpackPlugin([
-            {
-                from: MANIFEST,
-                transform: contents => {
-                    const manifest = JSON.parse(contents.toString());
-                    manifest.version = version;
-                    return JSON.stringify(manifest, undefined, 4);
-                }
-            },
-            {
-                from: path.join(RESOURCES, "buttercup-*.png")
-            },
-            {
-                from: CHANGELOG
-            },
-            {
-                from: ICONS_PATH,
-                to: "icons"
-            }
-        ]),
-        new CommonsChunkPlugin({
-            names: ["vendor", "buttercup"],
-            minChunks: Infinity
-        })
-    ]
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: MANIFEST,
+                    transform: (contents) => {
+                        const manifest = JSON.parse(contents.toString());
+                        manifest.version = version;
+                        return JSON.stringify(manifest, undefined, 4);
+                    },
+                },
+                {
+                    from: path.join(RESOURCES, "buttercup-*.png"),
+                },
+                {
+                    from: CHANGELOG,
+                },
+                {
+                    from: ICONS_PATH,
+                    to: "icons",
+                },
+            ],
+        }),
+    ],
 });
 
 const popupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_POPUP, "./index.js"),
         vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
+    },
+
+    optimization: {
+        splitChunks: {
+            chunks(chunk) {
+                return chunk.name !== "index";
+            },
+            minChunks: Infinity,
+        },
     },
 
     output: {
         filename: "popup-[name].js",
-        path: DIST
+        path: DIST,
     },
 
     plugins: [
@@ -187,25 +205,30 @@ const popupConfig = Object.assign({}, getBaseConfig(), {
             title: "Buttercup",
             template: INDEX_TEMPLATE,
             filename: "popup.html",
-            inject: "body"
+            inject: "body",
         }),
-        new CommonsChunkPlugin({
-            names: ["vendor", "buttercup"],
-            minChunks: Infinity
-        })
-    ]
+    ],
 });
 
 const setupConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_SETUP, "./index.js"),
         vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES, "dropbox"],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client"]
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/dropbox-client"],
     },
 
     output: {
         filename: "setup-[name].js",
-        path: DIST
+        path: DIST,
+    },
+
+    optimization: {
+        splitChunks: {
+            chunks(chunk) {
+                return chunk.name !== "index";
+            },
+            minChunks: Infinity,
+        },
     },
 
     plugins: [
@@ -214,25 +237,30 @@ const setupConfig = Object.assign({}, getBaseConfig(), {
             title: `Buttercup v${version}`,
             template: INDEX_TEMPLATE,
             filename: "setup.html",
-            inject: "body"
+            inject: "body",
         }),
-        new CommonsChunkPlugin({
-            names: ["vendor", "buttercup"],
-            minChunks: Infinity
-        })
-    ]
+    ],
 });
 
 const dialogConfig = Object.assign({}, getBaseConfig(), {
     entry: {
         index: path.resolve(SRC_DIALOG, "./index.js"),
         vendor: [...REACT_PACKAGES, ...REDUX_PACKAGES],
-        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"]
+        buttercup: ["@buttercup/ui", "@buttercup/channel-queue", "@buttercup/iconographer"],
     },
 
     output: {
         filename: "dialog-[name].js",
-        path: DIST
+        path: DIST,
+    },
+
+    optimization: {
+        splitChunks: {
+            chunks(chunk) {
+                return chunk.name !== "index";
+            },
+            minChunks: Infinity,
+        },
     },
 
     plugins: [
@@ -241,13 +269,9 @@ const dialogConfig = Object.assign({}, getBaseConfig(), {
             title: `Buttercup v${version}`,
             template: INDEX_TEMPLATE,
             filename: "dialog.html",
-            inject: "body"
+            inject: "body",
         }),
-        new CommonsChunkPlugin({
-            names: ["vendor", "buttercup"],
-            minChunks: Infinity
-        })
-    ]
+    ],
 });
 
 const tabConfig = Object.assign({}, getBaseConfig({ addFileHash: false, imageLoader: "file-loader" }), {
@@ -255,10 +279,10 @@ const tabConfig = Object.assign({}, getBaseConfig({ addFileHash: false, imageLoa
 
     output: {
         filename: "tab.js",
-        path: DIST
+        path: DIST,
     },
 
-    plugins: [...getBasePlugins()]
+    plugins: [...getBasePlugins()],
 });
 
 module.exports = [backgroundConfig, popupConfig, setupConfig, tabConfig, dialogConfig];
