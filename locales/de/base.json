@@ -1,5 +1,4 @@
 {
-    "choose-vault-type": "Tresortyp wählen",
     "enabled": "Aktiviert",
     "disabled": "Deaktiviert",
     "language": "Sprache",
@@ -13,6 +12,16 @@
     "week_plural": "{{count}} Wochen",
     "off": "aus",
     "settings": "Einstellungen",
+    "setup": {
+        "name": "Name",
+        "choose-vault-type": "Tresortyp wählen",
+        "choose-or-create-vault": "Wähle oder erstelle einen Tresor",
+        "add-vault": "Tresor hinzufügen",
+        "save-vault": "Tresor speichern",
+        "master-password": "Haupt-Passwort",
+        "vault-password-placeholder": "Tresor-Passwort eingeben...",
+        "vault-name-placeholder": "Tresor-Name eingeben..."
+    },
     "popup": {
         "settings": {
             "dark-theme": "Dunkles Theme",
