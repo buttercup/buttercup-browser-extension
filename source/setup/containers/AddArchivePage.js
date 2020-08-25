@@ -1,7 +1,6 @@
 import { basename, dirname } from "path";
 import { connect } from "react-redux";
 import stripTags from "striptags";
-import joinURL from "url-join";
 import { createClient as createGoogleDriveClient } from "@buttercup/googledrive-client";
 import AddArchivePage from "../components/AddArchivePage.js";
 import {

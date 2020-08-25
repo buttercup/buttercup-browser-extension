@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Button, Callout, Card, Checkbox, H3, H4, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
+import { Button, Callout, Card, Checkbox, H4, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import { v4 as uuid } from "uuid";
 import { switchValue } from "../../shared/library/switch.js";
 import LayoutMain from "./LayoutMain.js";

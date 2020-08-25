@@ -1,4 +1,4 @@
-import { el, mount, setStyle } from "redom";
+import { el, mount } from "redom";
 import { getExtensionURL } from "../shared/library/extension.js";
 import { getVaults } from "./messaging.js";
 

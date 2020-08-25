@@ -1,11 +1,8 @@
-import VError from "verror";
 import { extractDomain } from "../../shared/library/domain.js";
 import {
-    ENTRY_URL_TYPE_LOGIN,
     consumeVaultFacade,
     createEntryFacade,
-    createVaultFacade,
-    getEntryURLs,
+    createVaultFacade
 } from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";

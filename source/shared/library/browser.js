@@ -3,8 +3,7 @@ export function getBrowser() {
     const winNav = window.navigator;
     const vendorName = winNav.vendor;
     const isOpera = typeof window.opr !== "undefined";
-    var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
-    var isIOSChrome = winNav.userAgent.match("CriOS");
+    const isIEedge = winNav.userAgent.indexOf("Edge") > -1;
 
     if (
         isChromium !== null &&

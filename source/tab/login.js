@@ -1,5 +1,4 @@
 import { getLoginTarget, getLoginTargets } from "@buttercup/locust";
-import { itemIsIgnored } from "./disable.js";
 import { getSharedTracker } from "./LoginTracker.js";
 
 const TARGET_SEARCH_INTERVAL = 1500;

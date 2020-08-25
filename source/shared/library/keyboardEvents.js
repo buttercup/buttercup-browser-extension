@@ -4,7 +4,7 @@ import { trackUserActivity } from "./messaging";
 export function trackKeydownEvent() {
     const debouncedUserActivity = debounce(() => trackUserActivity(), 250, /* trailing: */ false);
 
-    let handleKeydown = () => {
+    const handleKeydown = () => {
         debouncedUserActivity();
     };
 

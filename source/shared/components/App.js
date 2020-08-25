@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Classes } from "@blueprintjs/core";
 import { ThemeProvider } from "styled-components";
