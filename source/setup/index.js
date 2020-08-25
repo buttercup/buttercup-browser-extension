@@ -21,7 +21,6 @@ import { trackKeydownEvent } from "../shared/library/keyboardEvents.js";
 import "../shared/styles/base.sass";
 import "./styles/setup.sass";
 
-
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>

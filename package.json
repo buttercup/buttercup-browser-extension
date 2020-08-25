@@ -80,7 +80,7 @@
         "eventemitter3": "^4.0.5",
         "extract-domain": "^2.2.1",
         "file-loader": "^6.0.0",
-        "history": "^5.0.0",
+        "history": "4.9.0",
         "html-webpack-plugin": "^4.3.0",
         "husky": "^4.2.5",
         "lint-staged": "^10.2.11",
