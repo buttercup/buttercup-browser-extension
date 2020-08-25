@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 Container.propTypes = {
-    noBackgroundColor: PropTypes.bool
+    noBackgroundColor: PropTypes.bool,
 };
 
 export default Container;

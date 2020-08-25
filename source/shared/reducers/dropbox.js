@@ -2,7 +2,7 @@ import { DROPBOX_CLEAR_STATE, DROPBOX_SET_AUTH_ID, DROPBOX_SET_AUTH_TOKEN } from
 
 const INITIAL = {
     authenticationID: null,
-    authToken: null
+    authToken: null,
 };
 
 export default function dropboxReducer(state = INITIAL, action = {}) {
@@ -11,17 +11,17 @@ export default function dropboxReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 authenticationID: null,
-                authToken: null
+                authToken: null,
             };
         case DROPBOX_SET_AUTH_ID:
             return {
                 ...state,
-                authenticationID: action.payload
+                authenticationID: action.payload,
             };
         case DROPBOX_SET_AUTH_TOKEN:
             return {
                 ...state,
-                authToken: action.payload
+                authToken: action.payload,
             };
 
         default:

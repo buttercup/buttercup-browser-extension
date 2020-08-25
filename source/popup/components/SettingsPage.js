@@ -6,7 +6,7 @@ import ms from "ms";
 export default class EntriesPage extends PureComponent {
     static propTypes = {
         config: PropTypes.object,
-        onUpdateConfigValue: PropTypes.func.isRequired
+        onUpdateConfigValue: PropTypes.func.isRequired,
     };
 
     handleConfigChange(event, configKey) {
@@ -53,7 +53,7 @@ export default class EntriesPage extends PureComponent {
                             { label: "1 day", value: ms("1d") },
                             { label: "2 days", value: ms("2d") },
                             { label: "1 week", value: ms("1w") },
-                            { label: "off", value: "off" }
+                            { label: "off", value: "off" },
                         ]}
                         onChange={event => this.handleConfigChange(event, "autoLockVaults")}
                     />
@@ -65,7 +65,7 @@ export default class EntriesPage extends PureComponent {
                         options={[
                             { label: "Always", value: "always" },
                             { label: "When Vaults Unlocked", value: "unlocked" },
-                            { label: "Never", value: "never" }
+                            { label: "Never", value: "never" },
                         ]}
                         onChange={event => this.handleConfigChange(event, "showSaveDialog")}
                     />

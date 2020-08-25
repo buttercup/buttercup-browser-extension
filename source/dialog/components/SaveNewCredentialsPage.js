@@ -8,18 +8,18 @@ class SaveNewCredentialsPage extends Component {
         cancelSavingCredentials: PropTypes.func.isRequired,
         disableSavePrompt: PropTypes.func.isRequired,
         fetchCredentials: PropTypes.func.isRequired,
-        openSaveForm: PropTypes.func.isRequired
+        openSaveForm: PropTypes.func.isRequired,
     };
 
     state = {
-        credentialsTitle: "\u2026"
+        credentialsTitle: "\u2026",
     };
 
     componentDidMount() {
         this.props.fetchCredentials().then(items => {
             const [item] = items;
             this.setState({
-                credentialsTitle: item.title
+                credentialsTitle: item.title,
             });
         });
     }

@@ -7,7 +7,7 @@ export function addDropboxArchive(name, masterPassword, filename, dropboxToken, 
         masterPassword,
         filename,
         dropboxToken,
-        create: shouldCreate
+        create: shouldCreate,
     });
 }
 
@@ -26,7 +26,7 @@ export function addGoogleDriveArchive(
         fileID,
         googleDriveToken,
         googleDriveRefreshToken,
-        create: shouldCreate
+        create: shouldCreate,
     });
 }
 
@@ -37,7 +37,7 @@ export function addLocalArchive(name, masterPassword, filename, key, shouldCreat
         masterPassword,
         filename,
         key,
-        create: shouldCreate
+        create: shouldCreate,
     });
 }
 
@@ -48,7 +48,7 @@ export function addMyButtercupArchives(name, vaultID, accessToken, refreshToken,
         accessToken,
         refreshToken,
         masterPassword,
-        vaultID
+        vaultID,
     });
 }
 
@@ -61,6 +61,6 @@ export function addWebDAVArchive(name, masterPassword, filename, url, username, 
         url,
         username,
         password,
-        create: shouldCreate
+        create: shouldCreate,
     });
 }

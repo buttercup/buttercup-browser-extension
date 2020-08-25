@@ -2,7 +2,7 @@ export const CLEAR_STYLES = {
     margin: "0px",
     minWidth: "0px",
     minHeight: "0px",
-    padding: "0px"
+    padding: "0px",
 };
 
 export function findBestZIndexInContainer(parentElement) {

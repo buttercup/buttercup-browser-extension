@@ -6,7 +6,7 @@ import {
     getLastLoginStatus,
     getSourcesStats,
     startMessageListeners,
-    transferLoginCredentials
+    transferLoginCredentials,
 } from "./messaging.js";
 import { getSharedTracker } from "./LoginTracker.js";
 import { showSaveDialog } from "./saveDialog.js";
@@ -44,7 +44,7 @@ function waitAndAttachLaunchButtons() {
             url: tracker.url,
             title: tracker.title,
             timestamp: Date.now(),
-            fromEntry: connection.entry
+            fromEntry: connection.entry,
         });
     });
     onIdentifiedTarget(loginTarget => {

@@ -5,7 +5,7 @@ import { fetchReleaseNotes } from "../library/releaseNotes.js";
 
 export default connect(
     (state, ownProps) => ({
-        releaseNotes: getReleaseNotes(state)
+        releaseNotes: getReleaseNotes(state),
     }),
     {
         onReady: () => (dispatch, getState) => {
@@ -13,6 +13,6 @@ export default connect(
             if (!releaseNotes) {
                 fetchReleaseNotes();
             }
-        }
+        },
     }
 )(ReleaseNotes);

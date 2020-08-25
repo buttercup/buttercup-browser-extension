@@ -2,7 +2,7 @@ import { REMOTE_FILES_RESET, REMOTE_FILES_SET_CONTENTS, REMOTE_FILES_SET_LOADING
 
 const INITIAL = {
     directoryContents: {},
-    directoriesLoading: []
+    directoriesLoading: [],
 };
 
 export default function remoteFilesReducer(state = INITIAL, action = {}) {
@@ -12,20 +12,20 @@ export default function remoteFilesReducer(state = INITIAL, action = {}) {
                 ...state,
                 directoryContents: {
                     ...state.directoryContents,
-                    [action.payload.directory]: action.payload.contents
-                }
+                    [action.payload.directory]: action.payload.contents,
+                },
             };
         case REMOTE_FILES_SET_LOADING: {
             const { directory, isLoading } = action.payload;
             if (isLoading) {
                 return {
                     ...state,
-                    directoriesLoading: [...state.directoriesLoading, directory]
+                    directoriesLoading: [...state.directoriesLoading, directory],
                 };
             } else {
                 return {
                     ...state,
-                    directoriesLoading: state.directoriesLoading.filter(dir => dir !== directory)
+                    directoriesLoading: state.directoriesLoading.filter(dir => dir !== directory),
                 };
             }
         }
@@ -33,7 +33,7 @@ export default function remoteFilesReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 directoryContents: {},
-                directoriesLoading: []
+                directoriesLoading: [],
             };
 
         default:

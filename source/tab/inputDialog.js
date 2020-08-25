@@ -9,11 +9,11 @@ export const DIALOG_TYPE_PASSWORD_GENERATOR = "/generate-password";
 
 const DIALOG_SIZES = {
     [DIALOG_TYPE_ENTRY_PICKER]: [320, 280],
-    [DIALOG_TYPE_PASSWORD_GENERATOR]: [320, 315]
+    [DIALOG_TYPE_PASSWORD_GENERATOR]: [320, 315],
 };
 const DIALOG_STYLING = {
     [DIALOG_TYPE_ENTRY_PICKER]: {},
-    [DIALOG_TYPE_PASSWORD_GENERATOR]: {}
+    [DIALOG_TYPE_PASSWORD_GENERATOR]: {},
 };
 const DIALOG_MIN_WIDTH = 250;
 
@@ -58,7 +58,7 @@ class InputDialog {
         setStyle(this.dialog, {
             left: `${left}px`,
             top: `${window.scrollY + top + height + 2}px`,
-            width: `${width + buttonWidth}px`
+            width: `${width + buttonWidth}px`,
         });
     }
 }
@@ -70,10 +70,10 @@ function createDialog(dialogType) {
     const frame = el("iframe", {
         style: {
             width: "100%",
-            height: "100%"
+            height: "100%",
         },
         src: dialogURL,
-        frameBorder: "0"
+        frameBorder: "0",
     });
     return el(
         "div",
@@ -85,8 +85,8 @@ function createDialog(dialogType) {
                 minWidth: `${DIALOG_MIN_WIDTH}px`,
                 position: "absolute",
                 zIndex: 9999999,
-                ...specificStyles
-            }
+                ...specificStyles,
+            },
         },
         frame
     );

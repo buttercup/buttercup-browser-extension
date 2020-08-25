@@ -5,7 +5,7 @@ import Dialog from "./Dialog.js";
 class ReleaseNotes extends Component {
     static propTypes = {
         onReady: PropTypes.func.isRequired,
-        releaseNotes: PropTypes.string
+        releaseNotes: PropTypes.string,
     };
 
     componentDidMount() {

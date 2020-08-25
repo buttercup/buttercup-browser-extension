@@ -5,7 +5,7 @@ import app from "../../shared/reducers/app.js";
 import searching from "../../shared/reducers/searching.js";
 import dialogRouting from "./routing.js";
 
-const appReducer = (history) =>
+const appReducer = history =>
     createSyncReducer(
         combineReducers({
             app,

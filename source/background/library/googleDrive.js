@@ -11,7 +11,7 @@ import secrets from "../../shared/google-client.json";
 const GOOGLE_DRIVE_BASE_SCOPES = ["email", "profile"];
 const GOOGLE_DRIVE_SCOPES_STANDARD = [
     ...GOOGLE_DRIVE_BASE_SCOPES,
-    "https://www.googleapis.com/auth/drive.file" // Per-file access
+    "https://www.googleapis.com/auth/drive.file", // Per-file access
 ];
 const GOOGLE_DRIVE_SCOPES_PERMISSIVE = [...GOOGLE_DRIVE_BASE_SCOPES, "https://www.googleapis.com/auth/drive"];
 const OAUTH_REDIRECT_URL = "https://buttercup.pw?googleauth";
@@ -22,7 +22,7 @@ export async function authenticateWithoutToken(authID = uuid(), useOpenPermissio
     const url = oauth2Client.generateAuthUrl({
         access_type: "offline",
         scope: [...scopes],
-        prompt: "consent select_account"
+        prompt: "consent select_account",
     });
     const cleanup = async () => {
         clearTimeout(timeout);
@@ -67,7 +67,7 @@ export async function authenticateWithRefreshToken(accessToken, refreshToken) {
     dispatch(setAccessToken(newAccessToken));
     return {
         accessToken: newAccessToken,
-        refreshToken
+        refreshToken,
     };
 }
 
@@ -79,7 +79,7 @@ async function exchangeAuthCodeForTokens(oauth2Client, authCode) {
     }
     return {
         accessToken,
-        refreshToken
+        refreshToken,
     };
 }
 

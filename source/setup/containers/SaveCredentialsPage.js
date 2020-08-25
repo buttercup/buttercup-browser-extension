@@ -7,7 +7,7 @@ import {
     addNewEntry,
     getArchivesGroupTree,
     getLastUsedCredentials,
-    removeSavedCredentials
+    removeSavedCredentials,
 } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
@@ -22,11 +22,13 @@ function processGroups(groups) {
         const attributes = group.attributes || {};
         return attributes[Group.Attribute.Role] === "trash";
     };
-    return groups.filter(group => !groupIsTrash(group)).map(group => ({
-        id: group.id,
-        title: group.title,
-        groups: processGroups(group.groups || [])
-    }));
+    return groups
+        .filter(group => !groupIsTrash(group))
+        .map(group => ({
+            id: group.id,
+            title: group.title,
+            groups: processGroups(group.groups || []),
+        }));
 }
 
 function stringsAreSet(...strings) {
@@ -35,7 +37,7 @@ function stringsAreSet(...strings) {
 
 export default connect(
     (state, ownProps) => ({
-        archives: processArchives(state)
+        archives: processArchives(state),
     }),
     {
         cancel: () => () => {
@@ -87,6 +89,6 @@ export default connect(
             } else {
                 notifyWarning("Unable to save credentials", "Both the archive source and target group must be chosen.");
             }
-        }
+        },
     }
 )(SaveCredentialsPage);

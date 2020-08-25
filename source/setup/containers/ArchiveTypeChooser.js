@@ -7,11 +7,11 @@ import { getConfigKey } from "../../shared/selectors/app.js";
 export default connect(
     (state, ownProps) => ({
         selectedArchiveType: getSelectedArchiveType(state),
-        darkMode: getConfigKey(state, "darkMode")
+        darkMode: getConfigKey(state, "darkMode"),
     }),
     {
         onSelectArchiveType: type => dispatch => {
             dispatch(setSelectedArchiveType(type));
-        }
+        },
     }
 )(ArchiveTypeChooser);

@@ -5,10 +5,10 @@ import { getFacades, sendCredentialsToTab } from "./archives.js";
 import log from "../../shared/library/log.js";
 
 const CONTEXT_SHARED_ALL = {
-    contexts: ["all"]
+    contexts: ["all"],
 };
 const CONTEXT_SHARED_EDITABLE = {
-    contexts: getBrowser() === "firefox" ? ["editable", "password"] : ["editable"]
+    contexts: getBrowser() === "firefox" ? ["editable", "password"] : ["editable"],
 };
 
 let __menu = null,
@@ -21,7 +21,7 @@ async function buildEntryExplorerMenu(parentMenu, clickHandler) {
             title: "No vaults available",
             parentId: parentMenu,
             enabled: false,
-            ...CONTEXT_SHARED_EDITABLE
+            ...CONTEXT_SHARED_EDITABLE,
         });
         return;
     }
@@ -29,14 +29,14 @@ async function buildEntryExplorerMenu(parentMenu, clickHandler) {
         const sourceMenu = chrome.contextMenus.create({
             title: `🗃 ${archiveFacade.sourceName}`,
             parentId: parentMenu,
-            ...CONTEXT_SHARED_EDITABLE
+            ...CONTEXT_SHARED_EDITABLE,
         });
         if (archiveFacade.groups.length === 0) {
             chrome.contextMenus.create({
                 title: "No groups",
                 parentId: sourceMenu,
                 enabled: false,
-                ...CONTEXT_SHARED_EDITABLE
+                ...CONTEXT_SHARED_EDITABLE,
             });
             return;
         }
@@ -44,7 +44,7 @@ async function buildEntryExplorerMenu(parentMenu, clickHandler) {
             const groupMenu = chrome.contextMenus.create({
                 title: `📂 ${group.title}`,
                 parentId: sourceMenu,
-                ...CONTEXT_SHARED_EDITABLE
+                ...CONTEXT_SHARED_EDITABLE,
             });
             const groupEntries = archiveFacade.entries.filter(entry => entry.parentID === group.id);
             if (groupEntries.length === 0) {
@@ -52,7 +52,7 @@ async function buildEntryExplorerMenu(parentMenu, clickHandler) {
                     title: "No entries",
                     parentId: groupMenu,
                     enabled: false,
-                    ...CONTEXT_SHARED_EDITABLE
+                    ...CONTEXT_SHARED_EDITABLE,
                 });
                 return;
             }
@@ -65,7 +65,7 @@ async function buildEntryExplorerMenu(parentMenu, clickHandler) {
                     onclick: () => {
                         clickHandler(archiveFacade.sourceID, entry.id);
                     },
-                    ...CONTEXT_SHARED_EDITABLE
+                    ...CONTEXT_SHARED_EDITABLE,
                 });
             });
         });
@@ -88,7 +88,7 @@ async function performUpdate() {
     chrome.contextMenus.removeAll();
     __menu = chrome.contextMenus.create({
         title: "Buttercup",
-        ...CONTEXT_SHARED_ALL
+        ...CONTEXT_SHARED_ALL,
     });
     chrome.contextMenus.create({
         title: "About",
@@ -96,12 +96,12 @@ async function performUpdate() {
         onclick: () => {
             createNewTab(getExtensionURL("setup.html#/about"));
         },
-        ...CONTEXT_SHARED_ALL
+        ...CONTEXT_SHARED_ALL,
     });
     chrome.contextMenus.create({
         parentId: __menu,
         type: "separator",
-        ...CONTEXT_SHARED_ALL
+        ...CONTEXT_SHARED_ALL,
     });
     chrome.contextMenus.create({
         title: "Generate password",
@@ -111,11 +111,11 @@ async function performUpdate() {
                 .then(tab => tab.id)
                 .then(tabID => {
                     sendTabMessage(tabID, {
-                        type: "open-generator"
+                        type: "open-generator",
                     });
                 });
         },
-        ...CONTEXT_SHARED_EDITABLE
+        ...CONTEXT_SHARED_EDITABLE,
     });
     chrome.contextMenus.create({
         title: "Insert last generated password",
@@ -127,21 +127,21 @@ async function performUpdate() {
                 .then(tabID => {
                     sendTabMessage(tabID, {
                         type: "set-generated-password",
-                        password: generatedPassword
+                        password: generatedPassword,
                     });
                 });
         },
-        ...CONTEXT_SHARED_EDITABLE
+        ...CONTEXT_SHARED_EDITABLE,
     });
     const enterLoginMenu = chrome.contextMenus.create({
         title: "Enter login details",
         parentId: __menu,
-        ...CONTEXT_SHARED_EDITABLE
+        ...CONTEXT_SHARED_EDITABLE,
     });
     const autoLoginMenu = chrome.contextMenus.create({
         title: "Log in with",
         parentId: __menu,
-        ...CONTEXT_SHARED_EDITABLE
+        ...CONTEXT_SHARED_EDITABLE,
     });
     await buildEntryExplorerMenu(enterLoginMenu, (sourceID, entryID) => {
         sendCredentialsToTab(sourceID, entryID, /* auto login: */ false).catch(err => {

@@ -5,7 +5,7 @@ import {
     consumeVaultFacade,
     createEntryFacade,
     createVaultFacade,
-    getEntryURLs
+    getEntryURLs,
 } from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
@@ -27,7 +27,7 @@ import {
     removeSource,
     saveSource,
     sendCredentialsToTab,
-    unlockSource
+    unlockSource,
 } from "./archives.js";
 import { setEntrySearchResults, setSourcesCount } from "../../shared/actions/searching.js";
 import { setConfigValue, setUserActivity } from "../../shared/actions/app.js";
@@ -230,7 +230,7 @@ function handleMessage(request, sender, sendResponse) {
                 .then(unlockedSources => {
                     sendResponse({
                         ok: true,
-                        unlocked: unlockedSources
+                        unlocked: unlockedSources,
                     });
                 })
                 .catch(err => {
@@ -242,7 +242,7 @@ function handleMessage(request, sender, sendResponse) {
             const { mode = "tab" } = request;
             sendResponse({
                 ok: true,
-                credentials: getLogins(mode === "tab" ? sender.tab.id : null)
+                credentials: getLogins(mode === "tab" ? sender.tab.id : null),
             });
             return false;
         }
@@ -290,7 +290,7 @@ function handleMessage(request, sender, sendResponse) {
                         setAutoLogin({
                             sourceID,
                             entryID,
-                            tabID: tab.id
+                            tabID: tab.id,
                         })
                     );
                 }
@@ -375,7 +375,7 @@ function handleMessage(request, sender, sendResponse) {
             dispatch(
                 setConfigValue({
                     key: request.key,
-                    value: request.value
+                    value: request.value,
                 })
             );
         }
@@ -384,7 +384,7 @@ function handleMessage(request, sender, sendResponse) {
             getCurrentTab().then(tab => {
                 sendTabMessage(tab.id, {
                     type: "set-generated-password",
-                    password
+                    password,
                 });
             });
             lastPassword.value = password;
@@ -433,7 +433,7 @@ async function processSearchResults([entryResults, sources]) {
                 sourceID,
                 sourceName,
                 url: entryResult.urls[0] || null,
-                urls: entryResult.urls
+                urls: entryResult.urls,
             };
         })
     );

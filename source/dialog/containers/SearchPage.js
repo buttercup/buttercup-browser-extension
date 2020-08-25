@@ -7,7 +7,7 @@ import { createNewTab, getExtensionURL } from "../../shared/library/extension.js
 
 export default connect(
     (state, ownProps) => ({
-        availableSources: getSourcesCount(state)
+        availableSources: getSourcesCount(state),
     }),
     {
         onPrepareFirstResults: () => () => {
@@ -19,6 +19,6 @@ export default connect(
         },
         onUnlockAllArchives: () => () => {
             createNewTab(getExtensionURL("setup.html#/unlock"));
-        }
+        },
     }
 )(SearchPage);

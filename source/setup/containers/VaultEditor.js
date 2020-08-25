@@ -8,7 +8,7 @@ import {
     deleteAttachment,
     getArchiveFacade,
     getAttachmentData,
-    getAttachmentDetails
+    getAttachmentDetails,
 } from "../library/messaging.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
@@ -21,7 +21,7 @@ async function convertAttachmentFiles(files) {
         output.push({
             data,
             name: file.name,
-            type: file.type || "application/octet-stream"
+            type: file.type || "application/octet-stream",
         });
     }
     return output;
@@ -29,7 +29,7 @@ async function convertAttachmentFiles(files) {
 
 export default connect(
     (state, ownProps) => ({
-        vault: getVaultFacade(state)
+        vault: getVaultFacade(state),
     }),
     {
         addAttachments: (sourceID, entryID, files) => dispatch => {
@@ -73,7 +73,7 @@ export default connect(
             dispatch(setBusy("Downloading attachment"));
             Promise.all([
                 getAttachmentData(sourceID, entryID, attachmentID),
-                getAttachmentDetails(sourceID, entryID, attachmentID)
+                getAttachmentDetails(sourceID, entryID, attachmentID),
             ])
                 .then(([base64, attachmentDetails]) => {
                     const attachmentData = base64ToArrayBuffer(base64);
@@ -128,6 +128,6 @@ export default connect(
                     notifyError("Failed updating archive", `Unable to update archive (${sourceID}): ${err.message}`);
                     dispatch(unsetBusy());
                 });
-        }
+        },
     }
 )(VaultEditor);

@@ -3,7 +3,7 @@ import { MyButtercupClient } from "../../shared/library/buttercup.js";
 import {
     MYBUTTERCUP_CLIENT_ID,
     MYBUTTERCUP_CLIENT_SECRET,
-    MYBUTTERCUP_REDIRECT_URI
+    MYBUTTERCUP_REDIRECT_URI,
 } from "../../shared/library/myButtercup.js";
 import { setName, setVaultID } from "../../shared/actions/myButtercup.js";
 import log from "../../shared/library/log.js";

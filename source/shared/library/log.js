@@ -33,5 +33,5 @@ function writeLog(type, ...args) {
 export default {
     error: logError,
     info: logInfo,
-    warn: logWarn
+    warn: logWarn,
 };

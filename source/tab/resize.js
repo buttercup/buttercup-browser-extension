@@ -13,7 +13,7 @@ export function onBodyResize(callback) {
     return {
         remove: () => {
             clearInterval(watch);
-        }
+        },
     };
 }
 
@@ -29,6 +29,6 @@ export function onBodyWidthResize(callback) {
     return {
         remove: () => {
             clearInterval(watch);
-        }
+        },
     };
 }

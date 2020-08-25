@@ -54,7 +54,7 @@ class AddArchivePage extends PureComponent {
         onSelectRemotePath: PropTypes.func.isRequired,
         selectedArchiveType: PropTypes.string,
         selectedFilename: PropTypes.string,
-        selectedFilenameNeedsCreation: PropTypes.bool.isRequired
+        selectedFilenameNeedsCreation: PropTypes.bool.isRequired,
     };
 
     // We store some details in the state, because they're sensitive. No point
@@ -69,14 +69,14 @@ class AddArchivePage extends PureComponent {
         myButtercupAuthenticationID: "",
         remoteURL: "",
         remoteUsername: "",
-        remotePassword: ""
+        remotePassword: "",
     };
 
     componentDidMount() {
         this.setState({
             dropboxAuthenticationID: uuid(),
             googleDriveAuthenticationID: uuid(),
-            myButtercupAuthenticationID: uuid()
+            myButtercupAuthenticationID: uuid(),
         });
         this.props.onReady();
     }
@@ -155,7 +155,7 @@ class AddArchivePage extends PureComponent {
 
     handleUpdateForm(property, event) {
         this.setState({
-            [property]: event.target.value
+            [property]: event.target.value,
         });
     }
 
@@ -181,7 +181,7 @@ class AddArchivePage extends PureComponent {
             ["dropbox", "dropbox"],
             ["googledrive", "googledrive"],
             ["mybuttercup", "mybuttercup"],
-            ["localfile", "localfile"]
+            ["localfile", "localfile"],
         ]);
         const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
         return (
@@ -235,7 +235,7 @@ class AddArchivePage extends PureComponent {
             ["dropbox", ::this.handleChooseDropboxBasedFile],
             ["googledrive", ::this.handleChooseGoogleDriveBasedFile],
             ["mybuttercup", ::this.handleChooseMyButtercupBasedFile],
-            ["localfile", ::this.handleChooseLocalBasedFile]
+            ["localfile", ::this.handleChooseLocalBasedFile],
         ]);
         const handleSubmit = onClickTypeSwitch(this.props.selectedArchiveType);
         return (

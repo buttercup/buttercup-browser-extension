@@ -11,7 +11,7 @@ import {
     FormGroup,
     InputGroup,
     ControlGroup,
-    Dialog
+    Dialog,
 } from "@blueprintjs/core";
 import { SiteIcon } from "@buttercup/ui";
 import { EntryShape } from "../prop-types/entry.js";
@@ -76,16 +76,16 @@ class SearchResult extends PureComponent {
     static propTypes = {
         onSelectEntry: PropTypes.func.isRequired,
         autoLoginEnabled: PropTypes.bool,
-        entry: EntryShape
+        entry: EntryShape,
     };
 
     static defaultProps = {
-        autoLoginEnabled: true
+        autoLoginEnabled: true,
     };
 
     state = {
         isDetailsVisible: false,
-        uncovered: []
+        uncovered: [],
     };
 
     handleCopyToClipboard(property, facade = true) {
@@ -107,14 +107,14 @@ class SearchResult extends PureComponent {
             ...state,
             uncovered: state.uncovered.includes(property)
                 ? state.uncovered.filter(prop => prop !== property)
-                : [...state.uncovered, property]
+                : [...state.uncovered, property],
         }));
     }
 
     toggleDetails() {
         this.setState(state => ({
             ...state,
-            isDetailsVisible: !state.isDetailsVisible
+            isDetailsVisible: !state.isDetailsVisible,
         }));
     }
 
@@ -207,7 +207,7 @@ class SearchResult extends PureComponent {
                                 margin: "1rem",
                                 height: "calc(100vh - 2rem)",
                                 width: "calc(100vw - 2rem)",
-                                paddingBottom: "10px"
+                                paddingBottom: "10px",
                             }}
                         >
                             {this.renderEntryDetails()}

@@ -1,6 +1,6 @@
 import {
     createClient as createDropboxClient,
-    createFsInterface as createDropboxFSClient
+    createFsInterface as createDropboxFSClient,
 } from "@buttercup/dropbox-client";
 import { createClient as createGoogleDriveClient } from "@buttercup/googledrive-client";
 import pify from "pify";
@@ -52,7 +52,7 @@ export function getDropboxDirectoryContents(directory, dropboxClient = getDropbo
             filename: item.path,
             basename: item.name,
             type: item.type,
-            size: item.isDirectory() ? 0 : item.size
+            size: item.isDirectory() ? 0 : item.size,
         }))
     );
 }
@@ -80,7 +80,7 @@ export function getGoogleDriveDirectoryContents(googleDriveClient = getGoogleDri
             type: "directory",
             size: 0,
             googleFileID: dirItem.id,
-            key: dirItem.id
+            key: dirItem.id,
         })),
         ...node.files.map(fileItem => ({
             filename: generateParentPath([...parentPath, fileItem.filename]),
@@ -89,15 +89,15 @@ export function getGoogleDriveDirectoryContents(googleDriveClient = getGoogleDri
             type: "file",
             size: fileItem.size,
             googleFileID: fileItem.id,
-            key: fileItem.id
+            key: fileItem.id,
         })),
         ...node.children.reduce(
             (convertedChildren, child) => [
                 ...convertedChildren,
-                ...convertNode(child, [...parentPath, child.filename])
+                ...convertNode(child, [...parentPath, child.filename]),
             ],
             []
-        )
+        ),
     ];
     return googleDriveClient.getDirectoryContents({ tree: true }).then(convertNode);
 }

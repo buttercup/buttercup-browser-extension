@@ -23,12 +23,12 @@ class VaultEditor extends Component {
         handlePreviewAttachmentError: PropTypes.func.isRequired,
         saveVaultFacade: PropTypes.func.isRequired,
         sourceID: PropTypes.string.isRequired,
-        vault: PropTypes.object
+        vault: PropTypes.object,
     };
 
     state = {
         attachmentPreviews: {},
-        masterPassword: ""
+        masterPassword: "",
     };
 
     componentDidMount() {
@@ -40,8 +40,8 @@ class VaultEditor extends Component {
             .then(base64 => {
                 this.setState({
                     attachmentPreviews: {
-                        [attachmentID]: base64
-                    }
+                        [attachmentID]: base64,
+                    },
                 });
             })
             .catch(err => {

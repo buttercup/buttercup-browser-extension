@@ -26,7 +26,7 @@ export function sendCredentialsToTab(sourceID, entryID, signIn) {
             type: "send-credentials-to-current-tab",
             sourceID,
             entryID,
-            signIn
+            signIn,
         },
         response => {
             if (!response.ok) {

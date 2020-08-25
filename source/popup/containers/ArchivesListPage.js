@@ -10,7 +10,7 @@ export default withRouter(
     connect(
         (state, ownProps) => ({
             archives: getArchives(state),
-            darkMode: getConfigKey(state, "darkMode")
+            darkMode: getConfigKey(state, "darkMode"),
         }),
         {
             onArchiveClick: (archiveID, state) => () => {
@@ -29,7 +29,7 @@ export default withRouter(
                 if (remove) {
                     return removeArchive(sourceID);
                 }
-            }
+            },
         }
     )(ArchivesListPage)
 );

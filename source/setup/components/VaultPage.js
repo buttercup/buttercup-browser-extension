@@ -8,7 +8,7 @@ import VaultEditor from "../containers/VaultEditor.js";
 const CLEAR_PASSWORD_CHANGE = {
     oldMasterPassword: "",
     newMasterPassword: "",
-    newMasterPassword2: ""
+    newMasterPassword2: "",
 };
 
 class VaultPage extends PureComponent {
@@ -22,7 +22,7 @@ class VaultPage extends PureComponent {
         onRemoveArchive: PropTypes.func.isRequired,
         onUnlockArchive: PropTypes.func.isRequired,
         sourceID: PropTypes.string.isRequired,
-        state: PropTypes.oneOf(["locked", "unlocked"]).isRequired
+        state: PropTypes.oneOf(["locked", "unlocked"]).isRequired,
     };
 
     state = {
@@ -31,7 +31,7 @@ class VaultPage extends PureComponent {
         passwordToken: "",
         oldMasterPassword: "",
         newMasterPassword: "",
-        newMasterPassword2: ""
+        newMasterPassword2: "",
     };
 
     get passwordChangeValid() {
@@ -62,7 +62,7 @@ class VaultPage extends PureComponent {
         event.preventDefault();
         this.setState({
             changingMasterPassword: true,
-            ...CLEAR_PASSWORD_CHANGE
+            ...CLEAR_PASSWORD_CHANGE,
         });
     }
 
@@ -73,12 +73,12 @@ class VaultPage extends PureComponent {
             this.state.oldMasterPassword,
             this.state.newMasterPassword,
             {
-                passwordToken: this.state.passwordToken
+                passwordToken: this.state.passwordToken,
             },
             () => {
                 this.setState({
                     changingMasterPassword: false,
-                    ...CLEAR_PASSWORD_CHANGE
+                    ...CLEAR_PASSWORD_CHANGE,
                 });
             }
         );
@@ -96,7 +96,7 @@ class VaultPage extends PureComponent {
 
     handleUpdateForm(property, event) {
         this.setState({
-            [property]: event.target.value
+            [property]: event.target.value,
         });
     }
 

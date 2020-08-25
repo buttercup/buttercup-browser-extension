@@ -35,7 +35,7 @@ class HeaderBar extends PureComponent {
         onToggleDarkMode: PropTypes.func.isRequired,
         onUnlockVaultClick: PropTypes.func.isRequired,
         onVaultsClick: PropTypes.func.isRequired,
-        unsavedLogins: PropTypes.number.isRequired
+        unsavedLogins: PropTypes.number.isRequired,
     };
 
     handleItemsClick(event) {

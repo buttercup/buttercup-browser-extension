@@ -40,7 +40,7 @@ Entries.propTypes = {
     entries: EntriesShape,
     sourcesUnlocked: PropTypes.number,
     autoLoginEnabled: PropTypes.bool,
-    onSelectEntry: PropTypes.func.isRequired
+    onSelectEntry: PropTypes.func.isRequired,
 };
 
 export default Entries;

@@ -13,7 +13,7 @@ import searching from "../../shared/reducers/searching.js";
 import vault from "./vault.js";
 import myButtercup from "../../shared/reducers/mybuttercup.js";
 
-const createAppReducer = (history) =>
+const createAppReducer = history =>
     createSyncReducer(
         combineReducers({
             router: setupRouting(history),

@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { push } from 'connected-react-router'
+import { push } from "connected-react-router";
 import delay from "yoctodelay";
 import VError from "verror";
 import VaultPage from "../components/VaultPage.js";
@@ -18,7 +18,7 @@ export default connect(
         attachments: getArchiveAttachmentsSupport(state, ownProps.match.params.id),
         isEditing: isEditing(state),
         state: ownProps.match.params.state,
-        sourceID: ownProps.match.params.id
+        sourceID: ownProps.match.params.id,
     }),
     {
         changePassword: (sourceID, oldPassword, newPassword, meta, onSuccessCB) => dispatch => {
@@ -114,6 +114,6 @@ export default connect(
                         notifyError("Failed unlocking archive", `Unable to unlock archive: ${err.message}`);
                     }
                 });
-        }
+        },
     }
 )(VaultPage);

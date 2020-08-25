@@ -10,12 +10,12 @@ class VaultPage extends PureComponent {
         isEditing: PropTypes.bool.isRequired,
         onUnlockArchive: PropTypes.func.isRequired,
         sourceID: PropTypes.string.isRequired,
-        state: PropTypes.oneOf(["unknown", "locked", "unlocked"]).isRequired
+        state: PropTypes.oneOf(["unknown", "locked", "unlocked"]).isRequired,
     };
 
     // We store some details in the state, because they're sensitive:
     state = {
-        masterPassword: ""
+        masterPassword: "",
     };
 
     componentDidMount() {
@@ -31,7 +31,7 @@ class VaultPage extends PureComponent {
 
     handleUpdateForm(property, event) {
         this.setState({
-            [property]: event.target.value
+            [property]: event.target.value,
         });
     }
 

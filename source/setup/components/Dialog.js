@@ -4,10 +4,7 @@ import { Classes, Colors } from "@blueprintjs/core";
 import colour from "color";
 
 const BACKGROUND_BASE = Colors.DARK_GRAY3;
-const BACKGROUND_OVERLAY = colour(BACKGROUND_BASE)
-    .alpha(0.7)
-    .rgb()
-    .string();
+const BACKGROUND_OVERLAY = colour(BACKGROUND_BASE).alpha(0.7).rgb().string();
 
 const DialogContainer = styled.div`
     background-color: ${props => (props.zIndex > 1 ? BACKGROUND_OVERLAY : BACKGROUND_BASE)};

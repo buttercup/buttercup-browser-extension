@@ -67,7 +67,7 @@ class SearchBar extends Component {
                     placeholder="Search for entries..."
                     value={this.state.searchTerm}
                     onChange={::this.handleSearchTermChange}
-                    inputRef={(input) => {
+                    inputRef={input => {
                         this._input = input;
                     }}
                 />

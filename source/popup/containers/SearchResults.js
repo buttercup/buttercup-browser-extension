@@ -9,7 +9,7 @@ export default connect(
     (state, ownProps) => ({
         entries: getEntryResults(state),
         sourcesTotal: getTotalArchivesCount(state),
-        sourcesUnlocked: getUnlockedArchivesCount(state)
+        sourcesUnlocked: getUnlockedArchivesCount(state),
     }),
     {
         onAddVault: () => () => {
@@ -20,6 +20,6 @@ export default connect(
         },
         onUnlockAllArchives: () => () => {
             createNewTab(getExtensionURL("setup.html#/unlock"));
-        }
+        },
     }
 )(SearchResults);

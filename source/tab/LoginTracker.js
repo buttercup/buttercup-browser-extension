@@ -44,7 +44,7 @@ export default class LoginTracker extends EventEmitter {
             set password(pw) {
                 connection._password = pw;
                 _this.emit("credentialsChanged", connection);
-            }
+            },
         };
         this._connections.push(connection);
     }

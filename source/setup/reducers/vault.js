@@ -1,7 +1,7 @@
 import { VAULT_FACADE_SET } from "../actions/types.js";
 
 const INITIAL = {
-    vaultFacade: null
+    vaultFacade: null,
 };
 
 export default function vaultReducer(state = INITIAL, action = {}) {
@@ -9,7 +9,7 @@ export default function vaultReducer(state = INITIAL, action = {}) {
         case VAULT_FACADE_SET:
             return {
                 ...state,
-                vaultFacade: action.payload
+                vaultFacade: action.payload,
             };
         default:
             return state;

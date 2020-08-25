@@ -15,7 +15,7 @@ const App = ({ children, darkMode, noBackgroundColor }) => (
 
 App.propTypes = {
     darkMode: PropTypes.bool,
-    noBackgroundColor: PropTypes.bool
+    noBackgroundColor: PropTypes.bool,
 };
 
 export default App;

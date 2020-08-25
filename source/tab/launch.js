@@ -68,7 +68,7 @@ export function attachLaunchButton(input) {
                 outline: "none",
             },
         });
-        button.onclick = (event) => {
+        button.onclick = event => {
             event.preventDefault();
             event.stopPropagation();
             toggleInputDialog(input, DIALOG_TYPE_ENTRY_PICKER);

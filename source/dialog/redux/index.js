@@ -7,7 +7,7 @@ import history from "./history.js";
 
 const reduxRouterMiddleware = routerMiddleware(history);
 const syncMiddleware = createSyncMiddleware();
-const composeEnhancer = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+const composeEnhancer = (typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const store = syncStore(
     createStore(

@@ -14,13 +14,13 @@ class RemoteExplorer extends Component {
         onSelectRemotePath: PropTypes.func.isRequired,
         rootDirectory: PropTypes.object,
         selectedFilename: PropTypes.string,
-        selectedFilenameNeedsCreation: PropTypes.bool.isRequired
+        selectedFilenameNeedsCreation: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
         onCreateRemotePath: NOOP,
         onSelectRemotePath: NOOP,
-        selectedFilenameNeedsCreation: false
+        selectedFilenameNeedsCreation: false,
     };
 
     componentDidMount() {

@@ -1,7 +1,7 @@
 import { MANAGE_ARCHIVE_SET_EDITING } from "../actions/types.js";
 
 const INITIAL = {
-    editing: false
+    editing: false,
 };
 
 export default function removeArchiveReducer(state = INITIAL, action = {}) {
@@ -9,7 +9,7 @@ export default function removeArchiveReducer(state = INITIAL, action = {}) {
         case MANAGE_ARCHIVE_SET_EDITING:
             return {
                 ...state,
-                editing: !!action.payload
+                editing: !!action.payload,
             };
 
         default:

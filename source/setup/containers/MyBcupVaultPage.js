@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { push } from 'connected-react-router'
+import { push } from "connected-react-router";
 import VError from "verror";
 import MyBcupVaultPage from "../components/MyBcupVaultPage.js";
 import { getArchiveState, getArchiveTitle } from "../../shared/selectors/archives.js";
@@ -14,7 +14,7 @@ export default connect(
         archiveTitle: getArchiveTitle(state, ownProps.match.params.id),
         isEditing: isEditing(state),
         state: getArchiveState(state, ownProps.match.params.id),
-        sourceID: ownProps.match.params.id
+        sourceID: ownProps.match.params.id,
     }),
     {
         onUnlockArchive: (sourceID, masterPassword) => dispatch => {
@@ -38,6 +38,6 @@ export default connect(
                         notifyError("Failed unlocking vault", `Unable to unlock archive: ${err.message}`);
                     }
                 });
-        }
+        },
     }
 )(MyBcupVaultPage);

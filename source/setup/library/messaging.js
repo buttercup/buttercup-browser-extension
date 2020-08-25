@@ -16,7 +16,7 @@ export function addNewEntry(sourceID, groupID, details) {
     const payload = {
         sourceID,
         groupID,
-        ...details
+        ...details,
     };
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({ type: "add-new-entry", payload }, resp => {
@@ -25,7 +25,7 @@ export function addNewEntry(sourceID, groupID, details) {
             }
             const error = new VError(
                 {
-                    info: { authFailure: resp.authFailure }
+                    info: { authFailure: resp.authFailure },
                 },
                 `Failed adding new entry: ${(resp && resp.error) || "Unknown error"}`
             );
@@ -216,7 +216,7 @@ export function unlockArchive(sourceID, masterPassword) {
             return reject(
                 new VError(
                     {
-                        info: { hush }
+                        info: { hush },
                     },
                     `Unlocking archive source (${sourceID}) failed: ${error}`
                 )

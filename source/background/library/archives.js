@@ -3,7 +3,7 @@ import {
     EntryFinder,
     VaultSource,
     createEntryFacade,
-    createVaultFacade
+    createVaultFacade,
 } from "../../shared/library/buttercup.js";
 import { extractDomain } from "../../shared/library/domain.js";
 import { getVaultManager } from "./buttercup.js";
@@ -42,7 +42,7 @@ export function addDropboxArchive(payload) {
         {
             type: "dropbox",
             token: dropboxToken,
-            path: filename
+            path: filename,
         },
         masterPassword
     );
@@ -68,7 +68,7 @@ export function addGoogleDriveArchive(payload) {
             type: "googledrive",
             token: googleDriveToken,
             refreshToken: googleDriveRefreshToken,
-            fileID
+            fileID,
         },
         masterPassword
     );
@@ -93,7 +93,7 @@ export function addLocalArchive(payload) {
         {
             type: "localfile",
             path: filename,
-            token: key
+            token: key,
         },
         masterPassword
     );
@@ -137,7 +137,7 @@ export function addMyButtercupArchive(payload) {
             refreshToken,
             clientID: MYBUTTERCUP_CLIENT_ID,
             clientSecret: MYBUTTERCUP_CLIENT_SECRET,
-            vaultID
+            vaultID,
         },
         masterPassword
     );
@@ -145,8 +145,8 @@ export function addMyButtercupArchive(payload) {
         ([vaultManager, sourceCredentials]) => {
             const source = new VaultSource(name, "mybuttercup", sourceCredentials, {
                 meta: {
-                    vaultID
-                }
+                    vaultID,
+                },
             });
             return vaultManager.interruptAutoUpdate(() =>
                 vaultManager
@@ -170,8 +170,8 @@ export function addWebDAVArchive(payload) {
                 endpoint: url,
                 path: filename,
                 username,
-                password
-            }
+                password,
+            },
         },
         masterPassword
     );
@@ -251,7 +251,7 @@ export function getFacades() {
                 getArchive(source.id).then(archive => ({
                     ...createVaultFacade(archive),
                     sourceID: source.id,
-                    sourceName: source.name
+                    sourceName: source.name,
                 }))
             )
         )
@@ -285,7 +285,7 @@ export function getSourcesInfo() {
             name: source.name,
             meta: source.meta || {},
             status: source.status,
-            order: source.order
+            order: source.order,
         }));
     });
 }
@@ -380,8 +380,8 @@ export async function sendCredentialsToTab(sourceID, entryID, signIn) {
         signIn,
         entry: {
             id: entryFacade.id,
-            properties
-        }
+            properties,
+        },
     });
 }
 
@@ -390,7 +390,7 @@ function signalMyButtercupTabConnections(vaultID) {
         chrome.tabs.query(
             {
                 currentWindow: true,
-                url: ["http://localhost:8000/*", "https://my.buttercup.pw/*"]
+                url: ["http://localhost:8000/*", "https://my.buttercup.pw/*"],
             },
             resolve
         );
@@ -407,7 +407,7 @@ export async function unlockSource(sourceID, masterPassword) {
     const vaultManager = await getVaultManager();
     const source = vaultManager.getSourceForID(sourceID);
     await source.unlock(Credentials.fromPassword(masterPassword), {
-        storeOfflineCopy: false
+        storeOfflineCopy: false,
     });
     updateContextMenu();
 }

@@ -43,7 +43,7 @@ const Container = styled.div`
 `;
 const ItemNewText = styled.div`
     font-style: italic;
-    color: ${(p) => (p.selected ? "#fff" : Colors.GRAY1)};
+    color: ${p => (p.selected ? "#fff" : Colors.GRAY1)};
     cursor: text;
 `;
 const NewFilenameInput = styled.input`
@@ -165,7 +165,7 @@ class RemoteFileTree extends Component {
 
     handleNodeCollapse({ nodeData }) {
         this.setState({
-            openDirectories: this.state.openDirectories.filter((dir) => dir !== nodeData.path),
+            openDirectories: this.state.openDirectories.filter(dir => dir !== nodeData.path),
         });
     }
 
@@ -193,7 +193,7 @@ class RemoteFileTree extends Component {
                         onChange={::this.onNewFilenameChange}
                         onBlur={::this.onBlurNewItem}
                         onKeyPress={::this.onNewItemKeyPress}
-                        innerRef={(input) => {
+                        innerRef={input => {
                             this._newFilenameInput = input;
                         }}
                     />
@@ -235,8 +235,8 @@ class RemoteFileTree extends Component {
                       },
                   ]
                 : [
-                      ...(directory.directories || []).map((dir) => this.getTree(dir)),
-                      ...(directory.files || []).map((dir) => this.getTree(dir, false)),
+                      ...(directory.directories || []).map(dir => this.getTree(dir)),
+                      ...(directory.files || []).map(dir => this.getTree(dir, false)),
                       this.getTreeNewItem(directory.path),
                   ],
         };

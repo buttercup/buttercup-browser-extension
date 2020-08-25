@@ -4,7 +4,7 @@ import {
     GOOGLE_DRIVE_SET_ACCESS_TOKEN,
     GOOGLE_DRIVE_SET_AUTH_ID,
     GOOGLE_DRIVE_SET_AUTH_CODE,
-    GOOGLE_DRIVE_SET_REFRESH_TOKEN
+    GOOGLE_DRIVE_SET_REFRESH_TOKEN,
 } from "./types.js";
 
 export const clearGoogleDriveState = createAction(GOOGLE_DRIVE_CLEAR_STATE);

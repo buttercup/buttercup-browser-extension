@@ -10,14 +10,14 @@ const Container = styled.div`
 const EntryShape = PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    url: PropTypes.string
+    url: PropTypes.string,
 });
 
 class SearchResults extends PureComponent {
     static propTypes = {
         entries: PropTypes.arrayOf(EntryShape),
         sourcesUnlocked: PropTypes.number.isRequired,
-        onEnterDetailsRequest: PropTypes.func.isRequired
+        onEnterDetailsRequest: PropTypes.func.isRequired,
     };
 
     render() {

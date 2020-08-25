@@ -6,7 +6,7 @@ import {
     ADD_ARCHIVE_SET_CONNECTING,
     ADD_ARCHIVE_SET_LOCAL_AUTH_KEY,
     ADD_ARCHIVE_SET_LOCAL_AUTH_STATUS,
-    ADD_ARCHIVE_SET_SELECTED_TYPE
+    ADD_ARCHIVE_SET_SELECTED_TYPE,
 } from "../actions/types.js";
 
 const INITIAL = {
@@ -17,7 +17,7 @@ const INITIAL = {
     localAuthStatus: "idle",
     selectedArchiveType: null,
     selectedRemoteFile: null,
-    shouldCreateRemoteFile: false
+    shouldCreateRemoteFile: false,
 };
 
 export default function addArchiveReducer(state = INITIAL, action = {}) {
@@ -25,44 +25,44 @@ export default function addArchiveReducer(state = INITIAL, action = {}) {
         case ADD_ARCHIVE_SET_SELECTED_TYPE:
             return {
                 ...state,
-                selectedArchiveType: action.payload
+                selectedArchiveType: action.payload,
             };
         case ADD_ARCHIVE_SET_CONNECTING:
             return {
                 ...state,
-                connecting: !!action.payload
+                connecting: !!action.payload,
             };
         case ADD_ARCHIVE_SET_CONNECTED:
             return {
                 ...state,
-                connected: !!action.payload
+                connected: !!action.payload,
             };
         case ADD_ARCHIVE_SET_ADDING:
             return {
                 ...state,
-                adding: !!action.payload
+                adding: !!action.payload,
             };
         case ADD_ARCHIVE_CREATE_REMOTE_FILE:
             return {
                 ...state,
                 selectedRemoteFile: action.payload,
-                shouldCreateRemoteFile: true
+                shouldCreateRemoteFile: true,
             };
         case ADD_ARCHIVE_SELECT_REMOTE_FILE:
             return {
                 ...state,
                 selectedRemoteFile: action.payload,
-                shouldCreateRemoteFile: false
+                shouldCreateRemoteFile: false,
             };
         case ADD_ARCHIVE_SET_LOCAL_AUTH_STATUS:
             return {
                 ...state,
-                localAuthStatus: action.payload
+                localAuthStatus: action.payload,
             };
         case ADD_ARCHIVE_SET_LOCAL_AUTH_KEY:
             return {
                 ...state,
-                localAuthKey: action.payload
+                localAuthKey: action.payload,
             };
 
         default:

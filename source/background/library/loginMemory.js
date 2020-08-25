@@ -33,14 +33,13 @@ export function removeLogin(id) {
 }
 
 export function stopPromptForTab(tabID) {
-    __items = __items.map(
-        item =>
-            item.tabID === tabID
-                ? {
-                      ...item,
-                      prompt: false
-                  }
-                : item
+    __items = __items.map(item =>
+        item.tabID === tabID
+            ? {
+                  ...item,
+                  prompt: false,
+              }
+            : item
     );
 }
 
@@ -51,7 +50,7 @@ export function updateLogin(targetID, tabID, credentials) {
             id: targetID,
             tabID,
             prompt: true,
-            timestamp: credentials.timestamp || Date.now()
+            timestamp: credentials.timestamp || Date.now(),
         };
         __items.unshift(item);
     }

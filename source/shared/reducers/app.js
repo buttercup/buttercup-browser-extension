@@ -4,7 +4,7 @@ import {
     APP_SET_CONFIG_VALUE,
     APP_SET_UNSAVED_LOGINS_COUNT,
     APP_SET_USER_ACTIVITY,
-    APP_UNSET_BUSY
+    APP_UNSET_BUSY,
 } from "../actions/types.js";
 import { INITIAL_CONFIG } from "../library/config.js";
 
@@ -14,7 +14,7 @@ const INITIAL = {
     config: { ...INITIAL_CONFIG },
     configSource: "app",
     unsavedLogins: 0,
-    userActivityTimestamp: Date.now()
+    userActivityTimestamp: Date.now(),
 };
 
 export default function appReducer(state = INITIAL, action = {}) {
@@ -23,40 +23,40 @@ export default function appReducer(state = INITIAL, action = {}) {
             return {
                 ...state,
                 busy: true,
-                busyMessage: action.payload
+                busyMessage: action.payload,
             };
         case APP_UNSET_BUSY:
             return {
                 ...state,
                 busy: false,
-                busyMessage: ""
+                busyMessage: "",
             };
         case APP_SET_CONFIG:
             return {
                 ...state,
                 config: {
-                    ...action.payload.config
+                    ...action.payload.config,
                 },
-                configSource: action.payload.source
+                configSource: action.payload.source,
             };
         case APP_SET_CONFIG_VALUE:
             return {
                 ...state,
                 config: {
                     ...state.config,
-                    [action.payload.key]: action.payload.value
+                    [action.payload.key]: action.payload.value,
                 },
-                configSource: "app"
+                configSource: "app",
             };
         case APP_SET_USER_ACTIVITY:
             return {
                 ...state,
-                userActivityTimestamp: Date.now()
+                userActivityTimestamp: Date.now(),
             };
         case APP_SET_UNSAVED_LOGINS_COUNT:
             return {
                 ...state,
-                unsavedLogins: action.payload
+                unsavedLogins: action.payload,
             };
         default:
             return state;

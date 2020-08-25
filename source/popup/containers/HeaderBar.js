@@ -23,10 +23,10 @@ export default compose(
             onAddVaultClick: () => () => {
                 createNewTab(getExtensionURL("setup.html#/add-archive"));
             },
-            onItemsClick: () => (dispatch) => {
+            onItemsClick: () => dispatch => {
                 dispatch(push("/"));
             },
-            onLockAllClick: () => (dispatch) => {
+            onLockAllClick: () => dispatch => {
                 dispatch(push("/vaults/lock", { lockAll: true }));
             },
             onManageDisabledLoginPromps: () => () => {
@@ -38,7 +38,7 @@ export default compose(
             onSaveUnsavedClick: () => () => {
                 createNewTab(getExtensionURL("setup.html#/save-new-credentials"));
             },
-            onSettingsClick: () => (dispatch) => {
+            onSettingsClick: () => dispatch => {
                 dispatch(push("/settings"));
             },
             onToggleDarkMode: () => (_, getState) => {
@@ -49,7 +49,7 @@ export default compose(
             onUnlockVaultClick: (archiveID, state) => () => {
                 createNewTab(getExtensionURL(`setup.html#/access-archive/${archiveID}/${state}`));
             },
-            onVaultsClick: () => (dispatch) => {
+            onVaultsClick: () => dispatch => {
                 dispatch(push("/vaults"));
             },
         }

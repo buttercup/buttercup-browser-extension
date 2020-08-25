@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import Select from 'react-select/async';
+import Select from "react-select/async";
 import styled from "styled-components";
 import {
     Button,
@@ -12,7 +12,7 @@ import {
     H4,
     InputGroup,
     Intent,
-    Spinner
+    Spinner,
 } from "@blueprintjs/core";
 import { notifyError } from "../library/notify.js";
 import LayoutMain from "./LayoutMain.js";
@@ -22,7 +22,7 @@ function flattenGroups(groups) {
     const nestGroup = (group, level = 0) => {
         processed.push({
             ...group,
-            level
+            level,
         });
         group.groups.sort(titleCompare).forEach(child => nestGroup(child, level + 1));
     };
@@ -52,7 +52,7 @@ const RaisedSelect = styled(Select)`
 const ArchiveShape = PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
 });
 
 class SaveCredentialsPage extends PureComponent {
@@ -61,7 +61,7 @@ class SaveCredentialsPage extends PureComponent {
         cancel: PropTypes.func.isRequired,
         fetchGroupsForArchive: PropTypes.func.isRequired,
         fetchLoginDetails: PropTypes.func.isRequired,
-        saveNewCredentials: PropTypes.func.isRequired
+        saveNewCredentials: PropTypes.func.isRequired,
     };
 
     state = {
@@ -74,7 +74,7 @@ class SaveCredentialsPage extends PureComponent {
         sourceID: "",
         title: "",
         url: "",
-        username: ""
+        username: "",
     };
 
     applyLogin(loginID) {
@@ -86,7 +86,7 @@ class SaveCredentialsPage extends PureComponent {
             password,
             url,
             title,
-            loading: false
+            loading: false,
         });
     }
 
@@ -95,7 +95,7 @@ class SaveCredentialsPage extends PureComponent {
             .fetchLoginDetails()
             .then(logins => {
                 this.setState({
-                    logins
+                    logins,
                 });
                 this.applyLogin(logins[0].id);
             })
@@ -114,15 +114,15 @@ class SaveCredentialsPage extends PureComponent {
             if (!sourceItem) {
                 this.setState({
                     groupID: "",
-                    sourceID: ""
+                    sourceID: "",
                 });
             }
         }
         return Promise.resolve({
             options: this.props.archives.map(archive => ({
                 value: archive.id,
-                label: archive.name
-            }))
+                label: archive.name,
+            })),
         });
     }
 
@@ -142,15 +142,15 @@ class SaveCredentialsPage extends PureComponent {
             .then(groups => ({
                 options: groups.map(group => ({
                     value: group.id,
-                    label: nestTitle(group.title, group.level)
-                }))
+                    label: nestTitle(group.title, group.level),
+                })),
             }));
     }
 
     handleArchiveGroupChange(selected) {
         const { value } = selected;
         this.setState({
-            groupID: value
+            groupID: value,
         });
     }
 
@@ -159,7 +159,7 @@ class SaveCredentialsPage extends PureComponent {
         this.setState({
             groupID: "",
             groups: [],
-            sourceID: value
+            sourceID: value,
         });
     }
 
@@ -170,7 +170,7 @@ class SaveCredentialsPage extends PureComponent {
 
     handleEditProperty(property, event) {
         this.setState({
-            [property]: event.target.value
+            [property]: event.target.value,
         });
     }
 
@@ -183,7 +183,7 @@ class SaveCredentialsPage extends PureComponent {
                 username: this.state.username,
                 password: this.state.password,
                 title: this.state.title,
-                url: this.state.url
+                url: this.state.url,
             },
             this.state.loginID
         );
@@ -193,7 +193,7 @@ class SaveCredentialsPage extends PureComponent {
         event.preventDefault();
         this.setState(state => ({
             ...state,
-            showPassword: !state.showPassword
+            showPassword: !state.showPassword,
         }));
     }
 
@@ -221,8 +221,8 @@ class SaveCredentialsPage extends PureComponent {
                                         Promise.resolve({
                                             options: this.state.logins.map(login => ({
                                                 label: `${login.username || "?"} @ ${login.title}`,
-                                                value: login.id
-                                            }))
+                                                value: login.id,
+                                            })),
                                         })
                                     }
                                 />
