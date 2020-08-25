@@ -53,7 +53,7 @@ class HeaderBar extends PureComponent {
     }
 
     render() {
-        const { archives, location, darkMode } = this.props;
+        const { archives, location, darkMode, t } = this.props;
         const archiveMenu = (
             <ArchiveMenu>
                 <If condition={archives.length > 0}>
@@ -79,9 +79,9 @@ class HeaderBar extends PureComponent {
         const optionsMenu = (
             <Menu>
                 <MenuItem text={`Buttercup v${version}`} icon="updated" disabled />
-                <MenuItem text="Settings" icon="cog" onClick={::this.props.onSettingsClick} />
+                <MenuItem text={t("settings")} icon="cog" onClick={::this.props.onSettingsClick} />
                 <MenuItem
-                    text={darkMode ? "Light theme" : "Dark theme"}
+                    text={darkMode ? t("popup.settings.light-theme") : t("popup.settings.dark-theme")}
                     icon={darkMode ? "flash" : "moon"}
                     onClick={::this.props.onToggleDarkMode}
                 />

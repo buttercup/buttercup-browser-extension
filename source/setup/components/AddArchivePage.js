@@ -160,6 +160,7 @@ class AddArchivePage extends PureComponent {
     }
 
     render() {
+        const { t } = this.props;
         const isTargetingWebDAV = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
         const isTargetingDropbox = this.props.selectedArchiveType === "dropbox";
         const isTargetingGoogleDrive = this.props.selectedArchiveType === "googledrive";
@@ -186,7 +187,7 @@ class AddArchivePage extends PureComponent {
         const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
         return (
             <LayoutMain title="Add Vault">
-                <H4>Choose Vault Type</H4>
+                <H4>{t("choose-vault-type")}</H4>
                 <ArchiveTypeChooser disabled={hasAuthenticated} />
                 <Spacer />
                 <If condition={this.props.selectedArchiveType}>
@@ -228,7 +229,7 @@ class AddArchivePage extends PureComponent {
     }
 
     renderArchiveNameInput() {
-        const { selectedFilename } = this.props;
+        const { selectedFilename, t } = this.props;
         const disabled = !selectedFilename;
         const onClickTypeSwitch = switchValue([
             [/webdav|owncloud|nextcloud/, ::this.handleChooseWebDAVBasedFile],

@@ -1,0 +1,39 @@
+{
+    "choose-vault-type": "Choose Vault Type",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "language": "Language",
+    "minute": "{{count}} minute",
+    "minute_plural": "{{count}} minutes",
+    "hour": "{{count}} hour",
+    "hour_plural": "{{count}} hours",
+    "day": "{{count}} day",
+    "day_plural": "{{count}} days",
+    "week": "{{count}} week",
+    "week_plural": "{{count}} weeks",
+    "off": "off",
+    "settings": "Settings",
+    "popup": {
+        "settings": {
+            "dark-theme": "Dark Theme",
+            "light-theme": "Light Theme",
+            "vaults-auto-unlock": {
+                "self": "Vaults Auto Unlock",
+                "helper-text": "Automatically unlock vaults when the browser starts."
+            },
+            "vaults-auto-lock": {
+                "self": "Vaults Auto Lock",
+                "helper-text": "Automatically lock vaults after the selected time."
+            },
+            "show-save-dialog": {
+                "self": "Show Save Dialog",
+                "helper-text": "Der Speichern-Dialog erscheint nach dem Absenden eines Formulars.",
+                "options": {
+                    "always": "Immer",
+                    "unlocked": "Wenn Tresor entsperrt ist",
+                    "never": "Niemals"
+                }
+            }
+        }
+    }
+}

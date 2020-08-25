@@ -1,12 +1,14 @@
-import { compose } from "redux";
 import { connect } from "react-redux";
+import { withTranslation } from "react-i18next";
 import { withRouter } from "react-router-dom";
 import { getConfigKey } from "../selectors/app.js";
 import App from "../components/App.js";
 
-export default compose(
-    withRouter,
-    connect((state, ownProps) => ({
-        darkMode: getConfigKey(state, "darkMode"),
-    }))
-)(App);
+export default withTranslation()(
+    withRouter(
+        connect((state, ownProps) => ({
+            darkMode: getConfigKey(state, "darkMode"),
+            language: getConfigKey(state, "language"),
+        }))(App)
+    )
+);
