@@ -14,11 +14,27 @@
     "settings": "Einstellungen",
     "add-vault": "Tresor hinzufügen",
     "save-vault": "Tresor speichern",
+    "remove-vault": "Tresor entfernen",
+    "managing-vault": "Tresor verwalten",
+    "unlock-vault": "Tresor entsperren",
     "unlock-vaults": "Tresore entsperren",
     "lock-all-vaults": "Alle Tresore sperren" ,
     "manage-vaults": "Tresore verwalten",
-    "master-password": "Master Password",
+    "master-password": "Haupt-Passwort",
     "vaults": "Tresore",
     "back": "Zurück",
-    "search-for-entries": "Nach Einträgen suchen..."
+    "search-for-entries": "Nach Einträgen suchen...",
+    "remove": "Entfernen",
+    "lock": "Sperren",
+    "unlock": "Entsperren",
+    "cancel": "Abbrechen",
+    "change-password": "Passwort ändern",
+    "notification": {
+        "success": {
+            "all-vaults-have-been-locked": "All vaults have been locked."
+        },
+        "confirm": {
+            "remove-vault": "Möchtest du wirklich den Tresor \"{{title}}\" löschen?"
+        }
+    }
 }

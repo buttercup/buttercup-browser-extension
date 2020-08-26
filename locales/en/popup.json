@@ -29,5 +29,9 @@
     "welcome": {
         "title": "Welcome to Buttercup",
         "description": "Use the search bar to find entries in your unlocked vaults."
+    },
+    "no-vaults": {
+        "title": "No Vaults",
+        "description": "Hmm.. There aren't any vaults yet."
     }
 }

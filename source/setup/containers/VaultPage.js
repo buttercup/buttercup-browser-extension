@@ -11,6 +11,7 @@ import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { isEditing } from "../selectors/manageArchive.js";
 import { setEditing } from "../actions/manageArchive.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
+import i18n from "../../shared/i18n";
 
 export default withTranslation()(
     connect(
@@ -65,7 +66,7 @@ export default withTranslation()(
             onRemoveArchive: sourceID => (dispatch, getState) => {
                 const state = getState();
                 const title = getArchiveTitle(state, sourceID);
-                const remove = window.confirm(`Are you sure that you want to remove the archive '${title}'?`);
+                const remove = window.confirm(i18n.t("notification.confirm.remove-vault", { title }));
                 if (remove) {
                     dispatch(setBusy("Removing archive..."));
                     dispatch(setEditing(true));

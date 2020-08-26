@@ -257,7 +257,7 @@ class AddArchivePage extends PureComponent {
                     <InputGroup
                         leftIcon="lock"
                         disabled={disabled}
-                        placeholder={t("setup:vault-password-placeholder")}
+                        placeholder={t("setup:placeholder.vault-password")}
                         type="password"
                         onChange={event => this.handleUpdateForm("masterPassword", event)}
                         onKeyPress={event => (event.key === "Enter" ? handleSubmit(event) : true)}

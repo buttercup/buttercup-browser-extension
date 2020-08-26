@@ -2,6 +2,13 @@
     "name": "Name",
     "choose-vault-type": "Choose Vault Type",
     "choose-or-create-vault": "Choose or Create Vault",
-    "vault-password-placeholder": "Enter vault password...",
-    "vault-name-placeholder": "Enter vault name..."
+    "current-password": "Current Password",
+    "placeholder": {
+        "vault-password": "Enter vault password...",
+        "vault-current-password": "Enter current vault password...",
+        "vault-name": "Enter vault name...",
+        "vault-reset-token": "Enter password reset token...",
+        "vault-new-password": "Enter new password...",
+        "vault-new-password-again": "Enter new password again..."
+    }
 }

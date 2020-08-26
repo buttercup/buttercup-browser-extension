@@ -14,11 +14,27 @@
     "settings": "Settings",
     "add-vault": "Add Vault",
     "save-vault": "Save Vault",
+    "remove-vault": "Remove Vault",
+    "managing-vault": "Managing Vault",
+    "unlock-vault": "Unlock Vault",
     "unlock-vaults": "Unlock Vaults",
     "lock-all-vaults": "Lock All Vaults",
     "manage-vaults": "Manage Vaults",
     "master-password": "Master Password",
     "vaults": "Vaults",
     "back": "Back",
-    "search-for-entries": "Search for entries..."
+    "search-for-entries": "Search for entries...",
+    "remove": "Remove",
+    "lock": "Lock",
+    "unlock": "Unlock",
+    "cancel": "Cancel",
+    "change-password": "Change Password",
+    "notification": {
+        "success": {
+            "all-vaults-have-been-locked": "Alle Tresore wurden verschlossen."
+        },
+        "confirm": {
+            "remove-vault": "Are you sure that you want to remove the vault \"{{title}}\"?"
+        }
+    }
 }

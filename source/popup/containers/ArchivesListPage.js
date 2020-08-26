@@ -6,6 +6,7 @@ import { getArchives, getArchiveTitle } from "../../shared/selectors/archives.js
 import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 import { lockArchive, removeArchive } from "../library/messaging";
 import { getConfigKey } from "../../shared/selectors/app.js";
+import i18n from "../../shared/i18n";
 
 export default withTranslation()(
     withRouter(
@@ -27,7 +28,7 @@ export default withTranslation()(
                 onRemoveArchive: sourceID => (dispatch, getState) => {
                     const state = getState();
                     const title = getArchiveTitle(state, sourceID);
-                    const remove = window.confirm(`Are you sure that you want to remove the vault "${title}"?`);
+                    const remove = window.confirm(i18n.t("notification.confirm.remove-vault", { title }));
                     if (remove) {
                         return removeArchive(sourceID);
                     }

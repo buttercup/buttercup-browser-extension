@@ -309,7 +309,7 @@ class SaveCredentialsPage extends PureComponent {
                                     onClick={::this.handleSaveClicked}
                                     intent={Intent.PRIMARY}
                                 />
-                                <Button text="Cancel" onClick={::this.handleCancelClick} />
+                                <Button text={this.props.t("cancel")} onClick={::this.handleCancelClick} />
                             </ButtonRow>
                         </Otherwise>
                     </Choose>

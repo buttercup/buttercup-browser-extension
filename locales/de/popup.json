@@ -29,5 +29,9 @@
     "welcome": {
         "title": "Willkommen bei Buttercup",
         "description": "Benutze die Suchleiste, um Einträge deiner entsperrten Tresore zu suchen."
+    },
+    "no-vaults": {
+        "title": "Keine Tresore",
+        "description": "Hmm.. Es gibt noch keine Tresore."
     }
 }
