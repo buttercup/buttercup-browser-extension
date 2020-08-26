@@ -1,10 +1,7 @@
 {
     "name": "Name",
-    "choose-vault-type": "Choose Vault Type",
-    "choose-or-create-vault": "Choose or Create Vault",
-    "add-vault": "Add Vault",
-    "save-vault": "Save Vault",
-    "master-password": "Master Password",
-    "vault-password-placeholder": "Enter vault password...",
-    "vault-name-placeholder": "Enter vault name..."
+    "choose-vault-type": "Wähle eine Tresorart",
+    "choose-or-create-vault": "Wähle Tresor aus oder lege eine an",
+    "vault-password-placeholder": "Tresor-Passwort eingeben...",
+    "vault-name-placeholder": "Tresor-Name eingeben..."
 }

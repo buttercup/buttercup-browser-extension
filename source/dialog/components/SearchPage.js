@@ -34,7 +34,7 @@ class SearchPage extends PureComponent {
                             action={
                                 this.props.availableSources === 0 ? (
                                     <Button icon="unlock" onClick={::this.props.onUnlockAllArchives}>
-                                        Unlock Vaults
+                                        {this.props.t("unlock-vaults")}
                                     </Button>
                                 ) : null
                             }

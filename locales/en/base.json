@@ -11,5 +11,14 @@
     "week": "{{count}} week",
     "week_plural": "{{count}} weeks",
     "off": "off",
-    "settings": "Settings"
+    "settings": "Settings",
+    "add-vault": "Add Vault",
+    "save-vault": "Save Vault",
+    "unlock-vaults": "Unlock Vaults",
+    "lock-all-vaults": "Lock All Vaults",
+    "manage-vaults": "Manage Vaults",
+    "master-password": "Master Password",
+    "vaults": "Vaults",
+    "back": "Back",
+    "search-for-entries": "Search for entries..."
 }

@@ -11,5 +11,14 @@
     "week": "{{count}} Woche",
     "week_plural": "{{count}} Wochen",
     "off": "aus",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "add-vault": "Tresor hinzufügen",
+    "save-vault": "Tresor speichern",
+    "unlock-vaults": "Tresore entsperren",
+    "lock-all-vaults": "Alle Tresore sperren" ,
+    "manage-vaults": "Tresore verwalten",
+    "master-password": "Master Password",
+    "vaults": "Tresore",
+    "back": "Zurück",
+    "search-for-entries": "Nach Einträgen suchen..."
 }

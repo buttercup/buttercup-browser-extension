@@ -19,5 +19,15 @@
                 "never": "Niemals"
             }
         }
+    },
+    "headerbar": {
+        "about-buttercup": "About Buttercup",
+        "other-applications": "Other Applications",
+        "manage-disabled-login-prompts": "Manage Disabled Login Prompts",
+        "save-stored-logins": "Save Stored Logins"
+    },
+    "welcome": {
+        "title": "Welcome to Buttercup",
+        "description": "Use the search bar to find entries in your unlocked vaults."
     }
 }

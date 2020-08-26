@@ -1,23 +1,33 @@
 {
-  "settings": {
-      "dark-theme": "Dunkles Theme",
-      "light-theme": "Helles Theme",
-      "vaults-auto-unlock": {
-          "self": "Tresore automatisch entsperren",
-          "helper-text": "Die Tresore werden beim Start des Browsers automatisch entsperrt."
-      },
-      "vaults-auto-lock": {
-          "self": "Tresore automatisch sperren",
-          "helper-text": "Tresore nach der gewählten Zeit automatisch sperren."
-      },
-      "show-save-dialog": {
-          "self": "Show Save Dialog",
-          "helper-text": "Der Speichern-Dialog erscheint nach dem Absenden eines Formulars.",
-          "options": {
-              "always": "Always",
-              "unlocked": "When Vaults Unlocked",
-              "never": "Never"
-          }
-      }
-  }
+    "settings": {
+        "dark-theme": "Dunkles Design",
+        "light-theme": "Helles Design",
+        "vaults-auto-unlock": {
+            "self": "Tresore automatisch entsperren",
+            "helper-text": "Die Tresore werden beim Start des Browsers automatisch entsperrt."
+        },
+        "vaults-auto-lock": {
+            "self": "Tresore automatisch sperren",
+            "helper-text": "Tresore nach der gewählten Zeit automatisch sperren."
+        },
+        "show-save-dialog": {
+            "self": "Show Save Dialog",
+            "helper-text": "Der Speichern-Dialog erscheint nach dem Absenden eines Formulars.",
+            "options": {
+                "always": "Always",
+                "unlocked": "When Vaults Unlocked",
+                "never": "Never"
+            }
+        }
+    },
+    "headerbar": {
+        "about-buttercup": "Über Buttercup",
+        "other-applications": "Andere Anwendungen",
+        "manage-disabled-login-prompts": "Deaktivierte Logins verwalten",
+        "save-stored-logins": "Hinterlegte Logins speichern"
+    },
+    "welcome": {
+        "title": "Willkommen bei Buttercup",
+        "description": "Benutze die Suchleiste, um Einträge deiner entsperrten Tresore zu suchen."
+    }
 }

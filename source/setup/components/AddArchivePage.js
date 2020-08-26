@@ -186,7 +186,7 @@ class AddArchivePage extends PureComponent {
         ]);
         const fetchType = fetchTypeSwitch(this.props.selectedArchiveType);
         return (
-            <LayoutMain title={t("setup:add-vault")}>
+            <LayoutMain title={t("add-vault")}>
                 <H4>{t("setup:choose-vault-type")}</H4>
                 <ArchiveTypeChooser disabled={hasAuthenticated} />
                 <Spacer />
@@ -253,7 +253,7 @@ class AddArchivePage extends PureComponent {
                         />
                     </FormGroup>
                 </If>
-                <FormGroup full label={t("setup:master-password")} labelInfo="(required)" disabled={disabled}>
+                <FormGroup full label={t("master-password")} labelInfo="(required)" disabled={disabled}>
                     <InputGroup
                         leftIcon="lock"
                         disabled={disabled}
