@@ -1,5 +1,5 @@
 {
-    "types": ["base"],
+    "types": ["base", "setup", "popup"],
     "fallbackLng": "en",
     "languages": {
         "en": {

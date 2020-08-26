@@ -35,7 +35,7 @@ export default class EntriesPage extends PureComponent {
         const { config, t } = this.props;
         return (
             <Fragment>
-                <FormGroup label={t("popup.settings.dark-theme")}>
+                <FormGroup label={t("popup:settings.dark-theme")}>
                     <Switch
                         label={config.darkMode ? t("enabled") : t("disabled")}
                         checked={config.darkMode}
@@ -43,8 +43,8 @@ export default class EntriesPage extends PureComponent {
                     />
                 </FormGroup>
                 <FormGroup
-                    label={t("popup.settings.vaults-auto-unlock.self")}
-                    helperText={t("popup.settings.vaults-auto-unlock.helper-text")}
+                    label={t("popup:settings.vaults-auto-unlock.self")}
+                    helperText={t("popup:settings.vaults-auto-unlock.helper-text")}
                 >
                     <Switch
                         label={config.autoUnlockVaults ? t("enabled") : t("disabled")}
@@ -53,8 +53,8 @@ export default class EntriesPage extends PureComponent {
                     />
                 </FormGroup>
                 <FormGroup
-                    label={t("popup.settings.vaults-auto-lock.self")}
-                    helperText={t("popup.settings.vaults-auto-lock.helper-text")}
+                    label={t("popup:settings.vaults-auto-lock.self")}
+                    helperText={t("popup:settings.vaults-auto-lock.helper-text")}
                 >
                     <HTMLSelect
                         fill
@@ -77,16 +77,16 @@ export default class EntriesPage extends PureComponent {
                     />
                 </FormGroup>
                 <FormGroup
-                    label={t("popup.settings.show-save-dialog.self")}
-                    helperText={t("popup.settings.show-save-dialog.helper-text")}
+                    label={t("popup:settings.show-save-dialog.self")}
+                    helperText={t("popup:settings.show-save-dialog.helper-text")}
                 >
                     <HTMLSelect
                         fill
                         value={config.showSaveDialog}
                         options={[
-                            { label: t("popup.settings.show-save-dialog.options.always"), value: "always" },
-                            { label: t("popup.settings.show-save-dialog.options.unlocked"), value: "unlocked" },
-                            { label: t("popup.settings.show-save-dialog.options.never"), value: "never" },
+                            { label: t("popup:settings.show-save-dialog.options.always"), value: "always" },
+                            { label: t("popup:settings.show-save-dialog.options.unlocked"), value: "unlocked" },
+                            { label: t("popup:settings.show-save-dialog.options.never"), value: "never" },
                         ]}
                         onChange={event => this.handleConfigChange(event, "showSaveDialog")}
                     />

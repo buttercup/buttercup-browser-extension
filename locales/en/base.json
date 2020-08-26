@@ -11,38 +11,5 @@
     "week": "{{count}} week",
     "week_plural": "{{count}} weeks",
     "off": "off",
-    "settings": "Settings",
-    "setup": {
-        "name": "Name",
-        "choose-vault-type": "Choose Vault Type",
-        "choose-or-create-vault": "Choose or Create Vault",
-        "add-vault": "Add Vault",
-        "save-vault": "Save Vault",
-        "master-password": "Master Password",
-        "vault-password-placeholder": "Enter vault password...",
-        "vault-name-placeholder": "Enter vault name..."
-    },
-    "popup": {
-        "settings": {
-            "dark-theme": "Dark Theme",
-            "light-theme": "Light Theme",
-            "vaults-auto-unlock": {
-                "self": "Vaults Auto Unlock",
-                "helper-text": "Automatically unlock vaults when the browser starts."
-            },
-            "vaults-auto-lock": {
-                "self": "Vaults Auto Lock",
-                "helper-text": "Automatically lock vaults after the selected time."
-            },
-            "show-save-dialog": {
-                "self": "Show Save Dialog",
-                "helper-text": "Der Speichern-Dialog erscheint nach dem Absenden eines Formulars.",
-                "options": {
-                    "always": "Immer",
-                    "unlocked": "Wenn Tresor entsperrt ist",
-                    "never": "Niemals"
-                }
-            }
-        }
-    }
+    "settings": "Settings"
 }

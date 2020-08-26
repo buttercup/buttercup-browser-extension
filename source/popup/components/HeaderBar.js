@@ -81,7 +81,7 @@ class HeaderBar extends PureComponent {
                 <MenuItem text={`Buttercup v${version}`} icon="updated" disabled />
                 <MenuItem text={t("settings")} icon="cog" onClick={::this.props.onSettingsClick} />
                 <MenuItem
-                    text={darkMode ? t("popup.settings.light-theme") : t("popup.settings.dark-theme")}
+                    text={darkMode ? t("popup:settings.light-theme") : t("popup:settings.dark-theme")}
                     icon={darkMode ? "flash" : "moon"}
                     onClick={::this.props.onToggleDarkMode}
                 />

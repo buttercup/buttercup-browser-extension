@@ -3,25 +3,36 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import localesConfig from "../../../locales/config.json";
 
-const languages = {};
-Object.keys(localesConfig.languages).forEach((key, lang) => {
-    languages[key] = {};
-    languages[key].name = localesConfig.languages[key].name;
+const languages = Object.keys(localesConfig.languages).reduce(
+    (previous, currentLangKey) => ({
+        ...previous,
+        [currentLangKey]: {
+            name: localesConfig.languages[currentLangKey].name,
+            ...localesConfig.types.reduce(
+                (previousType, currentType) => ({
+                    ...previousType,
+                    [currentType]: require(`../../../locales/${currentLangKey}/${currentType}.json`),
+                }),
+                {}
+            ),
+        },
+    }),
+    {}
+);
 
-    localesConfig.types.forEach(type => {
-        languages[key][type] = require(`../../../locales/${key}/${type}.json`);
-    });
-});
-
-const resources = Object.keys(languages).reduce((accumulator, key) => {
-    accumulator[key] = {};
-
-    localesConfig.types.forEach(type => {
-        accumulator[key][type] = languages[key][type];
-    });
-
-    return accumulator;
-}, {});
+const resources = Object.keys(languages).reduce(
+    (previous, currentLangKey) => ({
+        ...previous,
+        [currentLangKey]: localesConfig.types.reduce(
+            (previousType, currentType) => ({
+                ...previousType,
+                [currentType]: languages[currentLangKey][currentType],
+            }),
+            {}
+        ),
+    }),
+    {}
+);
 
 i18n.use(initReactI18next).init({
     resources,
@@ -30,7 +41,7 @@ i18n.use(initReactI18next).init({
     react: {
         wait: false,
     },
-    ns: ["base"],
+    ns: localesConfig.types,
     defaultNS: "base",
     nsSeparator: ":",
     keySeparator: ".",
