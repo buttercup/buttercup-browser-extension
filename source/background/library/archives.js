@@ -1,9 +1,4 @@
-import {
-    Credentials,
-    VaultSource,
-    createEntryFacade,
-    createVaultFacade,
-} from "../../shared/library/buttercup.js";
+import { Credentials, VaultSource, createEntryFacade, createVaultFacade } from "../../shared/library/buttercup.js";
 import { getVaultManager } from "./buttercup.js";
 import { getState } from "../redux/index.js";
 import { getConfigKey } from "../../shared/selectors/app.js";

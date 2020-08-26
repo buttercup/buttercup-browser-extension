@@ -33,8 +33,8 @@ const BASE_CONFIG_DEFAULTS = {
     addFileHash: true,
     imageLoader: "file-loader",
 };
-const REACT_PACKAGES = Object.keys(devDependencies).filter((name) => /^react(-|$)/.test(name));
-const REDUX_PACKAGES = Object.keys(devDependencies).filter((name) => /^redux(-|$)/.test(name));
+const REACT_PACKAGES = Object.keys(devDependencies).filter(name => /^react(-|$)/.test(name));
+const REDUX_PACKAGES = Object.keys(devDependencies).filter(name => /^redux(-|$)/.test(name));
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
@@ -147,7 +147,7 @@ const backgroundConfig = Object.assign({}, getBaseConfig(), {
             patterns: [
                 {
                     from: MANIFEST,
-                    transform: (contents) => {
+                    transform: contents => {
                         const manifest = JSON.parse(contents.toString());
                         manifest.version = version;
                         return JSON.stringify(manifest, undefined, 4);

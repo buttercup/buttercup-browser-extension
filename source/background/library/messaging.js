@@ -1,9 +1,5 @@
 import { extractDomain } from "../../shared/library/domain.js";
-import {
-    consumeVaultFacade,
-    createEntryFacade,
-    createVaultFacade
-} from "../../shared/library/buttercup.js";
+import { consumeVaultFacade, createEntryFacade, createVaultFacade } from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import {
