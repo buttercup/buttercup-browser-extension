@@ -28,7 +28,10 @@
     "lock": "Sperren",
     "unlock": "Entsperren",
     "cancel": "Abbrechen",
+    "save": "Speichern",
     "change-password": "Passwort ändern",
+    "username": "Benutzername",
+    "password": "Passwort",
     "notification": {
         "success": {
             "all-vaults-have-been-locked": "All vaults have been locked."

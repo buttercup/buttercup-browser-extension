@@ -11,12 +11,12 @@
             "helper-text": "Tresore nach der gewählten Zeit automatisch sperren."
         },
         "show-save-dialog": {
-            "self": "Show Save Dialog",
+            "self": "Speichern-Dialog anzeigen",
             "helper-text": "Der Speichern-Dialog erscheint nach dem Absenden eines Formulars.",
             "options": {
-                "always": "Always",
-                "unlocked": "When Vaults Unlocked",
-                "never": "Never"
+                "always": "Immer",
+                "unlocked": "Wenn Tresore entsperrt",
+                "never": "Niemals"
             }
         }
     },

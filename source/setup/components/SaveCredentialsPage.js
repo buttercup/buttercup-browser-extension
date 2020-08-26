@@ -235,7 +235,7 @@ class SaveCredentialsPage extends PureComponent {
                                     value={this.state.title}
                                 />
                             </FormGroup>
-                            <FormGroup label="Username">
+                            <FormGroup label={this.props.t("username")}>
                                 <InputGroup
                                     leftIcon="user"
                                     placeholder="Enter username..."
@@ -243,7 +243,7 @@ class SaveCredentialsPage extends PureComponent {
                                     value={this.state.username}
                                 />
                             </FormGroup>
-                            <FormGroup label="Password">
+                            <FormGroup label={this.props.t("password")}>
                                 <ControlGroup>
                                     <InputGroup
                                         className={Classes.FILL}

@@ -12,11 +12,11 @@
         },
         "show-save-dialog": {
             "self": "Show Save Dialog",
-            "helper-text": "Der Speichern-Dialog erscheint nach dem Absenden eines Formulars.",
+            "helper-text": "Save dialog appears after submitting a form.",
             "options": {
-                "always": "Immer",
-                "unlocked": "Wenn Tresor entsperrt ist",
-                "never": "Niemals"
+                "always": "Always",
+                "unlocked": "When Vaults Unlocked",
+                "never": "Never"
             }
         }
     },

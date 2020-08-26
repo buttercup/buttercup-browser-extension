@@ -28,7 +28,10 @@
     "lock": "Lock",
     "unlock": "Unlock",
     "cancel": "Cancel",
+    "save": "Save",
     "change-password": "Change Password",
+    "username": "Username",
+    "password": "Password",
     "notification": {
         "success": {
             "all-vaults-have-been-locked": "Alle Tresore wurden verschlossen."

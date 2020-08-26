@@ -204,7 +204,11 @@ class VaultPage extends PureComponent {
                         zIndex={2}
                     >
                         <form onSubmit={::this.handlePasswordChangeSubmit}>
-                            <FormGroup disabled={disableForm} label="Current Password" labelFor="old-master-password">
+                            <FormGroup
+                                disabled={disableForm}
+                                label={this.props.t("setup:current-password")}
+                                labelFor="old-master-password"
+                            >
                                 <InputGroup
                                     id="old-master-password"
                                     type="password"
@@ -217,7 +221,7 @@ class VaultPage extends PureComponent {
                             <If condition={this.props.archiveType === "mybuttercup"}>
                                 <FormGroup
                                     disabled={disableForm}
-                                    label="Password Reset Token"
+                                    label={this.props.t("setup:password-token")}
                                     labelFor="password-token"
                                 >
                                     <InputGroup
@@ -230,7 +234,11 @@ class VaultPage extends PureComponent {
                                     />
                                 </FormGroup>
                             </If>
-                            <FormGroup disabled={disableForm} label="New Password" labelFor="new-master-password">
+                            <FormGroup
+                                disabled={disableForm}
+                                label={this.props.t("setup:new-master-password")}
+                                labelFor="new-master-password"
+                            >
                                 <InputGroup
                                     id="new-master-password"
                                     type="password"
@@ -242,7 +250,7 @@ class VaultPage extends PureComponent {
                             </FormGroup>
                             <FormGroup
                                 disabled={disableForm}
-                                label="New Password (confirm)"
+                                label={this.props.t("setup:new-master-password-2")}
                                 labelFor="new-master-password-2"
                             >
                                 <InputGroup

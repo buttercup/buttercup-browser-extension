@@ -3,6 +3,9 @@
     "choose-vault-type": "Choose Vault Type",
     "choose-or-create-vault": "Choose or Create Vault",
     "current-password": "Current Password",
+    "password-token": "Password Reset Token",
+    "new-master-password": "New Password",
+    "new-master-password-2": "New Password (confirm)",
     "placeholder": {
         "vault-password": "Enter vault password...",
         "vault-current-password": "Enter current vault password...",

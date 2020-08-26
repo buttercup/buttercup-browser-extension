@@ -47,13 +47,13 @@ class SaveNewCredentialsPage extends Component {
                     <Fragment>
                         <Button
                             fill
-                            text="Save"
+                            text={this.props.t("save")}
                             icon="floppy-disk"
                             onClick={::this.handleSaveClick}
                             intent={Intent.PRIMARY}
                         />
                         <Button small icon="disable" onClick={::this.handleDisableClick} />
-                        <Button fill text="Cancel" onClick={::this.handleCancelClick} />
+                        <Button fill text={this.props.t("cancel")} onClick={::this.handleCancelClick} />
                     </Fragment>
                 }
             >
