@@ -35,17 +35,10 @@ const EntryImageBackground = styled.div`
     flex: 0 0 auto;
     background-color: ${p => p.theme.backgroundColor};
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     border-radius: 3px;
-    padding: 3px;
     border: 1px solid ${p => p.theme.listItemHover};
-`;
-const EntryImage = styled.img`
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 2px;
 `;
 const EntryRow = styled.div`
     flex: 1;
@@ -68,8 +61,15 @@ const Details = styled.div`
     padding: 20px !important;
 `;
 const EntryIcon = styled(SiteIcon)`
-    width: 100%;
-    height: auto;
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
+    margin: 3px;
+    overflow: hidden;
+
+    > img {
+        width: 100%;
+        height: 100%;
+    }
 `;
 
 class SearchResult extends PureComponent {

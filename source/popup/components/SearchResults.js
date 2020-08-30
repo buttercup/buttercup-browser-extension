@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Button, NonIdealState } from "@blueprintjs/core";
 import Entries from "../../shared/components/Entries.js";
 
-const BUTTERCUP_LOGO = require("../../../resources/buttercup-standalone.png");
+import BUTTERCUP_LOGO from "../../../resources/buttercup-standalone.png";
 
 const Container = styled.div`
     flex: 1;

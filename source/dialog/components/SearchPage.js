@@ -6,7 +6,7 @@ import SearchBar from "../containers/SearchBar.js";
 import SearchResults from "../containers/SearchResults.js";
 import DialogFrame from "./DialogFrame.js";
 
-const BUTTERCUP_LOGO = require("../../../resources/buttercup-standalone.png");
+import BUTTERCUP_LOGO from "../../../resources/buttercup-standalone.png";
 
 class SearchPage extends PureComponent {
     static propTypes = {

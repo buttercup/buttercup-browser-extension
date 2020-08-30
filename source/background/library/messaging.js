@@ -1,4 +1,3 @@
-import VError from "verror";
 import { extractDomain } from "../../shared/library/domain.js";
 import {
     ENTRY_URL_TYPE_LOGIN,
@@ -17,6 +16,7 @@ import {
     generateEntryPath,
     getArchive,
     getEntry,
+    getFacades,
     getNameForSource,
     getSourceIDForVaultID,
     getSourcesInfo,
@@ -419,17 +419,22 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 async function processSearchResults([entryResults, sources]) {
+    const sourceIDs = {};
+    const sourceNames = {};
+    const vaultFacades = await getFacades();
     const results = await Promise.all(
         entryResults.map(async entryResult => {
-            const sourceID = await getSourceIDForVaultID(entryResult.vaultID);
-            const sourceName = await getNameForSource(sourceID);
-            const entry = await getEntry(sourceID, entryResult.id);
-            const facade = createEntryFacade(entry);
+            const sourceID = (sourceIDs[entryResult.vaultID] =
+                sourceIDs[entryResult.vaultID] || (await getSourceIDForVaultID(entryResult.vaultID)));
+            const sourceName = (sourceNames[entryResult.vaultID] =
+                sourceNames[entryResult.vaultID] || (await getNameForSource(sourceID)));
+            const vaultFacade = vaultFacades.find(facade => facade.sourceID === sourceID);
+            const entryFacade = vaultFacade.entries.find(e => e.id === entryResult.id);
             return {
                 title: entryResult.properties.title,
                 id: entryResult.id,
-                entryPath: generateEntryPath(entry),
-                facade,
+                entryPath: generateEntryPath(vaultFacade, entryResult.id),
+                facade: entryFacade,
                 sourceID,
                 sourceName,
                 url: entryResult.urls[0] || null,
