@@ -2,15 +2,15 @@
   "presets": [
     ["@babel/preset-env", {
       "targets": {
-        "chrome": 60,
-        "firefox": 60
+        "chrome": 80,
+        "firefox": 70
       }
     }],
     "@babel/preset-react"
   ],
   "plugins": [
     "jsx-control-statements",
-    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-proposal-function-bind"
   ]
