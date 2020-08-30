@@ -7,11 +7,16 @@ import Entry from "./Entry.js";
 import { List, AutoSizer } from "react-virtualized";
 
 class Entries extends PureComponent {
-    rowRenderer = ({ key, index, style }) => {
+    rowRenderer = ({ index, style }) => {
         const { entries, onSelectEntry, autoLoginEnabled = true } = this.props;
         return (
-            <div style={style} key={key}>
-                <Entry entry={entries[index]} onSelectEntry={onSelectEntry} autoLoginEnabled={autoLoginEnabled} />
+            <div style={style} key={entries[index].id}>
+                <Entry
+                    entry={entries[index]}
+                    icons={this.props.icons}
+                    onSelectEntry={onSelectEntry}
+                    autoLoginEnabled={autoLoginEnabled}
+                />
                 <Divider />
             </div>
         );
@@ -38,6 +43,7 @@ class Entries extends PureComponent {
 
 Entries.propTypes = {
     entries: EntriesShape,
+    icons: PropTypes.bool,
     sourcesUnlocked: PropTypes.number,
     autoLoginEnabled: PropTypes.bool,
     onSelectEntry: PropTypes.func.isRequired

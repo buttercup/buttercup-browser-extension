@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { InputGroup, FormGroup, Switch, HTMLSelect } from "@blueprintjs/core";
 import ms from "ms";
 
-export default class EntriesPage extends PureComponent {
+export default class SettingsPage extends PureComponent {
     static propTypes = {
         config: PropTypes.object,
         onUpdateConfigValue: PropTypes.func.isRequired
@@ -69,6 +69,21 @@ export default class EntriesPage extends PureComponent {
                             { label: "Never", value: "never" }
                         ]}
                         onChange={event => this.handleConfigChange(event, "showSaveDialog")}
+                    />
+                </FormGroup>
+                <FormGroup
+                    label="Dynamic Entry Icons"
+                    helperText="Fetch entry icons from their URLs/domains using an anonymous proxy."
+                >
+                    <HTMLSelect
+                        fill
+                        value={config.dynamicIcons}
+                        options={[
+                            { label: "", value: "" },
+                            { label: "Enabled", value: "enabled" },
+                            { label: "Disabled", value: "disabled" }
+                        ]}
+                        onChange={event => this.handleConfigChange(event, "dynamicIcons")}
                     />
                 </FormGroup>
             </Fragment>

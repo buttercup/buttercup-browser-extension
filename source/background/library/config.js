@@ -9,6 +9,7 @@ import { dispatch, getState } from "../redux/index.js";
 import { setConfig } from "../../shared/actions/app.js";
 import { getConfig, getConfigSource } from "../../shared/selectors/app.js";
 import log from "../../shared/library/log.js";
+import { checkDynamicIconSetting } from "./icons.js";
 
 const queue = new ChannelQueue();
 let lastConfigHash = "";
@@ -72,5 +73,6 @@ export function watchStorage(reduxStore, storageInstance = new BrowserStorageInt
                 debouncedLoadConfig();
             }
         });
+        checkDynamicIconSetting();
     });
 }

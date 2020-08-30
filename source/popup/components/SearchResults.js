@@ -18,6 +18,7 @@ const EntryShape = PropTypes.shape({
 
 class SearchResults extends PureComponent {
     static propTypes = {
+        dynamicIconsSetting: PropTypes.string.isRequired,
         entries: PropTypes.arrayOf(EntryShape),
         sourcesTotal: PropTypes.number.isRequired,
         sourcesUnlocked: PropTypes.number.isRequired,
@@ -34,6 +35,7 @@ class SearchResults extends PureComponent {
                         <Entries
                             autoLoginEnabled={true}
                             entries={this.props.entries}
+                            icons={this.props.dynamicIconsSetting === "enabled"}
                             onSelectEntry={this.props.onSelectEntry}
                             sourcesUnlocked={this.props.sourcesUnlocked}
                         />

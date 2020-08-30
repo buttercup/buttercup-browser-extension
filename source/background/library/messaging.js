@@ -378,6 +378,7 @@ function handleMessage(request, sender, sendResponse) {
                     value: request.value
                 })
             );
+            return false;
         }
         case "set-generated-password": {
             const { password } = request;
