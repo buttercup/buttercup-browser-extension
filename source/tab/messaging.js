@@ -104,7 +104,6 @@ export function startMessageListeners() {
 }
 
 function startPostMessageListener() {
-    postRobot.CONFIG.LOG_LEVEL = "error";
     postRobot.on("bcup-close-dialog", () => {
         hideInputDialog();
         hideSaveDialog();
