@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Button, NonIdealState } from "@blueprintjs/core";
 import Entries from "../../shared/components/Entries.js";
 
-const BUTTERCUP_LOGO = require("../../../resources/buttercup-standalone.png");
+import BUTTERCUP_LOGO from "../../../resources/buttercup-standalone.png";
 
 const Container = styled.div`
     flex: 1;
@@ -18,6 +18,7 @@ const EntryShape = PropTypes.shape({
 
 class SearchResults extends PureComponent {
     static propTypes = {
+        dynamicIconsSetting: PropTypes.string.isRequired,
         entries: PropTypes.arrayOf(EntryShape),
         sourcesTotal: PropTypes.number.isRequired,
         sourcesUnlocked: PropTypes.number.isRequired,
@@ -34,6 +35,7 @@ class SearchResults extends PureComponent {
                         <Entries
                             autoLoginEnabled={true}
                             entries={this.props.entries}
+                            icons={this.props.dynamicIconsSetting === "enabled"}
                             onSelectEntry={this.props.onSelectEntry}
                             sourcesUnlocked={this.props.sourcesUnlocked}
                         />

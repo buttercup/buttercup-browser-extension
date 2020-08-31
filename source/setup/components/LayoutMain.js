@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Colors, Divider } from "@blueprintjs/core";
 import styled from "styled-components";
 
-const BUTTERCUP_LOGO = require("../../../resources/buttercup-128.png");
+import BUTTERCUP_LOGO from "../../../resources/buttercup-128.png";
 
 const MainContent = styled.div`
     width: 100vw;

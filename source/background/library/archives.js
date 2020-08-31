@@ -214,15 +214,21 @@ export function checkUnlockPossibility() {
     });
 }
 
-export function generateEntryPath(entry) {
-    let group = entry.getGroup(),
-        entryPath = [group];
-    let parent;
-    while ((parent = group.getParentGroup()) !== null) {
-        entryPath.unshift(parent);
-        group = parent;
+export function generateEntryPath(vaultFacade, entryID) {
+    const entryPath = [];
+    let parentID = null;
+    while (parentID != "0") {
+        let group;
+        if (!parentID) {
+            group = vaultFacade.entries.find(e => e.id === entryID);
+            parentID = group.parentID;
+        } else {
+            group = vaultFacade.groups.find(g => g.id === parentID);
+            parentID = group.parentID;
+        }
+        entryPath.unshift(group.title);
     }
-    return entryPath.map(pathGroup => pathGroup.getTitle());
+    return entryPath;
 }
 
 export function getArchive(sourceID) {

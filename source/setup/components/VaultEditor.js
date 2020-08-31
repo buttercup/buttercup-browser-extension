@@ -19,6 +19,7 @@ const Loader = styled.div`
 class VaultEditor extends Component {
     static propTypes = {
         attachments: PropTypes.bool.isRequired,
+        dynamicIconsSetting: PropTypes.string.isRequired,
         fetchVaultFacade: PropTypes.func.isRequired,
         handlePreviewAttachmentError: PropTypes.func.isRequired,
         saveVaultFacade: PropTypes.func.isRequired,
@@ -56,6 +57,7 @@ class VaultEditor extends Component {
                     <VaultProvider
                         attachments={this.props.attachments}
                         attachmentPreviews={this.state.attachmentPreviews}
+                        icons={this.props.dynamicIconsSetting === "enabled"}
                         onAddAttachments={(entryID, files) =>
                             this.props.addAttachments(this.props.sourceID, entryID, files)
                         }

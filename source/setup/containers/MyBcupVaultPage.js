@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import delay from "yoctodelay";
-import VError from "verror";
+import Errlop from "errlop";
 import MyBcupVaultPage from "../components/MyBcupVaultPage.js";
 import { getArchiveState, getArchiveTitle } from "../../shared/selectors/archives.js";
 import { unlockArchive } from "../library/messaging.js";
@@ -32,7 +32,7 @@ export default connect(
                     dispatch(setEditing(false));
                     dispatch(unsetBusy());
                     console.error(err);
-                    const { hush } = VError.info(err);
+                    const { hush } = Layerr.info(err);
                     if (hush) {
                         notifyWarning("Authorisation failed", "The credentials were invalid - re-authenticating");
                     } else {

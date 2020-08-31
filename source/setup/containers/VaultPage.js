@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import delay from "yoctodelay";
-import VError from "verror";
+import { Layerr } from "layerr";
 import VaultPage from "../components/VaultPage.js";
 import { getArchiveAttachmentsSupport, getArchiveTitle, getArchiveType } from "../../shared/selectors/archives.js";
 import { changeSourcePassword, lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
@@ -107,7 +107,7 @@ export default connect(
                     dispatch(setEditing(false));
                     dispatch(unsetBusy());
                     console.error(err);
-                    const { hush } = VError.info(err);
+                    const { hush } = Layerr.info(err);
                     if (hush) {
                         notifyWarning("Authorisation failed", "The credentials were invalid - re-authenticating");
                     } else {

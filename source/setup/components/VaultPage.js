@@ -15,7 +15,7 @@ class VaultPage extends PureComponent {
     static propTypes = {
         attachments: PropTypes.bool.isRequired,
         archiveTitle: PropTypes.string.isRequired,
-        archiveType: PropTypes.string.isRequired,
+        archiveType: PropTypes.string,
         changePassword: PropTypes.func.isRequired,
         isEditing: PropTypes.bool.isRequired,
         onLockArchive: PropTypes.func.isRequired,

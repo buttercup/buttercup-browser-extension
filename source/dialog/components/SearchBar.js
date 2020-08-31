@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { InputGroup, Classes } from "@blueprintjs/core";
 
-const BUTTERCUP_ICON = require("../../../resources/buttercup-128.png");
-const SEARCH_ICON = require("../../../resources/search-icon.png");
+import BUTTERCUP_ICON from "../../../resources/buttercup-128.png";
+import SEARCH_ICON from "../../../resources/search-icon.png";
 
 const Container = styled.div`
     flex: 0 0 auto;

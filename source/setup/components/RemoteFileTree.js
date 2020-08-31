@@ -4,8 +4,9 @@ import styled from "styled-components";
 import joinPath from "path.join";
 import { Tree, Spinner, InputGroup, Colors } from "@blueprintjs/core";
 
+import BUTTERCUP_LOGO_SMALL from "../../../resources/buttercup-128.png";
+
 const BCUP_EXTENSION = /\.bcup$/i;
-const BUTTERCUP_LOGO_SMALL = require("../../../resources/buttercup-128.png");
 const NOOP = () => {};
 
 function LazyType(f) {

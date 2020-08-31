@@ -13,6 +13,7 @@ import {
 import { notifyError, notifySuccess } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import { arrayBufferToBase64, base64ToArrayBuffer } from "../../shared/library/buffer.js";
+import { getConfigKey } from "../../shared/selectors/app.js";
 
 async function convertAttachmentFiles(files) {
     const output = [];
@@ -29,6 +30,7 @@ async function convertAttachmentFiles(files) {
 
 export default connect(
     (state, ownProps) => ({
+        dynamicIconsSetting: getConfigKey(state, "dynamicIcons"),
         vault: getVaultFacade(state)
     }),
     {

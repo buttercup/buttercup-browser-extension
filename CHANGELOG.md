@@ -1,5 +1,18 @@
 # Buttercup browser extension changelog
 
+## v2.21.0
+_2020-08-30_
+
+ * **Buttercup Core v5**
+   * Improved performance
+   * Improved stability
+   * Future support for **Vault Format B**
+ * Dynamic icons for entries (optional)
+ * Reduced extension size (< 50% of the size of 2.20.2)
+ * Removed `Buffer` dependencies
+ * **Bugfix**:
+   * Search wouldn't work (no results)
+
 ## v2.20.2
 _2020-08-19_
 

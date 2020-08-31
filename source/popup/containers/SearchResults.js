@@ -1,12 +1,14 @@
 import { connect } from "react-redux";
 import SearchResults from "../components/SearchResults.js";
 import { getEntryResults } from "../../shared/selectors/searching.js";
+import { getConfigKey } from "../../shared/selectors/app.js";
 import { getTotalArchivesCount, getUnlockedArchivesCount } from "../../shared/selectors/archives.js";
 import { requestCredentialsOpening } from "../library/messaging.js";
 import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
 
 export default connect(
     (state, ownProps) => ({
+        dynamicIconsSetting: getConfigKey(state, "dynamicIcons"),
         entries: getEntryResults(state),
         sourcesTotal: getTotalArchivesCount(state),
         sourcesUnlocked: getUnlockedArchivesCount(state)
