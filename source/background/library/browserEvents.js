@@ -62,9 +62,7 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
             })
             .catch(err => {
                 log.error(
-                    `Failed automatically logging in with entry ${autoLogin.entryID} on source ${autoLogin.sourceID}: ${
-                        err.message
-                    }`
+                    `Failed automatically logging in with entry ${autoLogin.entryID} on source ${autoLogin.sourceID}: ${err.message}`
                 );
             });
     } else if (MYBUTTERCUP_CALLBACK_URL_REXP.test(url)) {

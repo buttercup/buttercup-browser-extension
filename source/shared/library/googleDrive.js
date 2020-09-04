@@ -10,8 +10,9 @@ export function googleDriveContentsToTree(allItems) {
         return {
             path: directory,
             name: basename(directory),
-            directories: (items || []).filter(item => item.type === "directory").map(
-                item =>
+            directories: (items || [])
+                .filter(item => item.type === "directory")
+                .map(item =>
                     allItems[item.filename]
                         ? buildItem(item.filename, allItems[item.filename])
                         : {
@@ -20,7 +21,7 @@ export function googleDriveContentsToTree(allItems) {
                               directories: [],
                               files: []
                           }
-            ),
+                ),
             files: (items || []).filter(item => item.type === "file").map(itemToFile)
         };
     };
@@ -28,13 +29,15 @@ export function googleDriveContentsToTree(allItems) {
 }
 
 export function groupContentsByDirectory(allItems) {
-    const contents = allItems.filter(item => item.type === "directory").reduce(
-        (index, nextItem) => ({
-            ...index,
-            [nextItem.filename]: allItems.filter(item => item.parent === nextItem.filename)
-        }),
-        {}
-    );
+    const contents = allItems
+        .filter(item => item.type === "directory")
+        .reduce(
+            (index, nextItem) => ({
+                ...index,
+                [nextItem.filename]: allItems.filter(item => item.parent === nextItem.filename)
+            }),
+            {}
+        );
     contents["/"] = allItems.filter(item => item.parent === "/");
     return contents;
 }

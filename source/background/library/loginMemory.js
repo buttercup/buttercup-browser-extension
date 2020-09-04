@@ -33,14 +33,13 @@ export function removeLogin(id) {
 }
 
 export function stopPromptForTab(tabID) {
-    __items = __items.map(
-        item =>
-            item.tabID === tabID
-                ? {
-                      ...item,
-                      prompt: false
-                  }
-                : item
+    __items = __items.map(item =>
+        item.tabID === tabID
+            ? {
+                  ...item,
+                  prompt: false
+              }
+            : item
     );
 }
 

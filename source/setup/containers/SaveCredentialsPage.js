@@ -22,11 +22,13 @@ function processGroups(groups) {
         const attributes = group.attributes || {};
         return attributes[Group.Attribute.Role] === "trash";
     };
-    return groups.filter(group => !groupIsTrash(group)).map(group => ({
-        id: group.id,
-        title: group.title,
-        groups: processGroups(group.groups || [])
-    }));
+    return groups
+        .filter(group => !groupIsTrash(group))
+        .map(group => ({
+            id: group.id,
+            title: group.title,
+            groups: processGroups(group.groups || [])
+        }));
 }
 
 function stringsAreSet(...strings) {

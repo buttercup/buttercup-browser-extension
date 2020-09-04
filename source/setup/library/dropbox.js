@@ -15,8 +15,9 @@ export function dropboxContentsToTree(allItems) {
         return {
             path: directory,
             name: basename(directory),
-            directories: (items || []).filter(item => item.type === "directory").map(
-                item =>
+            directories: (items || [])
+                .filter(item => item.type === "directory")
+                .map(item =>
                     allItems[item.filename]
                         ? buildItem(item.filename, allItems[item.filename])
                         : {
@@ -25,7 +26,7 @@ export function dropboxContentsToTree(allItems) {
                               directories: [],
                               files: []
                           }
-            ),
+                ),
             files: (items || []).filter(item => item.type === "file").map(itemToFile)
         };
     };
