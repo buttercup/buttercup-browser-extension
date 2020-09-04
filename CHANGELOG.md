@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v2.22.0
+_2020-09-04_
+
+ * Core group/entry lookup performance upgrades
+ * **Bugfix**:
+   * ([#370](https://github.com/buttercup/buttercup-browser-extension/issues/370)) Critical CPU/memory use after some time
+   * Entries not able to be moved from group to group
+
 ## v2.21.0
 _2020-08-30_
 
