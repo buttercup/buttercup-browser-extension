@@ -11,7 +11,6 @@ import VaultPage from "./containers/VaultPage.js";
 import LoadingModal from "./containers/LoadingModal.js";
 import SaveCredentialsPage from "./containers/SaveCredentialsPage.js";
 import AboutPage from "./components/AboutPage.js";
-import IconSettingsPage from "./components/IconSettingsPage.js";
 import UnlockAllArchivesPage from "./containers/UnlockAllArchivesPage.js";
 import MyBcupVaultPage from "./containers/MyBcupVaultPage.js";
 import DisabledLoginDomainsPage from "./components/DisabledLoginDomainsPage.js";
@@ -35,7 +34,6 @@ ReactDOM.render(
                 <Route path="/about" component={AboutPage} />
                 <Route path="/unlock" component={UnlockAllArchivesPage} />
                 <Route path="/settings/disabled-login-domains" component={DisabledLoginDomainsPage} />
-                <Route path="/settings/icons" component={IconSettingsPage} />
                 <LoadingModal />
             </App>
         </ConnectedRouter>

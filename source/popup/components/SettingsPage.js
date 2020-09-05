@@ -79,7 +79,6 @@ export default class SettingsPage extends PureComponent {
                         fill
                         value={config.dynamicIcons}
                         options={[
-                            { label: "", value: "" },
                             { label: "Enabled", value: "enabled" },
                             { label: "Disabled", value: "disabled" }
                         ]}
