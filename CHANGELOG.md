@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v2.23.0
+_2020-09-05_
+
+ * Dynamic icons defaults to **enabled**
+   * Removed dynamic icons setting popup page
+ * **Bugfix**:
+   * ([#366](https://github.com/buttercup/buttercup-browser-extension/issues/366)) Google Drive bad refresh-token method call
+
 ## v2.22.0
 _2020-09-04_
 
