@@ -64,7 +64,7 @@ export async function authenticateWithRefreshToken(accessToken, refreshToken) {
     dispatch(setAuthCode(null));
     dispatch(setAccessToken(null));
     const oauth2Client = getOAuthClient();
-    const results = await oauth2Client.refreshToken(refreshToken);
+    const results = await oauth2Client.refreshAccessToken(refreshToken);
     const { access_token: newAccessToken } = results.tokens;
     dispatch(setAccessToken(newAccessToken));
     return {
