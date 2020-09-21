@@ -15,7 +15,8 @@ const languageOptions = Object.keys(localesConfig.languages).reduce(
     ],
     []
 );
-export default class EntriesPage extends PureComponent {
+
+export default class SettingsPage extends PureComponent {
     static propTypes = {
         config: PropTypes.object,
         onUpdateConfigValue: PropTypes.func.isRequired,
@@ -97,6 +98,20 @@ export default class EntriesPage extends PureComponent {
                         value={config.language}
                         options={languageOptions}
                         onChange={event => this.handleConfigChange(event, "language")}
+                    />
+                </FormGroup>
+                <FormGroup
+                    label="Dynamic Entry Icons"
+                    helperText="Fetch entry icons from their URLs/domains using an anonymous proxy."
+                >
+                    <HTMLSelect
+                        fill
+                        value={config.dynamicIcons}
+                        options={[
+                            { label: "Enabled", value: "enabled" },
+                            { label: "Disabled", value: "disabled" },
+                        ]}
+                        onChange={event => this.handleConfigChange(event, "dynamicIcons")}
                     />
                 </FormGroup>
             </Fragment>

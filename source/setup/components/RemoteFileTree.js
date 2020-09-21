@@ -4,6 +4,8 @@ import styled from "styled-components";
 import joinPath from "path.join";
 import { Tree, Spinner, Colors } from "@blueprintjs/core";
 
+import BUTTERCUP_LOGO_SMALL from "../../../resources/buttercup-128.png";
+
 const BCUP_EXTENSION = /\.bcup$/i;
 const NOOP = () => {};
 

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { withTranslation } from "react-i18next";
-import VError from "verror";
+import { Layerr } from "layerr";
 import UnlockAllArchivesPage from "../components/UnlockAllArchivesPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
 import { unlockArchive } from "../library/messaging.js";
@@ -44,7 +44,7 @@ export default withTranslation()(
                     })
                     .catch(err => {
                         console.error(err);
-                        const { hush } = VError.info(err);
+                        const { hush } = Layerr.info(err);
                         if (hush) {
                             notifyWarning("Authorisation failed", "The credentials were invalid - re-authenticating");
                         } else {

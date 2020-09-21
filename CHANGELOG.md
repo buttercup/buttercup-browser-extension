@@ -1,5 +1,34 @@
 # Buttercup browser extension changelog
 
+## v2.23.0
+_2020-09-05_
+
+ * Dynamic icons defaults to **enabled**
+   * Removed dynamic icons setting popup page
+ * **Bugfix**:
+   * ([#366](https://github.com/buttercup/buttercup-browser-extension/issues/366)) Google Drive bad refresh-token method call
+
+## v2.22.0
+_2020-09-04_
+
+ * Core group/entry lookup performance upgrades
+ * **Bugfix**:
+   * ([#370](https://github.com/buttercup/buttercup-browser-extension/issues/370)) Critical CPU/memory use after some time
+   * Entries not able to be moved from group to group
+
+## v2.21.0
+_2020-08-30_
+
+ * **Buttercup Core v5**
+   * Improved performance
+   * Improved stability
+   * Future support for **Vault Format B**
+ * Dynamic icons for entries (optional)
+ * Reduced extension size (< 50% of the size of 2.20.2)
+ * Removed `Buffer` dependencies
+ * **Bugfix**:
+   * Search wouldn't work (no results)
+
 ## v2.20.2
 _2020-08-19_
 

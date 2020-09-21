@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { withTranslation } from "react-i18next";
 import { push } from "connected-react-router";
 import delay from "yoctodelay";
-import VError from "verror";
+import { Layerr } from "layerr";
 import VaultPage from "../components/VaultPage.js";
 import { getArchiveAttachmentsSupport, getArchiveTitle, getArchiveType } from "../../shared/selectors/archives.js";
 import { changeSourcePassword, lockArchive, removeArchive, unlockArchive } from "../library/messaging.js";
@@ -66,7 +66,7 @@ export default withTranslation()(
             onRemoveArchive: sourceID => (dispatch, getState) => {
                 const state = getState();
                 const title = getArchiveTitle(state, sourceID);
-                const remove = window.confirm(i18n.t("notification.confirm.remove-vault", { title }));
+                const remove = window.confirm(`Are you sure that you want to remove the archive '${title}'?`);
                 if (remove) {
                     dispatch(setBusy("Removing archive..."));
                     dispatch(setEditing(true));
@@ -110,7 +110,7 @@ export default withTranslation()(
                         dispatch(setEditing(false));
                         dispatch(unsetBusy());
                         console.error(err);
-                        const { hush } = VError.info(err);
+                        const { hush } = Layerr.info(err);
                         if (hush) {
                             notifyWarning("Authorisation failed", "The credentials were invalid - re-authenticating");
                         } else {

@@ -1,4 +1,4 @@
-import VError from "verror";
+import { Layerr } from "layerr";
 import log from "../../shared/library/log.js";
 
 export function addAttachments(sourceID, entryID, files) {
@@ -23,7 +23,7 @@ export function addNewEntry(sourceID, groupID, details) {
             if (resp && resp.ok) {
                 return resolve();
             }
-            const error = new VError(
+            const error = new Layerr(
                 {
                     info: { authFailure: resp.authFailure },
                 },
@@ -214,7 +214,7 @@ export function unlockArchive(sourceID, masterPassword) {
                 return resolve();
             }
             return reject(
-                new VError(
+                new Layerr(
                     {
                         info: { hush },
                     },

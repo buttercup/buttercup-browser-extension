@@ -62,7 +62,7 @@ export async function authenticateWithRefreshToken(accessToken, refreshToken) {
     dispatch(setAuthCode(null));
     dispatch(setAccessToken(null));
     const oauth2Client = getOAuthClient();
-    const results = await oauth2Client.refreshToken(refreshToken);
+    const results = await oauth2Client.refreshAccessToken(refreshToken);
     const { access_token: newAccessToken } = results.tokens;
     dispatch(setAccessToken(newAccessToken));
     return {
@@ -72,7 +72,7 @@ export async function authenticateWithRefreshToken(accessToken, refreshToken) {
 }
 
 async function exchangeAuthCodeForTokens(oauth2Client, authCode) {
-    const response = await oauth2Client.getToken(authCode);
+    const response = await oauth2Client.exchangeAuthCodeForToken(authCode);
     const { access_token: accessToken, refresh_token: refreshToken = null } = response.tokens;
     if (!accessToken) {
         throw new Error("Failed getting access token");

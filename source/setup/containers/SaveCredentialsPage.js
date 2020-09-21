@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { withTranslation } from "react-i18next";
-import VError from "verror";
+import { Layerr } from "layerr";
 import { Group } from "../../shared/library/buttercup.js";
 import SaveCredentialsPage from "../components/SaveCredentialsPage.js";
 import { getArchives } from "../../shared/selectors/archives.js";
@@ -71,7 +71,7 @@ export default withTranslation()(
                             })
                             .catch(err => {
                                 dispatch(unsetBusy());
-                                const { authFailure = false } = VError.info(err);
+                                const { authFailure = false } = Layerr.info(err);
                                 if (authFailure) {
                                     notifyWarning(
                                         "Authorisation failed",
@@ -85,14 +85,9 @@ export default withTranslation()(
                     } else {
                         notifyWarning(
                             "Unable to save credentials",
-                            "The username, password and title fields must be entered."
+                            "Both the archive source and target group must be chosen."
                         );
                     }
-                } else {
-                    notifyWarning(
-                        "Unable to save credentials",
-                        "Both the archive source and target group must be chosen."
-                    );
                 }
             },
         }

@@ -16,7 +16,8 @@ import {
 import { SiteIcon } from "@buttercup/ui";
 import { EntryShape } from "../prop-types/entry.js";
 import { writeToClipboard } from "../library/browser.js";
-import { FIELD_VALUE_TYPE_PASSWORD } from "../library/buttercup.js";
+import { EntryPropertyValueType, EntryURLType, fieldsToProperties, getEntryURLs } from "../library/buttercup.js";
+import { extractDomain } from "../library/domain.js";
 
 const Container = styled.div`
     border-radius: 3px;
@@ -35,17 +36,10 @@ const EntryImageBackground = styled.div`
     flex: 0 0 auto;
     background-color: ${p => p.theme.backgroundColor};
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     border-radius: 3px;
-    padding: 3px;
     border: 1px solid ${p => p.theme.listItemHover};
-`;
-const EntryImage = styled.img`
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 2px;
 `;
 const EntryRow = styled.div`
     flex: 1;
@@ -68,19 +62,28 @@ const Details = styled.div`
     padding: 20px !important;
 `;
 const EntryIcon = styled(SiteIcon)`
-    width: 100%;
-    height: auto;
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
+    margin: 3px;
+    overflow: hidden;
+
+    > img {
+        width: 100%;
+        height: 100%;
+    }
 `;
 
 class SearchResult extends PureComponent {
     static propTypes = {
-        onSelectEntry: PropTypes.func.isRequired,
         autoLoginEnabled: PropTypes.bool,
         entry: EntryShape,
+        icons: PropTypes.bool,
+        onSelectEntry: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         autoLoginEnabled: true,
+        icons: false,
     };
 
     state = {
@@ -127,7 +130,7 @@ class SearchResult extends PureComponent {
         return (
             <Details className={Classes.DIALOG_BODY}>
                 <For each="field" of={fields}>
-                    <With isSecret={field.valueType === FIELD_VALUE_TYPE_PASSWORD}>
+                    <With isSecret={field.valueType === EntryPropertyValueType.Password}>
                         <FormGroup key={field.property} label={field.title}>
                             <ControlGroup>
                                 <InputGroup
@@ -156,6 +159,17 @@ class SearchResult extends PureComponent {
         const { entry, onSelectEntry } = this.props;
         const { isDetailsVisible } = this.state;
         const { title, sourceName, entryPath } = entry;
+        let iconDomain = null;
+        if (this.props.icons === true) {
+            const entryProps = fieldsToProperties(entry.facade.fields);
+            const [url] = [
+                ...getEntryURLs(entryProps, EntryURLType.Icon),
+                ...getEntryURLs(entryProps, EntryURLType.Any),
+            ];
+            if (url) {
+                iconDomain = extractDomain(url);
+            }
+        }
         const path = (
             <Fragment>
                 {sourceName} ›{" "}
@@ -170,7 +184,7 @@ class SearchResult extends PureComponent {
                 <Container isActive={isDetailsVisible}>
                     <EntryRow>
                         <EntryImageBackground>
-                            <EntryIcon domain={null} />
+                            <EntryIcon domain={iconDomain} />
                         </EntryImageBackground>
                         <DetailRow onClick={() => onSelectEntry(entry.sourceID, entry.id)}>
                             <Title title={title}>

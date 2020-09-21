@@ -6,7 +6,9 @@ import { getExtensionURL } from "../shared/library/extension.js";
 import { itemIsIgnored } from "./disable.js";
 import { onElementDismount } from "./dismount.js";
 
-import BUTTON_BACKGROUND_IMAGE from "../../resources/content-button-background.png";
+import BUTTON_BACKGROUND_IMAGE_RES from "../../resources/content-button-background.png";
+
+const BUTTON_BACKGROUND_IMAGE = getExtensionURL(BUTTON_BACKGROUND_IMAGE_RES);
 
 export function attachLaunchButton(input) {
     if (input.dataset.bcup === "attached" || itemIsIgnored(input)) {

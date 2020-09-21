@@ -59,7 +59,7 @@ export function watchInputs() {
         [...document.body.getElementsByTagName("input")].forEach(input => trackInput(input));
     }, 200);
     // watch for new ones
-    __stopTracking = mucus(document.body, function (changes) {
+    __stopTracking = mucus(document.body, function(changes) {
         searchInputs();
     });
     // check existing
