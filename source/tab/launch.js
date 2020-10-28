@@ -60,7 +60,7 @@ export function attachLaunchButton(input) {
                 left: `${left}px`,
                 top: `${top}px`,
                 borderRadius: `0 ${borderTopLeftRadius} ${borderBottomLeftRadius} 0`,
-                background: `rgb(0, 183, 172) url(${getExtensionURL(BUTTON_BACKGROUND_IMAGE)})`,
+                background: `rgb(0, 183, 172) url(${BUTTON_BACKGROUND_IMAGE})`,
                 backgroundSize: `${Math.ceil(buttonWidth / 2)}px`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "50% 50%",
