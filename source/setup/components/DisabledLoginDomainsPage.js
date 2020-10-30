@@ -7,7 +7,7 @@ import LayoutMain from "./LayoutMain.js";
 import {
     disableDomainForSavePrompt,
     getDisabledSavePromptDomains,
-    removeDisabledDomainForSavePrompt,
+    removeDisabledDomainForSavePrompt
 } from "../library/messaging.js";
 
 const Table = styled.table`

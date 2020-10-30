@@ -21,7 +21,7 @@ export default withTranslation()(
             attachments: getArchiveAttachmentsSupport(state, ownProps.match.params.id),
             isEditing: isEditing(state),
             state: ownProps.match.params.state,
-            sourceID: ownProps.match.params.id,
+            sourceID: ownProps.match.params.id
         }),
         {
             changePassword: (sourceID, oldPassword, newPassword, meta, onSuccessCB) => dispatch => {
@@ -117,7 +117,7 @@ export default withTranslation()(
                             notifyError("Failed unlocking archive", `Unable to unlock archive: ${err.message}`);
                         }
                     });
-            },
+            }
         }
     )(VaultPage)
 );

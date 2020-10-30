@@ -4,14 +4,14 @@ const INITIAL = {
     tabID: null,
     sourceID: null,
     entryID: null,
-    setTime: null,
+    setTime: null
 };
 
 export default function autoLoginReducer(state = INITIAL, action = {}) {
     switch (action.type) {
         case AUTOLOGIN_CLEAR_DETAILS:
             return {
-                ...INITIAL,
+                ...INITIAL
             };
         case AUTOLOGIN_SET_DETAILS: {
             const { entryID, sourceID, tabID } = action.payload;
@@ -20,7 +20,7 @@ export default function autoLoginReducer(state = INITIAL, action = {}) {
                 entryID,
                 sourceID,
                 tabID,
-                setTime: Date.now(),
+                setTime: Date.now()
             };
         }
 

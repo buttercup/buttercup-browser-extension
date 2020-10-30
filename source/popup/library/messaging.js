@@ -48,7 +48,7 @@ export function requestCredentialsOpening(sourceID, entryID, autoLogin = false) 
         type: "open-credentials-url",
         sourceID,
         entryID,
-        autoLogin,
+        autoLogin
     });
 }
 

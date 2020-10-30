@@ -9,7 +9,7 @@ import {
     deleteAttachment,
     getArchiveFacade,
     getAttachmentData,
-    getAttachmentDetails,
+    getAttachmentDetails
 } from "../library/messaging.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
@@ -23,7 +23,7 @@ async function convertAttachmentFiles(files) {
         output.push({
             data,
             name: file.name,
-            type: file.type || "application/octet-stream",
+            type: file.type || "application/octet-stream"
         });
     }
     return output;
@@ -33,7 +33,7 @@ export default withTranslation()(
     connect(
         (state, ownProps) => ({
             dynamicIconsSetting: getConfigKey(state, "dynamicIcons"),
-            vault: getVaultFacade(state),
+            vault: getVaultFacade(state)
         }),
         {
             addAttachments: (sourceID, entryID, files) => dispatch => {
@@ -77,7 +77,7 @@ export default withTranslation()(
                 dispatch(setBusy("Downloading attachment"));
                 Promise.all([
                     getAttachmentData(sourceID, entryID, attachmentID),
-                    getAttachmentDetails(sourceID, entryID, attachmentID),
+                    getAttachmentDetails(sourceID, entryID, attachmentID)
                 ])
                     .then(([base64, attachmentDetails]) => {
                         const attachmentData = base64ToArrayBuffer(base64);
@@ -135,7 +135,7 @@ export default withTranslation()(
                         );
                         dispatch(unsetBusy());
                     });
-            },
+            }
         }
     )(VaultEditor)
 );

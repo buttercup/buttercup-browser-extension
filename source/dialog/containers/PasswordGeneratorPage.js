@@ -7,6 +7,6 @@ export default withTranslation()(
     connect((state, ownProps) => ({}), {
         onSetPassword: password => () => {
             setGeneratedPassword(password);
-        },
+        }
     })(PasswordGeneratorPage)
 );

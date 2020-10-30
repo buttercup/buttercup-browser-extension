@@ -3,7 +3,7 @@ import { Toaster, Position, Text, Classes } from "@blueprintjs/core";
 
 export default Toaster.create({
     className: "buttercup-notifier",
-    position: Position.RIGHT_TOP,
+    position: Position.RIGHT_TOP
 });
 
 export const Message = ({ title, message }) => (

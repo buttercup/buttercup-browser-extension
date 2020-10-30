@@ -37,7 +37,7 @@ export function stopPromptForTab(tabID) {
         item.tabID === tabID
             ? {
                   ...item,
-                  prompt: false,
+                  prompt: false
               }
             : item
     );
@@ -50,7 +50,7 @@ export function updateLogin(targetID, tabID, credentials) {
             id: targetID,
             tabID,
             prompt: true,
-            timestamp: credentials.timestamp || Date.now(),
+            timestamp: credentials.timestamp || Date.now()
         };
         __items.unshift(item);
     }

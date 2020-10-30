@@ -27,7 +27,7 @@ const createAppReducer = history =>
             releaseNotes,
             remoteFiles,
             searching,
-            vault,
+            vault
         })
     );
 

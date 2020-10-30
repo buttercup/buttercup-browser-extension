@@ -27,7 +27,7 @@ const LoadingText = styled.div`
 class LoadingModal extends PureComponent {
     static propTypes = {
         busy: PropTypes.bool.isRequired,
-        busyMessage: PropTypes.string.isRequired,
+        busyMessage: PropTypes.string.isRequired
     };
 
     render() {

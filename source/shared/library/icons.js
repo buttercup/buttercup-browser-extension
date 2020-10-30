@@ -12,30 +12,30 @@ export const VAULT_TYPES = [
         type: "mybuttercup",
         title: "My Buttercup",
         image: VAULT_TYPE_IMAGE_MYBUTTERCUP,
-        invertOnDarkMode: false,
+        invertOnDarkMode: false
     },
     {
         type: "dropbox",
         title: "Dropbox",
         image: VAULT_TYPE_IMAGE_DROPBOX,
-        invertOnDarkMode: true,
+        invertOnDarkMode: true
     },
     {
         type: "googledrive",
         title: "Google Drive",
         image: VAULT_TYPE_IMAGE_GOOGLEDRIVE,
-        invertOnDarkMode: false,
+        invertOnDarkMode: false
     },
     {
         type: "webdav",
         title: "WebDAV",
         image: VAULT_TYPE_IMAGE_WEBDAV,
-        invertOnDarkMode: true,
+        invertOnDarkMode: true
     },
     {
         type: "localfile",
         title: "Local File",
         image: VAULT_TYPE_IMAGE_LOCALFILE,
-        invertOnDarkMode: true,
-    },
+        invertOnDarkMode: true
+    }
 ];

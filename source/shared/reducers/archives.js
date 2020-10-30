@@ -3,7 +3,7 @@ import { ARCHIVES_SET, ARCHIVES_SET_COUNT, ARCHIVES_UNLOCKED_SET_COUNT } from ".
 const INITIAL = {
     archives: [],
     unlocked: 0,
-    total: 0,
+    total: 0
 };
 
 export default function archivesReducer(state = INITIAL, action = {}) {
@@ -11,17 +11,17 @@ export default function archivesReducer(state = INITIAL, action = {}) {
         case ARCHIVES_SET:
             return {
                 ...state,
-                archives: [...action.payload],
+                archives: [...action.payload]
             };
         case ARCHIVES_SET_COUNT:
             return {
                 ...state,
-                total: action.payload,
+                total: action.payload
             };
         case ARCHIVES_UNLOCKED_SET_COUNT:
             return {
                 ...state,
-                unlocked: action.payload,
+                unlocked: action.payload
             };
 
         default:

@@ -10,11 +10,11 @@ import { getEntry } from "./archives.js";
 import { setAuthToken as setDropboxAuthToken } from "../../shared/actions/dropbox.js";
 import {
     getTokens as getMyButtercupTokens,
-    processNewVaultDetails as processMyButtercupVaultDetails,
+    processNewVaultDetails as processMyButtercupVaultDetails
 } from "./myButtercup.js";
 import {
     setAccessToken as setMyButtercupAccessToken,
-    setRefreshToken as setMyButtercupRefreshToken,
+    setRefreshToken as setMyButtercupRefreshToken
 } from "../../shared/actions/myButtercup.js";
 
 const AUTOLOGIN_EXPIRY = ms("45s");
@@ -57,7 +57,7 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
                 sendTabMessage(tabID, {
                     type: "auto-login",
                     username: entry.getProperty("username"),
-                    password: entry.getProperty("password"),
+                    password: entry.getProperty("password")
                 });
             })
             .catch(err => {

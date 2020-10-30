@@ -55,19 +55,19 @@ const VaultLabel = styled.div`
 const ArchiveShape = PropTypes.shape({
     name: PropTypes.string.isRequired,
     sourceID: PropTypes.string.isRequired,
-    state: PropTypes.string.isRequired,
+    state: PropTypes.string.isRequired
 });
 
 class UnlockAllArchivesPage extends Component {
     static propTypes = {
         archives: PropTypes.arrayOf(ArchiveShape).isRequired,
         darkMode: PropTypes.bool.isRequired,
-        onUnlockArchive: PropTypes.func.isRequired,
+        onUnlockArchive: PropTypes.func.isRequired
     };
 
     state = {
         masterPasswords: {},
-        unlocking: [],
+        unlocking: []
     };
 
     componentDidMount() {
@@ -107,7 +107,7 @@ class UnlockAllArchivesPage extends Component {
         this.setState({ unlocking: [...this.state.unlocking, sourceID] }, () => {
             this.props.onUnlockArchive(sourceID, this.state.masterPasswords[sourceID]).then(unlocked => {
                 this.setState({
-                    unlocking: this.state.unlocking.filter(id => id !== sourceID),
+                    unlocking: this.state.unlocking.filter(id => id !== sourceID)
                 });
             });
         });
@@ -117,8 +117,8 @@ class UnlockAllArchivesPage extends Component {
         this.setState({
             masterPasswords: {
                 ...this.state.masterPasswords,
-                [sourceID]: event.target.value,
-            },
+                [sourceID]: event.target.value
+            }
         });
     }
 

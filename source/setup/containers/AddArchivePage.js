@@ -11,7 +11,7 @@ import {
     getSelectedFilename,
     isConnected,
     isConnecting,
-    selectedFileNeedsCreation,
+    selectedFileNeedsCreation
 } from "../selectors/addArchive.js";
 import { getDirectoryContents } from "../selectors/remoteFiles.js";
 import {
@@ -22,7 +22,7 @@ import {
     setConnecting,
     setLocalAuthKey,
     setLocalAuthStatus,
-    setSelectedArchiveType,
+    setSelectedArchiveType
 } from "../actions/addArchive.js";
 import { connectWebDAV } from "../library/remote.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
@@ -31,12 +31,12 @@ import {
     addGoogleDriveArchive,
     addLocalArchive,
     addMyButtercupArchives,
-    addWebDAVArchive,
+    addWebDAVArchive
 } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import {
     setAuthID as setGoogleDriveAuthID,
-    setAccessToken as setGoogleDriveAccessToken,
+    setAccessToken as setGoogleDriveAccessToken
 } from "../../shared/actions/googleDrive.js";
 import { setAuthID as setDropboxAuthID } from "../../shared/actions/dropbox.js";
 import { getAuthID as getDropboxAuthID, getAuthToken as getDropboxAuthToken } from "../../shared/selectors/dropbox.js";
@@ -44,7 +44,7 @@ import { performAuthentication as performDropboxAuthentication } from "../librar
 import {
     getAuthID as getGoogleDriveAuthID,
     getAccessToken as getGoogleDriveAccessToken,
-    getRefreshToken as getGoogleDriveRefeshToken,
+    getRefreshToken as getGoogleDriveRefeshToken
 } from "../../shared/selectors/googleDrive";
 import { performAuthentication as performMyButtercupAuthentication } from "../library/myButtercup.js";
 import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButtercup.js";
@@ -53,13 +53,13 @@ import {
     getAccessToken as getMyButtercupAccessToken,
     getName as getMyButtercupName,
     getRefreshToken as getMyButtercupRefreshToken,
-    getVaultID as getMyButtercupVaultID,
+    getVaultID as getMyButtercupVaultID
 } from "../../shared/selectors/myButtercup.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
     createNewClient as createLocalClient,
     receiveAuthKey as receiveLocalKey,
-    requestConnection as requestLocalConnection,
+    requestConnection as requestLocalConnection
 } from "../library/localFile.js";
 import { authenticateGoogleDrive } from "../library/messaging.js";
 
@@ -80,7 +80,7 @@ export default withTranslation()(
             myButtercupRefreshToken: getMyButtercupRefreshToken(state),
             selectedArchiveType: getSelectedArchiveType(state),
             selectedFilename: getSelectedFilename(state),
-            selectedFilenameNeedsCreation: selectedFileNeedsCreation(state),
+            selectedFilenameNeedsCreation: selectedFileNeedsCreation(state)
         }),
         {
             onAuthenticateDesktop: code => dispatch => {
@@ -163,7 +163,7 @@ export default withTranslation()(
                             const containingDirectory = dirname(remoteFilename);
                             const putOptions = {
                                 contents: "\n",
-                                name: basename(remoteFilename),
+                                name: basename(remoteFilename)
                             };
                             if (containingDirectory !== "/") {
                                 const upperContainer = dirname(containingDirectory);
@@ -345,7 +345,7 @@ export default withTranslation()(
             },
             onSelectRemotePath: filename => dispatch => {
                 dispatch(selectRemoteFile(filename));
-            },
+            }
         }
     )(AddArchivePage)
 );

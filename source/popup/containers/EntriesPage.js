@@ -12,6 +12,6 @@ export default withTranslation()(
             } else {
                 clearSearchResults();
             }
-        },
+        }
     })(EntriesPage)
 );

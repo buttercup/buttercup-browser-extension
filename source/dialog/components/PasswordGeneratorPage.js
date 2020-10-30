@@ -25,7 +25,7 @@ const Generator = styled(GeneratorUserInterface)`
 
 class PasswordGeneratorPage extends Component {
     static propTypes = {
-        onSetPassword: PropTypes.func.isRequired,
+        onSetPassword: PropTypes.func.isRequired
     };
 
     render() {

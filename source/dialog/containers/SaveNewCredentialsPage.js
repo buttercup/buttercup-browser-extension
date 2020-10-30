@@ -19,6 +19,6 @@ export default withTranslation()(
         openSaveForm: () => () => {
             openURL(getExtensionURL("setup.html#/save-new-credentials"));
             closeDialog();
-        },
+        }
     })(SaveNewCredentialsPage)
 );

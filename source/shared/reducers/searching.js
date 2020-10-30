@@ -2,7 +2,7 @@ import { SEARCH_SET_ENTRY_RESULTS, SEARCH_SET_SOURCES_COUNT } from "../actions/t
 
 const INITIAL = {
     entryResults: [],
-    sourcesCount: 0,
+    sourcesCount: 0
 };
 
 export default function searchingReducer(state = INITIAL, action = {}) {
@@ -10,12 +10,12 @@ export default function searchingReducer(state = INITIAL, action = {}) {
         case SEARCH_SET_ENTRY_RESULTS:
             return {
                 ...state,
-                entryResults: [...action.payload],
+                entryResults: [...action.payload]
             };
         case SEARCH_SET_SOURCES_COUNT:
             return {
                 ...state,
-                sourcesCount: action.payload,
+                sourcesCount: action.payload
             };
 
         default:

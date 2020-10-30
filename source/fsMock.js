@@ -4,5 +4,5 @@ module.exports = {
     },
     writeFile: function(filename, data, callback) {
         throw new Error("Not implemented: writeFile");
-    },
+    }
 };

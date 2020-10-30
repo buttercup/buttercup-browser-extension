@@ -11,11 +11,11 @@ const languages = Object.keys(localesConfig.languages).reduce(
             ...localesConfig.types.reduce(
                 (previousType, currentType) => ({
                     ...previousType,
-                    [currentType]: require(`../../../locales/${currentLangKey}/${currentType}.json`),
+                    [currentType]: require(`../../../locales/${currentLangKey}/${currentType}.json`)
                 }),
                 {}
-            ),
-        },
+            )
+        }
     }),
     {}
 );
@@ -26,10 +26,10 @@ const resources = Object.keys(languages).reduce(
         [currentLangKey]: localesConfig.types.reduce(
             (previousType, currentType) => ({
                 ...previousType,
-                [currentType]: languages[currentLangKey][currentType],
+                [currentType]: languages[currentLangKey][currentType]
             }),
             {}
-        ),
+        )
     }),
     {}
 );
@@ -39,7 +39,7 @@ i18n.use(initReactI18next).init({
     lng: "en",
     fallbackLng: localesConfig.fallbackLng,
     react: {
-        wait: false,
+        wait: false
     },
     ns: localesConfig.types,
     defaultNS: "base",
@@ -50,7 +50,7 @@ i18n.use(initReactI18next).init({
     debug: false,
     saveMissingTo: "all",
     saveMissing: false,
-    returnEmptyString: false,
+    returnEmptyString: false
 });
 
 export default i18n;

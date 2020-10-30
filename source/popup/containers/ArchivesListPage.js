@@ -13,7 +13,7 @@ export default withTranslation()(
         connect(
             (state, ownProps) => ({
                 archives: getArchives(state),
-                darkMode: getConfigKey(state, "darkMode"),
+                darkMode: getConfigKey(state, "darkMode")
             }),
             {
                 onArchiveClick: (archiveID, state) => () => {
@@ -32,7 +32,7 @@ export default withTranslation()(
                     if (remove) {
                         return removeArchive(sourceID);
                     }
-                },
+                }
             }
         )(ArchivesListPage)
     )

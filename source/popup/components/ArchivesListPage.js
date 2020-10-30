@@ -16,7 +16,7 @@ import {
     Popover,
     Menu,
     MenuItem,
-    Position,
+    Position
 } from "@blueprintjs/core";
 import { ArchivesShape } from "../../shared/prop-types/archive.js";
 import { VAULT_TYPES } from "../../shared/library/icons.js";
@@ -59,24 +59,24 @@ class ArchivesListPage extends PureComponent {
         onArchiveClick: PropTypes.func.isRequired,
         onAddArchiveClick: PropTypes.func.isRequired,
         onLockArchive: PropTypes.func.isRequired,
-        onRemoveArchive: PropTypes.func.isRequired,
+        onRemoveArchive: PropTypes.func.isRequired
     };
 
     state = {
         lockingAll: false,
-        lockedSuccessfully: false,
+        lockedSuccessfully: false
     };
 
     handleLockArchives() {
         this.setState(state => ({
             ...state,
-            lockingAll: true,
+            lockingAll: true
         }));
         lockAllArchives()
             .then(() => {
                 this.setState(state => ({
                     ...state,
-                    lockedSuccessfully: true,
+                    lockedSuccessfully: true
                 }));
                 setTimeout(() => this.props.history.goBack(), 2500);
             })

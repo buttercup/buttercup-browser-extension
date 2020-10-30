@@ -13,7 +13,7 @@ export default withTranslation()(
             dynamicIconsSetting: getConfigKey(state, "dynamicIcons"),
             entries: getEntryResults(state),
             sourcesTotal: getTotalArchivesCount(state),
-            sourcesUnlocked: getUnlockedArchivesCount(state),
+            sourcesUnlocked: getUnlockedArchivesCount(state)
         }),
         {
             onAddVault: () => () => {
@@ -24,7 +24,7 @@ export default withTranslation()(
             },
             onUnlockAllArchives: () => () => {
                 createNewTab(getExtensionURL("setup.html#/unlock"));
-            },
+            }
         }
     )(SearchResults)
 );

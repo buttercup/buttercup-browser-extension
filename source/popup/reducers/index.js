@@ -11,7 +11,7 @@ const appReducer = history =>
             app,
             archives,
             router: popupRouting(history),
-            searching,
+            searching
         })
     );
 

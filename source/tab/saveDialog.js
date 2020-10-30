@@ -12,10 +12,10 @@ function createDialog() {
     const frame = el("iframe", {
         style: {
             width: "100%",
-            height: "100%",
+            height: "100%"
         },
         src: dialogURL,
-        frameBorder: "0",
+        frameBorder: "0"
     });
     return el(
         "div",
@@ -28,8 +28,8 @@ function createDialog() {
                 position: "absolute",
                 top: "16px",
                 right: "16px",
-                zIndex: 9999999,
-            },
+                zIndex: 9999999
+            }
         },
         frame
     );

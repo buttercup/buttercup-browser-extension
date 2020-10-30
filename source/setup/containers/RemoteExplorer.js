@@ -9,7 +9,7 @@ import { webdavContentsToTree } from "../library/webdav.js";
 import { dropboxContentsToTree } from "../library/dropbox.js";
 import {
     googleDriveContentsToTree,
-    groupContentsByDirectory as groupGoogleDriveContentsByDirectory,
+    groupContentsByDirectory as groupGoogleDriveContentsByDirectory
 } from "../../shared/library/googleDrive.js";
 import { getAllDirectoryContents, getDirectoryContents, getDirectoriesLoading } from "../selectors/remoteFiles.js";
 import { getLocalDirectoryContents, localContentsToTree } from "../library/localFile.js";
@@ -58,7 +58,7 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
     dispatch(
         setDirectoryLoading({
             directory,
-            isLoading: true,
+            isLoading: true
         })
     );
     log.info(`Fetching remote contents for path: ${directory}`);
@@ -72,7 +72,7 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
                     dispatch(
                         setDirectoryContents({
                             directory: subDir,
-                            contents: dirIndex[subDir],
+                            contents: dirIndex[subDir]
                         })
                     );
                 });
@@ -80,14 +80,14 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
                 dispatch(
                     setDirectoryContents({
                         directory,
-                        contents,
+                        contents
                     })
                 );
             }
             dispatch(
                 setDirectoryLoading({
                     directory,
-                    isLoading: false,
+                    isLoading: false
                 })
             );
         })
@@ -101,7 +101,7 @@ function fetchRemoteDirectory(dispatch, directory, fetchType) {
             dispatch(
                 setDirectoryLoading({
                     directory,
-                    isLoading: false,
+                    isLoading: false
                 })
             );
         });
@@ -111,7 +111,7 @@ export default withTranslation()(
     connect(
         (state, ownProps) => ({
             directoriesLoading: getDirectoriesLoading(state),
-            rootDirectory: contentsToTree(getAllDirectoryContents(state), ownProps.fetchType),
+            rootDirectory: contentsToTree(getAllDirectoryContents(state), ownProps.fetchType)
         }),
         {
             onOpenDirectory: (directory, fetchType) => (dispatch, getState) => {
@@ -123,7 +123,7 @@ export default withTranslation()(
             },
             onReady: fetchType => dispatch => {
                 fetchRemoteDirectory(dispatch, "/", fetchType);
-            },
+            }
         }
     )(RemoteExplorer)
 );

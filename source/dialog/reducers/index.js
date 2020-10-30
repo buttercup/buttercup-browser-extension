@@ -12,7 +12,7 @@ const appReducer = history =>
             archives: emptyReducer,
             router: dialogRouting(history),
             dropbox: emptyReducer,
-            searching,
+            searching
         })
     );
 

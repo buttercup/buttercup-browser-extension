@@ -14,7 +14,7 @@ export default withTranslation()(
             (state, ownProps) => ({
                 archives: getArchives(state),
                 darkMode: getConfigKey(state, "darkMode"),
-                unsavedLogins: getUnsavedLoginsCount(state),
+                unsavedLogins: getUnsavedLoginsCount(state)
             }),
             {
                 onAboutClick: () => () => {
@@ -51,7 +51,7 @@ export default withTranslation()(
                 },
                 onVaultsClick: () => dispatch => {
                     dispatch(push("/vaults"));
-                },
+                }
             }
         )(HeaderBar)
     )

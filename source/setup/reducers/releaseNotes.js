@@ -1,7 +1,7 @@
 import { RELEASE_NOTES_SET } from "../actions/types.js";
 
 const INITIAL = {
-    notes: null,
+    notes: null
 };
 
 export default function releaseNotesReducer(state = INITIAL, action = {}) {
@@ -9,7 +9,7 @@ export default function releaseNotesReducer(state = INITIAL, action = {}) {
         case RELEASE_NOTES_SET:
             return {
                 ...state,
-                notes: action.payload,
+                notes: action.payload
             };
 
         default:

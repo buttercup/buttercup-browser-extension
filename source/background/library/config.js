@@ -32,7 +32,7 @@ function loadConfigFromStorage(storageInstance) {
             dispatch(
                 setConfig({
                     config,
-                    source: "storage",
+                    source: "storage"
                 })
             );
         });

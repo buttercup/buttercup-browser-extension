@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
     dropbox,
     googleDrive,
     myButtercup,
-    searching,
+    searching
 });
 
 export default rootReducer;

@@ -8,7 +8,7 @@ import {
     addNewEntry,
     getArchivesGroupTree,
     getLastUsedCredentials,
-    removeSavedCredentials,
+    removeSavedCredentials
 } from "../library/messaging.js";
 import { notifyError, notifySuccess, notifyWarning } from "../library/notify.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
@@ -28,7 +28,7 @@ function processGroups(groups) {
         .map(group => ({
             id: group.id,
             title: group.title,
-            groups: processGroups(group.groups || []),
+            groups: processGroups(group.groups || [])
         }));
 }
 
@@ -39,7 +39,7 @@ function stringsAreSet(...strings) {
 export default withTranslation()(
     connect(
         (state, ownProps) => ({
-            archives: processArchives(state),
+            archives: processArchives(state)
         }),
         {
             cancel: () => () => {
@@ -89,7 +89,7 @@ export default withTranslation()(
                         );
                     }
                 }
-            },
+            }
         }
     )(SaveCredentialsPage)
 );

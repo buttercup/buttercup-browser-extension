@@ -5,7 +5,7 @@ import {
     MYBUTTERCUP_SET_AUTH_ID,
     MYBUTTERCUP_SET_NAME,
     MYBUTTERCUP_SET_REFRESH_TOKEN,
-    MYBUTTERCUP_SET_VAULT_ID,
+    MYBUTTERCUP_SET_VAULT_ID
 } from "./types.js";
 
 export const clearMyButtercupState = createAction(MYBUTTERCUP_CLEAR_STATE);

@@ -23,7 +23,7 @@ export function getLocalDirectoryContents(directory, client = getClient()) {
                 filename: join(directory, item.name),
                 basename: item.name,
                 type: item.type,
-                size: -1,
+                size: -1
             }));
             resolve(results);
         });
@@ -33,7 +33,7 @@ export function getLocalDirectoryContents(directory, client = getClient()) {
 export function localContentsToTree(allItems) {
     const itemToFile = item => ({
         path: item.filename,
-        name: item.basename,
+        name: item.basename
     });
     const buildItem = (directory, items) => {
         return {
@@ -48,10 +48,10 @@ export function localContentsToTree(allItems) {
                               path: item.filename,
                               name: basename(item.filename),
                               directories: [],
-                              files: [],
+                              files: []
                           }
                 ),
-            files: (items || []).filter(item => item.type === "file").map(itemToFile),
+            files: (items || []).filter(item => item.type === "file").map(itemToFile)
         };
     };
     return buildItem("/", allItems["/"]);

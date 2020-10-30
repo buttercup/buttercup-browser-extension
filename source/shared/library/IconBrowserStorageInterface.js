@@ -48,8 +48,8 @@ export default class IconBrowserStorageInterface extends StorageInterface {
                 {
                     [storedKey]: JSON.stringify({
                         ts: getTimestamp(),
-                        icon: iconData,
-                    }),
+                        icon: iconData
+                    })
                 },
                 resolve
             );

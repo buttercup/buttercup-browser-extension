@@ -7,7 +7,7 @@ export default withTranslation()(
     connect(
         (state, ownProps) => ({
             busy: shouldShowBusyModal(state),
-            busyMessage: getBusyMessage(state),
+            busyMessage: getBusyMessage(state)
         }),
         {}
     )(LoadingModal)

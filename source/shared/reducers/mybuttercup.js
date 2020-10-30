@@ -4,7 +4,7 @@ import {
     MYBUTTERCUP_SET_AUTH_ID,
     MYBUTTERCUP_SET_NAME,
     MYBUTTERCUP_SET_REFRESH_TOKEN,
-    MYBUTTERCUP_SET_VAULT_ID,
+    MYBUTTERCUP_SET_VAULT_ID
 } from "../actions/types.js";
 
 const INITIAL = {
@@ -12,7 +12,7 @@ const INITIAL = {
     authenticationID: null,
     name: null,
     refreshToken: null,
-    vaultID: null,
+    vaultID: null
 };
 
 export default function myButtercupReducer(state = INITIAL, action = {}) {
@@ -23,32 +23,32 @@ export default function myButtercupReducer(state = INITIAL, action = {}) {
                 accessToken: null,
                 authenticationID: null,
                 refreshToken: null,
-                vaultID: null,
+                vaultID: null
             };
         case MYBUTTERCUP_SET_AUTH_ID:
             return {
                 ...state,
-                authenticationID: action.payload,
+                authenticationID: action.payload
             };
         case MYBUTTERCUP_SET_ACCESS_TOKEN:
             return {
                 ...state,
-                accessToken: action.payload,
+                accessToken: action.payload
             };
         case MYBUTTERCUP_SET_REFRESH_TOKEN:
             return {
                 ...state,
-                refreshToken: action.payload,
+                refreshToken: action.payload
             };
         case MYBUTTERCUP_SET_VAULT_ID:
             return {
                 ...state,
-                vaultID: action.payload,
+                vaultID: action.payload
             };
         case MYBUTTERCUP_SET_NAME:
             return {
                 ...state,
-                name: action.payload,
+                name: action.payload
             };
         default:
             return state;

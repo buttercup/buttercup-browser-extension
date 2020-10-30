@@ -13,7 +13,7 @@ function optionsToIndex(options) {
                 // assume regex
                 return key.test(incoming);
             },
-            value,
+            value
         ]);
     } else if (typeof options === "object") {
         return Object.keys(options).map(key => [value => value === key, options[key]]);

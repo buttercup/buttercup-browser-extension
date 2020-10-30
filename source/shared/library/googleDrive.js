@@ -4,7 +4,7 @@ export function googleDriveContentsToTree(allItems) {
     const itemToFile = item => ({
         path: item.filename,
         name: item.basename,
-        key: item.key || item.filename,
+        key: item.key || item.filename
     });
     const buildItem = (directory, items) => {
         return {
@@ -19,10 +19,10 @@ export function googleDriveContentsToTree(allItems) {
                               path: item.filename,
                               name: basename(item.filename),
                               directories: [],
-                              files: [],
+                              files: []
                           }
                 ),
-            files: (items || []).filter(item => item.type === "file").map(itemToFile),
+            files: (items || []).filter(item => item.type === "file").map(itemToFile)
         };
     };
     return buildItem("/", allItems["/"]);
@@ -34,7 +34,7 @@ export function groupContentsByDirectory(allItems) {
         .reduce(
             (index, nextItem) => ({
                 ...index,
-                [nextItem.filename]: allItems.filter(item => item.parent === nextItem.filename),
+                [nextItem.filename]: allItems.filter(item => item.parent === nextItem.filename)
             }),
             {}
         );

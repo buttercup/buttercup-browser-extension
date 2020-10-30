@@ -15,7 +15,7 @@ export async function attemptVaultIDMatch(vaultID) {
         window.top.postMessage(
             `bcup_ext:${JSON.stringify({
                 type: "vault-match",
-                result: "found",
+                result: "found"
             })}`,
             "*"
         );
@@ -23,7 +23,7 @@ export async function attemptVaultIDMatch(vaultID) {
         window.top.postMessage(
             `bcup_ext:${JSON.stringify({
                 type: "vault-match",
-                result: "none",
+                result: "none"
             })}`,
             "*"
         );
@@ -41,10 +41,10 @@ function buildMyButtercupFrame(container) {
     const frame = el("iframe", {
         style: {
             width: "100%",
-            height: "100%",
+            height: "100%"
         },
         src: getExtensionURL(`setup.html#/mybuttercup-vault/${__matchedVaultData.id}`),
-        frameBorder: "0",
+        frameBorder: "0"
     });
     mount(container, frame);
     container.dataset.filled = "true";
@@ -75,14 +75,14 @@ export function watchForRegistrationPossibility() {
     window.addEventListener("message", handleWindowMessageResponse, false);
     window.top.postMessage(
         `bcup_ext:${JSON.stringify({
-            type: "get-vault-id",
+            type: "get-vault-id"
         })}`,
         "*"
     );
     window.top.postMessage(
         `bcup_ext:${JSON.stringify({
             type: "set-extension-setup-url",
-            url: chrome.runtime.getURL("/setup.html"),
+            url: chrome.runtime.getURL("/setup.html")
         })}`,
         "*"
     );

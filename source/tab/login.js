@@ -35,7 +35,7 @@ export function onIdentifiedTarget(callback) {
         remove: () => {
             clearInterval(checkInterval);
             locatedForms.splice(0, locatedForms.length);
-        },
+        }
     };
 }
 

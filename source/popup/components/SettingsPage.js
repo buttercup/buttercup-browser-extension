@@ -10,8 +10,8 @@ const languageOptions = Object.keys(localesConfig.languages).reduce(
         ...before,
         {
             value,
-            label: localesConfig.languages[value].name,
-        },
+            label: localesConfig.languages[value].name
+        }
     ],
     []
 );
@@ -19,7 +19,7 @@ const languageOptions = Object.keys(localesConfig.languages).reduce(
 export default class SettingsPage extends PureComponent {
     static propTypes = {
         config: PropTypes.object,
-        onUpdateConfigValue: PropTypes.func.isRequired,
+        onUpdateConfigValue: PropTypes.func.isRequired
     };
 
     handleConfigChange(event, configKey) {
@@ -72,7 +72,7 @@ export default class SettingsPage extends PureComponent {
                             { label: t("day", { count: 1 }), value: ms("1d") },
                             { label: t("day", { count: 2 }), value: ms("2d") },
                             { label: t("week", { count: 1 }), value: ms("1w") },
-                            { label: t("off"), value: "off" },
+                            { label: t("off"), value: "off" }
                         ]}
                         onChange={event => this.handleConfigChange(event, "autoLockVaults")}
                     />
@@ -87,7 +87,7 @@ export default class SettingsPage extends PureComponent {
                         options={[
                             { label: t("popup:settings.show-save-dialog.options.always"), value: "always" },
                             { label: t("popup:settings.show-save-dialog.options.unlocked"), value: "unlocked" },
-                            { label: t("popup:settings.show-save-dialog.options.never"), value: "never" },
+                            { label: t("popup:settings.show-save-dialog.options.never"), value: "never" }
                         ]}
                         onChange={event => this.handleConfigChange(event, "showSaveDialog")}
                     />
@@ -109,7 +109,7 @@ export default class SettingsPage extends PureComponent {
                         value={config.dynamicIcons}
                         options={[
                             { label: "Enabled", value: "enabled" },
-                            { label: "Disabled", value: "disabled" },
+                            { label: "Disabled", value: "disabled" }
                         ]}
                         onChange={event => this.handleConfigChange(event, "dynamicIcons")}
                     />

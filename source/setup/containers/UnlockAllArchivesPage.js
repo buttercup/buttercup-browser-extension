@@ -17,7 +17,7 @@ function getArchivesArray(state) {
             name: source.name,
             sourceID: source.id,
             state: source.state,
-            type: source.type,
+            type: source.type
         }));
 }
 
@@ -25,7 +25,7 @@ export default withTranslation()(
     connect(
         (state, ownProps) => ({
             archives: getArchivesArray(state),
-            darkMode: getConfigKey(state, "darkMode"),
+            darkMode: getConfigKey(state, "darkMode")
         }),
         {
             onUnlockArchive: (sourceID, masterPassword) => (dispatch, getState) => {
@@ -55,7 +55,7 @@ export default withTranslation()(
                         }
                         return false;
                     });
-            },
+            }
         }
     )(UnlockAllArchivesPage)
 );

@@ -7,7 +7,7 @@ import { fetchReleaseNotes } from "../library/releaseNotes.js";
 export default withTranslation()(
     connect(
         (state, ownProps) => ({
-            releaseNotes: getReleaseNotes(state),
+            releaseNotes: getReleaseNotes(state)
         }),
         {
             onReady: () => (dispatch, getState) => {
@@ -15,7 +15,7 @@ export default withTranslation()(
                 if (!releaseNotes) {
                     fetchReleaseNotes();
                 }
-            },
+            }
         }
     )(ReleaseNotes)
 );

@@ -25,11 +25,11 @@ class ArchiveTypeChooser extends PureComponent {
         disabled: PropTypes.bool.isRequired,
         darkMode: PropTypes.bool,
         selectedArchiveType: PropTypes.string,
-        onSelectArchiveType: PropTypes.func.isRequired,
+        onSelectArchiveType: PropTypes.func.isRequired
     };
 
     static defaultProps = {
-        disabled: false,
+        disabled: false
     };
 
     handleArchiveTypeSelection(providerType) {

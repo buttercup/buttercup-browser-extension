@@ -8,7 +8,7 @@ export default withTranslation()(
     withRouter(
         connect((state, ownProps) => ({
             darkMode: getConfigKey(state, "darkMode"),
-            language: getConfigKey(state, "language"),
+            language: getConfigKey(state, "language")
         }))(App)
     )
 );

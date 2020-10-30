@@ -9,13 +9,13 @@ export default withTranslation()(
     connect(
         (state, ownProps) => ({
             entries: getEntryResults(state),
-            sourcesUnlocked: getSourcesCount(state),
+            sourcesUnlocked: getSourcesCount(state)
         }),
         {
             onEnterDetailsRequest: (sourceID, entryID, signIn = false) => () => {
                 sendCredentialsToTab(sourceID, entryID, signIn);
                 closeDialog();
-            },
+            }
         }
     )(SearchResults)
 );

@@ -36,7 +36,7 @@ export function createArchiveManager() {
             autoUpdate: true,
             autoUpdateDelay: ms("2m"),
             cacheStorage: new BrowserStorageInterface(getNonSyncStorage()),
-            sourceStorage: new BrowserStorageInterface(getSyncStorage()),
+            sourceStorage: new BrowserStorageInterface(getSyncStorage())
         });
         attachArchiveManagerListeners(vm);
         vm.initialise();
@@ -63,7 +63,7 @@ function describeSource(source) {
         name: source.name,
         state: source.status,
         type: source.type,
-        attachments,
+        attachments
     };
 }
 

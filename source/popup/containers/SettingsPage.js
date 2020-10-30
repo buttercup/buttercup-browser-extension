@@ -7,12 +7,12 @@ import { setConfig } from "../../shared/library/messaging.js";
 export default withTranslation()(
     connect(
         (state, ownProps) => ({
-            config: getConfig(state),
+            config: getConfig(state)
         }),
         {
             onUpdateConfigValue: (key, value) => () => {
                 setConfig(key, value);
-            },
+            }
         }
     )(SettingsPage)
 );

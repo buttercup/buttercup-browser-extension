@@ -5,7 +5,7 @@ import {
     APP_SET_CONFIG,
     APP_SET_CONFIG_VALUE,
     APP_SET_USER_ACTIVITY,
-    APP_SET_UNSAVED_LOGINS_COUNT,
+    APP_SET_UNSAVED_LOGINS_COUNT
 } from "./types.js";
 
 export const setBusy = createAction(APP_SET_BUSY);

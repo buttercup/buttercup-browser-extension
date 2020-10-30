@@ -13,7 +13,7 @@ const Container = styled.div`
 const EntryShape = PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    url: PropTypes.string,
+    url: PropTypes.string
 });
 
 class SearchResults extends PureComponent {
@@ -24,7 +24,7 @@ class SearchResults extends PureComponent {
         sourcesUnlocked: PropTypes.number.isRequired,
         onAddVault: PropTypes.func.isRequired,
         onSelectEntry: PropTypes.func.isRequired,
-        onUnlockAllArchives: PropTypes.func.isRequired,
+        onUnlockAllArchives: PropTypes.func.isRequired
     };
 
     render() {

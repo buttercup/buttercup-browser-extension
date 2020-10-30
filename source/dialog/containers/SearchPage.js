@@ -9,7 +9,7 @@ import { createNewTab, getExtensionURL } from "../../shared/library/extension.js
 export default withTranslation()(
     connect(
         (state, ownProps) => ({
-            availableSources: getSourcesCount(state),
+            availableSources: getSourcesCount(state)
         }),
         {
             onPrepareFirstResults: () => () => {
@@ -21,7 +21,7 @@ export default withTranslation()(
             },
             onUnlockAllArchives: () => () => {
                 createNewTab(getExtensionURL("setup.html#/unlock"));
-            },
+            }
         }
     )(SearchPage)
 );

@@ -35,11 +35,11 @@ const SearchInput = styled.input`
 
 class SearchBar extends Component {
     static propTypes = {
-        onSearchTermChange: PropTypes.func.isRequired,
+        onSearchTermChange: PropTypes.func.isRequired
     };
 
     state = {
-        searchTerm: "",
+        searchTerm: ""
     };
 
     componentDidMount() {
@@ -51,7 +51,7 @@ class SearchBar extends Component {
     handleSearchTermChange(event) {
         const value = event.target.value;
         this.setState({
-            searchTerm: value,
+            searchTerm: value
         });
         this.props.onSearchTermChange(value);
     }

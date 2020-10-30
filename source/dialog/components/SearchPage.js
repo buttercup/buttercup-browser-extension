@@ -11,7 +11,7 @@ class SearchPage extends PureComponent {
     static propTypes = {
         availableSources: PropTypes.number.isRequired,
         onPrepareFirstResults: PropTypes.func.isRequired,
-        onUnlockAllArchives: PropTypes.func.isRequired,
+        onUnlockAllArchives: PropTypes.func.isRequired
     };
 
     componentDidMount() {

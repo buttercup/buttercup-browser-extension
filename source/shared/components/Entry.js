@@ -11,7 +11,7 @@ import {
     FormGroup,
     InputGroup,
     ControlGroup,
-    Dialog,
+    Dialog
 } from "@blueprintjs/core";
 import { SiteIcon } from "@buttercup/ui";
 import { EntryShape } from "../prop-types/entry.js";
@@ -78,17 +78,17 @@ class SearchResult extends PureComponent {
         autoLoginEnabled: PropTypes.bool,
         entry: EntryShape,
         icons: PropTypes.bool,
-        onSelectEntry: PropTypes.func.isRequired,
+        onSelectEntry: PropTypes.func.isRequired
     };
 
     static defaultProps = {
         autoLoginEnabled: true,
-        icons: false,
+        icons: false
     };
 
     state = {
         isDetailsVisible: false,
-        uncovered: [],
+        uncovered: []
     };
 
     handleCopyToClipboard(property, facade = true) {
@@ -110,14 +110,14 @@ class SearchResult extends PureComponent {
             ...state,
             uncovered: state.uncovered.includes(property)
                 ? state.uncovered.filter(prop => prop !== property)
-                : [...state.uncovered, property],
+                : [...state.uncovered, property]
         }));
     }
 
     toggleDetails() {
         this.setState(state => ({
             ...state,
-            isDetailsVisible: !state.isDetailsVisible,
+            isDetailsVisible: !state.isDetailsVisible
         }));
     }
 
@@ -164,7 +164,7 @@ class SearchResult extends PureComponent {
             const entryProps = fieldsToProperties(entry.facade.fields);
             const [url] = [
                 ...getEntryURLs(entryProps, EntryURLType.Icon),
-                ...getEntryURLs(entryProps, EntryURLType.Any),
+                ...getEntryURLs(entryProps, EntryURLType.Any)
             ];
             if (url) {
                 iconDomain = extractDomain(url);
@@ -221,7 +221,7 @@ class SearchResult extends PureComponent {
                                 margin: "1rem",
                                 height: "calc(100vh - 2rem)",
                                 width: "calc(100vw - 2rem)",
-                                paddingBottom: "10px",
+                                paddingBottom: "10px"
                             }}
                         >
                             {this.renderEntryDetails()}

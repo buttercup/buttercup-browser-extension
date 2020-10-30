@@ -15,7 +15,7 @@ export default withTranslation()(
             archiveTitle: getArchiveTitle(state, ownProps.match.params.id),
             isEditing: isEditing(state),
             state: getArchiveState(state, ownProps.match.params.id),
-            sourceID: ownProps.match.params.id,
+            sourceID: ownProps.match.params.id
         }),
         {
             onUnlockArchive: (sourceID, masterPassword) => dispatch => {
@@ -39,7 +39,7 @@ export default withTranslation()(
                             notifyError("Failed unlocking vault", `Unable to unlock archive: ${err.message}`);
                         }
                     });
-            },
+            }
         }
     )(MyBcupVaultPage)
 );
