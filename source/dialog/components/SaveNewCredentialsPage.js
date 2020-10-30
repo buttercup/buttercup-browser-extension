@@ -42,7 +42,7 @@ class SaveNewCredentialsPage extends Component {
     render() {
         return (
             <InPagePopupBody
-                title="Save Login Details?"
+                title={this.props.t("dialog:save-prompt.save-login-details")}
                 footer={
                     <Fragment>
                         <Button
