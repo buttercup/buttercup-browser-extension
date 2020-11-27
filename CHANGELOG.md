@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.23.1
+_2020-11-27_
+
+ * **Bugfix**:
+   * ([#368](https://github.com/buttercup/buttercup-browser-extension/issues/368)) Popup / Dialog menus very slow to open (performance bugfix for search)
+
 ## v2.23.0
 _2020-09-05_
 
