@@ -1,11 +1,5 @@
 import { extractDomain } from "../../shared/library/domain.js";
-import {
-    ENTRY_URL_TYPE_LOGIN,
-    consumeVaultFacade,
-    createEntryFacade,
-    createVaultFacade,
-    getEntryURLs
-} from "../../shared/library/buttercup.js";
+import { consumeVaultFacade, createVaultFacade } from "../../shared/library/buttercup.js";
 import { dispatch, getState } from "../redux/index.js";
 import log from "../../shared/library/log.js";
 import {
@@ -15,8 +9,6 @@ import {
     changeVaultPassword,
     generateEntryPath,
     getArchive,
-    getEntry,
-    getFacades,
     getNameForSource,
     getSourceIDForVaultID,
     getSourcesInfo,
@@ -38,7 +30,7 @@ import { getConfig } from "../../shared/selectors/app.js";
 import { authenticateWithoutToken as authenticateGoogleDrive } from "./googleDrive.js";
 import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledLogin.js";
 import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
-import { getSearch } from "./search.js";
+import { getCachedFacades, getSearch } from "./search.js";
 import { addAttachments, deleteAttachment, getAttachment, getAttachmentDetails } from "./attachments.js";
 
 export function clearSearchResults() {
@@ -422,7 +414,7 @@ function handleMessage(request, sender, sendResponse) {
 async function processSearchResults([entryResults, sources]) {
     const sourceIDs = {};
     const sourceNames = {};
-    const vaultFacades = await getFacades();
+    const vaultFacades = await getCachedFacades();
     const results = await Promise.all(
         entryResults.map(async entryResult => {
             const sourceID = (sourceIDs[entryResult.vaultID] =
