@@ -1,11 +1,4 @@
-import {
-    Credentials,
-    EntryFinder,
-    VaultSource,
-    createEntryFacade,
-    createVaultFacade
-} from "../../shared/library/buttercup.js";
-import { extractDomain } from "../../shared/library/domain.js";
+import { Credentials, VaultSource, createEntryFacade, createVaultFacade } from "../../shared/library/buttercup.js";
 import { getVaultManager } from "./buttercup.js";
 import { getState } from "../redux/index.js";
 import { getConfigKey } from "../../shared/selectors/app.js";
@@ -14,8 +7,6 @@ import { MYBUTTERCUP_CLIENT_ID, MYBUTTERCUP_CLIENT_SECRET } from "../../shared/l
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 import { updateContextMenu } from "./contextMenu.js";
 import { getSearch } from "./search.js";
-
-const URL_SEARCH_REXP = /^ur[li]$/i;
 
 export function addArchiveByRequest(payload) {
     switch (payload.type) {
@@ -248,20 +239,6 @@ export function getArchive(sourceID) {
 
 export function getEntry(sourceID, entryID) {
     return getArchive(sourceID).then(archive => archive.findEntryByID(entryID));
-}
-
-export function getFacades() {
-    return getVaultManager().then(vaultManager =>
-        Promise.all(
-            vaultManager.unlockedSources.map(source =>
-                getArchive(source.id).then(archive => ({
-                    ...createVaultFacade(archive),
-                    sourceID: source.id,
-                    sourceName: source.name
-                }))
-            )
-        )
-    );
 }
 
 export function getNameForSource(sourceID) {
