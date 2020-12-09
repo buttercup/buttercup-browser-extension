@@ -25,6 +25,7 @@ class SearchResults extends PureComponent {
             <Container>
                 <EntriesList
                     entries={this.props.entries}
+                    icons
                     sourcesUnlocked={this.props.sourcesUnlocked}
                     onSelectEntry={this.props.onEnterDetailsRequest}
                 />
