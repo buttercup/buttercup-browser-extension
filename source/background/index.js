@@ -28,4 +28,4 @@ migrateLocalStorageToChromeStorage(getQueue())
 setInterval(cleanLogins, 30000);
 setInterval(updateLoginsState, 5000);
 
-log.info("Started successfully");
+log.info(`Started successfully: v${__VERSION__}`);
