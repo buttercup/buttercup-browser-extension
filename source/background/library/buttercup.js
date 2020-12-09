@@ -8,6 +8,7 @@ import { setArchives, setArchivesCount, setUnlockedArchivesCount } from "../../s
 import BrowserStorageInterface, { getNonSyncStorage, getSyncStorage } from "./BrowserStorageInterface.js";
 import { authenticateWithoutToken, authenticateWithRefreshToken } from "./googleDrive.js";
 import { updateSearch } from "./search.js";
+import { updateFacades } from "./facades.js";
 
 let __vaultManager, __queue, __updateSearch;
 
@@ -18,14 +19,21 @@ function attachArchiveManagerListeners(vaultManager) {
                 updateSearch(vaultManager.unlockedSources.map(src => src.vault));
             },
             250,
-            false
+            false // immediate
         );
     }
     vaultManager.on("sourcesUpdated", () => {
         dispatch(setArchives(vaultManager.sources.map(source => describeSource(source))));
         dispatch(setArchivesCount(vaultManager.sources.length));
         dispatch(setUnlockedArchivesCount(vaultManager.unlockedSources.length));
-        __updateSearch();
+        updateFacades()
+            .then(() => {
+                __updateSearch();
+            })
+            .catch(err => {
+                log.error("Failed updating facades after sources updated");
+                console.error(err);
+            });
     });
 }
 

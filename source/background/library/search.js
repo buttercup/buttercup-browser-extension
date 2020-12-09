@@ -1,6 +1,6 @@
 import { Search } from "../../shared/library/buttercup.js";
 import BrowserStorageInterface, { getSyncStorage } from "./BrowserStorageInterface.js";
-import { getFacades } from "./archives.js";
+import { getFacades } from "./facades.js";
 
 let __search = null,
     __facades = [],

@@ -1,7 +1,8 @@
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 import { getBrowser } from "../../shared/library/browser.js";
 import { lastPassword } from "./lastGeneratedPassword.js";
-import { getFacades, sendCredentialsToTab } from "./archives.js";
+import { sendCredentialsToTab } from "./archives.js";
+import { getFacades } from "./facades.js";
 import log from "../../shared/library/log.js";
 
 const CONTEXT_SHARED_ALL = {
@@ -15,7 +16,7 @@ let __menu = null,
     __buildPromise = null;
 
 async function buildEntryExplorerMenu(parentMenu, clickHandler) {
-    const facades = await getFacades();
+    const facades = getFacades();
     if (facades.length === 0) {
         chrome.contextMenus.create({
             title: "No vaults available",

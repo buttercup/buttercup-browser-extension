@@ -146,5 +146,10 @@ module.exports = {
         }),
         new NormalModuleReplacementPlugin(/\/iconv-loader/, "node-noop"),
         new NormalModuleReplacementPlugin(/random-number-generator|safe-buffer/, "node-noop")
-    ]
+    ],
+
+    watchOptions: {
+        ignored: /node_modules/,
+        poll: 1000
+    }
 };
