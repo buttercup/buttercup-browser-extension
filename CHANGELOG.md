@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.24.0
+_2020-12-09_
+
+ * Site icons for results within in-page search dialog
+ * Performance improvements regarding search
+ * Vault unlock/save performance improvements
+
 ## v2.23.1
 _2020-11-27_
 
