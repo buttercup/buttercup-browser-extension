@@ -32,6 +32,7 @@ import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain 
 import { getLogins, removeLogin, stopPromptForTab, updateLogin } from "./loginMemory.js";
 import { getCachedFacades, getSearch } from "./search.js";
 import { addAttachments, deleteAttachment, getAttachment, getAttachmentDetails } from "./attachments.js";
+import { writeToClipboard } from "./clipboard.js";
 
 export function clearSearchResults() {
     return getUnlockedSourcesCount().then(unlockedSources => {
@@ -117,6 +118,9 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "clear-search":
             clearSearchResults();
+            return false;
+        case "copy-to-clipboard":
+            writeToClipboard(request.content);
             return false;
         case "create-vault-facade": {
             const { sourceID } = request;

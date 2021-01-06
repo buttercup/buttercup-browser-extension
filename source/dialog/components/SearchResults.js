@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import EntriesList from "../../shared/components/Entries.js";
+import { copyToClipboard } from "../library/messaging.js";
 
 const Container = styled.div`
     flex: 1;
@@ -24,6 +25,7 @@ class SearchResults extends PureComponent {
         return (
             <Container>
                 <EntriesList
+                    copyValue={value => copyToClipboard(value)}
                     entries={this.props.entries}
                     icons
                     sourcesUnlocked={this.props.sourcesUnlocked}

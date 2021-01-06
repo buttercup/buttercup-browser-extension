@@ -1,5 +1,9 @@
 import log from "../../shared/library/log.js";
 
+export function copyToClipboard(text) {
+    chrome.runtime.sendMessage({ type: "copy-to-clipboard", content: text });
+}
+
 export function disableLoginForDomain(domain) {
     chrome.runtime.sendMessage({ type: "disable-login-domain", domain });
 }

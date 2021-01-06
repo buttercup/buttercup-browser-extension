@@ -4,6 +4,10 @@ export function clearSearchResults() {
     chrome.runtime.sendMessage({ type: "clear-search" });
 }
 
+export function copyToClipboard(text) {
+    chrome.runtime.sendMessage({ type: "copy-to-clipboard", content: text });
+}
+
 export function lockAllArchives() {
     log.info("Sending request to background to lock all archives");
     return new Promise((resolve, reject) => {
