@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.24.1
+_2021-01-06_
+
+ * Remove `activeTab` permission requirement
+ * **Bugfix**:
+   * ([#393](https://github.com/buttercup/buttercup-browser-extension/issues/393)) Copy to clipboard not working for in-page dialog
+
 ## v2.24.0
 _2020-12-09_
 
