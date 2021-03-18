@@ -18,6 +18,14 @@
                 "unlocked": "Wenn Tresore entsperrt",
                 "never": "Niemals"
             }
+        },
+        "dynamic-entry-icons": {
+            "self": "Dynamische Eintrags-Icons",
+            "helper-text": "Hole durch URLs/Domains eines Eintrags über einen anonymen Proxy dessen Icon.",
+            "options": {
+                "enabled": "Aktiviert",
+                "disabled": "Deaktiviert"
+            }
         }
     },
     "headerbar": {

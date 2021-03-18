@@ -24,6 +24,7 @@ export default class SettingsPage extends PureComponent {
 
     handleConfigChange(event, configKey) {
         const { target } = event;
+
         const { onUpdateConfigValue } = this.props;
         if (target.type === "checkbox") {
             onUpdateConfigValue(configKey, target.checked ? true : false);
@@ -35,7 +36,7 @@ export default class SettingsPage extends PureComponent {
     render() {
         const { config, t } = this.props;
         return (
-            <Fragment>
+            <Fragment key={JSON.stringify(config)}>
                 <FormGroup label={t("popup:settings.dark-theme")}>
                     <Switch
                         label={config.darkMode ? t("enabled") : t("disabled")}
@@ -58,6 +59,7 @@ export default class SettingsPage extends PureComponent {
                     helperText={t("popup:settings.vaults-auto-lock.helper-text")}
                 >
                     <HTMLSelect
+                        key={config.autoLockVaults}
                         fill
                         value={config.autoLockVaults}
                         options={[
@@ -101,15 +103,15 @@ export default class SettingsPage extends PureComponent {
                     />
                 </FormGroup>
                 <FormGroup
-                    label="Dynamic Entry Icons"
-                    helperText="Fetch entry icons from their URLs/domains using an anonymous proxy."
+                    label={t("popup:settings.dynamic-entry-icons.self")}
+                    helperText={t("popup:settings.dynamic-entry-icons.helper-text")}
                 >
                     <HTMLSelect
                         fill
                         value={config.dynamicIcons}
                         options={[
-                            { label: "Enabled", value: "enabled" },
-                            { label: "Disabled", value: "disabled" }
+                            { label: t("popup:settings.dynamic-entry-icons.options.enabled"), value: "enabled" },
+                            { label: t("popup:settings.dynamic-entry-icons.options.disabled"), value: "disabled" }
                         ]}
                         onChange={event => this.handleConfigChange(event, "dynamicIcons")}
                     />

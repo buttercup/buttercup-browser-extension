@@ -18,6 +18,14 @@
                 "unlocked": "When Vaults Unlocked",
                 "never": "Never"
             }
+        },
+        "dynamic-entry-icons": {
+            "self": "Dynamic Entry Icons",
+            "helper-text": "Fetch entry icons from their URLs/domains using an anonymous proxy.",
+            "options": {
+                "enabled": "Enabled",
+                "disabled": "Disabled"
+            }
         }
     },
     "headerbar": {
