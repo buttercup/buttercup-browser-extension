@@ -1,5 +1,25 @@
 # Buttercup browser extension changelog
 
+## v2.24.1
+_2021-01-06_
+
+ * Remove `activeTab` permission requirement
+ * **Bugfix**:
+   * ([#393](https://github.com/buttercup/buttercup-browser-extension/issues/393)) Copy to clipboard not working for in-page dialog
+
+## v2.24.0
+_2020-12-09_
+
+ * Site icons for results within in-page search dialog
+ * Performance improvements regarding search
+ * Vault unlock/save performance improvements
+
+## v2.23.1
+_2020-11-27_
+
+ * **Bugfix**:
+   * ([#368](https://github.com/buttercup/buttercup-browser-extension/issues/368)) Popup / Dialog menus very slow to open (performance bugfix for search)
+
 ## v2.23.0
 _2020-09-05_
 

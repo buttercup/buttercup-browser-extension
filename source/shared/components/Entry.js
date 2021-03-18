@@ -15,7 +15,6 @@ import {
 } from "@blueprintjs/core";
 import { SiteIcon } from "@buttercup/ui";
 import { EntryShape } from "../prop-types/entry.js";
-import { writeToClipboard } from "../library/browser.js";
 import { EntryPropertyValueType, EntryURLType, fieldsToProperties, getEntryURLs } from "../library/buttercup.js";
 import { extractDomain } from "../library/domain.js";
 
@@ -76,6 +75,7 @@ const EntryIcon = styled(SiteIcon)`
 class SearchResult extends PureComponent {
     static propTypes = {
         autoLoginEnabled: PropTypes.bool,
+        copyValue: PropTypes.func.isRequired,
         entry: EntryShape,
         icons: PropTypes.bool,
         onSelectEntry: PropTypes.func.isRequired
@@ -83,6 +83,7 @@ class SearchResult extends PureComponent {
 
     static defaultProps = {
         autoLoginEnabled: true,
+        copyValue: () => {},
         icons: false
     };
 
@@ -98,10 +99,10 @@ class SearchResult extends PureComponent {
                 item => item.property === property && item.propertyType === "property"
             );
             if (field) {
-                writeToClipboard(field.value);
+                this.props.copyValue(field.value);
             }
         } else {
-            writeToClipboard(entry[property]);
+            this.props.copyValue(entry[property]);
         }
     }
 

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Button, NonIdealState } from "@blueprintjs/core";
 import Entries from "../../shared/components/Entries.js";
+import { copyToClipboard } from "../library/messaging.js";
 
 import BUTTERCUP_LOGO from "../../../resources/buttercup-standalone.png";
 
@@ -34,6 +35,7 @@ class SearchResults extends PureComponent {
                     <When condition={this.props.entries.length > 0}>
                         <Entries
                             autoLoginEnabled={true}
+                            copyValue={value => copyToClipboard(value)}
                             entries={this.props.entries}
                             icons={this.props.dynamicIconsSetting === "enabled"}
                             onSelectEntry={this.props.onSelectEntry}

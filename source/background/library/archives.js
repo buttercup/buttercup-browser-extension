@@ -8,8 +8,6 @@ import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "..
 import { updateContextMenu } from "./contextMenu.js";
 import { getSearch } from "./search.js";
 
-const URL_SEARCH_REXP = /^ur[li]$/i;
-
 export function addArchiveByRequest(payload) {
     switch (payload.type) {
         case "dropbox":
@@ -241,20 +239,6 @@ export function getArchive(sourceID) {
 
 export function getEntry(sourceID, entryID) {
     return getArchive(sourceID).then(archive => archive.findEntryByID(entryID));
-}
-
-export function getFacades() {
-    return getVaultManager().then(vaultManager =>
-        Promise.all(
-            vaultManager.unlockedSources.map(source =>
-                getArchive(source.id).then(archive => ({
-                    ...createVaultFacade(archive),
-                    sourceID: source.id,
-                    sourceName: source.name
-                }))
-            )
-        )
-    );
 }
 
 export function getNameForSource(sourceID) {

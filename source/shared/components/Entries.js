@@ -11,6 +11,7 @@ class Entries extends PureComponent {
         return (
             <div style={style} key={entries[index].id}>
                 <Entry
+                    copyValue={this.props.copyValue}
                     entry={entries[index]}
                     icons={this.props.icons}
                     onSelectEntry={onSelectEntry}
@@ -40,7 +41,12 @@ class Entries extends PureComponent {
     }
 }
 
+Entries.defaultProps = {
+    copyValue: () => {}
+};
+
 Entries.propTypes = {
+    copyValue: PropTypes.func.isRequired,
     entries: EntriesShape,
     icons: PropTypes.bool,
     sourcesUnlocked: PropTypes.number,

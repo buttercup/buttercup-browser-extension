@@ -18,7 +18,3 @@ export function getBrowser() {
     }
     return "";
 }
-
-export function writeToClipboard(text) {
-    return navigator.clipboard.writeText(text);
-}
