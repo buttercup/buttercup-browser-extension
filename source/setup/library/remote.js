@@ -18,14 +18,15 @@ export function connectWebDAV(url, username, password) {
     const createClient = getSharedAppEnv().getProperty("net/webdav/v1/newClient");
     const client = createClient(url, { username, password });
     log.info(`Creating WebDAV connection to: ${url}`);
-    return testWebDAVConnection(client).then(succeeded => {
-        if (succeeded) {
+    return testWebDAVConnection(client)
+        .then(() => {
             log.info("Connection to WebDAV service succeeded");
             __webdavClient = client;
-            return;
-        }
-        log.error(`Failed establishing WebDAV connection: ${url}`);
-    });
+        })
+        .catch(err => {
+            log.error(`Failed establishing WebDAV connection: ${url}`);
+            throw err;
+        });
 }
 
 export function disposeWebDAVConnection() {
@@ -106,16 +107,15 @@ export function getWebDAVClient() {
     return __webdavClient;
 }
 
-export function testWebDAVConnection(client) {
+function testWebDAVConnection(client) {
     log.info("Testing WebDAV connection...");
     return client
         .getDirectoryContents("/")
         .then(() => {
             log.info("WebDAV connected successfully");
-            return true;
         })
         .catch(err => {
             log.error(`WebDAV failed to connect: ${err.message}`);
-            return false;
+            throw err;
         });
 }
