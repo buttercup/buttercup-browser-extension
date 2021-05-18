@@ -34,6 +34,9 @@ import { getCachedFacades, getSearch } from "./search.js";
 import { addAttachments, deleteAttachment, getAttachment, getAttachmentDetails } from "./attachments.js";
 import { writeToClipboard } from "./clipboard.js";
 
+const ASYNC = true;
+const SYNC = false;
+
 export function clearSearchResults() {
     return getUnlockedSourcesCount().then(unlockedSources => {
         dispatch(setEntrySearchResults([]));
@@ -54,7 +57,7 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                 });
             // Async
-            return true;
+            return ASYNC;
         }
         case "add-attachments": {
             const { sourceID, entryID, files } = request;
@@ -67,7 +70,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "add-new-entry": {
             const { payload } = request;
@@ -80,7 +83,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "apply-vault-facade": {
             const { sourceID, facade } = request;
@@ -97,12 +100,12 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "authenticate-google-drive": {
             const { useOpenPermissions = false } = request;
             authenticateGoogleDrive(undefined, useOpenPermissions);
-            return false;
+            return SYNC;
         }
         case "change-vault-password": {
             const { sourceID, oldPassword, newPassword, meta = {} } = request;
@@ -118,10 +121,10 @@ function handleMessage(request, sender, sendResponse) {
         }
         case "clear-search":
             clearSearchResults();
-            return false;
+            return SYNC;
         case "copy-to-clipboard":
             writeToClipboard(request.content);
-            return false;
+            return SYNC;
         case "create-vault-facade": {
             const { sourceID } = request;
             getArchive(sourceID)
@@ -133,7 +136,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "delete-attachment": {
             const { sourceID, entryID, attachmentID } = request;
@@ -146,7 +149,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "disable-login-domain": {
             const [lastLogin] = getLogins();
@@ -171,7 +174,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "get-attachment": {
             const { sourceID, entryID, attachmentID } = request;
@@ -184,7 +187,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "get-attachment-details": {
             const { sourceID, entryID, attachmentID } = request;
@@ -197,7 +200,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "get-config":
             sendResponse({ config: getConfig(getState()) });
@@ -206,7 +209,7 @@ function handleMessage(request, sender, sendResponse) {
             getDisabledDomains().then(domains => {
                 sendResponse({ domains });
             });
-            return true;
+            return ASYNC;
         }
         case "get-groups-tree": {
             const { sourceID } = request;
@@ -219,7 +222,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "get-sources-stats":
             getUnlockedSourcesCount()
@@ -233,14 +236,14 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         case "get-used-credentials": {
             const { mode = "tab" } = request;
             sendResponse({
                 ok: true,
                 credentials: getLogins(mode === "tab" ? sender.tab.id : null)
             });
-            return false;
+            return SYNC;
         }
         case "get-vaultsinfo": {
             getSourcesInfo()
@@ -251,7 +254,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "lock-all-archives": {
             clearSearchResults();
@@ -263,7 +266,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "lock-archive": {
             const { sourceID } = request;
@@ -275,7 +278,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "open-credentials-url": {
             const { sourceID, entryID, autoLogin = false } = request;
@@ -291,13 +294,13 @@ function handleMessage(request, sender, sendResponse) {
                     );
                 }
             });
-            return false;
+            return SYNC;
         }
         case "open-tab": {
             const { url } = request;
             log.info(`Will open new tab by request: ${url}`);
             createNewTab(url);
-            return false;
+            return SYNC;
         }
         case "remove-archive": {
             const { sourceID } = request;
@@ -310,7 +313,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "remove-disabled-login-domain": {
             const { domain } = request;
@@ -323,19 +326,19 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "remove-saved-credentials": {
             const { id } = request;
             removeLogin(id);
-            return false;
+            return SYNC;
         }
         case "save-used-credentials": {
             const tabID = sender.tab.id;
             const { credentials } = request;
             const { id } = credentials;
             updateLogin(id, tabID, credentials);
-            return false;
+            return SYNC;
         }
         case "search-entries-for-term": {
             const { term } = request;
@@ -344,7 +347,7 @@ function handleMessage(request, sender, sendResponse) {
                 .catch(err => {
                     console.error(err);
                 });
-            return false;
+            return SYNC;
         }
         case "search-entries-for-url": {
             const { url } = request;
@@ -353,7 +356,7 @@ function handleMessage(request, sender, sendResponse) {
                 .catch(err => {
                     console.error(err);
                 });
-            return false;
+            return SYNC;
         }
         case "send-credentials-to-current-tab": {
             const { sourceID, entryID, signIn } = request;
@@ -365,7 +368,7 @@ function handleMessage(request, sender, sendResponse) {
                     sendResponse({ ok: false, error: err.message });
                     console.error(err);
                 });
-            return true;
+            return ASYNC;
         }
         case "set-config": {
             dispatch(
@@ -374,7 +377,7 @@ function handleMessage(request, sender, sendResponse) {
                     value: request.value
                 })
             );
-            return false;
+            return SYNC;
         }
         case "set-generated-password": {
             const { password } = request;
@@ -385,17 +388,17 @@ function handleMessage(request, sender, sendResponse) {
                 });
             });
             lastPassword.value = password;
-            return false;
+            return SYNC;
         }
         case "set-user-activity": {
             dispatch(setUserActivity());
-            return true;
+            return SYNC;
         }
         case "stop-prompt-saved-credentials": {
             const tabID = sender.tab.id;
             log.info(`Clearing save prompt for current credentials on tab: ${tabID}`);
             stopPromptForTab(tabID);
-            return true;
+            return ASYNC;
         }
         case "unlock-archive": {
             const { sourceID, masterPassword } = request;
@@ -407,7 +410,7 @@ function handleMessage(request, sender, sendResponse) {
                     console.error(err);
                     sendResponse({ ok: false, error: err.message });
                 });
-            return true;
+            return ASYNC;
         }
         default:
             // Do nothing
