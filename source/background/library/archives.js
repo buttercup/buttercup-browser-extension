@@ -274,7 +274,10 @@ export function getSourcesInfo() {
 }
 
 export function getUnlockedSourcesCount() {
-    return getVaultManager().then(vaultManager => vaultManager.unlockedSources.length);
+    return getVaultManager().then(vaultManager => {
+        console.log(vaultManager);
+        return vaultManager.unlockedSources.length;
+    });
 }
 
 export function lockSource(sourceID) {
