@@ -6,7 +6,8 @@ import { copyToClipboard } from "../library/messaging.js";
 
 const Container = styled.div`
     flex: 1 1 auto;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
 `;
 
 const EntryShape = PropTypes.shape({

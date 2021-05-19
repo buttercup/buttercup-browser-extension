@@ -23,7 +23,6 @@ const Container = styled.div`
     padding: 0.5rem;
     background-color: ${p => (p.isActive ? p.theme.listItemHover : null)};
     position: relative;
-    z-index: ${p => (p.isActive ? 100 : 0)};
 
     &:hover {
         background-color: ${p => p.theme.listItemHover};
@@ -214,24 +213,25 @@ class SearchResult extends PureComponent {
                                 onClick={() => this.toggleDetails()}
                             />
                         </ButtonGroup>
-                        <Dialog
-                            title={title}
-                            isOpen={isDetailsVisible}
-                            onClose={() => this.toggleDetails()}
-                            style={{
-                                margin: "1rem",
-                                height: "calc(100vh - 2rem)",
-                                width: "calc(100vw - 2rem)",
-                                paddingBottom: "10px"
-                            }}
-                        >
-                            {this.renderEntryDetails()}
-                            <div className={Classes.DIALOG_FOOTER}>
-                                <Text className={cx(Classes.TEXT_MUTED, Classes.TEXT_SMALL)}>{path}</Text>
-                            </div>
-                        </Dialog>
                     </EntryRow>
                 </Container>
+                <Dialog
+                    title={title}
+                    isOpen={isDetailsVisible}
+                    onClose={() => this.toggleDetails()}
+                    style={{
+                        margin: "1rem",
+                        height: "calc(100vh - 2rem)",
+                        width: "calc(100vw - 2rem)",
+                        paddingBottom: "10px"
+                    }}
+                    usePortal={false}
+                >
+                    {this.renderEntryDetails()}
+                    <div className={Classes.DIALOG_FOOTER}>
+                        <Text className={cx(Classes.TEXT_MUTED, Classes.TEXT_SMALL)}>{path}</Text>
+                    </div>
+                </Dialog>
             </Fragment>
         );
     }
