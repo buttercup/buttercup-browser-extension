@@ -4,40 +4,37 @@ import styled from "styled-components";
 import { Divider } from "@blueprintjs/core";
 import { EntriesShape } from "../prop-types/entry.js";
 import Entry from "./Entry.js";
-import { List, AutoSizer } from "react-virtualized";
+
+const ScrollList = styled.div`
+    max-height: 100%;
+    // overflow: hidd
+    // overflow-x: hidden;
+    // overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+`;
 
 class Entries extends PureComponent {
-    rowRenderer = ({ index, style }) => {
+    render() {
         const { entries, onSelectEntry, autoLoginEnabled = true } = this.props;
         return (
-            <div style={style} key={entries[index].id}>
-                <Entry
-                    copyValue={this.props.copyValue}
-                    entry={entries[index]}
-                    icons={this.props.icons}
-                    onSelectEntry={onSelectEntry}
-                    autoLoginEnabled={autoLoginEnabled}
-                />
-                <Divider />
-            </div>
-        );
-    };
-
-    render() {
-        const { entries } = this.props;
-        return (
-            <AutoSizer>
-                {({ height, width }) => (
-                    <List
-                        width={width}
-                        height={height}
-                        rowCount={entries.length}
-                        rowHeight={66}
-                        rowRenderer={this.rowRenderer}
-                        overscanRowCount={10}
-                    />
-                )}
-            </AutoSizer>
+            <ScrollList>
+                {entries.map((entry, ind) => (
+                    <div key={entry.id}>
+                        {ind === 0 && <Divider />}
+                        <Entry
+                            copyValue={this.props.copyValue}
+                            entry={entry}
+                            icons={this.props.icons}
+                            onSelectEntry={onSelectEntry}
+                            autoLoginEnabled={autoLoginEnabled}
+                        />
+                        <Divider />
+                    </div>
+                ))}
+            </ScrollList>
         );
     }
 }

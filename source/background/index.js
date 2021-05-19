@@ -14,18 +14,22 @@ import store from "./redux/index.js";
 log.info("Starting...");
 log.info(`Detected browser: ${getBrowser()}`);
 
-watchStorageForConfig(store);
-startMessageListener();
-attachBrowserStateListeners();
-setTimeout(checkUnlockPossibility, 2500);
-watchForSourcesAutoLock();
-registerAuthWatchers();
-
 migrateLocalStorageToChromeStorage(getQueue())
     .then(() => createArchiveManager())
-    .then(() => updateContextMenu());
-
-setInterval(cleanLogins, 30000);
-setInterval(updateLoginsState, 5000);
-
-log.info(`Started successfully: v${__VERSION__}`);
+    .then(() => {
+        watchStorageForConfig(store);
+        startMessageListener();
+        attachBrowserStateListeners();
+    })
+    .then(() => updateContextMenu())
+    .then(() => {
+        setTimeout(checkUnlockPossibility, 2500);
+        watchForSourcesAutoLock();
+        registerAuthWatchers();
+        setInterval(cleanLogins, 30000);
+        setInterval(updateLoginsState, 5000);
+        log.info(`Started successfully: v${__VERSION__}`);
+    })
+    .catch(err => {
+        log.error(err);
+    });
