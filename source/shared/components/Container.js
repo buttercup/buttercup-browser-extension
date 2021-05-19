@@ -7,6 +7,7 @@ const Container = styled.div`
     flex-direction: column;
     background-color: ${p => (p.noBackgroundColor ? "transparent" : p.theme.backgroundColor)};
     overflow: hidden;
+    height: 100%;
 `;
 
 Container.propTypes = {

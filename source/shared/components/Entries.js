@@ -7,8 +7,9 @@ import Entry from "./Entry.js";
 
 const ScrollList = styled.div`
     max-height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    // overflow: hidd
+    // overflow-x: hidden;
+    // overflow-y: scroll;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
