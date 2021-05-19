@@ -25,11 +25,13 @@ function buildManifest(assetNames) {
     const newManifest = JSON.parse(JSON.stringify(manifest));
     newManifest.version = version;
     assetNames.forEach(assetFilename => {
-        if (/\.js$/.test(assetFilename) && /^vendors-/.test(assetFilename)) {
-            if (/\bbackground\b/.test(assetFilename)) {
+        // console.log("ASSET NAME", assetFilename);
+        if (/^[^\/\\]+\.js$/.test(assetFilename)) {
+            // if (/\.js$/.test(assetFilename) && /^vendors-/.test(assetFilename)) {
+            if (/\bbackground\b/.test(assetFilename) && assetFilename !== "background.js") {
                 newManifest.background.scripts.unshift(assetFilename);
             }
-            if (/\btab\b/.test(assetFilename)) {
+            if (/\btab\b/.test(assetFilename) && assetFilename !== "tab.js") {
                 newManifest.content_scripts[0].js.unshift(assetFilename);
             }
         }
@@ -89,6 +91,9 @@ module.exports = {
         splitChunks: {
             automaticNameDelimiter: "-",
             chunks: "all",
+            // chunks: chunk => {
+            //     return chunk.name !== "background";
+            // },
             maxSize: 0,
             minSize: 30000
         }
