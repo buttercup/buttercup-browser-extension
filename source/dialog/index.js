@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Route } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
-import { Classes } from "@blueprintjs/core";
 import store from "./redux/index.js";
 import history from "./redux/history.js";
 import SearchPage from "./containers/SearchPage.js";

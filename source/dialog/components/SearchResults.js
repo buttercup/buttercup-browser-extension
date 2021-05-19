@@ -5,7 +5,8 @@ import EntriesList from "../../shared/components/Entries.js";
 import { copyToClipboard } from "../library/messaging.js";
 
 const Container = styled.div`
-    flex: 1;
+    flex: 1 1 auto;
+    overflow: hidden;
 `;
 
 const EntryShape = PropTypes.shape({

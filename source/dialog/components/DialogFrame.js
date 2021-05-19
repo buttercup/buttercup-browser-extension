@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Colors } from "@blueprintjs/core";
 
 const Container = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: stretch;
     overflow: hidden;
     background-color: ${p => p.theme.backgroundColor};
     box-shadow: inset 0 0 0 1px ${p => p.theme.backgroundFrameColor};
