@@ -6,7 +6,7 @@ import { EntriesShape } from "../prop-types/entry.js";
 import Entry from "./Entry.js";
 
 const ScrollList = styled.div`
-    height: 100%;
+    max-height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
     display: flex;
