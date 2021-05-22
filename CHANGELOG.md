@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v2.24.2
+_2021-05-22_
+
+ * **Bugfix**:
+   * ([#381](https://github.com/buttercup/buttercup-browser-extension/issues/381)) Search results not showing most recent result (URL detection)
+   * WebDAV connection crashes tab during failed connection attempt (when adding a vault)
+   * **Critical auto-update issue**: Core crash when receiving updated vaults in the background
+
 ## v2.24.1
 _2021-01-06_
 
