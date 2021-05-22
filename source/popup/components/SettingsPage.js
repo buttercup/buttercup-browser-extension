@@ -1,8 +1,14 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { InputGroup, FormGroup, Switch, HTMLSelect } from "@blueprintjs/core";
 import ms from "ms";
+
+const SettingsContainer = styled.div`
+    padding: 12px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+`;
 
 export default class SettingsPage extends PureComponent {
     static propTypes = {
@@ -23,7 +29,7 @@ export default class SettingsPage extends PureComponent {
     render() {
         const { config } = this.props;
         return (
-            <Fragment>
+            <SettingsContainer>
                 <FormGroup label="Dark Theme">
                     <Switch
                         label={config.darkMode ? "Enabled" : "Disabled"}
@@ -85,7 +91,7 @@ export default class SettingsPage extends PureComponent {
                         onChange={event => this.handleConfigChange(event, "dynamicIcons")}
                     />
                 </FormGroup>
-            </Fragment>
+            </SettingsContainer>
         );
     }
 }
