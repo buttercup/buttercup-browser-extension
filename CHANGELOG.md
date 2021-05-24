@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.24.3
+_2021-05-24_
+
+ * **Bugfix**:
+   * Vault pages not taking up 100% of the height of the window
+
 ## v2.24.2
 _2021-05-22_
 
