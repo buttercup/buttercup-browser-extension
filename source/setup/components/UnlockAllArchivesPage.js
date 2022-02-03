@@ -69,7 +69,8 @@ class UnlockAllArchivesPage extends Component {
 
     state = {
         masterPasswords: {},
-        unlocking: []
+        unlocking: [],
+        showPassword: false
     };
 
     componentDidMount() {
@@ -132,6 +133,21 @@ class UnlockAllArchivesPage extends Component {
 
     render() {
         const firstLockedIndex = this.props.archives.findIndex(archive => archive.state === "locked");
+        const lockButton = (
+            <Button
+                icon={this.state.showPassword ? "unlock" : "lock"}
+                minimal={true}
+                onMouseEnter={() => {
+                    this.setState({ showPassword: true });
+                    setShowPassword(true);
+                }}
+                onMouseLeave={() => {
+                    this.setState({ showPassword: false });
+                }}
+                active={this.state.showPassword}
+                style={{ userSelect: "none" }}
+            />
+        );
         return (
             <DualColumnLayout>
                 <Dialog title="Unlock vaults" overlay={false}>
@@ -160,7 +176,8 @@ class UnlockAllArchivesPage extends Component {
                                     <InputGroup
                                         fill
                                         placeholder="Enter master password..."
-                                        type="password"
+                                        type={this.state.showPassword ? "text" : "password"}
+                                        rightElement={lockButton}
                                         disabled={unlocked}
                                         onChange={event => this.handleUpdatePassword(event, archive.sourceID)}
                                         value={this.state.masterPasswords[archive.sourceID] || ""}
