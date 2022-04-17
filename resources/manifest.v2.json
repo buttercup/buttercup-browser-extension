@@ -1,0 +1,30 @@
+{
+    "manifest_version": 2,
+
+    "name": "Buttercup",
+    "description": "Browser extension for Buttercup, the secure and easy-to-use password manager.",
+    "version": "0.0.0",
+
+    "icons": {
+        "256": "buttercup-256.png",
+        "128": "buttercup-128.png",
+        "48": "buttercup-48.png",
+        "16": "buttercup-16.png"
+    },
+
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+
+    "permissions": [
+        "clipboardWrite",
+        "contextMenus",
+        "http://*/*",
+        "https://*/*",
+        "storage",
+        "tabs",
+        "unlimitedStorage"
+    ]
+}

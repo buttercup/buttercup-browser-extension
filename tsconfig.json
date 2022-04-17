@@ -2,12 +2,12 @@
     "compilerOptions": {
         "outDir": "./dist",
         "module": "esnext",
+        "moduleResolution": "node",
         "target": "esnext",
         "esModuleInterop": true,
         "strict": false,
         "jsx": "react",
         "allowSyntheticDefaultImports": true,
-        "resolveJsonModule": true,
         "types": ["react", "react-dom"]
     },
     "include": [
