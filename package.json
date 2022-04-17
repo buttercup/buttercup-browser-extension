@@ -10,7 +10,7 @@
     "dev:firefox": "npm run clean && BROWSER=firefox webpack --mode development -w --progress",
     "xdev:firefox": "concurrently -k \"npm run dev\" \"cd dist && web-ext run\" --restart-tries 20 --restart-after 5000",
     "dev:prod": "env-cmd -e production webpack --mode production -w --progress",
-    "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
+    "format": "prettier --write '{{source,test}/**/*.{ts,js},webpack.config.js}'",
     "release": "npm run build && mkdirp release release/chrome release/firefox release/edge && run-s release:chrome release:firefox release:edge",
     "release:chrome": "zip -r release/chrome/extension.zip ./dist",
     "release:edge": "zip -r release/edge/extension.zip ./dist",
@@ -19,10 +19,10 @@
     "release:firefox:source": "zip -r release/firefox/source.zip . --exclude=/.git* --exclude=/node_modules* --exclude=/.history* --exclude=/dist* --exclude=/release* --exclude=*.DS_Store*",
     "test": "run-s test:format",
     "test:ci": "run-s test release",
-    "test:format": "prettier-check '{{source,test}/**/*.js,webpack.config.js}'"
+    "test:format": "prettier --check '{{source,test}/**/*.{ts,js},webpack.config.js}'"
   },
   "lint-staged": {
-    "{{source,test}/**/*.js,webpack.config.js}": [
+    "{{source,test}/**/*.{ts,js},webpack.config.js}": [
       "prettier --write"
     ]
   },

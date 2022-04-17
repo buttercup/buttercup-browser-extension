@@ -5,7 +5,7 @@ initialise()
     .then(() => {
         log("initialisation complete");
     })
-    .catch(err => {
+    .catch((err) => {
         console.error(err);
         log("initialisation failed");
     });
