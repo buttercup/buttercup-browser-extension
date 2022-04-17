@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "module": "esnext",
+        "target": "esnext",
+        "esModuleInterop": true,
+        "strict": false,
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "types": ["react", "react-dom"]
+    },
+    "include": [
+        "./source/client/**/*",
+        "./source/shared/**/*"
+    ],
+    "exclude":[
+        "dist",
+        "node_modules"
+    ]
+}
