@@ -16,7 +16,11 @@
         "service_worker": "background.js"
     },
 
-    "action": {},
+    "action": {
+        "default_title": "Buttercup",
+        "default_icon": "buttercup-256.png",
+        "default_popup": "popup.html#/"
+    },
 
     "permissions": [
         "clipboardWrite",

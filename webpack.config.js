@@ -2,13 +2,15 @@ const fs = require("fs");
 const path = require("path");
 const ResolveTypeScriptPlugin = require("resolve-typescript-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const { version } = require("./package.json");
 const manifestV2 = require("./resources/manifest.v2.json");
 const manifestV3 = require("./resources/manifest.v3.json");
 
-const DIST = path.resolve(__dirname, "dist");
 const { BROWSER } = process.env;
+const DIST = path.resolve(__dirname, "dist");
+const INDEX_TEMPLATE = path.resolve(__dirname, "./resources/template.pug");
 
 function buildManifest(assetNames, manifest) {
     const newManifest = JSON.parse(JSON.stringify(manifest));
@@ -35,6 +37,7 @@ module.exports = {
 
     entry: {
         background: path.resolve(__dirname, "./source/background/index.ts"),
+        popup: path.resolve(__dirname, "./source/popup/index.tsx")
     },
 
     module: {
@@ -53,27 +56,34 @@ module.exports = {
                                         targets: {
                                             chrome: "90",
                                             firefox: "85",
-                                            edge: "90",
+                                            edge: "90"
                                         },
-                                        useBuiltIns: false,
-                                    },
-                                ],
-                            ],
-                        },
+                                        useBuiltIns: false
+                                    }
+                                ]
+                            ]
+                        }
                     },
                     {
-                        loader: "ts-loader",
-                    },
+                        loader: "ts-loader"
+                    }
                 ],
                 resolve: {
-                    fullySpecified: false,
-                },
+                    fullySpecified: false
+                }
             },
             {
                 test: /\.pug$/,
-                loader: "pug-loader",
+                loader: "pug-loader"
             },
-        ],
+            {
+                test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
+                loader: "file-loader",
+                options: {
+                    name: "[name].[hash].[ext]"
+                }
+            }
+        ]
     },
 
     optimization: {
@@ -84,21 +94,21 @@ module.exports = {
             //     return chunk.name !== "background";
             // },
             maxSize: Infinity,
-            minSize: 30000,
-        },
+            minSize: 30000
+        }
     },
 
     output: {
         filename: "[name].js",
         chunkFilename: "[name].chunk.js",
         path: DIST,
-        chunkLoadingGlobal: "__bcupjsonp",
+        chunkLoadingGlobal: "__bcupjsonp"
     },
 
     performance: {
         hints: false,
         maxEntrypointSize: 768000,
-        maxAssetSize: 768000,
+        maxAssetSize: 768000
     },
 
     plugins: [
@@ -110,17 +120,24 @@ module.exports = {
                         BROWSER === "chrome" ? manifestV3 : manifestV2
                     );
                 });
-            },
+            }
         },
         new CopyWebpackPlugin({
             patterns: [
                 {
                     from: path.join(__dirname, "./resources", "buttercup-*.png"),
                     to: DIST,
-                    context: path.join(__dirname, "./resources"),
-                },
-            ],
+                    context: path.join(__dirname, "./resources")
+                }
+            ]
         }),
+        new HtmlWebpackPlugin({
+            title: "Buttercup",
+            template: INDEX_TEMPLATE,
+            filename: "popup.html",
+            inject: "body"
+            // chunks: ["popup"]
+        })
     ],
 
     resolve: {
@@ -129,11 +146,11 @@ module.exports = {
         fallback: {
             buffer: false,
             fs: false,
-            path: false,
+            path: false
         },
         plugins: [
             // Handle .ts => .js resolution
-            new ResolveTypeScriptPlugin(),
-        ],
-    },
+            new ResolveTypeScriptPlugin()
+        ]
+    }
 };
