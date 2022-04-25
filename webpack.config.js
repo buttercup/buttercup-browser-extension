@@ -63,7 +63,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader"]
+                use: [MiniCSSExtractPlugin.loader, "css-loader"]
             },
             {
                 test: /\.pug$/,
