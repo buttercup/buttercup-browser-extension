@@ -3,6 +3,7 @@ const fs = require("fs");
 const { DefinePlugin, NormalModuleReplacementPlugin } = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
 const { devDependencies, version } = require("./package.json");
 const manifest = require("./resources/manifest.json");
 
@@ -58,7 +59,7 @@ module.exports = {
             },
             {
                 test: /\.s[ac]ss$/,
-                use: ["style-loader", "css-loader", "sass-loader"]
+                use: [MiniCSSExtractPlugin.loader, "css-loader", "sass-loader"]
             },
             {
                 test: /\.css$/,
@@ -70,32 +71,31 @@ module.exports = {
             },
             {
                 test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
-                loader: "file-loader",
-                options: {
-                    name: "[path][name].[hash].[ext]"
+                type: "asset/resource",
+                generator: {
+                    filename: "assets/[name][ext]"
                 }
             }
         ]
     },
 
-    node: {
-        Buffer: false,
-        child_process: "empty",
-        dns: "empty",
-        net: "empty",
-        stream: "empty",
-        tls: "empty"
-    },
-
     optimization: {
         splitChunks: {
             automaticNameDelimiter: "-",
-            chunks: "all",
-            // chunks: chunk => {
-            //     return chunk.name !== "background";
-            // },
-            maxSize: 0,
-            minSize: 30000
+            cacheGroups: {
+                vendors: {
+                    test: /\/node_modules\//,
+                    name: "vendors",
+                    priority: -10,
+                    chunks: "initial"
+                },
+                default: {
+                    priority: -20,
+                    chunks: "initial",
+                    reuseExistingChunk: true,
+                    name: "common"
+                }
+            }
         }
     },
 
@@ -105,6 +105,7 @@ module.exports = {
     },
 
     plugins: [
+        new MiniCSSExtractPlugin(),
         {
             apply: compiler => {
                 compiler.hooks.afterEmit.tap("AfterEmitPlugin", compilation => {
@@ -112,18 +113,20 @@ module.exports = {
                 });
             }
         },
-        new CopyWebpackPlugin([
-            {
-                from: CHANGELOG
-            },
-            {
-                from: path.join(__dirname, "./resources", "buttercup-*.png")
-            },
-            {
-                from: ICONS_PATH,
-                to: "icons"
-            }
-        ]),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: CHANGELOG
+                },
+                {
+                    from: path.join(__dirname, "./resources", "buttercup-*.png")
+                },
+                {
+                    from: ICONS_PATH,
+                    to: "icons"
+                }
+            ]
+        }),
         new DefinePlugin(__configDefines),
         new DefinePlugin({
             __VERSION__: JSON.stringify(version)
@@ -152,6 +155,19 @@ module.exports = {
         new NormalModuleReplacementPlugin(/\/iconv-loader/, "node-noop"),
         new NormalModuleReplacementPlugin(/random-number-generator|safe-buffer/, "node-noop")
     ],
+
+    resolve: {
+        fallback: {
+            Buffer: false,
+            child_process: false,
+            dns: false,
+            net: false,
+            process: false,
+            stream: false,
+            tls: false,
+            util: false
+        }
+    },
 
     watchOptions: {
         ignored: /node_modules/,
