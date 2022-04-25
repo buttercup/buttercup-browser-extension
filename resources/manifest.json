@@ -25,6 +25,8 @@
 
     "background": {
         "scripts": [
+            "vendors.js",
+            "common.js",
             "background.js"
         ]
     },
