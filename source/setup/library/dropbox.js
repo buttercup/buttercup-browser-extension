@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "path-posix";
 import Dropbox from "dropbox";
 
 const DROPBOX_CALLBACK_URL = "https://buttercup.pw/";

@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "path-posix";
 
 export function googleDriveContentsToTree(allItems) {
     const itemToFile = item => ({

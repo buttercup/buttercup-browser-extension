@@ -1,4 +1,4 @@
-import path from "path";
+import path from "path-posix";
 import { getExtensionURL } from "./extension.js";
 
 import VAULT_TYPE_IMAGE_DROPBOX from "../../../resources/providers/dropbox-256.png";
