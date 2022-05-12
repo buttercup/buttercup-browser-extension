@@ -141,6 +141,9 @@ module.exports = {
     ],
 
     resolve: {
+        alias: {
+            buttercup: "buttercup/web"
+        },
         // No .ts/.tsx included due to the typescript resolver plugin
         extensions: [".js", ".jsx"],
         fallback: {
