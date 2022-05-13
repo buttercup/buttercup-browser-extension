@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { Spinner } from "@blueprintjs/core";
-import { VaultProvider, VaultUI } from "@buttercup/ui";
+import { VaultProvider, VaultUI, themes } from "@buttercup/ui";
 import { getAttachmentData } from "../library/messaging.js";
 
 // @TODO maybe move this somewhere better?
@@ -19,6 +19,7 @@ const Loader = styled.div`
 class VaultEditor extends Component {
     static propTypes = {
         attachments: PropTypes.bool.isRequired,
+        darkMode: PropTypes.bool.isRequired,
         dynamicIconsSetting: PropTypes.string.isRequired,
         fetchVaultFacade: PropTypes.func.isRequired,
         handlePreviewAttachmentError: PropTypes.func.isRequired,
@@ -54,6 +55,7 @@ class VaultEditor extends Component {
         return (
             <Choose>
                 <When condition={this.props.vault}>
+                    {/* <ThemeProvider theme={this.props.darkMode ? themes.dark : themes.light}> */}
                     <VaultProvider
                         attachments={this.props.attachments}
                         attachmentPreviews={this.state.attachmentPreviews}
@@ -73,6 +75,7 @@ class VaultEditor extends Component {
                     >
                         <VaultUI />
                     </VaultProvider>
+                    {/* </ThemeProvider> */}
                 </When>
                 <Otherwise>
                     <Loader>
