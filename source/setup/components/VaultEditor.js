@@ -55,7 +55,6 @@ class VaultEditor extends Component {
         return (
             <Choose>
                 <When condition={this.props.vault}>
-                    {/* <ThemeProvider theme={this.props.darkMode ? themes.dark : themes.light}> */}
                     <VaultProvider
                         attachments={this.props.attachments}
                         attachmentPreviews={this.state.attachmentPreviews}
@@ -75,7 +74,6 @@ class VaultEditor extends Component {
                     >
                         <VaultUI />
                     </VaultProvider>
-                    {/* </ThemeProvider> */}
                 </When>
                 <Otherwise>
                     <Loader>
