@@ -232,11 +232,11 @@ class AddArchivePage extends PureComponent {
         const { selectedFilename } = this.props;
         const disabled = !selectedFilename;
         const onClickTypeSwitch = switchValue([
-            [/webdav|owncloud|nextcloud/, ::this.handleChooseWebDAVBasedFile],
-            ["dropbox", ::this.handleChooseDropboxBasedFile],
-            ["googledrive", ::this.handleChooseGoogleDriveBasedFile],
-            ["mybuttercup", ::this.handleChooseMyButtercupBasedFile],
-            ["localfile", ::this.handleChooseLocalBasedFile]
+            [/webdav|owncloud|nextcloud/, evt => this.handleChooseWebDAVBasedFile(evt)],
+            ["dropbox", evt => this.handleChooseDropboxBasedFile(evt)],
+            ["googledrive", evt => this.handleChooseGoogleDriveBasedFile(evt)],
+            ["mybuttercup", evt => this.handleChooseMyButtercupBasedFile(evt)],
+            ["localfile", evt => this.handleChooseLocalBasedFile(evt)]
         ]);
         const handleSubmit = onClickTypeSwitch(this.props.selectedArchiveType);
         return (
@@ -324,7 +324,7 @@ class AddArchivePage extends PureComponent {
                             </FormGroup>
                             <Button
                                 intent={Intent.SUCCESS}
-                                onClick={::this.handleConnectWebDAV}
+                                onClick={evt => this.handleConnectWebDAV(evt)}
                                 loading={this.props.isConnecting}
                                 disabled={this.props.isConnected}
                             >
@@ -341,7 +341,7 @@ class AddArchivePage extends PureComponent {
                             </p>
                             <Button
                                 icon="key"
-                                onClick={::this.handleDropboxAuth}
+                                onClick={evt => this.handleDropboxAuth(evt)}
                                 disabled={hasAuthenticatedDropbox}
                                 loading={isAuthenticatingDropbox && !hasAuthenticatedDropbox}
                             >
@@ -376,7 +376,7 @@ class AddArchivePage extends PureComponent {
                             </CalloutWithSpacing>
                             <Button
                                 icon="key"
-                                onClick={::this.handleGoogleDriveAuth}
+                                onClick={evt => this.handleGoogleDriveAuth(evt)}
                                 disabled={hasAuthenticatedGoogleDrive}
                                 loading={isAuthenticatingGoogleDrive && !hasAuthenticatedGoogleDrive}
                             >
@@ -390,7 +390,7 @@ class AddArchivePage extends PureComponent {
                             <p>To start, please grant Buttercup access to your My Buttercup account.</p>
                             <Button
                                 icon="key"
-                                onClick={::this.handleMyButtercupAuth}
+                                onClick={evt => this.handleMyButtercupAuth(evt)}
                                 disabled={hasAuthenticatedMyButtercup}
                                 loading={isAuthenticatingMyButtercup && !hasAuthenticatedMyButtercup}
                             >
@@ -414,7 +414,7 @@ class AddArchivePage extends PureComponent {
                                 </p>
                                 <Button
                                     icon="desktop"
-                                    onClick={::this.handleLocalAuth}
+                                    onClick={evt => this.handleLocalAuth(evt)}
                                     disabled={this.props.isConnected}
                                     loading={this.props.isConnecting && !this.isConnected}
                                 >
@@ -434,7 +434,7 @@ class AddArchivePage extends PureComponent {
                             </FormGroup>
                             <Button
                                 intent={Intent.SUCCESS}
-                                onClick={::this.handleConnectLocal}
+                                onClick={evt => this.handleConnectLocal(evt)}
                                 loading={isAuthenticatingDesktop}
                                 disabled={!this.props.isConnected || !this.state.localCode || hasAuthenticatedDesktop}
                             >
