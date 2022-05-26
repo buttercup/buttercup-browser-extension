@@ -1,9 +1,5 @@
-import {
-    createClient as createDropboxClient,
-    createFsInterface as createDropboxFSClient
-} from "@buttercup/dropbox-client";
+import { DropboxClient } from "@buttercup/dropbox-client";
 import { createClient as createGoogleDriveClient } from "@buttercup/googledrive-client";
-import pify from "pify";
 import { getSharedAppEnv } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { getState } from "../redux/index.js";
@@ -33,7 +29,7 @@ export function disposeWebDAVConnection() {
     __webdavClient = null;
 }
 
-function getDropboxFSClient() {
+function getDropboxClient() {
     if (!__dropboxClient) {
         const state = getState();
         const authToken = getDropboxAuthToken(state);
@@ -41,21 +37,19 @@ function getDropboxFSClient() {
             log.error("Unable to create Dropbox client: No token found");
             return;
         }
-        __dropboxClient = createDropboxFSClient(createDropboxClient(authToken));
+        __dropboxClient = new DropboxClient(authToken);
     }
     return __dropboxClient;
 }
 
-export function getDropboxDirectoryContents(directory, dropboxClient = getDropboxFSClient()) {
-    const readDir = pify(::dropboxClient.readdir);
-    return readDir(directory, { mode: "stat" }).then(contents =>
-        contents.map(item => ({
-            filename: item.path,
-            basename: item.name,
-            type: item.type,
-            size: item.isDirectory() ? 0 : item.size
-        }))
-    );
+export async function getDropboxDirectoryContents(directory, dropboxClient = getDropboxClient()) {
+    const contents = await dropboxClient.getDirectoryContents(directory);
+    return contents.map(item => ({
+        filename: item.path,
+        basename: item.name,
+        type: item.type,
+        size: item.size
+    }));
 }
 
 function getGoogleDriveClient() {
