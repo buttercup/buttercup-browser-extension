@@ -79,29 +79,30 @@ module.exports = {
         ]
     },
 
-    optimization: {
-        splitChunks: {
-            automaticNameDelimiter: "-",
-            cacheGroups: {
-                vendors: {
-                    test: /\/node_modules\//,
-                    name: "vendors",
-                    priority: -10,
-                    chunks: "initial"
-                },
-                default: {
-                    priority: -20,
-                    chunks: "initial",
-                    reuseExistingChunk: true,
-                    name: "common"
-                }
-            }
-        }
-    },
+    // optimization: {
+    //     splitChunks: {
+    //         automaticNameDelimiter: "-",
+    //         cacheGroups: {
+    //             vendors: {
+    //                 test: /\/node_modules\//,
+    //                 name: "vendors",
+    //                 priority: -10,
+    //                 chunks: "initial"
+    //             },
+    //             default: {
+    //                 priority: -20,
+    //                 chunks: "initial",
+    //                 reuseExistingChunk: true,
+    //                 name: "common"
+    //             }
+    //         }
+    //     }
+    // },
 
     output: {
         filename: "[name].js",
-        path: DIST
+        path: DIST,
+        publicPath: ""
     },
 
     plugins: [

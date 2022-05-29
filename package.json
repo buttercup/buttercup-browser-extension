@@ -8,6 +8,7 @@
     "build:production": "env-cmd -e production webpack --mode production --progress",
     "clean": "rimraf dist/* release/*",
     "dev": "npm run clean && env-cmd -e development webpack --mode development -w",
+    "dev:chrome": "concurrently -k \"npm run dev\"",
     "dev:firefox": "concurrently -k \"npm run dev\" \"cd dist && web-ext run\" --restart-tries 20 --restart-after 5000",
     "dev:prod": "env-cmd -e production webpack --mode production -w --progress",
     "format": "prettier --write '{{source,test}/**/*.js,webpack.config.js}'",
