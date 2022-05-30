@@ -25,6 +25,7 @@
 
     "background": {
         "scripts": [
+            "background-vendors.js",
             "background.js"
         ]
     },
@@ -33,7 +34,7 @@
         {
             "matches": ["http://*/*", "https://*/*"],
             "run_at": "document_end",
-            "js": ["tab.js"]
+            "js": ["vendors.js", "tab.js"]
         }
     ],
 
