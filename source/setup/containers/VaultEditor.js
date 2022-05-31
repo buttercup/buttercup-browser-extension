@@ -30,6 +30,7 @@ async function convertAttachmentFiles(files) {
 
 export default connect(
     (state, ownProps) => ({
+        darkMode: getConfigKey(state, "darkMode"),
         dynamicIconsSetting: getConfigKey(state, "dynamicIcons"),
         vault: getVaultFacade(state)
     }),

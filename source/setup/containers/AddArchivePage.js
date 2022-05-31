@@ -1,4 +1,4 @@
-import { basename, dirname } from "path";
+import { basename, dirname } from "path-posix";
 import { connect } from "react-redux";
 import stripTags from "striptags";
 import joinURL from "url-join";

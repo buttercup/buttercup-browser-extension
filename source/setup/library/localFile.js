@@ -1,4 +1,4 @@
-import { basename, join } from "path";
+import { basename, join } from "path-posix";
 import { localFileClient } from "../../shared/library/buttercup.js";
 
 const { buildClient, completeConnection, initiateConnection } = localFileClient;

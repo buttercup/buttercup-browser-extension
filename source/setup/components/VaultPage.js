@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
-import { Button, Intent, Classes, FormGroup, InputGroup, Toaster, Position } from "@blueprintjs/core";
+import { Button, Classes, Intent, FormGroup, InputGroup, Navbar, Alignment } from "@blueprintjs/core";
+import styled from "styled-components";
 import Dialog from "./Dialog.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import VaultEditor from "../containers/VaultEditor.js";
@@ -10,6 +11,11 @@ const CLEAR_PASSWORD_CHANGE = {
     newMasterPassword: "",
     newMasterPassword2: ""
 };
+
+const VaultContainer = styled.div`
+    height: calc(100% - 0px);
+    margin-top: 0px;
+`;
 
 class VaultPage extends PureComponent {
     static propTypes = {
@@ -48,7 +54,7 @@ class VaultPage extends PureComponent {
         }
     }
 
-    handleCancelUnlock(event) {
+    handleCloseTab(event) {
         event.preventDefault();
         closeCurrentTab();
     }
@@ -115,65 +121,102 @@ class VaultPage extends PureComponent {
             default:
                 throw new Error(`Unknown vault state: ${this.props.state}`);
         }
-        const actions = (
-            <Fragment>
-                <Button
-                    className="ml-0"
-                    intent={Intent.DANGER}
-                    icon="trash"
-                    onClick={::this.handleRemoveArchive}
-                    disabled={disableForm}
-                >
-                    Remove Archive
-                </Button>
-                <Button className="ml-auto" onClick={::this.handleCancelUnlock} disabled={disableForm}>
-                    Cancel
-                </Button>
-                <Choose>
-                    <When condition={this.props.state === "locked"}>
-                        <Button onClick={::this.handleUnlockArchive} disabled={disableForm}>
-                            Unlock
-                        </Button>
-                    </When>
-                    <Otherwise>
-                        <Button icon="text-highlight" onClick={::this.handlePasswordChange} disabled={disableForm}>
-                            Change Password
-                        </Button>
-                        <Button icon="lock" onClick={::this.handleLockArchive} disabled={disableForm}>
-                            Lock
-                        </Button>
-                    </Otherwise>
-                </Choose>
-            </Fragment>
-        );
         return (
             <Fragment>
-                <Dialog
-                    maximise={this.props.state === "unlocked"}
-                    title={`${title}: ${this.props.archiveTitle}`}
-                    actions={actions}
-                >
+                <Navbar>
+                    <Navbar.Group align={Alignment.LEFT}>
+                        <Navbar.Heading>{this.props.archiveTitle}</Navbar.Heading>
+                        <Navbar.Divider />
+                        <If condition={this.props.state === "unlocked"}>
+                            <Button
+                                className="bp4-minimal"
+                                icon="lock"
+                                onClick={event => this.handleLockArchive(event)}
+                                disabled={disableForm}
+                            >
+                                Lock
+                            </Button>
+                            <Button
+                                className="bp4-minimal"
+                                icon="text-highlight"
+                                onClick={event => this.handlePasswordChange(event)}
+                                disabled={disableForm}
+                            >
+                                Change Password
+                            </Button>
+                        </If>
+                    </Navbar.Group>
+                    <Navbar.Group align={Alignment.RIGHT}>
+                        <Button
+                            className="bp4-minimal"
+                            intent={Intent.DANGER}
+                            icon="trash"
+                            onClick={event => this.handleRemoveArchive(event)}
+                            disabled={disableForm}
+                            title="Remove vault"
+                        />
+                        <Button
+                            className="bp4-minimal"
+                            onClick={event => this.handleCloseTab(event)}
+                            disabled={disableForm}
+                            icon="cross"
+                        />
+                    </Navbar.Group>
+                </Navbar>
+                <VaultContainer>
                     <If condition={this.props.state === "unlocked"}>
                         <VaultEditor attachments={this.props.attachments} sourceID={this.props.sourceID} />
                     </If>
                     <If condition={this.props.state === "locked"}>
-                        <form onSubmit={::this.handleUnlockArchive}>
-                            <FormGroup disabled={disableForm} label="Master Password" labelFor="master-password">
-                                <InputGroup
-                                    id="master-password"
-                                    type="password"
-                                    placeholder="Enter your password..."
-                                    disabled={disableForm}
-                                    large
-                                    onChange={event => this.handleUpdateForm("masterPassword", event)}
-                                    inputRef={input => {
-                                        this._passwordInput = input;
-                                    }}
-                                />
-                            </FormGroup>
-                        </form>
+                        <div className={Classes.DIALOG_CONTAINER}>
+                            <div className={Classes.DIALOG}>
+                                <div className={Classes.DIALOG_HEADER}>
+                                    <h5 className={Classes.HEADING}>Unlock</h5>
+                                </div>
+                                <div className={Classes.DIALOG_BODY}>
+                                    <form onSubmit={event => this.handleUnlockArchive(event)}>
+                                        <FormGroup
+                                            disabled={disableForm}
+                                            label="Master Password"
+                                            labelFor="master-password"
+                                        >
+                                            <InputGroup
+                                                id="master-password"
+                                                type="password"
+                                                placeholder="Enter your password..."
+                                                disabled={disableForm}
+                                                large
+                                                onChange={event => this.handleUpdateForm("masterPassword", event)}
+                                                inputRef={input => {
+                                                    this._passwordInput = input;
+                                                }}
+                                            />
+                                        </FormGroup>
+                                    </form>
+                                </div>
+                                <div className={Classes.DIALOG_FOOTER}>
+                                    <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                                        <Button
+                                            className="bp4-minimal"
+                                            onClick={event => this.handleUnlockArchive(event)}
+                                            disabled={disableForm}
+                                            intent={Intent.PRIMARY}
+                                        >
+                                            Unlock
+                                        </Button>
+                                        <Button
+                                            className="bp4-minimal"
+                                            onClick={event => this.handleCloseTab(event)}
+                                            disabled={disableForm}
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </If>
-                </Dialog>
+                </VaultContainer>
                 <If condition={this.state.changingMasterPassword}>
                     <Dialog
                         title={`Change Password: ${this.props.archiveTitle}`}
@@ -190,7 +233,7 @@ class VaultPage extends PureComponent {
                                 <Button
                                     intent={Intent.DANGER}
                                     icon="confirm"
-                                    onClick={::this.handlePasswordChangeSubmit}
+                                    onClick={event => this.handlePasswordChangeSubmit(event)}
                                     disabled={disableForm || !this.passwordChangeValid}
                                 >
                                     Change Password
@@ -199,7 +242,7 @@ class VaultPage extends PureComponent {
                         }
                         zIndex={2}
                     >
-                        <form onSubmit={::this.handlePasswordChangeSubmit}>
+                        <form onSubmit={event => this.handlePasswordChangeSubmit(event)}>
                             <FormGroup disabled={disableForm} label="Current Password" labelFor="old-master-password">
                                 <InputGroup
                                     id="old-master-password"

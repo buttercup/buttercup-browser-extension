@@ -1,10 +1,8 @@
-import { basename } from "path";
-import Dropbox from "dropbox";
+import { basename } from "path-posix";
+import { generateAuthorisationURL } from "@buttercup/dropbox-client";
 
 const DROPBOX_CALLBACK_URL = "https://buttercup.pw/";
 const DROPBOX_CLIENT_ID = "5fstmwjaisrt06t";
-
-let __client;
 
 export function dropboxContentsToTree(allItems) {
     const itemToFile = item => ({
@@ -33,17 +31,7 @@ export function dropboxContentsToTree(allItems) {
     return buildItem("/", allItems["/"]);
 }
 
-export function getClient() {
-    if (!__client) {
-        __client = new Dropbox({
-            clientId: DROPBOX_CLIENT_ID
-        });
-    }
-    return __client;
-}
-
 export function performAuthentication() {
-    const client = getClient();
-    const url = client.getAuthenticationUrl(DROPBOX_CALLBACK_URL);
+    const url = generateAuthorisationURL(DROPBOX_CLIENT_ID, DROPBOX_CALLBACK_URL);
     chrome.tabs.create({ url });
 }

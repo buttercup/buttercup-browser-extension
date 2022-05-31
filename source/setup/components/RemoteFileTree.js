@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import joinPath from "path.join";
-import { Tree, Spinner, InputGroup, Colors } from "@blueprintjs/core";
-
-import BUTTERCUP_LOGO_SMALL from "../../../resources/buttercup-128.png";
+import path from "path-posix";
+import { Tree, Spinner, Colors } from "@blueprintjs/core";
 
 const BCUP_EXTENSION = /\.bcup$/i;
 const NOOP = () => {};
@@ -115,7 +113,7 @@ class RemoteFileTree extends Component {
             editingNewFile: false,
             editingNewFileName: filename
         });
-        this.props.onCreateRemotePath(joinPath(this.state.editingNewFileDirectory, filename));
+        this.props.onCreateRemotePath(path.join(this.state.editingNewFileDirectory, filename));
     }
 
     onNewFilenameChange(event) {
