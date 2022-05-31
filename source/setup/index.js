@@ -46,7 +46,3 @@ trackMouseMovement();
 
 // Track keystrokes for user activity tracking
 trackKeydownEvent();
-
-// setTimeout(() => {
-//     window.document.body.classList.add("bp3-dark");
-// });

@@ -34,7 +34,7 @@
         {
             "matches": ["http://*/*", "https://*/*"],
             "run_at": "document_end",
-            "js": ["vendors.js", "tab.js"]
+            "js": ["tab.js"]
         }
     ],
 
