@@ -1,5 +1,16 @@
 # Buttercup browser extension changelog
 
+## v2.25.0
+_2022-06-02_
+
+ * Buttercup upgrade: v6
+   * Improved Dropbox/Google Drive integrations
+   * Improved vault stability and performance
+   * Improved support for Vault Format B
+ * Removed My Buttercup integration
+ * Vault editor page redesign
+ * Updated vault UI
+
 ## v2.24.3
 _2021-05-24_
 
