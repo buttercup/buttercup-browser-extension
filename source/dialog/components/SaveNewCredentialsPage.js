@@ -49,11 +49,11 @@ class SaveNewCredentialsPage extends Component {
                             fill
                             text="Save"
                             icon="floppy-disk"
-                            onClick={::this.handleSaveClick}
+                            onClick={evt => this.handleSaveClick(evt)}
                             intent={Intent.PRIMARY}
                         />
-                        <Button small icon="disable" onClick={::this.handleDisableClick} />
-                        <Button fill text="Cancel" onClick={::this.handleCancelClick} />
+                        <Button small icon="disable" onClick={evt => this.handleDisableClick(evt)} />
+                        <Button fill text="Cancel" onClick={evt => this.handleCancelClick(evt)} />
                     </Fragment>
                 }
             >
