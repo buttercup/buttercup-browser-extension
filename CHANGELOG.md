@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.25.1
+_2022-08-16_
+
+ * **Bugfix**:
+   * Format B saving new properties would fail
+   * Format B conversion would omit history
+
 ## v2.25.0
 _2022-06-02_
 
