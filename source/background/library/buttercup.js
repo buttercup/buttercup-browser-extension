@@ -1,6 +1,7 @@
 import ChannelQueue, { TASK_TYPE_HIGH_PRIORITY } from "@buttercup/channel-queue";
 import debounce from "debounce";
 import ms from "ms";
+import { Layerr } from "layerr";
 import { DatasourceAuthManager, VaultManager, VaultSource } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { dispatch } from "../redux/index.js";
@@ -9,6 +10,8 @@ import BrowserStorageInterface, { getNonSyncStorage, getSyncStorage } from "./Br
 import { authenticateWithoutToken, authenticateWithRefreshToken } from "./googleDrive.js";
 import { updateSearch } from "./search.js";
 import { updateFacades } from "./facades.js";
+
+const ERR_REFRESH_FAILED = "err/refresh/failed";
 
 let __vaultManager, __queue, __updateSearch;
 
@@ -101,8 +104,23 @@ export function registerAuthWatchers() {
             }
         } else {
             log.info("Datasource contains refresh token: Refreshing authorisation");
-            const { accessToken } = await authenticateWithRefreshToken(currentToken, currentRefreshToken);
-            datasource.updateTokens(accessToken, currentRefreshToken);
+            try {
+                const { accessToken } = await authenticateWithRefreshToken(currentToken, currentRefreshToken);
+                datasource.updateTokens(accessToken, currentRefreshToken);
+            } catch (err) {
+                const { code, status } = Layerr.info(err);
+                if (code === ERR_REFRESH_FAILED && status === 400) {
+                    // Start re-authentication procedure
+                    log.info("Refresh failed, performing full authorisation");
+                    const { accessToken, refreshToken } = await authenticateWithoutToken();
+                    datasource.updateTokens(accessToken, refreshToken);
+                    if (!refreshToken) {
+                        log.warn("Updating Google Drive datasource access token without refresh token");
+                    }
+                    return;
+                }
+                throw err;
+            }
         }
         log.info("Google Drive datasource tokens updated");
     });
