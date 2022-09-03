@@ -37,7 +37,10 @@ function getDropboxClient() {
             log.error("Unable to create Dropbox client: No token found");
             return;
         }
-        __dropboxClient = new DropboxClient(authToken);
+        __dropboxClient = new DropboxClient(authToken, {
+            compat: true,
+            compatCorsHack: false
+        });
     }
     return __dropboxClient;
 }
