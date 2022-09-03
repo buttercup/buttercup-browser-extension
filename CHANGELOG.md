@@ -1,5 +1,12 @@
 # Buttercup browser extension changelog
 
+## v2.25.2
+_2022-09-03_
+
+ * **Bugfix**:
+   * Fixed Dropbox connectivity issues
+   * Fixed Google Drive re-authentication loop, short auth time
+
 ## v2.25.1
 _2022-08-16_
 
