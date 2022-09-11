@@ -1,5 +1,8 @@
-import { createLog as createLogger } from "gle";
+import { createLog as createLogger, toggleContext } from "gle";
 
-export function createLog(name: string): (...args: Array<any>) => void {
+export function createLog(name: string, force: boolean = false): (...args: Array<any>) => void {
+    if (force) {
+        toggleContext(name, true);
+    }
     return createLogger(name);
 }
