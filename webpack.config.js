@@ -150,7 +150,7 @@ module.exports = [
     }),
     merge(getBaseConfig(), {
         entry: {
-            // background: path.resolve(__dirname, "./source/background/index.ts"),
+            full: path.resolve(__dirname, "./source/full/index.tsx"),
             popup: path.resolve(__dirname, "./source/popup/index.tsx")
         },
 
