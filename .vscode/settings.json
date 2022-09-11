@@ -3,5 +3,6 @@
     "eslint.enable": false,
     "files.associations": {
         "**/*.js": "javascriptreact"
-    }
+    },
+    "typescript.preferences.importModuleSpecifierEnding": "js"
 }

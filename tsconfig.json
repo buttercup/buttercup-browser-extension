@@ -3,16 +3,15 @@
         "outDir": "./dist",
         "module": "esnext",
         "moduleResolution": "node",
-        "target": "esnext",
+        "target": "ES6",
         "esModuleInterop": true,
         "strict": false,
         "jsx": "react",
         "allowSyntheticDefaultImports": true,
-        "types": ["react", "react-dom"]
+        "types": ["chrome", "react", "react-dom"]
     },
     "include": [
-        "./source/client/**/*",
-        "./source/shared/**/*"
+        "./source/**/*"
     ],
     "exclude":[
         "dist",

@@ -1,8 +1,10 @@
 const fs = require("fs");
 const path = require("path");
+const { BannerPlugin } = require("webpack");
 const ResolveTypeScriptPlugin = require("resolve-typescript-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { merge } = require("webpack-merge");
 
 const { version } = require("./package.json");
 const manifestV2 = require("./resources/manifest.v2.json");
@@ -11,6 +13,10 @@ const manifestV3 = require("./resources/manifest.v3.json");
 const { BROWSER } = process.env;
 const DIST = path.resolve(__dirname, "dist");
 const INDEX_TEMPLATE = path.resolve(__dirname, "./resources/template.pug");
+
+if (!BROWSER) {
+    throw new Error("BROWSER must be specified");
+}
 
 function buildManifest(assetNames, manifest) {
     const newManifest = JSON.parse(JSON.stringify(manifest));
@@ -28,132 +34,153 @@ function buildManifest(assetNames, manifest) {
     fs.writeFileSync(path.join(DIST, "./manifest.json"), JSON.stringify(newManifest, undefined, 2));
 }
 
-if (!BROWSER) {
-    throw new Error("BROWSER must be specified");
-}
+function getBaseConfig() {
+    return {
+        devtool: false,
 
-module.exports = {
-    devtool: false,
-
-    entry: {
-        background: path.resolve(__dirname, "./source/background/index.ts"),
-        popup: path.resolve(__dirname, "./source/popup/index.tsx")
-    },
-
-    module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                use: [
-                    {
-                        loader: "babel-loader",
-                        options: {
-                            compact: true,
-                            presets: [
-                                [
-                                    "@babel/preset-env",
-                                    {
-                                        targets: {
-                                            chrome: "90",
-                                            firefox: "85",
-                                            edge: "90"
-                                        },
-                                        useBuiltIns: false
-                                    }
-                                ]
-                            ]
-                        }
-                    },
-                    {
-                        loader: "ts-loader"
-                    }
-                ],
-                resolve: {
-                    fullySpecified: false
-                }
-            },
-            {
-                test: /\.pug$/,
-                loader: "pug-loader"
-            },
-            {
-                test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
-                loader: "file-loader",
-                options: {
-                    name: "[name].[hash].[ext]"
-                }
-            }
-        ]
-    },
-
-    optimization: {
-        splitChunks: {
-            automaticNameDelimiter: "-",
-            chunks: "all",
-            // chunks: chunk => {
-            //     return chunk.name !== "background";
-            // },
-            maxSize: Infinity,
-            minSize: 30000
-        }
-    },
-
-    output: {
-        filename: "[name].js",
-        chunkFilename: "[name].chunk.js",
-        path: DIST,
-        chunkLoadingGlobal: "__bcupjsonp"
-    },
-
-    performance: {
-        hints: false,
-        maxEntrypointSize: 768000,
-        maxAssetSize: 768000
-    },
-
-    plugins: [
-        {
-            apply: (compiler) => {
-                compiler.hooks.afterEmit.tap("AfterEmitPlugin", (compilation) => {
-                    buildManifest(
-                        Object.keys(compilation.getStats().compilation.assets),
-                        BROWSER === "chrome" ? manifestV3 : manifestV2
-                    );
-                });
-            }
-        },
-        new CopyWebpackPlugin({
-            patterns: [
+        module: {
+            rules: [
                 {
-                    from: path.join(__dirname, "./resources", "buttercup-*.png"),
-                    to: DIST,
-                    context: path.join(__dirname, "./resources")
+                    test: /\.tsx?$/,
+                    use: [
+                        {
+                            loader: "babel-loader",
+                            options: {
+                                compact: true,
+                                presets: [
+                                    [
+                                        "@babel/preset-env",
+                                        {
+                                            targets: {
+                                                chrome: "90",
+                                                firefox: "85",
+                                                edge: "90"
+                                            },
+                                            useBuiltIns: false
+                                        }
+                                    ]
+                                ]
+                            }
+                        },
+                        {
+                            loader: "ts-loader"
+                        }
+                    ],
+                    resolve: {
+                        fullySpecified: false
+                    }
+                },
+                {
+                    test: /\.pug$/,
+                    loader: "pug-loader"
+                },
+                {
+                    test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[hash].[ext]"
+                    }
                 }
             ]
-        }),
-        new HtmlWebpackPlugin({
-            title: "Buttercup",
-            template: INDEX_TEMPLATE,
-            filename: "popup.html",
-            inject: "body"
-            // chunks: ["popup"]
-        })
-    ],
+        },
 
-    resolve: {
-        alias: {
-            buttercup: "buttercup/web"
+        performance: {
+            hints: false,
+            maxEntrypointSize: 768000,
+            maxAssetSize: 768000
         },
-        // No .ts/.tsx included due to the typescript resolver plugin
-        extensions: [".js", ".jsx"],
-        fallback: {
-            buffer: false,
-            fs: false,
-            path: false
+
+        resolve: {
+            alias: {
+                buttercup: "buttercup/web"
+                // gle: "gle/browser"
+            },
+            // No .ts/.tsx included due to the typescript resolver plugin
+            extensions: [".js", ".jsx"],
+            fallback: {
+                buffer: false,
+                fs: false,
+                path: false
+            },
+            plugins: [
+                // Handle .ts => .js resolution
+                new ResolveTypeScriptPlugin()
+            ]
+        }
+    };
+}
+
+module.exports = [
+    merge(getBaseConfig(), {
+        entry: {
+            background: path.resolve(__dirname, "./source/background/index.ts")
         },
+
+        output: {
+            filename: "[name].js",
+            path: DIST
+        },
+
         plugins: [
-            // Handle .ts => .js resolution
-            new ResolveTypeScriptPlugin()
+            new BannerPlugin({
+                // Fix service worker scope
+                banner: `window = self || global;`,
+                raw: true
+            }),
+            {
+                apply: (compiler) => {
+                    compiler.hooks.afterEmit.tap("AfterEmitPlugin", (compilation) => {
+                        buildManifest(
+                            Object.keys(compilation.getStats().compilation.assets),
+                            BROWSER === "chrome" ? manifestV3 : manifestV2
+                        );
+                    });
+                }
+            },
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from: path.join(__dirname, "./resources", "buttercup-*.png"),
+                        to: DIST,
+                        context: path.join(__dirname, "./resources")
+                    }
+                ]
+            })
         ]
-    }
-};
+    }),
+    merge(getBaseConfig(), {
+        entry: {
+            // background: path.resolve(__dirname, "./source/background/index.ts"),
+            popup: path.resolve(__dirname, "./source/popup/index.tsx")
+        },
+
+        optimization: {
+            splitChunks: {
+                automaticNameDelimiter: "-",
+                chunks: "all",
+                // chunks: chunk => {
+                //     return chunk.name !== "background";
+                // },
+                maxSize: Infinity,
+                minSize: 30000
+            }
+        },
+
+        output: {
+            filename: "[name].js",
+            chunkFilename: "[name].chunk.js",
+            path: DIST,
+            chunkLoadingGlobal: "__bcupjsonp"
+        },
+
+        plugins: [
+            new HtmlWebpackPlugin({
+                title: "Buttercup",
+                template: INDEX_TEMPLATE,
+                filename: "popup.html",
+                inject: "body"
+                // chunks: ["popup"]
+            })
+        ]
+    })
+];
