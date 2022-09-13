@@ -29,7 +29,7 @@ export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
 }
 
 export function getExtensionURL(path: string): string {
-    return getExtensionAPI().extension.getURL(path);
+    return getExtensionAPI().runtime.getURL(path);
 }
 
 export async function sendTabMessage(tabID: number, message: any) {

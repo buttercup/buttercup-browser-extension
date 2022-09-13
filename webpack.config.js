@@ -3,8 +3,8 @@ const path = require("path");
 const { BannerPlugin } = require("webpack");
 const ResolveTypeScriptPlugin = require("resolve-typescript-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { merge } = require("webpack-merge");
+const PugPlugin = require("pug-plugin");
 
 const { version } = require("./package.json");
 const manifestV2 = require("./resources/manifest.v2.json");
@@ -72,7 +72,7 @@ function getBaseConfig() {
                 },
                 {
                     test: /\.pug$/,
-                    loader: "pug-loader"
+                    loader: PugPlugin.loader
                 },
                 {
                     test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
@@ -89,6 +89,12 @@ function getBaseConfig() {
             maxEntrypointSize: 768000,
             maxAssetSize: 768000
         },
+
+        plugins: [
+            new PugPlugin({
+                pretty: false
+            })
+        ],
 
         resolve: {
             alias: {
@@ -151,7 +157,8 @@ module.exports = [
     merge(getBaseConfig(), {
         entry: {
             full: path.resolve(__dirname, "./source/full/index.tsx"),
-            popup: path.resolve(__dirname, "./source/popup/index.tsx")
+            popup: path.resolve(__dirname, "./source/popup/index.tsx"),
+            popup_page: path.resolve(__dirname, "./resources/popup.pug")
         },
 
         optimization: {
@@ -170,17 +177,18 @@ module.exports = [
             filename: "[name].js",
             chunkFilename: "[name].chunk.js",
             path: DIST,
+            publicPath: "/",
             chunkLoadingGlobal: "__bcupjsonp"
-        },
+        }
 
-        plugins: [
-            new HtmlWebpackPlugin({
-                title: "Buttercup",
-                template: INDEX_TEMPLATE,
-                filename: "popup.html",
-                inject: "body"
-                // chunks: ["popup"]
-            })
-        ]
+        // plugins: [
+        //     new HtmlWebpackPlugin({
+        //         title: "Buttercup",
+        //         template: INDEX_TEMPLATE,
+        //         filename: "popup.html",
+        //         inject: "body"
+        //         // chunks: ["popup"]
+        //     })
+        // ]
     })
 ];
