@@ -23,6 +23,15 @@
         "default_popup": "popup.html#/"
     },
 
+    "content_scripts" : [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "run_at": "document_end",
+            "all_frames": true,
+            "js": ["tab.js"]
+        }
+    ],
+
     "permissions": [
         "clipboardWrite",
         "contextMenus",

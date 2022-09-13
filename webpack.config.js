@@ -84,6 +84,11 @@ function getBaseConfig() {
             ]
         },
 
+        output: {
+            filename: "[name].js",
+            path: DIST
+        },
+
         performance: {
             hints: false,
             maxEntrypointSize: 768000,
@@ -105,6 +110,7 @@ function getBaseConfig() {
             extensions: [".js", ".jsx"],
             fallback: {
                 buffer: false,
+                crypto: false,
                 fs: false,
                 path: false
             },
@@ -120,11 +126,6 @@ module.exports = [
     merge(getBaseConfig(), {
         entry: {
             background: path.resolve(__dirname, "./source/background/index.ts")
-        },
-
-        output: {
-            filename: "[name].js",
-            path: DIST
         },
 
         plugins: [
@@ -174,21 +175,18 @@ module.exports = [
         },
 
         output: {
-            filename: "[name].js",
             chunkFilename: "[name].chunk.js",
-            path: DIST,
             publicPath: "/",
             chunkLoadingGlobal: "__bcupjsonp"
         }
+    }),
+    merge(getBaseConfig(), {
+        entry: {
+            tab: path.resolve(__dirname, "./source/tab/index.ts")
+        },
 
-        // plugins: [
-        //     new HtmlWebpackPlugin({
-        //         title: "Buttercup",
-        //         template: INDEX_TEMPLATE,
-        //         filename: "popup.html",
-        //         inject: "body"
-        //         // chunks: ["popup"]
-        //     })
-        // ]
+        output: {
+            publicPath: "/"
+        }
     })
 ];
