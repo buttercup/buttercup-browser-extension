@@ -42,6 +42,11 @@
         "unlimitedStorage"
     ],
 
+    "web_accessible_resources": [
+        "*.png",
+        "*.jpg"
+    ],
+
     "applications": {
         "gecko": {
             "id": "{10e7d273-2e63-47c9-82af-76c45dc1b624}"

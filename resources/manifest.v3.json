@@ -37,5 +37,12 @@
         "storage",
         "tabs",
         "unlimitedStorage"
+    ],
+
+    "web_accessible_resources": [
+        {
+            "resources": ["*.png", "*.jpg"],
+            "matches": ["http://*/*", "https://*/*"]
+        }
     ]
 }
