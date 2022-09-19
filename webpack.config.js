@@ -12,7 +12,6 @@ const manifestV3 = require("./resources/manifest.v3.json");
 
 const { BROWSER } = process.env;
 const DIST = path.resolve(__dirname, "dist");
-const INDEX_TEMPLATE = path.resolve(__dirname, "./resources/template.pug");
 
 if (!BROWSER) {
     throw new Error("BROWSER must be specified");
@@ -71,10 +70,6 @@ function getBaseConfig() {
                     }
                 },
                 {
-                    test: /\.pug$/,
-                    loader: PugPlugin.loader
-                },
-                {
                     test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
                     options: {
@@ -94,12 +89,6 @@ function getBaseConfig() {
             maxEntrypointSize: 768000,
             maxAssetSize: 768000
         },
-
-        plugins: [
-            new PugPlugin({
-                pretty: false
-            })
-        ],
 
         resolve: {
             alias: {
@@ -158,19 +147,23 @@ module.exports = [
     merge(getBaseConfig(), {
         entry: {
             full: path.resolve(__dirname, "./source/full/index.tsx"),
-            popup: path.resolve(__dirname, "./source/popup/index.tsx"),
-            popup_page: path.resolve(__dirname, "./resources/popup.pug")
+            popup: path.resolve(__dirname, "./source/popup/index.tsx")
         },
 
         optimization: {
             splitChunks: {
                 automaticNameDelimiter: "-",
                 chunks: "all",
-                // chunks: chunk => {
-                //     return chunk.name !== "background";
-                // },
                 maxSize: Infinity,
-                minSize: 30000
+                minSize: 30000,
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name(module) {
+                            return "vendors";
+                        }
+                    }
+                }
             }
         },
 
@@ -188,5 +181,32 @@ module.exports = [
         output: {
             publicPath: "/"
         }
-    })
+    }),
+    {
+        devtool: false,
+
+        entry: {
+            popup: path.resolve(__dirname, "./resources/popup.pug")
+        },
+
+        module: {
+            rules: [
+                {
+                    test: /\.pug$/,
+                    loader: PugPlugin.loader
+                }
+            ]
+        },
+
+        output: {
+            filename: "[name].html",
+            path: DIST
+        },
+
+        plugins: [
+            new PugPlugin({
+                pretty: false
+            })
+        ]
+    }
 ];

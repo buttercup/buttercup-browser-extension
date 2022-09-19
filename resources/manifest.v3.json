@@ -19,7 +19,7 @@
     "action": {
         "default_title": "Buttercup",
         "default_icon": "buttercup-256.png",
-        "default_popup": "popup.html#/"
+        "default_popup": "/popup.html#/"
     },
 
     "content_scripts" : [
