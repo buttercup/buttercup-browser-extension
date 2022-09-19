@@ -5,6 +5,8 @@ const ResolveTypeScriptPlugin = require("resolve-typescript-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { merge } = require("webpack-merge");
 const PugPlugin = require("pug-plugin");
+const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
+const sass = require("sass");
 
 const { version } = require("./package.json");
 const manifestV2 = require("./resources/manifest.v2.json");
@@ -70,11 +72,32 @@ function getBaseConfig() {
                     }
                 },
                 {
+                    test: /\.s[ac]ss$/,
+                    use: [
+                        MiniCSSExtractPlugin.loader,
+                        "css-loader",
+                        {
+                            loader: "sass-loader",
+                            options: {
+                                implementation: sass
+                            }
+                        }
+                    ]
+                },
+                {
+                    test: /\.css$/,
+                    use: [MiniCSSExtractPlugin.loader, "css-loader"]
+                },
+                {
                     test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[hash].[ext]"
+                    type: "asset/resource",
+                    generator: {
+                        filename: "assets/[name][ext]"
                     }
+                    // loader: "file-loader",
+                    // options: {
+                    //     name: "[name].[hash].[ext]"
+                    // }
                 }
             ]
         },
@@ -171,7 +194,13 @@ module.exports = [
             chunkFilename: "[name].chunk.js",
             publicPath: "/",
             chunkLoadingGlobal: "__bcupjsonp"
-        }
+        },
+
+        plugins: [
+            new MiniCSSExtractPlugin({
+                filename: "[name].css"
+            })
+        ]
     }),
     merge(getBaseConfig(), {
         entry: {
