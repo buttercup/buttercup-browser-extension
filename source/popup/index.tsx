@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { App } from "./components/App.jsx";
-
-console.log("POPUP!2");
+import "../shared/styles/base.sass";
+import "./styles/base.sass";
 
 ReactDOM.render(
     <App />,
