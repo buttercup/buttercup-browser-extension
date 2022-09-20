@@ -4,12 +4,13 @@ import {
     RouterProvider,
     Route,
 } from "react-router-dom";
+import { SearchPage } from "./pages/SearchPage.jsx";
 
 const ROUTER = createHashRouter([
     {
-      path: "/",
-      element: <div>Test 2</div>,
-    },
+        path: "/",
+        element: <SearchPage />
+    }
 ]);
 
 export function App() {
