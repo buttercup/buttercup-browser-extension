@@ -215,6 +215,7 @@ module.exports = [
         devtool: false,
 
         entry: {
+            full: path.resolve(__dirname, "./resources/full.pug"),
             popup: path.resolve(__dirname, "./resources/popup.pug")
         },
 
