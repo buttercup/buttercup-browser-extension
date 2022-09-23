@@ -7,6 +7,7 @@
         "esModuleInterop": true,
         "strict": false,
         "jsx": "react",
+        "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true,
         "types": ["chrome", "react", "react-dom"]
     },
