@@ -1,15 +1,14 @@
 import React from "react";
 import {
     createHashRouter,
-    RouterProvider,
-    Route,
+    RouterProvider
 } from "react-router-dom";
-// import { SearchPage } from "./pages/AddVaultPage.jsx";
+import { AddVault } from "./pages/AddVault.js";
 
 const ROUTER = createHashRouter([
     {
         path: "/add-vault",
-        element: <div>Test</div>
+        element: <AddVault />
     }
 ]);
 

@@ -1,8 +1,7 @@
 import React from "react";
 import {
     createHashRouter,
-    RouterProvider,
-    Route,
+    RouterProvider
 } from "react-router-dom";
 import { SearchPage } from "./pages/SearchPage.jsx";
 
