@@ -3,12 +3,17 @@ import {
     createHashRouter,
     RouterProvider
 } from "react-router-dom";
-import { AddVault } from "./pages/AddVault.js";
+import { AddVaultPage } from "./pages/addVault/index.js";
+import { AttributionsPage } from "./pages/AttributionsPage.js";
 
 const ROUTER = createHashRouter([
     {
         path: "/add-vault",
-        element: <AddVault />
+        element: <AddVaultPage />
+    },
+    {
+        path: "/attributions",
+        element: <AttributionsPage />
     }
 ]);
 
