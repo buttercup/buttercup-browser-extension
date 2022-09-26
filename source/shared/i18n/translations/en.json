@@ -2,6 +2,9 @@
     "_": "English (UK)",
     "add-vault-page": {
         "title": "Add Vault",
+        "section-select": {
+            "heading": "Select Vault"
+        },
         "section-type": {
             "heading": "Choose Vault Type"
         }
@@ -11,18 +14,23 @@
     },
     "vault-type": {
         "dropbox": {
+            "auth-error": "Dropbox failed to authenticate",
+            "configure-btn": "Authenticate",
             "description": "Host your vault within your Dropbox cloud storage account, so that you can access it from any device you own. You must have an account with Dropbox to be able to use this vault type.",
             "title": "Dropbox"
         },
         "googledrive": {
+            "configure-btn": "Authenticate",
             "description": "Host your vault within your Google Drive cloud storage, so that you can access it from any device you own. You must have a Google account to be able to use this vault type.",
             "title": "Google Drive"
         },
         "localfile": {
+            "configure-btn": "Connect",
             "description": "Use the Buttercup desktop application to supply access to local files on your computer. Requires the desktop application to be installed and running.",
             "title": "Local File"
         },
         "webdav": {
+            "configure-btn": "Configure",
             "description": "Use the DAV protocol that certain services provide to store your vault. Self-hosted cloud storage providers such as Nextcloud and ownCloud support this protocol, allowing you to access your vault from any device you own.",
             "title": "WebDAV"
         }

@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, ButtonGroup, Card, Classes, H5, Text } from "@blueprintjs/core";
+import React, { useCallback } from "react";
+import { Button, ButtonGroup, Card, Classes, H5, Icon, Intent, Text } from "@blueprintjs/core";
 import styled from "styled-components";
 import { t } from "../../../../shared/i18n/trans.js";
 import { VAULT_TYPES } from "../../../../shared/library/vaultTypes.js";
@@ -7,10 +7,24 @@ import { VaultType } from "../../../types.js";
 
 interface VaultTypeChooserProps {
     disabled?: boolean;
+    onConfigure: () => void;
     onSelectType: (newType: VaultType) => void;
     selectedType: VaultType | null;
 }
 
+const Heading = styled(H5)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+const HeadingIcon = styled(Icon)`
+    margin-right: 8px;
+`;
+const RightAlign = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+`;
 const VaultChooser = styled.div`
     display: flex;
     flex-direction: column;
@@ -37,8 +51,11 @@ const VaultText = styled(Text)`
 `;
 
 export function VaultTypeChooser(props: VaultTypeChooserProps) {
-    const { disabled, onSelectType, selectedType } = props;
+    const { disabled, onConfigure, onSelectType, selectedType } = props;
     const darkMode = false;
+    const handleConfigureClick = useCallback((event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        onConfigure();
+    }, [onConfigure]);
     return (
         <VaultChooser>
             <ButtonGroup fill large minimal>
@@ -69,8 +86,19 @@ export function VaultTypeChooser(props: VaultTypeChooserProps) {
             </ButtonGroup>
             {selectedType && (
                 <VaultTypeDescription>
-                    <H5>{t(`vault-type.${selectedType}.title`)}</H5>
+                    <Heading>
+                        <HeadingIcon icon="info-sign" />
+                        {t(`vault-type.${selectedType}.title`)}
+                    </Heading>
                     <p>{t(`vault-type.${selectedType}.description`)}</p>
+                    <RightAlign>
+                        <Button
+                            disabled={disabled}
+                            intent={Intent.PRIMARY}
+                            onClick={handleConfigureClick}
+                            text={t(`vault-type.${selectedType}.configure-btn`)}
+                        />
+                    </RightAlign>
                 </VaultTypeDescription>
             )}
         </VaultChooser>
