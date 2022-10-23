@@ -94,10 +94,6 @@ function getBaseConfig() {
                     generator: {
                         filename: "assets/[name][ext]"
                     }
-                    // loader: "file-loader",
-                    // options: {
-                    //     name: "[name].[hash].[ext]"
-                    // }
                 }
             ]
         },
@@ -124,7 +120,8 @@ function getBaseConfig() {
                 buffer: false,
                 crypto: false,
                 fs: false,
-                path: false
+                path: false,
+                util: false
             },
             plugins: [
                 // Handle .ts => .js resolution

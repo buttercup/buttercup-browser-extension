@@ -1,29 +1,26 @@
 import React, { useMemo } from "react";
+import { FileSystemInterface } from "@buttercup/file-interface";
 import { RemoteExplorer } from "../../explorer/RemoteExplorer.jsx";
-import {
-    RemoteExplorer as RemoteExplorerSvc,
-    initialiseDropboxExplorer
-} from "../../../services/RemoteExplorer.js";
+import { createDropboxInterface } from "../../../services/remoteExplorer.js";
+import { VaultType } from "../../../types.js";
 
 interface VaultFileChooserProps {
     dropboxToken?: string;
-    type: "dropbox";
+    type: VaultType;
 }
 
-function routeRemoteExplorer(props: VaultFileChooserProps): RemoteExplorerSvc {
+function routeRemoteExplorer(props: VaultFileChooserProps): FileSystemInterface {
     switch (props.type) {
-        case "dropbox":
-            return initialiseDropboxExplorer(props.dropboxToken);
+        case VaultType.Dropbox:
+            return createDropboxInterface(props.dropboxToken);
         default:
             throw new Error(`Unknown remote type: ${props.type}`);
     }
 }
 
 export function VaultFileChooser(props: VaultFileChooserProps) {
-    const remoteExplorer = useMemo(() => routeRemoteExplorer(props), []);
+    const fsInterface = useMemo(() => routeRemoteExplorer(props), []);
     return (
-        <RemoteExplorer
-            explorer={remoteExplorer}
-        />
+        <RemoteExplorer fsInterface={fsInterface} type={props.type} />
     );
 }

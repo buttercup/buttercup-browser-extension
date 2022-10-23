@@ -6,6 +6,7 @@ import { Layout } from "../../Layout.js";
 import { t } from "../../../../shared/i18n/trans.js";
 import { useTitle } from "../../../hooks/document.js";
 import { VaultTypeChooser } from "./VaultTypeChooser.js";
+import { VaultFileChooser } from "./VaultFileChooser.js";
 import { processDropboxAuthentication } from "../../../services/datasource.js";
 import { ADD_VAULT_STATE } from "../../../state/addVault.js";
 import { VaultType } from "../../../types.js";
@@ -90,6 +91,10 @@ export function AddVaultPage() {
             {pageType === PageType.Select && (
                 <>
                     <Heading>{t("add-vault-page.section-select.heading")}</Heading>
+                    <VaultFileChooser
+                        dropboxToken={dropboxToken}
+                        type={vaultType}
+                    />
                 </>
             )}
         </Layout>

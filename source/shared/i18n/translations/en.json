@@ -3,7 +3,8 @@
     "add-vault-page": {
         "title": "Add Vault",
         "section-select": {
-            "heading": "Select Vault"
+            "heading": "Select Vault",
+            "new-file-placeholder": "Enter new vault name..."
         },
         "section-type": {
             "heading": "Choose Vault Type"
