@@ -19,7 +19,6 @@ export async function authenticate(): Promise<string> {
             clearTimeout(timer);
             eventEmitter.off("tabClosed", onTabClosed);
             eventEmitter.off("dropboxToken", onToken);
-            console.log("REMOVE TAB 1?", !tabClosed, !!tab);
             if (!tabClosed && tab) browser.tabs.remove(tab.id);
             reject(new Error("Failed authenticating Dropbox"));
         };
@@ -32,7 +31,6 @@ export async function authenticate(): Promise<string> {
         const onToken = ({ token }: { token: string }) => {
             clearTimeout(timer);
             eventEmitter.off("tabClosed", onTabClosed);
-            console.log("REMOVE TAB 2?", !tabClosed, !!tab);
             // Tab is already removed by browser service
             // if (!tabClosed && tab) browser.tabs.remove(tab.id);
             resolve(token);

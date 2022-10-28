@@ -1,7 +1,7 @@
 import React, { Ref } from "react";
 import styled from "styled-components";
 import { Colors } from "@blueprintjs/core";
-import { FileIdentifier, PathIdentifier } from "@buttercup/file-interface";
+import { FileIdentifier, FileItem } from "@buttercup/file-interface";
 import path from "path-posix";
 import { t } from "../../../shared/i18n/trans.js";
 
@@ -19,11 +19,11 @@ const NewFilenameInput = styled.input`
 `;
 
 export function getNewTreeItem(
-    parentPath: PathIdentifier | FileIdentifier,
+    parentPath: FileItem,
     editingNewFileName: string | null,
-    editingNewFileDirectory: string | null,
+    editingNewFileDirectory: string | number | null,
     selectedFileName: FileIdentifier | null,
-    onEditNewItem: (event: React.MouseEvent<HTMLInputElement>, parentPath: PathIdentifier | FileIdentifier) => void,
+    onEditNewItem: (event: React.MouseEvent<HTMLInputElement>, parentPath: FileItem) => void,
     onNewFilenameChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     onBlurNewItem: (event: React.FocusEvent<HTMLInputElement>) => void,
     onKeypressNewItem: (event: React.KeyboardEvent<HTMLInputElement>) => void,
@@ -34,7 +34,7 @@ export function getNewTreeItem(
     const isSelected =
         currentlyEditingThis &&
         path.join(editingNewFileDirectory, editingNewFileName) === selectedFileName;
-    const label = editingNewFileDirectory === parentPath.identifier && editingNewFileName ?
+    const label = editingNewFileDirectory === parentPath.identifier && typeof editingNewFileName === "string" ?
         (
             <NewFilenameInput
                 type="text"
@@ -42,6 +42,7 @@ export function getNewTreeItem(
                 onChange={onNewFilenameChange}
                 onBlur={onBlurNewItem}
                 onKeyPress={onKeypressNewItem}
+                autoFocus
                 innerRef={newItemRef}
             />
         ) : (
@@ -53,6 +54,10 @@ export function getNewTreeItem(
         id: "new-vault-file",
         icon: "plus",
         label,
-        isSelected
+        isSelected,
+        nodeData: {
+            new: true,
+            parent: parentPath
+        }
     };
 }

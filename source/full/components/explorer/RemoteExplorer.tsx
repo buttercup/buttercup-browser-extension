@@ -1,5 +1,5 @@
-import React, { Ref, useEffect, useMemo, useRef } from "react";
-import { Colors, FileInput, Spinner, Tree, TreeNodeInfo } from "@blueprintjs/core";
+import React, { Ref, useCallback, useEffect, useMemo, useRef } from "react";
+import { Callout, Colors, FileInput, Intent, Spinner, Tree, TreeNodeInfo } from "@blueprintjs/core";
 import { FileIdentifier, FileItem, FileSystemInterface, PathIdentifier } from "@buttercup/file-interface";
 import { createStateObject } from "obstate";
 import { useSingleState } from "react-obstate";
@@ -9,8 +9,8 @@ import { getNewTreeItem } from "./newTreeItem.js";
 
 type DirectoryContents = Record<string, Array<FileItem> | null>;
 
-interface RemoteExplorerInitResult {
-    directory: string;
+interface RemoteExplorerFetchResult {
+    directory: string | number;
     contents: Array<FileItem>;
 }
 
@@ -20,24 +20,44 @@ interface RemoteExplorerProps {
 }
 
 interface RemoteExplorerState {
-    directory: PathIdentifier | FileItem;
+    // directory: PathIdentifier | FileItem;
     directoryContents: DirectoryContents;
     fsInterface: FileSystemInterface | null;
-    newFileDirectory: string | null;
+    newFileDirectory: string | number | null;
     newFileName: string | null;
     openDirectories: Array<string | number>;
-    root: PathIdentifier;
-    selectedFile: FileItem | null;
+    root: FileItem;
+    selectedFile: FileIdentifier | null;
 }
+
+type TreeTarget = FileItem;
 
 const BCUP_EXTENSION = /\.bcup$/i;
 
+async function fetchDirectoryContents(
+    target: FileIdentifier,
+    type: VaultType,
+    fsInterface: FileSystemInterface
+): Promise<RemoteExplorerFetchResult> {
+    switch (type) {
+        case VaultType.Dropbox: {
+            const contents = await fsInterface.getDirectoryContents(target);
+            return {
+                directory: target.identifier,
+                contents
+            };
+        }
+        default:
+            throw new Error(`Unknown remote type: ${type}`);
+    }
+}
+
 function getTree(
-    target: PathIdentifier | FileItem,
+    target: TreeTarget,
     directoryContents: DirectoryContents,
     openDirectories: Array<string | number>,
     newFileName: string | null,
-    newFileDirectory: string | null,
+    newFileDirectory: string | number | null,
     selectedItem: FileIdentifier | null,
     newFileInputRef: Ref<HTMLInputElement>
 ): TreeNodeInfo {
@@ -107,29 +127,23 @@ function getTree(
 async function initialiseRemoteExplorer(
     type: VaultType,
     fsInterface: FileSystemInterface
-): Promise<RemoteExplorerInitResult> {
-    switch (type) {
-        case VaultType.Dropbox: {
-            const contents = await fsInterface.getDirectoryContents({ identifier: "/", name: "/" });
-            return {
-                directory: "/",
-                contents
-            };
-        }
-        default:
-            throw new Error(`Unknown remote type: ${type}`);
-    }
+): Promise<RemoteExplorerFetchResult> {
+    return fetchDirectoryContents({ identifier: "/", name: "/" }, type, fsInterface);
 }
 
 function prepareState(type: VaultType, fsInterface: FileSystemInterface) {
     return createStateObject<RemoteExplorerState>({
-        directory: { identifier: "/", name: "/" },
         directoryContents: {},
         fsInterface,
         newFileDirectory: null,
         newFileName: null,
         openDirectories: ["/"],
-        root: { identifier: "/", name: "/" },
+        root: {
+            identifier: "/",
+            name: "/",
+            type: "directory",
+            size: 0
+        },
         selectedFile: null
     });
 }
@@ -147,7 +161,6 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
     const state = useMemo(() => prepareState(props.type, props.fsInterface), [props.fsInterface]);
     const [fsInterface] = useSingleState(state, "fsInterface");
     const [root] = useSingleState(state, "root");
-    const [directory, setDirectory] = useSingleState(state, "directory");
     const [dirContents, setDirContents] = useSingleState(state, "directoryContents");
     const [openDirectories, setOpenDirectories] = useSingleState(state, "openDirectories");
     const [selectedItem, setSelectedItem] = useSingleState(state, "selectedFile");
@@ -156,7 +169,7 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
     const newFileInputRef = useRef<HTMLInputElement>(null);
     // Init
     const initialiseRemoteExplorer_ = useMemo(() => () => initialiseRemoteExplorer(props.type, fsInterface), [fsInterface]);
-    const { value: initRes, error: initErr } = useAsync<RemoteExplorerInitResult>(
+    const { value: initRes, error: initErr } = useAsync<RemoteExplorerFetchResult>(
         initialiseRemoteExplorer_,
         [fsInterface]
     );
@@ -165,19 +178,88 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
         setDirContents({
             [root.identifier]: sortItems(initRes.contents)
         });
-        setDirectory({
-            identifier: initRes.directory,
-            name: initRes.directory
-        });
-
     }, [initRes, root]);
+    // Handlers
+    const handleNodeCollapse = useCallback(({ nodeData }, _, e) => {
+        setOpenDirectories(openDirectories.filter(dir => dir !== nodeData.identifier));
+    }, [openDirectories]);
+    const handleNodeExpand = useCallback(({ nodeData }, _, e) => {
+        if (nodeData.type !== "directory") {
+            e.preventDefault();
+            return;
+        }
+        setOpenDirectories([
+            ...openDirectories,
+            nodeData.identifier
+        ]);
+        if (dirContents[nodeData.identifier] === null || dirContents[nodeData.identifier]) {
+            return;
+        }
+        setDirContents({
+            ...dirContents,
+            [nodeData.identifier]: null
+        });
+        fetchDirectoryContents(
+            { name: nodeData.name, identifier: nodeData.identifier },
+            props.type,
+            fsInterface
+        )
+            .then(res => {
+                setDirContents({
+                    ...dirContents,
+                    [res.directory]: res.contents
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                // @todo show error
+            });
+    }, [dirContents, fsInterface, openDirectories]);
+    const handleNodeToggle = useCallback((nodeInfo, nodePath, e) => {
+        const isExpanded = openDirectories.includes(nodeInfo.nodeData.identifier);
+        if (isExpanded) {
+            handleNodeCollapse(nodeInfo, nodePath, e);
+        } else {
+            handleNodeExpand(nodeInfo, nodePath, e);
+        }
+    }, [handleNodeCollapse, handleNodeExpand, openDirectories]);
+    const handleNodeClick = useCallback((nodeInfo, nodePath, e) => {
+        const nodeData = nodeInfo.nodeData as TreeTarget & { new?: boolean; };
+        if (nodeInfo?.nodeData && nodeData.type === "directory") {
+            // handle directories
+            handleNodeToggle(nodeInfo, nodePath, e);
+            return;
+        }
+        if (nodeData.new) {
+            // New file: init
+            setNewFileName("");
+            setNewFileDirectory(nodeData.parent.identifier);
+        } else {
+            setNewFileName(null);
+            setNewFileDirectory(null);
+            setSelectedItem({
+                name: nodeInfo.nodeData.name,
+                identifier: nodeInfo.nodeData.path
+            });
+        }
+    }, [handleNodeToggle]);
     // Render
     const rootLoading = typeof dirContents[root.identifier] === "undefined" || dirContents[root.identifier] === null;
     if (rootLoading) {
         return (
             <Spinner size={32} />
         );
+    } else if (initErr) {
+        return (
+            <Callout
+                intent={Intent.DANGER}
+                title="Initialisation Error"
+            >
+                {initErr.message}
+            </Callout>
+        );
     }
+    console.log("STATE!", { newFileDirectory, newFileName });
     return (
         <div>
             <Tree
@@ -190,15 +272,10 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
                     selectedItem,
                     newFileInputRef
                 ).childNodes}
-                onNodeClick={() => {}}
-                onNodeCollapse={() => {}}
-                onNodeDoubleClick={() => {}}
-                onNodeExpand={() => {}}
-                // contents={this.getTree(this.props.rootDirectory).childNodes}
-                // onNodeExpand={::this.handleNodeExpand}
-                // onNodeCollapse={::this.handleNodeCollapse}
-                // onNodeDoubleClick={::this.handleNodeToggle}
-                // onNodeClick={::this.handleNodeClick}
+                onNodeClick={handleNodeClick}
+                onNodeCollapse={handleNodeCollapse}
+                onNodeDoubleClick={handleNodeToggle}
+                onNodeExpand={handleNodeExpand}
             />
         </div>
     );
