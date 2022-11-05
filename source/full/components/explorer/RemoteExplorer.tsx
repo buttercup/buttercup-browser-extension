@@ -3,6 +3,7 @@ import { Callout, Colors, FileInput, Intent, Spinner, Tree, TreeNodeInfo } from 
 import { FileIdentifier, FileItem, FileSystemInterface, PathIdentifier } from "@buttercup/file-interface";
 import { createStateObject } from "obstate";
 import { useSingleState } from "react-obstate";
+import path from "path-posix";
 import { VaultType } from "../../types.js";
 import { useAsync } from "../../../shared/hooks/async.js";
 import { getNewTreeItem } from "./newTreeItem.js";
@@ -20,14 +21,13 @@ interface RemoteExplorerProps {
 }
 
 interface RemoteExplorerState {
-    // directory: PathIdentifier | FileItem;
     directoryContents: DirectoryContents;
     fsInterface: FileSystemInterface | null;
     newFileDirectory: string | number | null;
     newFileName: string | null;
     openDirectories: Array<string | number>;
     root: FileItem;
-    selectedFile: FileIdentifier | null;
+    selectedFile: FileIdentifier & { base?: string | number; } | null;
 }
 
 type TreeTarget = FileItem;
@@ -58,16 +58,20 @@ function getTree(
     openDirectories: Array<string | number>,
     newFileName: string | null,
     newFileDirectory: string | number | null,
+    newFileInputRef: Ref<HTMLInputElement>,
     selectedItem: FileIdentifier | null,
-    newFileInputRef: Ref<HTMLInputElement>
+    handleEditNewItem: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    handleBlurNewItem: () => void,
+    handleKeypressNewItem: (event: React.KeyboardEvent<HTMLInputElement>) => void
 ): TreeNodeInfo {
     const isDir = !(target as FileItem).type || (target as FileItem).type === "directory";
+    const isNew = newFileName !== null;
     const childItems = isDir && directoryContents[target.identifier] || [];
     return {
         id: target.identifier,
         label: target.name,
         isExpanded: openDirectories.includes(target.identifier),
-        isSelected: false,
+        isSelected: !isNew && !isDir && selectedItem && target.identifier === selectedItem.identifier,
         hasCaret: isDir,
         icon: isDir ? "folder-close" : "document",
         nodeData: target,
@@ -89,8 +93,11 @@ function getTree(
                             openDirectories,
                             newFileName,
                             newFileDirectory,
+                            newFileInputRef,
                             selectedItem,
-                            newFileInputRef
+                            handleEditNewItem,
+                            handleBlurNewItem,
+                            handleKeypressNewItem
                         )]
                         : output,
                     []
@@ -103,8 +110,11 @@ function getTree(
                             openDirectories,
                             newFileName,
                             newFileDirectory,
+                            newFileInputRef,
                             selectedItem,
-                            newFileInputRef
+                            handleEditNewItem,
+                            handleBlurNewItem,
+                            handleKeypressNewItem
                         )]
                         : output,
                     []
@@ -114,10 +124,9 @@ function getTree(
                     newFileName,
                     newFileDirectory,
                     selectedItem,
-                    (event: React.MouseEvent<HTMLInputElement>, parentPath: PathIdentifier | FileIdentifier) => {},
-                    (event: React.ChangeEvent<HTMLInputElement>) => {},
-                    (event: React.FocusEvent<HTMLInputElement>) => {},
-                    (event: React.KeyboardEvent<HTMLInputElement>) => {},
+                    handleEditNewItem,
+                    handleBlurNewItem,
+                    handleKeypressNewItem,
                     newFileInputRef
                 )
             ]
@@ -146,6 +155,14 @@ function prepareState(type: VaultType, fsInterface: FileSystemInterface) {
         },
         selectedFile: null
     });
+}
+
+function sanitiseFilename(filename: string): string {
+    let output = filename.trim();
+    if (BCUP_EXTENSION.test(output) !== true) {
+        output += ".bcup";
+    }
+    return output;
 }
 
 function sortItems(items: Array<FileItem>): Array<FileItem> {
@@ -234,15 +251,39 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
             // New file: init
             setNewFileName("");
             setNewFileDirectory(nodeData.parent.identifier);
+            setSelectedItem({
+                name: "",
+                identifier: path.join(nodeData.parent.identifier, ""),
+                base: nodeData.parent.identifier
+            });
         } else {
             setNewFileName(null);
             setNewFileDirectory(null);
             setSelectedItem({
                 name: nodeInfo.nodeData.name,
-                identifier: nodeInfo.nodeData.path
+                identifier: nodeInfo.nodeData.identifier
             });
         }
     }, [handleNodeToggle]);
+    const handleEditNewItem = useCallback((eventOrValue: React.ChangeEvent<HTMLInputElement> | string) => {
+        const value = typeof eventOrValue === "string" ? eventOrValue : eventOrValue.target.value;
+        setNewFileName(value);
+        setSelectedItem({
+            ...selectedItem,
+            name: value,
+            identifier: path.join(selectedItem.base, value)
+        });
+    }, [selectedItem]);
+    const handleBlurNewItem = useCallback(() => {
+        handleEditNewItem(sanitiseFilename(newFileName));
+    }, [handleEditNewItem, newFileName]);
+    const handleKeypressNewItem = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key !== "Enter") return;
+        handleBlurNewItem();
+        if (newFileInputRef.current) {
+            newFileInputRef.current.blur();
+        }
+    }, [handleBlurNewItem, newFileInputRef]);
     // Render
     const rootLoading = typeof dirContents[root.identifier] === "undefined" || dirContents[root.identifier] === null;
     if (rootLoading) {
@@ -252,6 +293,7 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
     } else if (initErr) {
         return (
             <Callout
+                icon="warning-sign"
                 intent={Intent.DANGER}
                 title="Initialisation Error"
             >
@@ -259,7 +301,6 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
             </Callout>
         );
     }
-    console.log("STATE!", { newFileDirectory, newFileName });
     return (
         <div>
             <Tree
@@ -269,8 +310,11 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
                     openDirectories,
                     newFileName,
                     newFileDirectory,
+                    newFileInputRef,
                     selectedItem,
-                    newFileInputRef
+                    handleEditNewItem,
+                    handleBlurNewItem,
+                    handleKeypressNewItem
                 ).childNodes}
                 onNodeClick={handleNodeClick}
                 onNodeCollapse={handleNodeCollapse}

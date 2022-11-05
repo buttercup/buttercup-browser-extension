@@ -22,8 +22,7 @@ export function getNewTreeItem(
     parentPath: FileItem,
     editingNewFileName: string | null,
     editingNewFileDirectory: string | number | null,
-    selectedFileName: FileIdentifier | null,
-    onEditNewItem: (event: React.MouseEvent<HTMLInputElement>, parentPath: FileItem) => void,
+    selectedFile: FileIdentifier | null,
     onNewFilenameChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     onBlurNewItem: (event: React.FocusEvent<HTMLInputElement>) => void,
     onKeypressNewItem: (event: React.KeyboardEvent<HTMLInputElement>) => void,
@@ -33,7 +32,7 @@ export function getNewTreeItem(
         editingNewFileName.length > 0;
     const isSelected =
         currentlyEditingThis &&
-        path.join(editingNewFileDirectory, editingNewFileName) === selectedFileName;
+        path.join(editingNewFileDirectory, editingNewFileName) === selectedFile.identifier;
     const label = editingNewFileDirectory === parentPath.identifier && typeof editingNewFileName === "string" ?
         (
             <NewFilenameInput
@@ -43,10 +42,12 @@ export function getNewTreeItem(
                 onBlur={onBlurNewItem}
                 onKeyPress={onKeypressNewItem}
                 autoFocus
-                innerRef={newItemRef}
+                ref={newItemRef}
             />
         ) : (
-            <ItemNewText selected={isSelected} onClick={(evt) => onEditNewItem(evt, parentPath)} role="button">
+            <ItemNewText
+                selected={isSelected}
+            >
                 {currentlyEditingThis ? editingNewFileName : t("add-vault-page.section-select.new-file-placeholder")}
             </ItemNewText>
         );
