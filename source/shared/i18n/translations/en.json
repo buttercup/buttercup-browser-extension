@@ -1,17 +1,23 @@
 {
     "_": "English (UK)",
     "add-vault-page": {
-        "title": "Add Vault",
+        "section-confirm": {
+            "heading": "Confirm Vault Configuration"
+        },
         "section-select": {
             "heading": "Select Vault",
             "new-file-placeholder": "Enter new vault name..."
         },
         "section-type": {
             "heading": "Choose Vault Type"
-        }
+        },
+        "title": "Add Vault"
     },
     "attributions-page": {
         "title": "Attributions"
+    },
+    "error": {
+        "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"
     },
     "vault-type": {
         "dropbox": {

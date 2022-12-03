@@ -9,7 +9,7 @@ export function processDropboxAuthentication() {
             type: BackgroundMessageType.AuthenticateProvider,
             datasource: VaultType.Dropbox
         },
-        ms("2m")
+        ms("2.5m")
     )
         .then(({ token }) => {
             ADD_VAULT_STATE.dropboxToken = token;

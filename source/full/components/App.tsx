@@ -3,8 +3,8 @@ import {
     createHashRouter,
     RouterProvider
 } from "react-router-dom";
-import { AddVaultPage } from "./pages/addVault/index.js";
-import { AttributionsPage } from "./pages/AttributionsPage.js";
+import { AddVaultPage } from "./pages/addVault/index.jsx";
+import { AttributionsPage } from "./pages/AttributionsPage.jsx";
 
 const ROUTER = createHashRouter([
     {

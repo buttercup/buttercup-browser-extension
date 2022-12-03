@@ -17,6 +17,7 @@ interface RemoteExplorerFetchResult {
 
 interface RemoteExplorerProps {
     fsInterface: FileSystemInterface;
+    onSelectedVault: (item: FileIdentifier, isNew: boolean) => void;
     type: VaultType;
 }
 
@@ -175,6 +176,7 @@ function sortItems(items: Array<FileItem>): Array<FileItem> {
 }
 
 export function RemoteExplorer(props: RemoteExplorerProps) {
+    const { onSelectedVault } = props;
     const state = useMemo(() => prepareState(props.type, props.fsInterface), [props.fsInterface]);
     const [fsInterface] = useSingleState(state, "fsInterface");
     const [root] = useSingleState(state, "root");
@@ -259,23 +261,34 @@ export function RemoteExplorer(props: RemoteExplorerProps) {
         } else {
             setNewFileName(null);
             setNewFileDirectory(null);
-            setSelectedItem({
+            const item: FileIdentifier = {
                 name: nodeInfo.nodeData.name,
                 identifier: nodeInfo.nodeData.identifier
-            });
+            };
+            setSelectedItem(item);
+            onSelectedVault(item, false);
         }
-    }, [handleNodeToggle]);
-    const handleEditNewItem = useCallback((eventOrValue: React.ChangeEvent<HTMLInputElement> | string) => {
-        const value = typeof eventOrValue === "string" ? eventOrValue : eventOrValue.target.value;
-        setNewFileName(value);
-        setSelectedItem({
-            ...selectedItem,
-            name: value,
-            identifier: path.join(selectedItem.base, value)
-        });
-    }, [selectedItem]);
+    }, [handleNodeToggle, onSelectedVault]);
+    const handleEditNewItem = useCallback(
+        (eventOrValue: React.ChangeEvent<HTMLInputElement> | string, didBlur: boolean = false) => {
+            const value = typeof eventOrValue === "string" ? eventOrValue : eventOrValue.target.value;
+            setNewFileName(value);
+            setSelectedItem({
+                ...selectedItem,
+                name: value,
+                identifier: path.join(selectedItem.base, value)
+            });
+            if (didBlur) {
+                onSelectedVault({
+                    name: value,
+                    identifier: path.join(selectedItem.base, value)
+                }, true);
+            }
+        },
+        [onSelectedVault, selectedItem]
+    );
     const handleBlurNewItem = useCallback(() => {
-        handleEditNewItem(sanitiseFilename(newFileName));
+        handleEditNewItem(sanitiseFilename(newFileName), true);
     }, [handleEditNewItem, newFileName]);
     const handleKeypressNewItem = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key !== "Enter") return;

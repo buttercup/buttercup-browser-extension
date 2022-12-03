@@ -14,6 +14,10 @@ export async function sendBackgroundMessage<T extends {} | void>(
         }, timeout);
         browser.runtime.sendMessage(msg, (resp) => {
             clearTimeout(timer);
+            if (resp.error) {
+                reject(resp.error);
+                return;
+            }
             resolve(resp);
         });
     });
