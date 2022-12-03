@@ -23,7 +23,7 @@ export function initialise() {
     getExtensionAPI().runtime.onMessage.addListener((request, sender, sendResponse) => {
         handleMessage(request, sender, sendResponse).catch((err) => {
             sendResponse({
-                error: new Layerr(err, "Failed handling background message")
+                error: new Layerr(err, "Background task failed")
             });
         });
         return true;
