@@ -2,11 +2,33 @@
     "_": "English (UK)",
     "add-vault-page": {
         "section-confirm": {
-            "heading": "Confirm Vault Configuration"
+            "add-button": {
+                "text": "Add",
+                "title": "Add vault to Buttercup"
+            },
+            "details-heading": "Vault Details",
+            "error": {
+                "password-empty": "Password cannot be empty",
+                "password-mismatch": "Passwords don't match"
+            },
+            "heading": "Confirm Vault Configuration",
+            "plc-password1": "Vault password...",
+            "plc-password2": "Vault password again...",
+            "vault-create-new": "Create New Vault",
+            "vault-file": "Vault File",
+            "vault-password": "Password",
+            "vault-password-confirm": "Confirm Password",
+            "vault-source": "Vault Source"
         },
         "section-select": {
+            "choice-continue": "Continue",
+            "choice-heading": "Selected Vault",
+            "choice-vault-filename": "Vault Filename:",
+            "choice-vault-new": "Create New:",
             "heading": "Select Vault",
-            "new-file-placeholder": "Enter new vault name..."
+            "new-file-placeholder": "Enter new vault name...",
+            "new-no": "No",
+            "new-yes": "Yes"
         },
         "section-type": {
             "heading": "Choose Vault Type"

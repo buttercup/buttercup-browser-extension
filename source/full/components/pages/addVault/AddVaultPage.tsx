@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Callout, Colors, H4, H5, Icon, Intent } from "@blueprintjs/core";
+import { Callout, Colors, H4, H5, Intent } from "@blueprintjs/core";
 import styled from "styled-components";
 import { useSingleState } from "react-obstate";
 import { Layout } from "../../Layout.js";
@@ -10,6 +10,7 @@ import { VaultFileChooser } from "./VaultFileChooser.js";
 import { processDropboxAuthentication } from "../../../services/datasource.js";
 import { ADD_VAULT_STATE } from "../../../state/addVault.js";
 import { VaultType } from "../../../types.js";
+import { VaultConfirmation } from "./VaultConfirmation.js";
 
 enum PageType {
     Confirm = "confirm",
@@ -25,10 +26,6 @@ const ErrorHeading = styled(H5)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`;
-const ErrorHeadingIcon = styled(Icon)`
-    fill: ${Colors.RED2};
-    margin-right: 8px;
 `;
 const Heading = styled(H4)`
     margin-bottom: 24px;
@@ -79,9 +76,16 @@ export function AddVaultPage() {
     const handleSelectedVaultChange = useCallback((filename: string, isNew: boolean) => {
         setSelectedVaultPath(filename);
         setSelectedIsNew(isNew);
+    }, []);
+    const handleSelectionConfirm = useCallback(() => {
         setPageType(PageType.Confirm);
     }, []);
-    
+    // **
+    // ** Confirm
+    // **
+    const handleConfirmation = useCallback((name: string, masterPassword: string) => {
+
+    }, []);
     return (
         <Layout title={t("add-vault-page.title")}>
             {pageType === PageType.Choose && (
@@ -114,7 +118,10 @@ export function AddVaultPage() {
             {pageType === PageType.Select && (
                 <>
                     <VaultFileChooser
+                        confirmSelectedNew={selectedIsNew}
+                        confirmSelectedVault={selectedVaultPath}
                         dropboxToken={dropboxToken}
+                        onConfirmSelection={handleSelectionConfirm}
                         onSelectVault={handleSelectedVaultChange}
                         type={vaultType}
                     />
@@ -122,8 +129,12 @@ export function AddVaultPage() {
             )}
             {pageType === PageType.Confirm && (
                 <>
-                    <Heading>{t("add-vault-page.section-confirm.heading")}</Heading>
-                
+                    <VaultConfirmation
+                        onConfirm={handleConfirmation}
+                        vaultFilename={selectedVaultPath}
+                        vaultIsNew={selectedIsNew}
+                        vaultType={vaultType}
+                    />
                 </>
             )}
         </Layout>
