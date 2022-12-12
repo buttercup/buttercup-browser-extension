@@ -78,7 +78,7 @@ export function VaultFileChooser(props: VaultFileChooserProps) {
                         <strong>{t("add-vault-page.section-select.choice-vault-filename")}</strong>
                         <br />
                         {confirmSelectedVault === null && (
-                            <i>None</i>
+                            <i>{t("add-vault-page.section-select.selected-none")}</i>
                         ) || (
                             <SelectedFilePre>{confirmSelectedVault}</SelectedFilePre>
                         )}

@@ -28,7 +28,8 @@
             "heading": "Select Vault",
             "new-file-placeholder": "Enter new vault name...",
             "new-no": "No",
-            "new-yes": "Yes"
+            "new-yes": "Yes",
+            "selected-none": "None"
         },
         "section-type": {
             "heading": "Choose Vault Type"
