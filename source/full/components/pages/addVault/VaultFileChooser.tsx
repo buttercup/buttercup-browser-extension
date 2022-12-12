@@ -16,6 +16,11 @@ interface VaultFileChooserProps {
     type: VaultType;
 }
 
+const RightAlign = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+`;
 const SelectedFilePre = styled.pre`
     margin: 0;
 `;
@@ -24,9 +29,13 @@ const VaultChoiceCard = styled(Card)`
 `;
 const VaultChoiceCardContents = styled.div`
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+
+    > *:not(:last-child) {
+        margin-bottom: 18px;
+    }
 `;
 const VaultChoiceCardHeading = styled(H5)`
     display: flex;
@@ -79,13 +88,15 @@ export function VaultFileChooser(props: VaultFileChooserProps) {
                         <br />
                         <span>{confirmSelectedNew ? t("add-vault-page.section-select.new-yes") : t("add-vault-page.section-select.new-no")}</span>
                     </div>
-                    <Button
-                        disabled={!confirmSelectedVault}
-                        icon="confirm"
-                        intent={Intent.PRIMARY}
-                        onClick={() => onConfirmSelection()}
-                        text={t("add-vault-page.section-select.choice-continue")}
-                    />
+                    <RightAlign>
+                        <Button
+                            disabled={!confirmSelectedVault}
+                            icon="confirm"
+                            intent={Intent.PRIMARY}
+                            onClick={() => onConfirmSelection()}
+                            text={t("add-vault-page.section-select.choice-continue")}
+                        />
+                    </RightAlign>
                 </VaultChoiceCardContents>
             </VaultChoiceCard>
             <RemoteExplorer
