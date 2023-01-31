@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.25.3
+_2023-01-31_
+
+ * **Bugfix**:
+   * Google Drive would fail when tokens expire (new response format)
+
 ## v2.25.2
 _2022-09-03_
 
