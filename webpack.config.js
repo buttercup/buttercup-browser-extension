@@ -111,7 +111,7 @@ function getBaseConfig() {
 
         resolve: {
             alias: {
-                buttercup: "buttercup/web"
+                // buttercup: "buttercup/web"
                 // gle: "gle/browser"
             },
             // No .ts/.tsx included due to the typescript resolver plugin

@@ -7,10 +7,10 @@ import { t } from "../../../../shared/i18n/trans.js";
 import { useTitle } from "../../../hooks/document.js";
 import { VaultTypeChooser } from "./VaultTypeChooser.js";
 import { VaultFileChooser } from "./VaultFileChooser.js";
-import { processDropboxAuthentication } from "../../../services/datasource.js";
+import { VaultConfirmation } from "./VaultConfirmation.js";
+import { addVaultDatasource, processDropboxAuthentication } from "../../../services/datasource.js";
 import { ADD_VAULT_STATE } from "../../../state/addVault.js";
 import { VaultType } from "../../../types.js";
-import { VaultConfirmation } from "./VaultConfirmation.js";
 
 enum PageType {
     Confirm = "confirm",
@@ -41,18 +41,18 @@ export function AddVaultPage() {
     // **
     const [configuring, setConfiguring] = useState<boolean>(false);
     const [dropboxToken, setDropboxToken] = useSingleState(ADD_VAULT_STATE, "dropboxToken");
-    const [authError, setAuthError] = useSingleState(ADD_VAULT_STATE, "authError");
+    const [error, setError] = useSingleState(ADD_VAULT_STATE, "error");
     useEffect(() => {
-        setAuthError(null);
+        setError(null);
         setDropboxToken(null);
     }, []);
     const handleConfiguration = useCallback(() => {
-        setAuthError(null);
+        setError(null);
         setConfiguring(true);
         processDropboxAuthentication();
     }, [vaultType]);
     useEffect(() => {
-        if (authError) {
+        if (error) {
             setConfiguring(false);
             if (errorRef.current) {
                 console.log(errorRef.current);
@@ -62,7 +62,7 @@ export function AddVaultPage() {
                 });
             }
         }
-    }, [authError]);
+    }, [error]);
     useEffect(() => {
         if (dropboxToken) {
             setPageType(PageType.Select);
@@ -83,9 +83,23 @@ export function AddVaultPage() {
     // **
     // ** Confirm
     // **
+    const [addingVault, setAddingVault] = useState<boolean>(false);
     const handleConfirmation = useCallback((name: string, masterPassword: string) => {
-
-    }, []);
+        setAddingVault(true);
+        addVaultDatasource({
+            createNew: selectedIsNew,
+            dropboxToken,
+            masterPassword,
+            name,
+            type: vaultType,
+            vaultPath: selectedVaultPath
+        })
+    }, [
+        dropboxToken,
+        selectedIsNew,
+        selectedVaultPath,
+        vaultType
+    ]);
     return (
         <Layout title={t("add-vault-page.title")}>
             {pageType === PageType.Choose && (
@@ -97,12 +111,12 @@ export function AddVaultPage() {
             {pageType === PageType.Confirm && (
                 <Heading>{t("add-vault-page.section-confirm.heading")}</Heading>
             )}
-            {authError && vaultType && (
+            {error && vaultType && (
                 <ErrorDescription intent={Intent.DANGER} innerRef={errorRef}>
                     <ErrorHeading>
-                        {t(`vault-type.${vaultType}.auth-error`)}
+                        {t(`vault-type.${vaultType}.add-error`)}
                     </ErrorHeading>
-                    <p>{authError}</p>
+                    <p>{error}</p>
                 </ErrorDescription>
             )}
             {pageType === PageType.Choose && (
@@ -130,6 +144,7 @@ export function AddVaultPage() {
             {pageType === PageType.Confirm && (
                 <>
                     <VaultConfirmation
+                        adding={addingVault}
                         onConfirm={handleConfirmation}
                         vaultFilename={selectedVaultPath}
                         vaultIsNew={selectedIsNew}

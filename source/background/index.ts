@@ -4,7 +4,7 @@ import { log } from "./services/log.js";
 
 initialise()
     .then(() => {
-        log(`Add URL: ${getExtensionURL("full.html#/add")}`);
+        // log(`debug: add url: ${getExtensionURL("full.html#/add")}`);
     })
     .catch((err) => {
         console.error(err);

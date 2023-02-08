@@ -8,14 +8,17 @@
             },
             "details-heading": "Vault Details",
             "error": {
+                "name-invalid": "Vault name invalid",
                 "password-empty": "Password cannot be empty",
                 "password-mismatch": "Passwords don't match"
             },
             "heading": "Confirm Vault Configuration",
+            "plc-name": "Vault name...",
             "plc-password1": "Vault password...",
             "plc-password2": "Vault password again...",
             "vault-create-new": "Create New Vault",
             "vault-file": "Vault File",
+            "vault-name": "Vault Name",
             "vault-password": "Password",
             "vault-password-confirm": "Confirm Password",
             "vault-source": "Vault Source"
@@ -40,11 +43,15 @@
         "title": "Attributions"
     },
     "error": {
+        "code": {
+            "bad-vault-type": "Unrecognised vault type",
+            "unlock-failure": "Failed unlocking vault"
+        },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"
     },
     "vault-type": {
         "dropbox": {
-            "auth-error": "Dropbox failed to authenticate",
+            "add-error": "Failed adding Dropbox vault",
             "configure-btn": "Authenticate",
             "description": "Host your vault within your Dropbox cloud storage account, so that you can access it from any device you own. You must have an account with Dropbox to be able to use this vault type.",
             "title": "Dropbox"
