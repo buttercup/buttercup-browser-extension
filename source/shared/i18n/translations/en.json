@@ -49,6 +49,13 @@
         },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"
     },
+    "popup": {
+        "entries": {
+            "search": {
+                "placeholder": "Search..."
+            }
+        }
+    },
     "vault-type": {
         "dropbox": {
             "add-error": "Failed adding Dropbox vault",

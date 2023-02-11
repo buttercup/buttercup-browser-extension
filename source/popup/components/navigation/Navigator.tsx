@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Classes, Divider, Tab, Tabs } from "@blueprintjs/core";
 import { VaultsPage, VaultsPageControls } from "../pages/VaultsPage.js";
+import { EntriesPage, EntriesPageControls } from "../pages/EntriesPage.js";
 import { PopupPage } from "../../types.js";
 
 interface NavigatorProps {
@@ -9,18 +10,12 @@ interface NavigatorProps {
     onChangeTab: (tab: PopupPage) => void;
 }
 
-// const BarContents = styled.div`
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: space-between;
-//     align-items: center;
-//     padding: 0px 3px;
-// `;
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
     padding: 3px;
+    overflow: hidden;
 
     [role="tab"] {
         outline: none;
@@ -39,7 +34,15 @@ export function Navigator(props: NavigatorProps) {
                 onChange={(newTab: PopupPage) => props.onChangeTab(newTab)}
                 selectedTabId={props.activeTab}
             >
-                <Tab id={PopupPage.Entries}>Entries</Tab>
+                <Tab
+                    id={PopupPage.Entries}
+                    panel={(
+                        <>
+                            <Divider />
+                            <EntriesPage />
+                        </>
+                    )}
+                >Entries</Tab>
                 <Tab
                     id={PopupPage.Vaults}
                     panel={(
@@ -53,6 +56,9 @@ export function Navigator(props: NavigatorProps) {
                 </Tab>
                 <Tab id={PopupPage.OTPs}>OTPs</Tab>
                 <Tabs.Expander />
+                {props.activeTab === PopupPage.Entries && (
+                    <EntriesPageControls />
+                )}
                 {props.activeTab === PopupPage.Vaults && (
                     <VaultsPageControls />
                 )}
