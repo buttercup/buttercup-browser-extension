@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
-import { Button, ButtonGroup } from "@blueprintjs/core";
+import { Button, ButtonGroup, NonIdealState } from "@blueprintjs/core";
+import { useVaultSources } from "../../../shared/hooks/vaultAppliance.js";
+import { t } from "../../../shared/i18n/trans.js";
+import { openAddVaultPage } from "../../../shared/library/page.js";
 
 const Container = styled.div`
     display: flex;
@@ -8,11 +11,31 @@ const Container = styled.div`
     justify-content: flex-start;
     align-items: stretch;
 `;
+const NoVaultsState = styled(NonIdealState)`
+    margin-top: 28px;
+`;
 
 export function VaultsPage() {
+    const sources = useVaultSources();
+    const handleAddVaultClick = useCallback(() => {
+        openAddVaultPage();
+    }, []);
     return (
         <Container>
-            Vaults
+            {sources.length === 0 && (
+                <NoVaultsState
+                    title={t("popup.vaults.empty.title")}
+                    description={t("popup.vaults.empty.description")}
+                    icon="folder-open"
+                    action={(
+                        <Button
+                            icon="plus"
+                            onClick={handleAddVaultClick}
+                            text={t("popup.vaults.empty.action-text")}
+                        />
+                    )}
+                />
+            )}
         </Container>
     );
 }

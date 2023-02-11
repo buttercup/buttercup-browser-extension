@@ -1,5 +1,7 @@
 import { Credentials, VaultManager, VaultSource, VaultSourceID, VaultSourceStatus } from "buttercup";
 import ms from "ms";
+import { getVaultsAppliance } from "../../shared/services/vaultsAppliance.js";
+import { describeSource } from "../library/vaultSource.js";
 import { log } from "./log.js";
 import { BrowserStorageInterface, getNonSyncStorage, getSyncStorage } from "./storage/BrowserStorageInterface.js";
 
@@ -20,7 +22,13 @@ export async function initialiseVaultManager() {
         cacheStorage: new BrowserStorageInterface(getNonSyncStorage()),
         sourceStorage: new BrowserStorageInterface(getSyncStorage())
     });
-
+    const vaultsAppliance = getVaultsAppliance();
+    vm.on("sourcesUpdated", () => {
+        vaultsAppliance.setProperty(
+            "vaults",
+            vm.sources.map((source) => describeSource(source))
+        );
+    });
     vm.initialise();
     await vm.rehydrate();
     __vaultManager = vm;

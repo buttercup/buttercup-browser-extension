@@ -1,11 +1,10 @@
 import { getExtensionAPI } from "../../shared/extension.js";
+import { MESSAGE_DEFAULT_TIMEOUT } from "../../shared/symbols.js";
 import { BackgroundMessage } from "../types.js";
-
-const DEFAULT_TIMEOUT = 15000;
 
 export async function sendBackgroundMessage<T extends {} | void>(
     msg: BackgroundMessage,
-    timeout: number = DEFAULT_TIMEOUT
+    timeout: number = MESSAGE_DEFAULT_TIMEOUT
 ): Promise<T> {
     const browser = getExtensionAPI();
     return new Promise<T>((resolve, reject) => {
