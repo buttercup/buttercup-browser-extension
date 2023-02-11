@@ -19,6 +19,15 @@ export function closeCurrentTab() {
     });
 }
 
+export async function getAllTabs(): Promise<Array<chrome.tabs.Tab>> {
+    const browser = getExtensionAPI();
+    return new Promise<Array<chrome.tabs.Tab>>((resolve) => {
+        browser.tabs.query({ discarded: false }, (tabs) => {
+            resolve(tabs);
+        });
+    });
+}
+
 export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
     const browser = getExtensionAPI();
     return new Promise((resolve) => {

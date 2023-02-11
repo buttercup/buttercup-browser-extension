@@ -54,6 +54,13 @@
             "search": {
                 "placeholder": "Search..."
             }
+        },
+        "vaults": {
+            "empty": {
+                "action-text": "Add Vault",
+                "description": "There aren't any vaults here, yet.",
+                "title": "No Vaults"
+            }
         }
     },
     "vault-type": {
