@@ -2,7 +2,7 @@ import EventEmitter from "eventemitter3";
 import * as _Layerr from "layerr";
 import { getExtensionAPI } from "../../extension.js";
 import { naiveClone } from "../../library/clone.js";
-import { getAllTabs, sendTabMessage } from "../../library/extension.js";
+import { getAllTabs, getCurrentTab, sendTabMessage } from "../../library/extension.js";
 import { MESSAGE_DEFAULT_TIMEOUT } from "../../symbols.js";
 
 const { Layerr } = _Layerr;
@@ -17,20 +17,25 @@ type ApplianceMessage<T extends Record<string, any>, K extends keyof T> =
           type: ApplianceMessageType.FetchAll;
       }
     | {
-          type: ApplianceMessageType.KeyUpdated;
           key: K;
+          type: ApplianceMessageType.KeyUpdated;
           value: T[K];
+      }
+    | {
+          tabID: number;
+          type: ApplianceMessageType.RegisterTab;
       };
 
 enum ApplianceMessageType {
     FetchAll = "fetch-all",
-    KeyUpdated = "key-updated"
+    KeyUpdated = "key-updated",
+    RegisterTab = "register-tab"
 }
 
-type ApplianceMessageResponse<T> = {
-    type: ApplianceMessageType.FetchAll;
-    result: T;
-};
+interface ApplianceMessageResponse<T> {
+    type: ApplianceMessageType;
+    result?: T;
+}
 
 async function sendBackgroundMessage<B extends {}, T extends Record<string, any>, K extends keyof T>(
     msg: ApplianceMessage<T, K>,
@@ -55,6 +60,7 @@ async function sendBackgroundMessage<B extends {}, T extends Record<string, any>
 export class DataNetworkAppliance<T extends Record<string, any>> extends EventEmitter<ApplianceEvents<T>> {
     protected _dataset: T;
     private __initialised: boolean = false;
+    private __tabIDs: Array<number> = [];
 
     constructor(initial: T) {
         super();
@@ -80,6 +86,14 @@ export class DataNetworkAppliance<T extends Record<string, any>> extends EventEm
             });
             return true;
         });
+        if (!this.isPrimary) {
+            // Ping main to register
+            const currentTab = await getCurrentTab();
+            await this.__sendMessage({
+                tabID: currentTab.id,
+                type: ApplianceMessageType.RegisterTab
+            });
+        }
         this.__initialised = true;
     }
 
@@ -115,7 +129,17 @@ export class DataNetworkAppliance<T extends Record<string, any>> extends EventEm
                     type: msg.type,
                     result: naiveClone(this._dataset)
                 });
-                return;
+                break;
+            }
+            case ApplianceMessageType.RegisterTab: {
+                const { tabID } = msg;
+                if (this.isPrimary && !this.__tabIDs.includes(tabID)) {
+                    this.__tabIDs.push(tabID);
+                }
+                sendResponse({
+                    type: msg.type
+                });
+                break;
             }
             default:
                 // Do nothing
@@ -129,7 +153,16 @@ export class DataNetworkAppliance<T extends Record<string, any>> extends EventEm
         if (global.background === true) {
             // Send to all tabs
             const tabs = await getAllTabs();
-            await Promise.all(tabs.map((tab) => sendTabMessage(tab.id, msg)));
+            // Reconcile current tab IDs
+            this.__tabIDs = this.__tabIDs.filter((tabID) => {
+                const tab = tabs.find((t) => t.id === tabID);
+                if (!tab) {
+                    // Tab has been removed, remove this ID
+                    return false;
+                }
+                return true;
+            });
+            await Promise.all(this.__tabIDs.map((tabID) => sendTabMessage(tabID, msg)));
             // Don't care about the response
         } else {
             // Send to background
