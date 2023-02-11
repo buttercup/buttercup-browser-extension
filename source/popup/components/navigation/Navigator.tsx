@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Classes, Divider, Tab, Tabs } from "@blueprintjs/core";
+import { Classes, Divider, Icon, Tab, Tabs } from "@blueprintjs/core";
 import { VaultsPage, VaultsPageControls } from "../pages/VaultsPage.js";
 import { EntriesPage, EntriesPageControls } from "../pages/EntriesPage.js";
 import { PopupPage } from "../../types.js";
@@ -54,7 +54,19 @@ export function Navigator(props: NavigatorProps) {
                 >
                     Vaults
                 </Tab>
-                <Tab id={PopupPage.OTPs}>OTPs</Tab>
+                <Tab id={PopupPage.OTPs}>
+                    <Icon icon="array-timestamp" />
+                </Tab>
+                <Tab
+                    id={PopupPage.Settings}
+                    panel={(
+                        <>
+                            <div>Test</div>
+                        </>
+                    )}
+                >
+                    <Icon icon="cog" />
+                </Tab>
                 <Tabs.Expander />
                 {props.activeTab === PopupPage.Entries && (
                     <EntriesPageControls />
