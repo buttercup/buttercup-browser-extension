@@ -4,6 +4,7 @@ import { Button, ButtonGroup, NonIdealState } from "@blueprintjs/core";
 import { useVaultSources } from "../../../shared/hooks/vaultAppliance.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { openAddVaultPage } from "../../../shared/library/page.js";
+import { VaultItemList } from "../vaults/VaultItemList.js";
 
 const Container = styled.div`
     display: flex;
@@ -34,6 +35,11 @@ export function VaultsPage() {
                             text={t("popup.vaults.empty.action-text")}
                         />
                     )}
+                />
+            )}
+            {sources.length > 0 && (
+                <VaultItemList
+                    vaults={sources}
                 />
             )}
         </Container>

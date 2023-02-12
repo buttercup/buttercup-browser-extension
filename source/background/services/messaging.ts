@@ -22,7 +22,6 @@ async function handleMessage(
         }
         default:
             // Do nothing
-            // throw new Error(`Unsupported message type: ${msg.type}`);
             break;
     }
 }

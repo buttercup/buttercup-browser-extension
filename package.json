@@ -56,6 +56,7 @@
     "@babel/preset-react": "^7.16.7",
     "@blueprintjs/core": "^4.15.1",
     "@blueprintjs/icons": "^4.13.1",
+    "@blueprintjs/popover2": "^1.12.1",
     "@buttercup/channel-queue": "^1.0.1",
     "@buttercup/config": "^0.1.0",
     "@buttercup/dropbox-client": "^2.1.0",

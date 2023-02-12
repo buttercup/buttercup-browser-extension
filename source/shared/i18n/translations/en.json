@@ -55,6 +55,12 @@
                 "placeholder": "Search..."
             }
         },
+        "vault": {
+            "lock": "Lock vault",
+            "remove": "Remove vault",
+            "state-pending": "Vault state is pending",
+            "unlock": "Unlock vault"
+        },
         "vaults": {
             "empty": {
                 "action-text": "Add Vault",

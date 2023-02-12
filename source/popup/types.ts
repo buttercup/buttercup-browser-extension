@@ -4,3 +4,5 @@ export enum PopupPage {
     Settings = "settings",
     Vaults = "vaults"
 }
+
+export * from "../shared/types.js";

@@ -3,6 +3,7 @@ import {
     createHashRouter,
     RouterProvider
 } from "react-router-dom";
+import { ThemeProvider } from "../../shared/components/ThemeProvider.js";
 import { AddVaultPage } from "./pages/addVault/index.jsx";
 import { AttributionsPage } from "./pages/AttributionsPage.jsx";
 
@@ -19,6 +20,8 @@ const ROUTER = createHashRouter([
 
 export function App() {
     return (
-        <RouterProvider router={ROUTER} />
+        <ThemeProvider darkMode={false}>
+            <RouterProvider router={ROUTER} />
+        </ThemeProvider>
     );
 }

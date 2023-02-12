@@ -1,4 +1,5 @@
 import { VaultFormatID, VaultSourceID, VaultSourceStatus } from "buttercup";
+import { ReactChild, ReactChildren } from "react";
 
 export interface AddVaultPayload {
     createNew: boolean;
@@ -24,18 +25,14 @@ export interface BackgroundResponse {
     [key: string]: any;
 }
 
-export enum SourceType {
-    Dropbox = "dropbox",
-    GoogleDrive = "googledrive",
-    Local = "localfile",
-    WebDAV = "webdav"
-}
+type ChildElement = ReactChild | ReactChildren | false | null;
+export type ChildElements = ChildElement | Array<ChildElement>;
 
 export interface VaultSourceDescription {
     id: VaultSourceID;
     name: string;
     state: VaultSourceStatus;
-    type: SourceType;
+    type: VaultType;
     order: number;
     format?: VaultFormatID;
 }
