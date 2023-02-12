@@ -1,5 +1,6 @@
 import EventEmitter from "eventemitter3";
 import * as _Layerr from "layerr";
+import { waitForInitialisation } from "../../../background/services/init.js";
 import { getExtensionAPI } from "../../extension.js";
 import { naiveClone } from "../../library/clone.js";
 import { getAllTabs, getCurrentTab, sendTabMessage } from "../../library/extension.js";
@@ -123,6 +124,8 @@ export class DataNetworkAppliance<T extends Record<string, any>> extends EventEm
         sender: chrome.runtime.MessageSender,
         sendResponse: (resp: ApplianceMessageResponse<T>) => void
     ): Promise<void> {
+        // Wait for SW startup
+        await waitForInitialisation();
         switch (msg.type) {
             case ApplianceMessageType.FetchAll: {
                 sendResponse({

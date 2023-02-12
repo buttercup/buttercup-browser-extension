@@ -2,6 +2,7 @@ import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
 import { routeProviderAuthentication } from "../library/datasource.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse } from "../types.js";
+import { waitForInitialisation } from "./init.js";
 import { connectVault } from "./vaultConnection.js";
 
 async function handleMessage(
@@ -9,6 +10,8 @@ async function handleMessage(
     sender: chrome.runtime.MessageSender,
     sendResponse: (resp: BackgroundResponse) => void
 ) {
+    // Wait for SW startup
+    await waitForInitialisation();
     switch (msg.type) {
         case BackgroundMessageType.AddVault: {
             const sourceID = await connectVault(msg.payload);
