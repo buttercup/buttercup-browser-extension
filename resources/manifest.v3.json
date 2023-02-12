@@ -34,6 +34,7 @@
     "permissions": [
         "clipboardWrite",
         "contextMenus",
+        "offscreen",
         "storage",
         "tabs",
         "unlimitedStorage"

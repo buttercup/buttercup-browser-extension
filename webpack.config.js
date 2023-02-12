@@ -159,6 +159,11 @@ module.exports = [
                         from: path.join(__dirname, "./resources", "buttercup-*.png"),
                         to: DIST,
                         context: path.join(__dirname, "./resources")
+                    },
+                    {
+                        from: path.join(__dirname, "./resources/offscreen.*"),
+                        to: DIST,
+                        context: path.join(__dirname, "./resources")
                     }
                 ]
             })

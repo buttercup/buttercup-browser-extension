@@ -1,6 +1,11 @@
-import { getExtensionURL } from "../shared/library/extension.js";
-import { initialise } from "./services/init.js";
+import { createOffscreen, initialise } from "./services/init.js";
 import { log } from "./services/log.js";
+
+chrome.runtime.onInstalled.addListener(() => {
+    createOffscreen().catch((err) => {
+        console.error(err);
+    });
+});
 
 initialise()
     .then(() => {

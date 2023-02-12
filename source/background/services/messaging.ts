@@ -16,13 +16,16 @@ async function handleMessage(
         case BackgroundMessageType.AddVault: {
             const sourceID = await connectVault(msg.payload);
             sendResponse({ sourceID });
-            return;
+            break;
         }
         case BackgroundMessageType.AuthenticateProvider: {
             const result = await routeProviderAuthentication(msg.datasource);
             sendResponse(result);
-            return;
+            break;
         }
+        case BackgroundMessageType.KeepAlive:
+            sendResponse({});
+            break;
         default:
             // Do nothing
             break;

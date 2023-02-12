@@ -15,6 +15,16 @@ enum Initialisation {
 const __initEE = new EventEmitter();
 let __initialisation: Initialisation = Initialisation.Idle;
 
+export async function createOffscreen() {
+    if (await chrome.offscreen.hasDocument?.()) return;
+    log("creating offscreen document");
+    await chrome.offscreen.createDocument({
+        url: "offscreen.html",
+        reasons: [chrome.offscreen.Reason.USER_MEDIA],
+        justification: "Keep service worker running: needed for vaults to remain unlocked"
+    });
+}
+
 export async function initialise(): Promise<void> {
     if (__initialisation !== Initialisation.Idle) return;
     __initialisation = Initialisation.Running;
