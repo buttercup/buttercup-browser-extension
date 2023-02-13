@@ -6,6 +6,10 @@ import { t } from "../../../shared/i18n/trans.js";
 import { openAddVaultPage } from "../../../shared/library/page.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
 
+interface VaultsPageControlsProps {
+
+}
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -46,7 +50,7 @@ export function VaultsPage() {
     );
 }
 
-export function VaultsPageControls() {
+export function VaultsPageControls(props: VaultsPageControlsProps) {
     return (
         <ButtonGroup>
             <Button

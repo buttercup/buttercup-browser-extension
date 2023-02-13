@@ -18,7 +18,8 @@ export interface BackgroundMessage {
 export enum BackgroundMessageType {
     AddVault = "addVault",
     AuthenticateProvider = "authenticateProvider",
-    KeepAlive = "keepAlive"
+    KeepAlive = "keepAlive",
+    UnlockSource = "unlockSource"
 }
 
 export interface BackgroundResponse {

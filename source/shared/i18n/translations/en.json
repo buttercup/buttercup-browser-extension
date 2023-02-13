@@ -59,7 +59,15 @@
             "lock": "Lock vault",
             "remove": "Remove vault",
             "state-pending": "Vault state is pending",
-            "unlock": "Unlock vault"
+            "unlock": "Unlock vault",
+            "unlock-dialog": {
+                "password-label": "Vault Password",
+                "title": "Unlock {{title}}"
+            },
+            "unlocking": {
+                "description": "Vault is being unlocked...",
+                "title": "Unlocking"
+            }
         },
         "vaults": {
             "empty": {
