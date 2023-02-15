@@ -1,11 +1,12 @@
 import React, { Fragment, KeyboardEvent, useCallback, useState } from "react";
 import styled from "styled-components";
 import cn from "classnames";
-import { Classes, Dialog, Divider, FormGroup, H4, InputGroup, Overlay, Spinner, Text } from "@blueprintjs/core";
+import { Classes, Dialog, Divider, FormGroup, H4, InputGroup, Intent, Overlay, Spinner, Text } from "@blueprintjs/core";
 import { VaultItem } from "./VaultItem.js";
 import { unlockSource } from "../../services/vaults.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { VaultSourceDescription } from "../../types.js";
+import { getToaster } from "../../../shared/services/notifications.js";
 
 interface VaultItemListProps {
     vaults: Array<VaultSourceDescription>;
@@ -48,10 +49,25 @@ export function VaultItemList(props: VaultItemListProps) {
             title: t("popup.vault.unlocking.title"),
             description: t("popup.vault.unlocking.description")
         });
-        handleDialogClose();
-        unlockSource(unlockVault.id, vaultPassword).catch(err => {
-            
-        });
+        unlockSource(unlockVault.id, vaultPassword)
+            .then(() => {
+                getToaster().show({
+                    intent: Intent.SUCCESS,
+                    message: t("popup.vault.unlocking.success", { vault: unlockVault.name }),
+                    timeout: 10000
+                });
+                handleDialogClose();
+                setWorkAlert(null);
+            })
+            .catch(err => {
+                console.error(err);
+                setWorkAlert(null);
+                getToaster().show({
+                    intent: Intent.DANGER,
+                    message: t("popup.vault.unlocking.error", { message: err.message }),
+                    timeout: 10000
+                });
+            });
     }, [handleDialogClose, unlockVault, vaultPassword]);
     const handleUnlockKeyPress = useCallback((event: KeyboardEvent) => {
         if (event.key === "Enter" && !event.ctrlKey && !event.shiftKey) {

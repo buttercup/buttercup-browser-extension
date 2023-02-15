@@ -66,6 +66,8 @@
             },
             "unlocking": {
                 "description": "Vault is being unlocked...",
+                "error": "Failed unlocking: {{message}}",
+                "success": "Successfully unlocked: {{vault}}",
                 "title": "Unlocking"
             }
         },

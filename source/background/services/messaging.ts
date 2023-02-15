@@ -1,9 +1,10 @@
 import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
 import { routeProviderAuthentication } from "../library/datasource.js";
-import { BackgroundMessage, BackgroundMessageType, BackgroundResponse } from "../types.js";
 import { waitForInitialisation } from "./init.js";
 import { connectVault } from "./vaultConnection.js";
+import { BackgroundMessage, BackgroundMessageType, BackgroundResponse } from "../types.js";
+import { unlockSource } from "./buttercup.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -26,6 +27,11 @@ async function handleMessage(
         case BackgroundMessageType.KeepAlive:
             sendResponse({});
             break;
+        case BackgroundMessageType.UnlockSource: {
+            await unlockSource(msg.sourceID, msg.password);
+            sendResponse({});
+            break;
+        }
         default:
             // Do nothing
             break;
