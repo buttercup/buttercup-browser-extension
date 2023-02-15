@@ -1,6 +1,7 @@
 import { SearchResult } from "buttercup";
-import { VaultSourceDescription } from "../../types.js";
+import { Logger } from "../../library/log.js";
 import { DataNetworkAppliance } from "./DataNetworkAppliance.js";
+import { VaultSourceDescription } from "../../types.js";
 
 interface VaultsApplianceDataset {
     pageEntries: Array<SearchResult>;
@@ -9,28 +10,22 @@ interface VaultsApplianceDataset {
 }
 
 export class VaultsAppliance extends DataNetworkAppliance<VaultsApplianceDataset> {
-    constructor() {
-        super({
-            pageEntries: [],
-            popupEntries: [],
-            vaults: []
-        });
+    constructor(log: Logger) {
+        super(
+            "vaults-state",
+            {
+                pageEntries: [],
+                popupEntries: [],
+                vaults: []
+            },
+            log
+        );
     }
 
     async initialise() {
         await super.initialise();
-        if (!this.isPrimary) {
-            // Fetch data from primary
-            return new Promise<void>(async (resolve, reject) => {
-                let timeout = setTimeout(() => {
-                    reject(new Error("Failed initialising vault appliance: No data received from primary"));
-                }, 5000);
-                this.once("fetchedAll", () => {
-                    resolve();
-                    clearTimeout(timeout);
-                });
-                await this._syncFromPrimary();
-            });
+        if (!this.isBackground) {
+            await this._syncFromBackground();
         }
     }
 }

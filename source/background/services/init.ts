@@ -4,7 +4,7 @@ import { initialiseVaultManager } from "./buttercup.js";
 import { initialise as initialiseMessaging } from "./messaging.js";
 import { log } from "./log.js";
 import { attachTabEventListeners } from "./browser.js";
-import { getVaultsAppliance } from "../../shared/services/vaultsAppliance.js";
+import { getVaultsAppliance } from "./vaultsAppliance.js";
 
 enum Initialisation {
     Complete = "complete",

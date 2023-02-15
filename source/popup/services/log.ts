@@ -1,8 +1,8 @@
-import { createLog } from "../../shared/library/log.js";
+import { Logger, createLog } from "../../shared/library/log.js";
 
 const LOG_NAME = "buttercup:browser:popup";
 
-let __logger: ReturnType<typeof createLog>;
+let __logger: Logger;
 
 export function log(...args: Array<any>): void {
     if (!__logger) {

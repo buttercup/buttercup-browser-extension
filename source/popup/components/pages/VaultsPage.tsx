@@ -5,6 +5,7 @@ import { useVaultSources } from "../../../shared/hooks/vaultAppliance.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { openAddVaultPage } from "../../../shared/library/page.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
+import { getVaultsAppliance } from "../../services/vaultsAppliance.js";
 
 interface VaultsPageControlsProps {
 
@@ -21,7 +22,7 @@ const NoVaultsState = styled(NonIdealState)`
 `;
 
 export function VaultsPage() {
-    const sources = useVaultSources();
+    const sources = useVaultSources(getVaultsAppliance());
     const handleAddVaultClick = useCallback(() => {
         openAddVaultPage();
     }, []);

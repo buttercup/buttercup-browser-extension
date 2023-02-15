@@ -1,6 +1,6 @@
 import { Credentials, VaultManager, VaultSource, VaultSourceID, VaultSourceStatus } from "buttercup";
 import ms from "ms";
-import { getVaultsAppliance } from "../../shared/services/vaultsAppliance.js";
+import { getVaultsAppliance } from "./vaultsAppliance.js";
 import { describeSource } from "../library/vaultSource.js";
 import { log } from "./log.js";
 import { BrowserStorageInterface, getNonSyncStorage, getSyncStorage } from "./storage/BrowserStorageInterface.js";
