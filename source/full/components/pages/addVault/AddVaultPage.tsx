@@ -8,8 +8,11 @@ import { useTitle } from "../../../hooks/document.js";
 import { VaultTypeChooser } from "./VaultTypeChooser.js";
 import { VaultFileChooser } from "./VaultFileChooser.js";
 import { VaultConfirmation } from "./VaultConfirmation.js";
+import { BusyLoader } from "../../../../shared/components/loading/BusyLoader.js";
 import { addVaultDatasource, processDropboxAuthentication } from "../../../services/datasource.js";
 import { ADD_VAULT_STATE } from "../../../state/addVault.js";
+import { getToaster } from "../../../../shared/services/notifications.js";
+import { closeCurrentTab } from "../../../../shared/library/extension.js";
 import { VaultType } from "../../../types.js";
 
 enum PageType {
@@ -93,7 +96,25 @@ export function AddVaultPage() {
             name,
             type: vaultType,
             vaultPath: selectedVaultPath
-        })
+        }).then(() => {
+            getToaster().show({
+                intent: Intent.SUCCESS,
+                message: t("add-vault-page.adding.success", { vault: name }),
+                timeout: 4000
+            });
+            setAddingVault(false);
+            setTimeout(() => {
+                closeCurrentTab();
+            }, 2500);
+        }).catch(err => {
+            console.error(err);
+            setAddingVault(false);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("add-vault-page.adding.error", { message: err.message }),
+                timeout: 10000
+            });
+        });
     }, [
         dropboxToken,
         selectedIsNew,
@@ -151,6 +172,12 @@ export function AddVaultPage() {
                         vaultType={vaultType}
                     />
                 </>
+            )}
+            {addingVault && (
+                <BusyLoader
+                    description={t("add-vault-page.adding.description")}
+                    title={t("add-vault-page.adding.title")}
+                />
             )}
         </Layout>
     );

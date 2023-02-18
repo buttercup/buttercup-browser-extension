@@ -1,12 +1,13 @@
 import React, { Fragment, KeyboardEvent, useCallback, useState } from "react";
 import styled from "styled-components";
 import cn from "classnames";
-import { Alert, Button, Classes, Dialog, Divider, FormGroup, H4, InputGroup, Intent, Overlay, Spinner, Text } from "@blueprintjs/core";
+import { Alert, Button, Classes, Dialog, Divider, FormGroup, InputGroup, Intent, Text } from "@blueprintjs/core";
 import { VaultItem } from "./VaultItem.js";
 import { removeSource, unlockSource } from "../../services/vaults.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { VaultSourceDescription } from "../../types.js";
 import { getToaster } from "../../../shared/services/notifications.js";
+import { BusyLoader } from "../../../shared/components/loading/BusyLoader.js";
 
 interface VaultItemListProps {
     vaults: Array<VaultSourceDescription>;
@@ -21,17 +22,6 @@ const ButtonRow = styled.div`
     > button:not(:last-child) {
         margin-right: 6px;
     }
-`;
-const OverlayBody = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-`;
-const OverlayContainer = styled(Overlay)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
 const ScrollList = styled.div`
     max-height: 100%;
@@ -199,20 +189,10 @@ export function VaultItemList(props: VaultItemListProps) {
                 </Alert>
             )}
             {workAlert && (
-                <OverlayContainer
-                    canEscapeKeyClose={false}
-                    canOutsideClickClose={false}
-                    className={Classes.OVERLAY_SCROLL_CONTAINER}
-                    hasBackdrop
-                    isOpen
-                >
-                    <OverlayBody className={cn(Classes.CARD, Classes.ELEVATION_2)}>
-                        <Spinner size={30} />
-                        <br />
-                        <H4>{workAlert.title}</H4>
-                        <Text>{workAlert.description}</Text>
-                    </OverlayBody>
-                </OverlayContainer>
+                <BusyLoader
+                    description={workAlert.description}
+                    title={workAlert.title}
+                />
             )}
         </>
     );
