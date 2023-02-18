@@ -41,7 +41,15 @@ export async function initialiseVaultManager() {
     log(`initialsed vault manager: ${vm.sources.length} sources available`);
 }
 
+export async function lockSource(sourceID: VaultSourceID): Promise<void> {
+    const source = __vaultManager.getSourceForID(sourceID);
+    if (source.status === VaultSourceStatus.Unlocked) {
+        await source.lock();
+    }
+}
+
 export async function removeSource(sourceID: VaultSourceID): Promise<void> {
+    await lockSource(sourceID);
     await __vaultManager.removeSource(sourceID);
 }
 

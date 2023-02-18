@@ -19,6 +19,7 @@ export enum BackgroundMessageType {
     AddVault = "addVault",
     AuthenticateProvider = "authenticateProvider",
     KeepAlive = "keepAlive",
+    RemoveSource = "removeSource",
     UnlockSource = "unlockSource"
 }
 

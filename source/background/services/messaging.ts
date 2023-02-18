@@ -4,7 +4,7 @@ import { routeProviderAuthentication } from "../library/datasource.js";
 import { waitForInitialisation } from "./init.js";
 import { connectVault } from "./vaultConnection.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse } from "../types.js";
-import { unlockSource } from "./buttercup.js";
+import { removeSource, unlockSource } from "./buttercup.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -27,11 +27,14 @@ async function handleMessage(
         case BackgroundMessageType.KeepAlive:
             sendResponse({});
             break;
-        case BackgroundMessageType.UnlockSource: {
+        case BackgroundMessageType.RemoveSource:
+            await removeSource(msg.sourceID);
+            sendResponse({});
+            break;
+        case BackgroundMessageType.UnlockSource:
             await unlockSource(msg.sourceID, msg.password);
             sendResponse({});
             break;
-        }
         default:
             // Do nothing
             break;

@@ -10,6 +10,7 @@ import { VaultSourceDescription } from "../../types.js";
 
 interface VaultItemProps {
     isDetailsVisible: boolean;
+    onRemoveClick: () => void;
     onUnlockClick: () => void;
     vault: VaultSourceDescription;
 }
@@ -59,21 +60,24 @@ const VaultRow = styled.div`
 export function VaultItem(props: VaultItemProps) {
     const {
         isDetailsVisible,
+        onRemoveClick,
         onUnlockClick,
         vault
     } = props;
     const vaultImage = VAULT_TYPES[vault.type].image;
     const handleVaultClick = useCallback(() => {
-
+        // @todo
     }, [vault]);
     const handleLockUnlockClick = useCallback(() => {
         if (vault.state === VaultSourceStatus.Locked) {
             onUnlockClick();
+        } else if (vault.state === VaultSourceStatus.Unlocked) {
+            // @todo
         }
     }, [vault, onUnlockClick]);
     const handleRemoveClick = useCallback(() => {
-
-    }, [vault]);
+        onRemoveClick();
+    }, [vault, onRemoveClick]);
     return (
         <Container isActive={isDetailsVisible}>
             <VaultRow>
@@ -108,9 +112,7 @@ export function VaultItem(props: VaultItemProps) {
                             }
                             loading={vault.state === VaultSourceStatus.Pending}
                             minimal
-                            onClick={() =>
-                                handleLockUnlockClick()
-                            }
+                            onClick={handleLockUnlockClick}
                         />
                     </Tooltip2>
                     <Tooltip2 content={t("popup.vault.remove")}>
@@ -118,9 +120,7 @@ export function VaultItem(props: VaultItemProps) {
                             icon="remove"
                             loading={vault.state === VaultSourceStatus.Pending}
                             minimal
-                            onClick={() =>
-                                handleRemoveClick()
-                            }
+                            onClick={handleRemoveClick}
                         />
                     </Tooltip2>
                 </ButtonGroup>

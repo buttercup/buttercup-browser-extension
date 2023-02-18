@@ -7,10 +7,6 @@ import { openAddVaultPage } from "../../../shared/library/page.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
 import { getVaultsAppliance } from "../../services/vaultsAppliance.js";
 
-interface VaultsPageControlsProps {
-
-}
-
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -51,12 +47,16 @@ export function VaultsPage() {
     );
 }
 
-export function VaultsPageControls(props: VaultsPageControlsProps) {
+export function VaultsPageControls() {
+    const handleAddVaultClick = useCallback(() => {
+        openAddVaultPage();
+    }, []);
     return (
         <ButtonGroup>
             <Button
                 icon="add"
                 minimal
+                onClick={handleAddVaultClick}
             />
             <Button
                 icon="lock"
