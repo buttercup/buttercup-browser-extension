@@ -29,11 +29,11 @@ export async function initialise(): Promise<void> {
     if (__initialisation !== Initialisation.Idle) return;
     __initialisation = Initialisation.Running;
     log("initialising");
+    initialiseMessaging();
     init();
     global.background = true;
     await getVaultsAppliance().initialise();
     await initialiseVaultManager();
-    initialiseMessaging();
     attachTabEventListeners();
     log("initialisation complete");
     __initialisation = Initialisation.Complete;

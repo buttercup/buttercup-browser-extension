@@ -7,6 +7,7 @@ import { VaultSourceStatus } from "buttercup";
 import { VAULT_TYPES } from "../../../shared/library/vaultTypes.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { VaultSourceDescription } from "../../types.js";
+import { VaultStateIndicator } from "./VaultStateIndicator.js";
 
 interface VaultItemProps {
     isDetailsVisible: boolean;
@@ -15,6 +16,10 @@ interface VaultItemProps {
     vault: VaultSourceDescription;
 }
 
+const CenteredText = styled(Text)`
+    display: flex;
+    align-items: center;
+`;
 const Container = styled.div`
     border-radius: 3px;
     padding: 0.5rem;
@@ -88,9 +93,10 @@ export function VaultItem(props: VaultItemProps) {
                     <Title title={vault.name}>
                         <Text ellipsize>{vault.name}</Text>
                     </Title>
-                    <Text ellipsize className={cn(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
-                        {vault.state}
-                    </Text>
+                    <CenteredText ellipsize className={cn(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
+                        <VaultStateIndicator state={vault.state} />&nbsp;
+                        {t(`vault-state.${vault.state}`)}
+                    </CenteredText>
                 </DetailRow>
                 <ButtonGroup>
                     <Tooltip2

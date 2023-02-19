@@ -99,6 +99,11 @@
             }
         }
     },
+    "vault-state": {
+        "locked": "Locked",
+        "pending": "Pending",
+        "unlocked": "Unlocked"
+    },
     "vault-type": {
         "dropbox": {
             "add-error": "Failed adding Dropbox vault",
