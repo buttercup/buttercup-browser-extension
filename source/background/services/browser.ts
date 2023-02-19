@@ -8,7 +8,7 @@ const GOOGLE_DRIVE_AUTH_CODE_REXP = /\?googleauth&code=([^&#?]+)/;
 
 let __eventEmitter: EventEmitter;
 
-export function attachTabEventListeners() {
+function attachTabEventListeners() {
     const browser = getExtensionAPI();
     browser.tabs.onUpdated.addListener(handleTabUpdatedEvent);
     browser.tabs.onRemoved.addListener(handleTabRemovedEvent);
@@ -95,4 +95,8 @@ function handleTabUpdatedEvent(tabID: number, changeInfo: chrome.tabs.TabChangeI
 
 function handleTabRemovedEvent(tabID: number, removeInfo: chrome.tabs.TabRemoveInfo) {
     getEmitter().emit("tabClosed", { tabID });
+}
+
+export async function initialise() {
+    attachTabEventListeners();
 }

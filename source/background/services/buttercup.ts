@@ -1,9 +1,11 @@
-import { Credentials, VaultManager, VaultSource, VaultSourceID, VaultSourceStatus } from "buttercup";
+import { Credentials, VaultLiveSnapshot, VaultManager, VaultSource, VaultSourceID, VaultSourceStatus } from "buttercup";
 import ms from "ms";
 import { getVaultsAppliance } from "./vaultsAppliance.js";
 import { describeSource } from "../library/vaultSource.js";
 import { log } from "./log.js";
 import { BrowserStorageInterface, getNonSyncStorage, getSyncStorage } from "./storage/BrowserStorageInterface.js";
+
+const SNAPSHOT_STORAGE_PREFIX = "bcup:vaultsnapshot:";
 
 let __vaultManager: VaultManager;
 
@@ -28,6 +30,7 @@ export async function initialiseVaultManager() {
             "vaults",
             vm.sources.map((source) => describeSource(source))
         );
+        storeVaultLiveSnapshots(vm);
     });
     vm.initialise();
     await vm.rehydrate();
@@ -39,6 +42,7 @@ export async function initialiseVaultManager() {
         log("auto-update completed");
     });
     log(`initialsed vault manager: ${vm.sources.length} sources available`);
+    await restoreVaultLiveSnapshots();
 }
 
 export async function lockSource(sourceID: VaultSourceID): Promise<void> {
@@ -51,6 +55,42 @@ export async function lockSource(sourceID: VaultSourceID): Promise<void> {
 export async function removeSource(sourceID: VaultSourceID): Promise<void> {
     await lockSource(sourceID);
     await __vaultManager.removeSource(sourceID);
+}
+
+async function restoreVaultLiveSnapshots(): Promise<void> {
+    const storage = new BrowserStorageInterface(getNonSyncStorage());
+    const allKeys = await storage.getAllKeys();
+    const keys = allKeys.filter((key) => key.indexOf(`${SNAPSHOT_STORAGE_PREFIX}1a`) === 0);
+    const snapshots: Array<VaultLiveSnapshot> = [];
+    for (const key of keys) {
+        const rawPayload = await storage.getValue(key);
+        const payload = JSON.parse(rawPayload);
+        // await storage.removeKey(key);
+        snapshots.push(payload);
+    }
+    if (snapshots.length > 0) {
+        log(`restoring ${snapshots.length} vault live snapshots`);
+        await __vaultManager.restoreLiveSnapshots(snapshots);
+    }
+}
+
+function storeVaultLiveSnapshots(vaultManager = __vaultManager): void {
+    log("storing vault snapshots");
+    const snapshots = vaultManager.getLiveSnapshots();
+    if (snapshots.length <= 0) {
+        log("no snapshots available to store");
+        return;
+    }
+    const rawStorage = getNonSyncStorage();
+    rawStorage.set(
+        snapshots.reduce(
+            (output, snapshot) => ({
+                ...output,
+                [`${SNAPSHOT_STORAGE_PREFIX}${snapshot.version}:${snapshot.sourceID}`]: JSON.stringify(snapshot)
+            }),
+            {}
+        )
+    );
 }
 
 export async function unlockAndCreate(sourceID: VaultSourceID, masterPassword: string): Promise<void> {

@@ -1,11 +1,11 @@
 import { createOffscreen, initialise } from "./services/init.js";
 import { log } from "./services/log.js";
 
-chrome.runtime.onInstalled.addListener(() => {
-    createOffscreen().catch((err) => {
-        console.error(err);
-    });
-});
+// chrome.runtime.onInstalled.addListener(() => {
+//     createOffscreen().catch((err) => {
+//         console.error(err);
+//     });
+// });
 
 initialise()
     .then(() => {

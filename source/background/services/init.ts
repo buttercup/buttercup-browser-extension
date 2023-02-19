@@ -3,7 +3,7 @@ import { EventEmitter } from "eventemitter3";
 import { initialiseVaultManager } from "./buttercup.js";
 import { initialise as initialiseMessaging } from "./messaging.js";
 import { log } from "./log.js";
-import { attachTabEventListeners } from "./browser.js";
+import { initialise as initialiseBrowser } from "./browser.js";
 import { getVaultsAppliance } from "./vaultsAppliance.js";
 
 enum Initialisation {
@@ -34,7 +34,7 @@ export async function initialise(): Promise<void> {
     global.background = true;
     await getVaultsAppliance().initialise();
     await initialiseVaultManager();
-    attachTabEventListeners();
+    await initialiseBrowser();
     log("initialisation complete");
     __initialisation = Initialisation.Complete;
     __initEE.emit("initialised");
