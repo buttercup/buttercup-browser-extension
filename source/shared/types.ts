@@ -11,22 +11,31 @@ export interface AddVaultPayload {
 }
 
 export interface BackgroundMessage {
-    type: BackgroundMessageType;
-    [key: string]: any;
+    [BackgroundMessageType.CheckDesktopConnection]: {
+        type: BackgroundMessageType.CheckDesktopConnection;
+    };
 }
 
 export enum BackgroundMessageType {
-    AddVault = "addVault",
-    AuthenticateProvider = "authenticateProvider",
-    KeepAlive = "keepAlive",
-    RemoveSource = "removeSource",
-    UnlockSource = "unlockSource"
+    CheckDesktopConnection = "checkDesktopConnection"
 }
 
 export interface BackgroundResponse {
-    error?: Error;
-    [key: string]: any;
+    [BackgroundMessageType.CheckDesktopConnection]: {
+        available: boolean;
+        error?: Error;
+    };
 }
+
+// interface BackgroundResponseBase {
+//     error?: Error;
+// }
+// export type BackgroundResponse<T extends BackgroundMessageType> = (BackgroundResponseBase & (
+//     [T is BackgroundMessageType.CheckDesktopConnection] => {
+//         available?: boolean;
+//         type: BackgroundMessageType.CheckDesktopConnection;
+//     }
+// ));
 
 type ChildElement = ReactChild | ReactChildren | false | null;
 export type ChildElements = ChildElement | Array<ChildElement>;

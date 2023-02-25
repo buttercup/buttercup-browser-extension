@@ -1,50 +1,5 @@
 {
     "_": "English (UK)",
-    "add-vault-page": {
-        "adding": {
-            "description": "Vault is being added and unlocked...",
-            "error": "Failed adding vault: {{message}}",
-            "success": "Successfully added vault: {{vault}}",
-            "title": "Adding Vault"
-        },
-        "section-confirm": {
-            "add-button": {
-                "text": "Add",
-                "title": "Add vault to Buttercup"
-            },
-            "details-heading": "Vault Details",
-            "error": {
-                "name-invalid": "Vault name invalid",
-                "password-empty": "Password cannot be empty",
-                "password-mismatch": "Passwords don't match"
-            },
-            "heading": "Confirm Vault Configuration",
-            "plc-name": "Vault name...",
-            "plc-password1": "Vault password...",
-            "plc-password2": "Vault password again...",
-            "vault-create-new": "Create New Vault",
-            "vault-file": "Vault File",
-            "vault-name": "Vault Name",
-            "vault-password": "Password",
-            "vault-password-confirm": "Confirm Password",
-            "vault-source": "Vault Source"
-        },
-        "section-select": {
-            "choice-continue": "Continue",
-            "choice-heading": "Selected Vault",
-            "choice-vault-filename": "Vault Filename:",
-            "choice-vault-new": "Create New:",
-            "heading": "Select Vault",
-            "new-file-placeholder": "Enter new vault name...",
-            "new-no": "No",
-            "new-yes": "Yes",
-            "selected-none": "None"
-        },
-        "section-type": {
-            "heading": "Choose Vault Type"
-        },
-        "title": "Add Vault"
-    },
     "attributions-page": {
         "title": "Attributions"
     },

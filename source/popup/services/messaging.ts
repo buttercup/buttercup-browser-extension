@@ -1,13 +1,13 @@
 import { getExtensionAPI } from "../../shared/extension.js";
 import { MESSAGE_DEFAULT_TIMEOUT } from "../../shared/symbols.js";
-import { BackgroundMessage } from "../types.js";
+import { BackgroundMessage, BackgroundMessageType, BackgroundResponse } from "../types.js";
 
-export async function sendBackgroundMessage<T extends {} | void>(
-    msg: BackgroundMessage,
+export async function sendBackgroundMessage<T extends BackgroundMessageType>(
+    msg: BackgroundMessage[T],
     timeout: number = MESSAGE_DEFAULT_TIMEOUT
-): Promise<T> {
+): Promise<BackgroundResponse[T]> {
     const browser = getExtensionAPI();
-    return new Promise<T>((resolve, reject) => {
+    return new Promise<BackgroundResponse[T]>((resolve, reject) => {
         const timer = setTimeout(() => {
             reject(new Error(`Timed out waiting for response to message: ${msg.type} (${timeout} ms)`));
         }, timeout);

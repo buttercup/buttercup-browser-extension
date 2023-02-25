@@ -1,11 +1,12 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { Button, ButtonGroup, NonIdealState } from "@blueprintjs/core";
-import { useVaultSources } from "../../../shared/hooks/vaultAppliance.js";
+// import { useVaultSources } from "../../../shared/hooks/vaultAppliance.js";
 import { t } from "../../../shared/i18n/trans.js";
-import { openAddVaultPage } from "../../../shared/library/page.js";
+// import { openAddVaultPage } from "../../../shared/library/page.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
 import { getVaultsAppliance } from "../../services/vaultsAppliance.js";
+import { useDesktopConnectionAvailable } from "../../hooks/desktop.js";
 
 const Container = styled.div`
     display: flex;
@@ -18,12 +19,27 @@ const NoVaultsState = styled(NonIdealState)`
 `;
 
 export function VaultsPage() {
-    const sources = useVaultSources(getVaultsAppliance());
+    const desktopConnected = useDesktopConnectionAvailable();
+    const sources = []; //useVaultSources(getVaultsAppliance());
     const handleAddVaultClick = useCallback(() => {
-        openAddVaultPage();
+        // openAddVaultPage();
     }, []);
     return (
         <Container>
+            {desktopConnected === false && (
+                <NoVaultsState
+                    title={t("popup.vaults.empty.title")}
+                    description={t("popup.vaults.empty.description")}
+                    icon="folder-open"
+                    action={(
+                        <Button
+                            icon="plus"
+                            onClick={handleAddVaultClick}
+                            text={t("popup.vaults.empty.action-text")}
+                        />
+                    )}
+                />
+            )}
             {sources.length === 0 && (
                 <NoVaultsState
                     title={t("popup.vaults.empty.title")}
@@ -49,7 +65,7 @@ export function VaultsPage() {
 
 export function VaultsPageControls() {
     const handleAddVaultClick = useCallback(() => {
-        openAddVaultPage();
+        // openAddVaultPage();
     }, []);
     return (
         <ButtonGroup>

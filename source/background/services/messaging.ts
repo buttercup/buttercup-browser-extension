@@ -1,43 +1,23 @@
 import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
-import { routeProviderAuthentication } from "../library/datasource.js";
-import { waitForInitialisation } from "./init.js";
-import { connectVault } from "./vaultConnection.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse } from "../types.js";
-import { removeSource, unlockSource } from "./buttercup.js";
+import { hasConnection } from "./desktop.js";
 
-async function handleMessage(
-    msg: BackgroundMessage,
+async function handleMessage<T extends BackgroundMessageType>(
+    msg: BackgroundMessage[T],
     sender: chrome.runtime.MessageSender,
-    sendResponse: (resp: BackgroundResponse) => void
+    sendResponse: (resp: BackgroundResponse[T]) => void
 ) {
-    // Wait for SW startup
-    await waitForInitialisation();
     switch (msg.type) {
-        case BackgroundMessageType.AddVault: {
-            const sourceID = await connectVault(msg.payload);
-            sendResponse({ sourceID });
+        case BackgroundMessageType.CheckDesktopConnection: {
+            const available = await hasConnection();
+            sendResponse({
+                available
+            });
             break;
         }
-        case BackgroundMessageType.AuthenticateProvider: {
-            const result = await routeProviderAuthentication(msg.datasource);
-            sendResponse(result);
-            break;
-        }
-        case BackgroundMessageType.KeepAlive:
-            sendResponse({});
-            break;
-        case BackgroundMessageType.RemoveSource:
-            await removeSource(msg.sourceID);
-            sendResponse({});
-            break;
-        case BackgroundMessageType.UnlockSource:
-            await unlockSource(msg.sourceID, msg.password);
-            sendResponse({});
-            break;
         default:
-            // Do nothing
-            break;
+            throw new Layerr(`Unrecognised message type: ${msg.type}`);
     }
 }
 

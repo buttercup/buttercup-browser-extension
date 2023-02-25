@@ -1,7 +1,8 @@
 import React, { useCallback } from "react";
-import { openAddVaultPage } from "../../../shared/library/page.js";
+// import { openAddVaultPage } from "../../../shared/library/page.js";
 
 export function SearchPage() {
+    return null;
     // const handleAddVault = useCallback(() => {
     //     openAddVaultPage();
     // }, []);
