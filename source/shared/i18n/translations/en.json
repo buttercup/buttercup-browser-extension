@@ -5,10 +5,14 @@
     },
     "error": {
         "code": {
-            "bad-vault-type": "Unrecognised vault type",
-            "unlock-failure": "Failed unlocking vault"
+            "desktop-request-failed": "Desktop request failed"
         },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"
+    },
+    "full": {
+        "connect": {
+            "title": "Connect desktop application"
+        }
     },
     "popup": {
         "entries": {
@@ -17,6 +21,9 @@
             }
         },
         "vault": {
+            "connect": {
+                "open-error": "Failed starting connection: {{message}}"
+            },
             "lock": "Lock vault",
             "remove": "Remove vault",
             "remove-dialog": {
@@ -48,9 +55,13 @@
         },
         "vaults": {
             "empty": {
-                "action-text": "Add Vault",
-                "description": "There aren't any vaults here, yet.",
+                "description": "No vaults have been added to your desktop application, yet.",
                 "title": "No Vaults"
+            },
+            "no-connection": {
+                "action-text": "Connect",
+                "description": "You haven't connected to the desktop application, yet.",
+                "title": "Not Connected"
             }
         }
     },

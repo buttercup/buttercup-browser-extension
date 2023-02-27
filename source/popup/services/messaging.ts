@@ -17,7 +17,7 @@ export async function sendBackgroundMessage<T extends BackgroundMessageType>(
                 reject(resp.error);
                 return;
             }
-            resolve(resp);
+            resolve(resp as BackgroundResponse[T]);
         });
     });
 }

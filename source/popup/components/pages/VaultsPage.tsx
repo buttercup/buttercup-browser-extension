@@ -1,18 +1,24 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { Button, ButtonGroup, NonIdealState } from "@blueprintjs/core";
+import { Button, ButtonGroup, Intent, NonIdealState } from "@blueprintjs/core";
 // import { useVaultSources } from "../../../shared/hooks/vaultAppliance.js";
 import { t } from "../../../shared/i18n/trans.js";
 // import { openAddVaultPage } from "../../../shared/library/page.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
-import { getVaultsAppliance } from "../../services/vaultsAppliance.js";
+// import { getVaultsAppliance } from "../../services/vaultsAppliance.js";
 import { useDesktopConnectionAvailable } from "../../hooks/desktop.js";
+import { initiateDesktopConnectionRequest } from "../../queries/desktop.js";
+import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
+import { getToaster } from "../../../shared/services/notifications.js";
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+`;
+const NotConnectedState = styled(NonIdealState)`
+    margin-top: 28px;
 `;
 const NoVaultsState = styled(NonIdealState)`
     margin-top: 28px;
@@ -21,37 +27,50 @@ const NoVaultsState = styled(NonIdealState)`
 export function VaultsPage() {
     const desktopConnected = useDesktopConnectionAvailable();
     const sources = []; //useVaultSources(getVaultsAppliance());
-    const handleAddVaultClick = useCallback(() => {
-        // openAddVaultPage();
+    const handleConnectClick = useCallback(async () => {
+        try {
+            await initiateDesktopConnectionRequest();
+            await createNewTab(getExtensionURL("full.html#/connect"));
+        } catch (err) {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("popup.vault.connect.open-error", { message: err.message }),
+                timeout: 10000
+            });
+        }
     }, []);
+    // const handleAddVaultClick = useCallback(() => {
+    //     // openAddVaultPage();
+    // }, []);
     return (
         <Container>
             {desktopConnected === false && (
-                <NoVaultsState
-                    title={t("popup.vaults.empty.title")}
-                    description={t("popup.vaults.empty.description")}
-                    icon="folder-open"
+                <NotConnectedState
+                    title={t("popup.vaults.no-connection.title")}
+                    description={t("popup.vaults.no-connection.description")}
+                    icon="offline"
                     action={(
                         <Button
-                            icon="plus"
-                            onClick={handleAddVaultClick}
-                            text={t("popup.vaults.empty.action-text")}
+                            icon="link"
+                            onClick={handleConnectClick}
+                            text={t("popup.vaults.no-connection.action-text")}
                         />
                     )}
                 />
             )}
-            {sources.length === 0 && (
+            {desktopConnected === true && sources.length === 0 && (
                 <NoVaultsState
                     title={t("popup.vaults.empty.title")}
                     description={t("popup.vaults.empty.description")}
                     icon="folder-open"
-                    action={(
-                        <Button
-                            icon="plus"
-                            onClick={handleAddVaultClick}
-                            text={t("popup.vaults.empty.action-text")}
-                        />
-                    )}
+                    // action={(
+                    //     <Button
+                    //         icon="plus"
+                    //         onClick={handleAddVaultClick}
+                    //         text={t("popup.vaults.empty.action-text")}
+                    //     />
+                    // )}
                 />
             )}
             {sources.length > 0 && (

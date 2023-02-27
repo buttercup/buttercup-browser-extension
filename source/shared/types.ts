@@ -14,15 +14,22 @@ export interface BackgroundMessage {
     [BackgroundMessageType.CheckDesktopConnection]: {
         type: BackgroundMessageType.CheckDesktopConnection;
     };
+    [BackgroundMessageType.InitiateDesktopConnection]: {
+        type: BackgroundMessageType.InitiateDesktopConnection;
+    };
 }
 
 export enum BackgroundMessageType {
-    CheckDesktopConnection = "checkDesktopConnection"
+    CheckDesktopConnection = "checkDesktopConnection",
+    InitiateDesktopConnection = "initiateDesktopConnection"
 }
 
 export interface BackgroundResponse {
     [BackgroundMessageType.CheckDesktopConnection]: {
         available: boolean;
+        error?: Error;
+    };
+    [BackgroundMessageType.InitiateDesktopConnection]: {
         error?: Error;
     };
 }

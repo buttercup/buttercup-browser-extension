@@ -5,6 +5,6 @@ export function useDesktopConnectionAvailable(): boolean | null {
     const { value } = useAsync(async () => {
         const isAvailable = await getDesktopConnectionAvailable();
         return isAvailable;
-    });
-    return value;
+    }, []);
+    return value === null ? false : value;
 }

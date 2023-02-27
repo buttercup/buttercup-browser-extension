@@ -1,6 +1,5 @@
 import React from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
-import { themes } from "@buttercup/ui";
 import themesInternal from "../themes.js";
 import { ChildElements } from "../types.js";
 
@@ -14,8 +13,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
     return (
         <StyledThemeProvider
             theme={{
-                ...(darkMode ? themesInternal.dark : themesInternal.light),
-                ...(darkMode ? themes.dark : themes.light)
+                ...(darkMode ? themesInternal.dark : themesInternal.light)
             }}
         >
             {children}

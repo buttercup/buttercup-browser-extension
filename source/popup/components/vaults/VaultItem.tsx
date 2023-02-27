@@ -11,7 +11,7 @@ import { VaultStateIndicator } from "./VaultStateIndicator.js";
 
 interface VaultItemProps {
     isDetailsVisible: boolean;
-    onRemoveClick: () => void;
+    // onRemoveClick: () => void;
     onUnlockClick: () => void;
     vault: VaultSourceDescription;
 }
@@ -65,7 +65,7 @@ const VaultRow = styled.div`
 export function VaultItem(props: VaultItemProps) {
     const {
         isDetailsVisible,
-        onRemoveClick,
+        // onRemoveClick,
         onUnlockClick,
         vault
     } = props;
@@ -80,9 +80,9 @@ export function VaultItem(props: VaultItemProps) {
             // @todo
         }
     }, [vault, onUnlockClick]);
-    const handleRemoveClick = useCallback(() => {
-        onRemoveClick();
-    }, [vault, onRemoveClick]);
+    // const handleRemoveClick = useCallback(() => {
+    //     onRemoveClick();
+    // }, [vault, onRemoveClick]);
     return (
         <Container isActive={isDetailsVisible}>
             <VaultRow>
@@ -121,14 +121,14 @@ export function VaultItem(props: VaultItemProps) {
                             onClick={handleLockUnlockClick}
                         />
                     </Tooltip2>
-                    <Tooltip2 content={t("popup.vault.remove")}>
+                    {/* <Tooltip2 content={t("popup.vault.remove")}>
                         <Button
                             icon="remove"
                             loading={vault.state === VaultSourceStatus.Pending}
                             minimal
                             onClick={handleRemoveClick}
                         />
-                    </Tooltip2>
+                    </Tooltip2> */}
                 </ButtonGroup>
             </VaultRow>
         </Container>

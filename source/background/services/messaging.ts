@@ -1,7 +1,7 @@
 import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
+import { hasConnection } from "./desktop/connection.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse } from "../types.js";
-import { hasConnection } from "./desktop.js";
 
 async function handleMessage<T extends BackgroundMessageType>(
     msg: BackgroundMessage[T],
@@ -16,8 +16,11 @@ async function handleMessage<T extends BackgroundMessageType>(
             });
             break;
         }
+        case BackgroundMessageType.InitiateDesktopConnection: {
+            break;
+        }
         default:
-            throw new Layerr(`Unrecognised message type: ${msg.type}`);
+            throw new Layerr(`Unrecognised message type: ${(msg as any).type}`);
     }
 }
 

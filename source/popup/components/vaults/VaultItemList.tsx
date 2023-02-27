@@ -3,7 +3,7 @@ import styled from "styled-components";
 import cn from "classnames";
 import { Alert, Button, Classes, Dialog, Divider, FormGroup, InputGroup, Intent, Text } from "@blueprintjs/core";
 import { VaultItem } from "./VaultItem.js";
-import { removeSource, unlockSource } from "../../services/vaults.js";
+import { unlockSource } from "../../services/vaults.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { VaultSourceDescription } from "../../types.js";
 import { getToaster } from "../../../shared/services/notifications.js";
@@ -59,7 +59,7 @@ export function VaultItemList(props: VaultItemListProps) {
             title: t("popup.vault.unlocking.title"),
             description: t("popup.vault.unlocking.description")
         });
-        unlockSource(unlockVault.id, vaultPassword)
+        unlockSource(unlockVault.id)
             .then(() => {
                 getToaster().show({
                     intent: Intent.SUCCESS,
@@ -79,35 +79,35 @@ export function VaultItemList(props: VaultItemListProps) {
                 });
             });
     }, [handleDialogClose, unlockVault, vaultPassword]);
-    const handleVaultRemoveClick = useCallback((vault: VaultSourceDescription) => {
-        setRemoveVault(vault);
-    }, []);
-    const handleVaultRemove = useCallback(() => {
-        setWorkAlert({
-            title: t("popup.vault.removing.title"),
-            description: t("popup.vault.removing.description")
-        });
-        const vaultName = removeVault.name;
-        removeSource(removeVault.id)
-            .then(() => {
-                getToaster().show({
-                    intent: Intent.SUCCESS,
-                    message: t("popup.vault.removing.success", { vault: vaultName }),
-                    timeout: 4000
-                });
-                handleDialogClose();
-                setWorkAlert(null);
-            })
-            .catch(err => {
-                console.error(err);
-                setWorkAlert(null);
-                getToaster().show({
-                    intent: Intent.DANGER,
-                    message: t("popup.vault.removing.error", { message: err.message }),
-                    timeout: 10000
-                });
-            });
-    }, [handleDialogClose, removeVault]);
+    // const handleVaultRemoveClick = useCallback((vault: VaultSourceDescription) => {
+    //     setRemoveVault(vault);
+    // }, []);
+    // const handleVaultRemove = useCallback(() => {
+    //     setWorkAlert({
+    //         title: t("popup.vault.removing.title"),
+    //         description: t("popup.vault.removing.description")
+    //     });
+    //     const vaultName = removeVault.name;
+    //     removeSource(removeVault.id)
+    //         .then(() => {
+    //             getToaster().show({
+    //                 intent: Intent.SUCCESS,
+    //                 message: t("popup.vault.removing.success", { vault: vaultName }),
+    //                 timeout: 4000
+    //             });
+    //             handleDialogClose();
+    //             setWorkAlert(null);
+    //         })
+    //         .catch(err => {
+    //             console.error(err);
+    //             setWorkAlert(null);
+    //             getToaster().show({
+    //                 intent: Intent.DANGER,
+    //                 message: t("popup.vault.removing.error", { message: err.message }),
+    //                 timeout: 10000
+    //             });
+    //         });
+    // }, [handleDialogClose, removeVault]);
     const handleUnlockKeyPress = useCallback((event: KeyboardEvent) => {
         if (event.key === "Enter" && !event.ctrlKey && !event.shiftKey) {
             handleVaultUnlock();
@@ -120,7 +120,7 @@ export function VaultItemList(props: VaultItemListProps) {
                     <Fragment key={vault.id}>
                         <VaultItem
                             isDetailsVisible={false}
-                            onRemoveClick={() => handleVaultRemoveClick(vault)}
+                            // onRemoveClick={() => handleVaultRemoveClick(vault)}
                             onUnlockClick={() => handleVaultUnlockClick(vault)}
                             vault={vault}
                         />
@@ -174,7 +174,7 @@ export function VaultItemList(props: VaultItemListProps) {
                     </div>
                 </Dialog>
             )}
-            {removeVault && (
+            {/* {removeVault && (
                 <Alert
                     cancelButtonText={t("popup.vault.remove-dialog.cancel-button")}
                     confirmButtonText={t("popup.vault.remove-dialog.confirm-button")}
@@ -187,7 +187,7 @@ export function VaultItemList(props: VaultItemListProps) {
                 >
                     <p dangerouslySetInnerHTML={{ __html: t("popup.vault.remove-dialog.message", { vault: removeVault.name }) }} />
                 </Alert>
-            )}
+            )} */}
             {workAlert && (
                 <BusyLoader
                     description={workAlert.description}
