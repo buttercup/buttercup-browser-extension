@@ -1,14 +1,20 @@
 import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
-import { hasConnection } from "./desktop/connection.js";
-import { BackgroundMessage, BackgroundMessageType, BackgroundResponse } from "../types.js";
+import { authenticateBrowserAccess, hasConnection, initiateConnection } from "./desktop/connection.js";
+import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
+import { setLocalValue } from "./storage.js";
 
-async function handleMessage<T extends BackgroundMessageType>(
-    msg: BackgroundMessage[T],
+async function handleMessage(
+    msg: BackgroundMessage,
     sender: chrome.runtime.MessageSender,
-    sendResponse: (resp: BackgroundResponse[T]) => void
+    sendResponse: (resp: BackgroundResponse) => void
 ) {
     switch (msg.type) {
+        case BackgroundMessageType.AuthenticateDesktopConnection: {
+            const token = await authenticateBrowserAccess(msg.code);
+            await setLocalValue(LocalStorageItem.DesktopToken, token);
+            break;
+        }
         case BackgroundMessageType.CheckDesktopConnection: {
             const available = await hasConnection();
             sendResponse({
@@ -17,6 +23,8 @@ async function handleMessage<T extends BackgroundMessageType>(
             break;
         }
         case BackgroundMessageType.InitiateDesktopConnection: {
+            await initiateConnection();
+            sendResponse({});
             break;
         }
         default:

@@ -8,7 +8,7 @@ export async function sendDesktopRequest(
     method: string,
     route: string,
     payload: Record<string, any> = {}
-): Promise<Record<string, any>> {
+): Promise<string | Record<string, any>> {
     const url = joinURL(DESKTOP_URL_BASE, route);
     const resp = await fetch(url, {
         method,
@@ -29,5 +29,8 @@ export async function sendDesktopRequest(
             `Desktop request failed: ${resp.statusText}`
         );
     }
-    return resp.json();
+    if (/application\/json/.test(resp.headers.get("Content-Type"))) {
+        return resp.json();
+    }
+    return resp.text();
 }

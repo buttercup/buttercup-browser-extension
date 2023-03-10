@@ -10,29 +10,67 @@ export interface AddVaultPayload {
     vaultPath: string;
 }
 
+// type BackgroundMessageMap = {
+//     [BackgroundMessageType.CheckDesktopConnection]: {
+//         type: BackgroundMessageType.CheckDesktopConnection;
+//     };
+//     [BackgroundMessageType.InitiateDesktopConnection]: {
+//         type: BackgroundMessageType.InitiateDesktopConnection;
+//     };
+// }
+
+// export type BackgroundMessage<T extends BackgroundMessageType> = BackgroundMessageMap[T];
+
+// export type BackgroundMessage<T extends BackgroundMessageType> = (
+//     T extends BackgroundMessageType.CheckDesktopConnection ? {
+//         type: T;
+//     } : never
+// );
+
 export interface BackgroundMessage {
-    [BackgroundMessageType.CheckDesktopConnection]: {
-        type: BackgroundMessageType.CheckDesktopConnection;
-    };
-    [BackgroundMessageType.InitiateDesktopConnection]: {
-        type: BackgroundMessageType.InitiateDesktopConnection;
-    };
+    code?: string;
+    type: BackgroundMessageType;
 }
 
 export enum BackgroundMessageType {
+    AuthenticateDesktopConnection = "authenticateDesktopConnection",
     CheckDesktopConnection = "checkDesktopConnection",
     InitiateDesktopConnection = "initiateDesktopConnection"
 }
 
+// type BackgroundResponseMap = {
+//     [BackgroundMessageType.CheckDesktopConnection]: {
+//         available: boolean;
+//         error?: Error;
+//     };
+//     [BackgroundMessageType.InitiateDesktopConnection]: {
+//         error?: Error;
+//     };
+// }
+
+// export type BackgroundResponse<T extends BackgroundMessageType> = BackgroundResponseMap[T];
+
+// export type BackgroundResponse<T extends BackgroundMessageType> = (
+//     T extends BackgroundMessageType.CheckDesktopConnection ? {
+//         available: boolean;
+//         // type: BackgroundMessageType.CheckDesktopConnection;
+//     } : never
+// );
+
 export interface BackgroundResponse {
-    [BackgroundMessageType.CheckDesktopConnection]: {
-        available: boolean;
-        error?: Error;
-    };
-    [BackgroundMessageType.InitiateDesktopConnection]: {
-        error?: Error;
-    };
+    available?: boolean;
+    error?: Error;
 }
+
+// export interface BackgroundResponse {
+//     [BackgroundMessageType.CheckDesktopConnection]: {
+//         available: boolean;
+//         error?: Error;
+//     };
+//     [BackgroundMessageType.InitiateDesktopConnection]: {
+//         error?: Error;
+//     };
+// }
 
 // interface BackgroundResponseBase {
 //     error?: Error;

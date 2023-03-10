@@ -11,6 +11,11 @@
     },
     "full": {
         "connect": {
+            "auth-error": "Failed authenticating: {{message}}",
+            "auth-success": "Successfully connected",
+            "code-plc": "Code...",
+            "description": "Connect the Buttercup extension to the Buttercup Desktop application so you can use your vaults and entries to easily access your web-based accounts.",
+            "instruction": "The desktop application should have appeared. If it hasn't, please close this page and try again. You must have opened the desktop application before trying. Wait for an authorisation code to appear in the desktop application, and then enter it here:",
             "title": "Connect desktop application"
         }
     },

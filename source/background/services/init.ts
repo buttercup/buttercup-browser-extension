@@ -1,6 +1,7 @@
 import { EventEmitter } from "eventemitter3";
 import { log } from "./log.js";
 import { initialise as initialiseMessaging } from "./messaging.js";
+import { initialise as initialiseStorage } from "./storage.js";
 
 enum Initialisation {
     Complete = "complete",
@@ -16,6 +17,7 @@ export async function initialise(): Promise<void> {
     __initialisation = Initialisation.Running;
     log("initialising");
     initialiseMessaging();
+    await initialiseStorage();
     log("initialisation complete");
     __initialisation = Initialisation.Complete;
     __initEE.emit("initialised");
