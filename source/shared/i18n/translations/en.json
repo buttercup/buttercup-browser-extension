@@ -5,6 +5,7 @@
     },
     "error": {
         "code": {
+            "desktop-connection-not-authorised": "Desktop connection has not been authorised",
             "desktop-request-failed": "Desktop request failed"
         },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"

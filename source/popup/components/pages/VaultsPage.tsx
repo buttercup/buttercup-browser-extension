@@ -1,12 +1,9 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { Button, ButtonGroup, Intent, NonIdealState } from "@blueprintjs/core";
-// import { useVaultSources } from "../../../shared/hooks/vaultAppliance.js";
 import { t } from "../../../shared/i18n/trans.js";
-// import { openAddVaultPage } from "../../../shared/library/page.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
-// import { getVaultsAppliance } from "../../services/vaultsAppliance.js";
-import { useDesktopConnectionAvailable } from "../../hooks/desktop.js";
+import { useDesktopConnectionAvailable, useVaultSources } from "../../hooks/desktop.js";
 import { initiateDesktopConnectionRequest } from "../../queries/desktop.js";
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 import { getToaster } from "../../../shared/services/notifications.js";
@@ -26,7 +23,7 @@ const NoVaultsState = styled(NonIdealState)`
 
 export function VaultsPage() {
     const desktopConnected = useDesktopConnectionAvailable();
-    const sources = []; //useVaultSources(getVaultsAppliance());
+    const sources = useVaultSources();
     const handleConnectClick = useCallback(async () => {
         try {
             await initiateDesktopConnectionRequest();
@@ -73,7 +70,7 @@ export function VaultsPage() {
                     // )}
                 />
             )}
-            {sources.length > 0 && (
+            {desktopConnected === true && sources.length > 0 && (
                 <VaultItemList
                     vaults={sources}
                 />

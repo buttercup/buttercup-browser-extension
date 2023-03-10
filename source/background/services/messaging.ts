@@ -1,6 +1,6 @@
 import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
-import { authenticateBrowserAccess, hasConnection, initiateConnection } from "./desktop/connection.js";
+import { authenticateBrowserAccess, getVaultSources, hasConnection, initiateConnection } from "./desktop/connection.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { setLocalValue } from "./storage.js";
 
@@ -19,6 +19,13 @@ async function handleMessage(
             const available = await hasConnection();
             sendResponse({
                 available
+            });
+            break;
+        }
+        case BackgroundMessageType.GetDesktopVaultSources: {
+            const sources = await getVaultSources();
+            sendResponse({
+                vaultSources: sources
             });
             break;
         }

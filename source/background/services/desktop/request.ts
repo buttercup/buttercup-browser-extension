@@ -7,16 +7,23 @@ const DESKTOP_URL_BASE = `http://localhost:${DESKTOP_API_PORT}`;
 export async function sendDesktopRequest(
     method: string,
     route: string,
-    payload: Record<string, any> = {}
+    payload: Record<string, any> = null,
+    auth: string = null
 ): Promise<string | Record<string, any>> {
     const url = joinURL(DESKTOP_URL_BASE, route);
-    const resp = await fetch(url, {
+    const config: RequestInit = {
         method,
         headers: {
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
+        }
+    };
+    if (payload !== null) {
+        config.body = JSON.stringify(payload);
+    }
+    if (auth !== null) {
+        config.headers["Authorization"] = `Bearer ${auth}`;
+    }
+    const resp = await fetch(url, config);
     if (!resp.ok) {
         throw new Layerr(
             {

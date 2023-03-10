@@ -1,7 +1,7 @@
 import { sendDesktopRequest } from "./request.js";
 import { Layerr } from "layerr";
 import { getLocalValue } from "../storage.js";
-import { LocalStorageItem } from "../../types.js";
+import { LocalStorageItem, VaultSourceDescription } from "../../types.js";
 
 export async function authenticateBrowserAccess(code: string): Promise<string> {
     const { token } = (await sendDesktopRequest("POST", "/v1/auth/response", {
@@ -13,10 +13,26 @@ export async function authenticateBrowserAccess(code: string): Promise<string> {
     return token;
 }
 
+export async function getVaultSources(): Promise<Array<VaultSourceDescription>> {
+    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
+    if (!authToken) {
+        throw new Layerr(
+            {
+                info: {
+                    i18n: "error.code.desktop-connection-not-authorised"
+                }
+            },
+            "Desktop connection not authorised"
+        );
+    }
+    const { sources } = (await sendDesktopRequest("GET", "/v1/vaults", null, authToken)) as {
+        sources: Array<VaultSourceDescription>;
+    };
+    return sources;
+}
+
 export async function hasConnection(): Promise<boolean> {
     const token = await getLocalValue(LocalStorageItem.DesktopToken);
-    // const storage = new BrowserStorageInterface(getNonSyncStorage());
-    // const connRaw = await storage.getValue(STORAGE_KEY_DESKTOP_CONNECTION);
     return !!token;
 }
 

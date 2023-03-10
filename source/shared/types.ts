@@ -35,7 +35,8 @@ export interface BackgroundMessage {
 export enum BackgroundMessageType {
     AuthenticateDesktopConnection = "authenticateDesktopConnection",
     CheckDesktopConnection = "checkDesktopConnection",
-    InitiateDesktopConnection = "initiateDesktopConnection"
+    InitiateDesktopConnection = "initiateDesktopConnection",
+    GetDesktopVaultSources = "getDesktopVaultSources"
 }
 
 // type BackgroundResponseMap = {
@@ -60,6 +61,7 @@ export enum BackgroundMessageType {
 export interface BackgroundResponse {
     available?: boolean;
     error?: Error;
+    vaultSources?: Array<VaultSourceDescription>;
 }
 
 // export interface BackgroundResponse {
@@ -96,7 +98,7 @@ export interface VaultSourceDescription {
 
 export enum VaultType {
     Dropbox = "dropbox",
+    File = "file",
     GoogleDrive = "googledrive",
-    LocalFile = "localfile",
     WebDAV = "webdav"
 }
