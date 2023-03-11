@@ -6,6 +6,7 @@ import { CodeInput } from "./CodeInput.js";
 import { sendBackgroundMessage } from "../../../services/messaging.js";
 import { getToaster } from "../../../../shared/services/notifications.js";
 import { closeCurrentTab } from "../../../../shared/library/extension.js";
+import { localisedErrorMessage } from "../../../../shared/library/error.js";
 import { BackgroundMessageType } from "../../../types.js";
 
 export function ConnectPage() {
@@ -29,7 +30,7 @@ export function ConnectPage() {
                 console.error(err);
                 getToaster().show({
                     intent: Intent.DANGER,
-                    message: t("full.connect.auth-error", { message: err.message }),
+                    message: t("full.connect.auth-error", { message: localisedErrorMessage(err) }),
                     timeout: 10000
                 });
                 setAuthenticating(false);

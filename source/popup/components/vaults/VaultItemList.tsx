@@ -1,13 +1,14 @@
 import React, { Fragment, KeyboardEvent, useCallback, useState } from "react";
 import styled from "styled-components";
 import cn from "classnames";
-import { Alert, Button, Classes, Dialog, Divider, FormGroup, InputGroup, Intent, Text } from "@blueprintjs/core";
+import { Button, Classes, Dialog, Divider, FormGroup, InputGroup, Intent, Text } from "@blueprintjs/core";
 import { VaultItem } from "./VaultItem.js";
 import { unlockSource } from "../../services/vaults.js";
 import { t } from "../../../shared/i18n/trans.js";
-import { VaultSourceDescription } from "../../types.js";
 import { getToaster } from "../../../shared/services/notifications.js";
 import { BusyLoader } from "../../../shared/components/loading/BusyLoader.js";
+import { localisedErrorMessage } from "../../../shared/library/error.js";
+import { VaultSourceDescription } from "../../types.js";
 
 interface VaultItemListProps {
     vaults: Array<VaultSourceDescription>;
@@ -74,7 +75,7 @@ export function VaultItemList(props: VaultItemListProps) {
                 setWorkAlert(null);
                 getToaster().show({
                     intent: Intent.DANGER,
-                    message: t("popup.vault.unlocking.error", { message: err.message }),
+                    message: t("popup.vault.unlocking.error", { message: localisedErrorMessage(err) }),
                     timeout: 10000
                 });
             });

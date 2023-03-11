@@ -7,6 +7,7 @@ import { useDesktopConnectionAvailable, useVaultSources } from "../../hooks/desk
 import { initiateDesktopConnectionRequest } from "../../queries/desktop.js";
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 import { getToaster } from "../../../shared/services/notifications.js";
+import { localisedErrorMessage } from "../../../shared/library/error.js";
 
 const Container = styled.div`
     display: flex;
@@ -32,7 +33,7 @@ export function VaultsPage() {
             console.error(err);
             getToaster().show({
                 intent: Intent.DANGER,
-                message: t("popup.vault.connect.open-error", { message: err.message }),
+                message: t("popup.vault.connect.open-error", { message: localisedErrorMessage(err) }),
                 timeout: 10000
             });
         }
