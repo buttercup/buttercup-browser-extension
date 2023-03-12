@@ -1,3 +1,4 @@
+import { SearchResult } from "buttercup";
 import { Layerr } from "layerr";
 import { sendBackgroundMessage } from "../services/messaging.js";
 import { BackgroundMessageType, VaultSourceDescription } from "../types.js";
@@ -29,4 +30,15 @@ export async function initiateDesktopConnectionRequest(): Promise<void> {
     if (resp.error) {
         throw new Layerr(resp.error, "Failed initiating desktop connection");
     }
+}
+
+export async function searchEntriesByTerm(term: string): Promise<Array<SearchResult>> {
+    const resp = await sendBackgroundMessage({
+        searchTerm: term,
+        type: BackgroundMessageType.SearchEntriesByTerm
+    });
+    if (resp.error) {
+        throw new Layerr(resp.error, "Failed fetching search results from desktop application");
+    }
+    return resp.searchResults;
 }

@@ -1,7 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, ButtonGroup, ControlGroup, InputGroup } from "@blueprintjs/core";
+import { Button, InputGroup } from "@blueprintjs/core";
 import { t } from "../../../shared/i18n/trans.js";
+import { useDesktopConnectionAvailable, useSearchedEntries } from "../../hooks/desktop.js";
+
+interface EntriesPageProps {
+    searchTerm: string;
+}
+
+interface EntriesPageControlsProps {
+    onSearchTermChange: (term: string) => void;
+}
 
 const Container = styled.div`
     display: flex;
@@ -13,32 +22,30 @@ const Input = styled(InputGroup)`
     margin-right: 2px !important;
 `;
 
-export function EntriesPage() {
+export function EntriesPage(props: EntriesPageProps) {
+    const entries = useSearchedEntries(props.searchTerm);
     return (
         <Container>
-            Vaults
+            Entries: {entries.length}
         </Container>
     );
 }
 
-export function EntriesPageControls() {
+export function EntriesPageControls(props: EntriesPageControlsProps) {
+    const isConnected = useDesktopConnectionAvailable();
     return (
-        // <ControlGroup>
         <>
             <Input
+                disabled={!isConnected}
+                onChange={evt => props.onSearchTermChange(evt.target.value)}
                 placeholder={t("popup.entries.search.placeholder")}
                 round
-                // small
             />
             <Button
+                disabled={!isConnected}
                 icon="search"
                 minimal
             />
         </>
-        //     <Button
-        //         icon="search"
-        //         minimal
-        //     />
-        // </ControlGroup>
     );
 }

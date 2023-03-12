@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Classes, Divider, Icon, Tab, Tabs } from "@blueprintjs/core";
 import { VaultsPage, VaultsPageControls } from "../pages/VaultsPage.js";
@@ -28,6 +28,7 @@ const Container = styled.div`
 `;
 
 export function Navigator(props: NavigatorProps) {
+    const [entriesSearch, setEntriesSearch] = useState<string>("");
     return (
         <Container>
             <Tabs
@@ -39,10 +40,12 @@ export function Navigator(props: NavigatorProps) {
                     panel={(
                         <>
                             <Divider />
-                            <EntriesPage />
+                            <EntriesPage searchTerm={entriesSearch} />
                         </>
                     )}
-                >Entries</Tab>
+                >
+                    <Icon icon="label" />
+                </Tab>
                 <Tab
                     id={PopupPage.Vaults}
                     panel={(
@@ -52,7 +55,7 @@ export function Navigator(props: NavigatorProps) {
                         </>
                     )}
                 >
-                    Vaults
+                    <Icon icon="projects" />
                 </Tab>
                 <Tab id={PopupPage.OTPs}>
                     <Icon icon="array-timestamp" />
@@ -69,7 +72,7 @@ export function Navigator(props: NavigatorProps) {
                 </Tab>
                 <Tabs.Expander />
                 {props.activeTab === PopupPage.Entries && (
-                    <EntriesPageControls />
+                    <EntriesPageControls onSearchTermChange={setEntriesSearch} />
                 )}
                 {props.activeTab === PopupPage.Vaults && (
                     <VaultsPageControls />

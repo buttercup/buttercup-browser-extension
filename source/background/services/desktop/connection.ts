@@ -1,6 +1,7 @@
-import { sendDesktopRequest } from "./request.js";
 import { Layerr } from "layerr";
+import { SearchResult } from "buttercup";
 import { getLocalValue } from "../storage.js";
+import { sendDesktopRequest } from "./request.js";
 import { LocalStorageItem, VaultSourceDescription } from "../../types.js";
 
 export async function authenticateBrowserAccess(code: string): Promise<string> {
@@ -42,4 +43,30 @@ export async function initiateConnection(): Promise<void> {
         purpose: "vaults-access",
         rev: 1
     });
+}
+
+export async function searchEntriesByTerm(term: string): Promise<Array<SearchResult>> {
+    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
+    if (!authToken) {
+        throw new Layerr(
+            {
+                info: {
+                    i18n: "error.code.desktop-connection-not-authorised"
+                }
+            },
+            "Desktop connection not authorised"
+        );
+    }
+    const { results } = (await sendDesktopRequest(
+        "GET",
+        "/v1/entries",
+        {
+            type: "term",
+            term
+        },
+        authToken
+    )) as {
+        results: Array<SearchResult>;
+    };
+    return results;
 }

@@ -1,6 +1,12 @@
 import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
-import { authenticateBrowserAccess, getVaultSources, hasConnection, initiateConnection } from "./desktop/connection.js";
+import {
+    authenticateBrowserAccess,
+    getVaultSources,
+    hasConnection,
+    initiateConnection,
+    searchEntriesByTerm
+} from "./desktop/connection.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { setLocalValue } from "./storage.js";
 
@@ -32,6 +38,13 @@ async function handleMessage(
         case BackgroundMessageType.InitiateDesktopConnection: {
             await initiateConnection();
             sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.SearchEntriesByTerm: {
+            const searchResults = await searchEntriesByTerm(msg.searchTerm);
+            sendResponse({
+                searchResults
+            });
             break;
         }
         default:

@@ -10,6 +10,7 @@
         },
         "desktop": {
             "connection-check-failed": "Failed checking desktop connection: {{message}}",
+            "search-failed": "Failed searching for entries: {{message}}",
             "sources-fetch-failed": "Failed fetching vaults: {{message}}"
         },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"

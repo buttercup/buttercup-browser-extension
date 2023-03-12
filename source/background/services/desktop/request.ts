@@ -10,7 +10,7 @@ export async function sendDesktopRequest(
     payload: Record<string, any> = null,
     auth: string = null
 ): Promise<string | Record<string, any>> {
-    const url = joinURL(DESKTOP_URL_BASE, route);
+    let url = joinURL(DESKTOP_URL_BASE, route);
     const config: RequestInit = {
         method,
         headers: {
@@ -18,7 +18,17 @@ export async function sendDesktopRequest(
         }
     };
     if (payload !== null) {
-        config.body = JSON.stringify(payload);
+        if (/^get$/i.test(method)) {
+            const newURL = new URL(url);
+            for (const prop in payload) {
+                if (payload.hasOwnProperty(prop)) {
+                    newURL.searchParams.set(prop, payload[prop]);
+                }
+            }
+            url = newURL.toString();
+        } else {
+            config.body = JSON.stringify(payload);
+        }
     }
     if (auth !== null) {
         config.headers["Authorization"] = `Bearer ${auth}`;
