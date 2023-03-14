@@ -1,17 +1,18 @@
 import React, { Fragment, KeyboardEvent, useCallback, useState } from "react";
 import styled from "styled-components";
 import cn from "classnames";
+import { SearchResult } from "buttercup";
 import { Button, Classes, Dialog, Divider, FormGroup, InputGroup, Intent, Text } from "@blueprintjs/core";
-import { VaultItem } from "./VaultItem.js";
 import { unlockSource } from "../../services/vaults.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { getToaster } from "../../../shared/services/notifications.js";
 import { BusyLoader } from "../../../shared/components/loading/BusyLoader.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { VaultSourceDescription } from "../../types.js";
+import { EntryItem } from "./EntryItem.js";
 
-interface VaultItemListProps {
-    vaults: Array<VaultSourceDescription>;
+interface EntryItemListProps {
+    entries: Array<SearchResult>;
 }
 
 const ButtonRow = styled.div`
@@ -34,52 +35,52 @@ const ScrollList = styled.div`
     align-items: stretch;
 `;
 
-export function VaultItemList(props: VaultItemListProps) {
-    const [unlockVault, setUnlockVault] = useState<VaultSourceDescription>(null);
-    const [removeVault, setRemoveVault] = useState<VaultSourceDescription>(null);
-    const [vaultPassword, setVaultPassword] = useState<string>("");
-    const [workAlert, setWorkAlert] = useState<{ title: string; description: string; }>(null);
-    const handleDialogClose = useCallback(() => {
-        setVaultPassword("");
-        setUnlockVault(null);
-        setRemoveVault(null);
-    }, []);
-    const handleVaultUnlockClick = useCallback((vault: VaultSourceDescription) => {
-        setUnlockVault(vault);
-    }, []);
-    const handleVaultUnlock = useCallback(() => {
-        if (vaultPassword.trim().length <= 0) {
-            getToaster().show({
-                intent: Intent.WARNING,
-                message: t("popup.vault.unlocking.invalid-password"),
-                timeout: 5000
-            });
-            return;
-        }
-        setWorkAlert({
-            title: t("popup.vault.unlocking.title"),
-            description: t("popup.vault.unlocking.description")
-        });
-        unlockSource(unlockVault.id)
-            .then(() => {
-                getToaster().show({
-                    intent: Intent.SUCCESS,
-                    message: t("popup.vault.unlocking.success", { vault: unlockVault.name }),
-                    timeout: 4000
-                });
-                handleDialogClose();
-                setWorkAlert(null);
-            })
-            .catch(err => {
-                console.error(err);
-                setWorkAlert(null);
-                getToaster().show({
-                    intent: Intent.DANGER,
-                    message: t("popup.vault.unlocking.error", { message: localisedErrorMessage(err) }),
-                    timeout: 10000
-                });
-            });
-    }, [handleDialogClose, unlockVault, vaultPassword]);
+export function EntryItemList(props: EntryItemListProps) {
+    // const [unlockVault, setUnlockVault] = useState<VaultSourceDescription>(null);
+    // const [removeVault, setRemoveVault] = useState<VaultSourceDescription>(null);
+    // const [vaultPassword, setVaultPassword] = useState<string>("");
+    // const [workAlert, setWorkAlert] = useState<{ title: string; description: string; }>(null);
+    // const handleDialogClose = useCallback(() => {
+    //     setVaultPassword("");
+    //     setUnlockVault(null);
+    //     setRemoveVault(null);
+    // }, []);
+    // const handleVaultUnlockClick = useCallback((vault: VaultSourceDescription) => {
+    //     setUnlockVault(vault);
+    // }, []);
+    // const handleVaultUnlock = useCallback(() => {
+    //     if (vaultPassword.trim().length <= 0) {
+    //         getToaster().show({
+    //             intent: Intent.WARNING,
+    //             message: t("popup.vault.unlocking.invalid-password"),
+    //             timeout: 5000
+    //         });
+    //         return;
+    //     }
+    //     setWorkAlert({
+    //         title: t("popup.vault.unlocking.title"),
+    //         description: t("popup.vault.unlocking.description")
+    //     });
+    //     unlockSource(unlockVault.id)
+    //         .then(() => {
+    //             getToaster().show({
+    //                 intent: Intent.SUCCESS,
+    //                 message: t("popup.vault.unlocking.success", { vault: unlockVault.name }),
+    //                 timeout: 4000
+    //             });
+    //             handleDialogClose();
+    //             setWorkAlert(null);
+    //         })
+    //         .catch(err => {
+    //             console.error(err);
+    //             setWorkAlert(null);
+    //             getToaster().show({
+    //                 intent: Intent.DANGER,
+    //                 message: t("popup.vault.unlocking.error", { message: localisedErrorMessage(err) }),
+    //                 timeout: 10000
+    //             });
+    //         });
+    // }, [handleDialogClose, unlockVault, vaultPassword]);
     // const handleVaultRemoveClick = useCallback((vault: VaultSourceDescription) => {
     //     setRemoveVault(vault);
     // }, []);
@@ -109,27 +110,28 @@ export function VaultItemList(props: VaultItemListProps) {
     //             });
     //         });
     // }, [handleDialogClose, removeVault]);
-    const handleUnlockKeyPress = useCallback((event: KeyboardEvent) => {
-        if (event.key === "Enter" && !event.ctrlKey && !event.shiftKey) {
-            handleVaultUnlock();
-        }
-    }, [handleVaultUnlock]);
+    // const handleUnlockKeyPress = useCallback((event: KeyboardEvent) => {
+    //     if (event.key === "Enter" && !event.ctrlKey && !event.shiftKey) {
+    //         handleVaultUnlock();
+    //     }
+    // }, [handleVaultUnlock]);
     return (
         <>
             <ScrollList>
-                {props.vaults.map((vault) => (
-                    <Fragment key={vault.id}>
-                        <VaultItem
-                            isDetailsVisible={false}
+                {props.entries.map((entry) => (
+                    <Fragment key={entry.id}>
+                        <EntryItem
+                            entry={entry}
+                            // isDetailsVisible={false}
                             // onRemoveClick={() => handleVaultRemoveClick(vault)}
-                            onUnlockClick={() => handleVaultUnlockClick(vault)}
-                            vault={vault}
+                            // onUnlockClick={() => handleVaultUnlockClick(vault)}
+                            // vault={vault}
                         />
                         <Divider />
                     </Fragment>
                 ))}
             </ScrollList>
-            {unlockVault && (
+            {/* {unlockVault && (
                 <Dialog
                     title={t("popup.vault.unlock-dialog.title", { title: unlockVault.name })}
                     isOpen
@@ -174,7 +176,7 @@ export function VaultItemList(props: VaultItemListProps) {
                         </Text>
                     </div>
                 </Dialog>
-            )}
+            )} */}
             {/* {removeVault && (
                 <Alert
                     cancelButtonText={t("popup.vault.remove-dialog.cancel-button")}
@@ -189,12 +191,12 @@ export function VaultItemList(props: VaultItemListProps) {
                     <p dangerouslySetInnerHTML={{ __html: t("popup.vault.remove-dialog.message", { vault: removeVault.name }) }} />
                 </Alert>
             )} */}
-            {workAlert && (
+            {/* {workAlert && (
                 <BusyLoader
                     description={workAlert.description}
                     title={workAlert.title}
                 />
-            )}
+            )} */}
         </>
     );
 }

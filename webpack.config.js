@@ -14,6 +14,7 @@ const manifestV3 = require("./resources/manifest.v3.json");
 
 const { BROWSER } = process.env;
 const DIST = path.resolve(__dirname, "dist");
+const ICONS_PATH = path.join(path.dirname(require.resolve("@buttercup/ui")), "icons");
 
 if (!BROWSER) {
     throw new Error("BROWSER must be specified");
@@ -113,6 +114,8 @@ function getBaseConfig() {
             alias: {
                 // buttercup: "buttercup/web"
                 // gle: "gle/browser"
+                "react/jsx-runtime": "react/jsx-runtime.js",
+                "react/jsx-dev-runtime": "react/jsx-dev-runtime.js"
             },
             // No .ts/.tsx included due to the typescript resolver plugin
             extensions: [".js", ".jsx"],
@@ -164,6 +167,11 @@ module.exports = [
                         from: path.join(__dirname, "./resources/offscreen.*"),
                         to: DIST,
                         context: path.join(__dirname, "./resources")
+                    },
+                    {
+                        from: path.join(ICONS_PATH, "/*"),
+                        to: path.join(DIST, "icons"),
+                        context: ICONS_PATH
                     }
                 ]
             })

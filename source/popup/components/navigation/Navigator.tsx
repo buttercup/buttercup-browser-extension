@@ -16,14 +16,35 @@ const Container = styled.div`
     align-items: stretch;
     padding: 3px;
     overflow: hidden;
+    max-height: 100%;
 
-    [role="tab"] {
+    .${Classes.TAB} {
         outline: none;
         user-select: none;
     }
 
+    .${Classes.TABS} {
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
     .${Classes.TAB_PANEL} {
         margin-top: 8px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: space-between;
+        // align-items: stretch;
+    }
+
+    .${Classes.TAB_LIST} {
+        padding: 0px 5px;
+        height: 30px;
     }
 `;
 
@@ -72,7 +93,10 @@ export function Navigator(props: NavigatorProps) {
                 </Tab>
                 <Tabs.Expander />
                 {props.activeTab === PopupPage.Entries && (
-                    <EntriesPageControls onSearchTermChange={setEntriesSearch} />
+                    <EntriesPageControls
+                        onSearchTermChange={setEntriesSearch}
+                        searchTerm={entriesSearch}
+                    />
                 )}
                 {props.activeTab === PopupPage.Vaults && (
                     <VaultsPageControls />

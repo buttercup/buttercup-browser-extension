@@ -12,6 +12,7 @@ export function useAsync<T extends any>(
     const [value, setValue] = useState<T>(null);
     const [error, setError] = useState<Error>(null);
     const execute = useCallback(async () => {
+        if (!mounted.current) return;
         setValue(null);
         setError(null);
         return fn()
@@ -31,6 +32,7 @@ export function useAsync<T extends any>(
         };
     }, []);
     useEffect(() => {
+        if (!mounted.current) return;
         execute();
     }, [execute, ...deps]);
     return { error, value };
@@ -44,10 +46,21 @@ export function useAsyncWithTimer<T extends any>(
     error: Error | null;
     value: T | null;
 } {
+    const mounted = useRef(false);
+    const allTimers = useRef([]);
     const [time, setTime] = useState<number>(Date.now());
     const [timer, setTimer] = useState<ReturnType<typeof setInterval>>(null);
     const { error, value } = useAsync(fn, [...deps, time]);
     const [lastValue, setLastValue] = useState(value);
+    useEffect(() => {
+        mounted.current = true;
+        return () => {
+            mounted.current = false;
+            allTimers.current.forEach((currentTimer) => {
+                clearInterval(currentTimer);
+            });
+        };
+    }, []);
     useEffect(() => {
         if (time === 0) return;
         if (error) {
@@ -57,11 +70,12 @@ export function useAsyncWithTimer<T extends any>(
             return;
         }
         if (!timer) {
-            setTimer(
-                setInterval(() => {
-                    setTime(Date.now());
-                }, delay)
-            );
+            const thisTimer = setInterval(() => {
+                if (!mounted.current) return;
+                setTime(Date.now());
+            }, delay);
+            allTimers.current.push(thisTimer);
+            setTimer(thisTimer);
         }
     }, [time, timer, error, delay]);
     useEffect(() => {
