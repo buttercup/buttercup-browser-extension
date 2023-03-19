@@ -44,6 +44,10 @@
         {
             "resources": ["*.png", "*.jpg"],
             "matches": ["http://*/*", "https://*/*"]
+        },
+        {
+            "resources": ["popup.html"],
+            "matches": ["http://*/*", "https://*/*"]
         }
     ]
 }

@@ -1,4 +1,5 @@
 import { getExtensionAPI } from "../../shared/extension.js";
+import { stringToError } from "../../shared/library/error.js";
 import { MESSAGE_DEFAULT_TIMEOUT } from "../../shared/symbols.js";
 import { BackgroundMessage, BackgroundResponse } from "../types.js";
 
@@ -14,7 +15,7 @@ export async function sendBackgroundMessage(
         browser.runtime.sendMessage(msg, (resp) => {
             clearTimeout(timer);
             if (resp.error) {
-                reject(resp.error);
+                reject(stringToError(resp.error));
                 return;
             }
             resolve(resp as BackgroundResponse);

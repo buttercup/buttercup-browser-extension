@@ -2,6 +2,8 @@ import { EventEmitter } from "eventemitter3";
 import { log } from "./log.js";
 import { initialise as initialiseMessaging } from "./messaging.js";
 import { initialise as initialiseStorage } from "./storage.js";
+import { initialise as initialiseI18n } from "../../shared/i18n/trans.js";
+import { getLanguage } from "../../shared/library/i18n.js";
 
 enum Initialisation {
     Complete = "complete",
@@ -18,6 +20,7 @@ export async function initialise(): Promise<void> {
     log("initialising");
     initialiseMessaging();
     await initialiseStorage();
+    await initialiseI18n(getLanguage());
     log("initialisation complete");
     __initialisation = Initialisation.Complete;
     __initEE.emit("initialised");

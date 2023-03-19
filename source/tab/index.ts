@@ -3,13 +3,13 @@ import { waitAndAttachLaunchButtons } from "./services/detection.js";
 import { findIframeForWindow } from "./services/frames.js";
 import { listenForTabEvents, sendTabEvent } from "./services/messaging.js";
 import { TabEventType } from "./types.js";
-import { renderPopup } from "./ui/popup.js";
+import { togglePopup } from "./ui/popup.js";
 
 const IS_TOP = window.parent === window;
 
 waitAndAttachLaunchButtons((input) => {
     if (IS_TOP) {
-        renderPopup(getElementRectInDocument(input));
+        togglePopup(getElementRectInDocument(input));
     } else {
         sendTabEvent(
             {
@@ -32,7 +32,7 @@ listenForTabEvents((tabEvent) => {
         const newPosition = recalculateRectForIframe(tabEvent.inputPosition, frame);
         // Show if top, or pass on to the next frame above
         if (IS_TOP) {
-            renderPopup(newPosition);
+            togglePopup(newPosition);
         } else {
             sendTabEvent(
                 {

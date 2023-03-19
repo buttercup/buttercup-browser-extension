@@ -7,8 +7,9 @@ import {
     initiateConnection,
     searchEntriesByTerm
 } from "./desktop/connection.js";
-import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { setLocalValue } from "./storage.js";
+import { errorToString } from "../../shared/library/error.js";
+import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -57,7 +58,7 @@ export function initialise() {
         handleMessage(request, sender, sendResponse).catch((err) => {
             console.error(err);
             sendResponse({
-                error: new Layerr(err, "Background task failed")
+                error: errorToString(new Layerr(err, "Background task failed"))
             });
         });
         return true;
