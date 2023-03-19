@@ -8,7 +8,6 @@ import { renderPopup } from "./ui/popup.js";
 const IS_TOP = window.parent === window;
 
 waitAndAttachLaunchButtons((input) => {
-    console.log("BUTTON CLICK", { IS_TOP });
     if (IS_TOP) {
         renderPopup(getElementRectInDocument(input));
     } else {
@@ -23,7 +22,6 @@ waitAndAttachLaunchButtons((input) => {
 });
 
 listenForTabEvents((tabEvent) => {
-    console.log("TABEVENT", tabEvent);
     if (tabEvent.type === TabEventType.OpenPopupDialog) {
         // Re-calculate based upon the iframe the message came from
         const frame = findIframeForWindow(tabEvent.sourceURL);

@@ -1,7 +1,6 @@
 import { ElementRect } from "../types.js";
 
 export function renderPopup(inputRect: ElementRect) {
-    console.log("RENDER POPUP", inputRect);
     const temp = document.createElement("div");
     Object.assign(temp.style, {
         position: "absolute",

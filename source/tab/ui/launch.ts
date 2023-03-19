@@ -49,7 +49,6 @@ function renderInternalStyle(
         paddingRight: `${buttonArea}px`
     });
     input.onclick = (event) => {
-        console.log("BUTTON CLICKED", event.target);
         if (event.offsetX >= input.offsetWidth - buttonArea) {
             event.preventDefault();
             event.stopPropagation();
