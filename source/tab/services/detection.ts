@@ -26,7 +26,7 @@ function onIdentifiedTarget(callback) {
     };
 }
 
-export function waitAndAttachLaunchButtons() {
+export function waitAndAttachLaunchButtons(onInputActivate: (input: HTMLInputElement) => void) {
     const tracker = getSharedTracker();
     tracker.on("credentialsChanged", (connection) => {
         // transferLoginCredentials({
@@ -43,10 +43,10 @@ export function waitAndAttachLaunchButtons() {
         tracker.registerConnection(loginTarget);
         const { usernameField, passwordField } = loginTarget;
         if (passwordField) {
-            attachLaunchButton(passwordField);
+            attachLaunchButton(passwordField, onInputActivate);
         }
         if (usernameField) {
-            attachLaunchButton(usernameField);
+            attachLaunchButton(usernameField, onInputActivate);
         }
         watchLogin(
             loginTarget,

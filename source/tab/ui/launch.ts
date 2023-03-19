@@ -10,7 +10,7 @@ import INPUT_BACKGROUND_IMAGE_RES from "../../../resources/buttercup-simple-150.
 const BUTTON_BACKGROUND_IMAGE = getExtensionURL(BUTTON_BACKGROUND_IMAGE_RES);
 const INPUT_BACKGROUND_IMAGE = getExtensionURL(INPUT_BACKGROUND_IMAGE_RES);
 
-export function attachLaunchButton(input: HTMLInputElement) {
+export function attachLaunchButton(input: HTMLInputElement, onClick: (input: HTMLInputElement) => void) {
     if (input.dataset.bcup === "attached" || itemIsIgnored(input)) {
         return;
     }
@@ -24,13 +24,18 @@ export function attachLaunchButton(input: HTMLInputElement) {
             setTimeout(tryToAttach, 250);
             return;
         }
-        // renderButtonStyle(input, tryToAttach, bounds);
-        renderInternalStyle(input, tryToAttach, bounds);
+        renderButtonStyle(input, () => onClick(input), tryToAttach, bounds);
+        // renderInternalStyle(input, () => onClick(input), tryToAttach, bounds);
     };
     tryToAttach();
 }
 
-function renderInternalStyle(input: HTMLInputElement, reattachCB: () => void, inputBounds: DOMRect) {
+function renderInternalStyle(
+    input: HTMLInputElement,
+    onClick: () => void,
+    reattachCB: () => void,
+    inputBounds: DOMRect
+) {
     const bounds = inputBounds || input.getBoundingClientRect();
     const { height } = bounds;
     const imageSize = height * 0.6;
@@ -44,10 +49,12 @@ function renderInternalStyle(input: HTMLInputElement, reattachCB: () => void, in
         paddingRight: `${buttonArea}px`
     });
     input.onclick = (event) => {
+        console.log("BUTTON CLICKED", event.target);
         if (event.offsetX >= input.offsetWidth - buttonArea) {
             event.preventDefault();
             event.stopPropagation();
             // toggleInputDialog(input, DIALOG_TYPE_ENTRY_PICKER);
+            onClick();
         }
     };
     input.onmousemove = (event) => {
@@ -63,7 +70,7 @@ function renderInternalStyle(input: HTMLInputElement, reattachCB: () => void, in
     };
 }
 
-function renderButtonStyle(input: HTMLInputElement, reattachCB: () => void, inputBounds: DOMRect) {
+function renderButtonStyle(input: HTMLInputElement, onClick: () => void, reattachCB: () => void, inputBounds: DOMRect) {
     const bounds = inputBounds || input.getBoundingClientRect();
     const { width, height } = bounds;
     const { borderTopLeftRadius, borderBottomLeftRadius, boxSizing, paddingLeft, paddingRight } =
@@ -111,6 +118,7 @@ function renderButtonStyle(input: HTMLInputElement, reattachCB: () => void, inpu
         event.preventDefault();
         event.stopPropagation();
         // toggleInputDialog(input, DIALOG_TYPE_ENTRY_PICKER);
+        onClick();
     };
     mount(input.offsetParent, button);
     onElementDismount(button, () => {
