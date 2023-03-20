@@ -10,59 +10,34 @@ import { getToaster } from "../../../shared/services/notifications.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { DesktopConnectionState } from "../../types.js";
 
+interface VaultsPageProps {
+    onConnectClick: () => Promise<void>;
+    onReconnectClick: () => Promise<void>;
+}
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
 `;
-const NotConnectedState = styled(NonIdealState)`
-    margin-top: 28px;
-`;
-const NoVaultsState = styled(NonIdealState)`
+const InvalidState = styled(NonIdealState)`
     margin-top: 28px;
 `;
 
-export function VaultsPage() {
+export function VaultsPage(props: VaultsPageProps) {
     const desktopState = useDesktopConnectionState();
-    const handleConnectClick = useCallback(async () => {
-        try {
-            await initiateDesktopConnectionRequest();
-            await createNewTab(getExtensionURL("full.html#/connect"));
-        } catch (err) {
-            console.error(err);
-            getToaster().show({
-                intent: Intent.DANGER,
-                message: t("popup.connection.open-error", { message: localisedErrorMessage(err) }),
-                timeout: 10000
-            });
-        }
-    }, []);
-    const handleReconnectClick = useCallback(async () => {
-        try {
-            await clearDesktopConnectionAuth();
-        } catch (err) {
-            console.error(err);
-            getToaster().show({
-                intent: Intent.DANGER,
-                message: t("popup.connection.reauth-error", { message: localisedErrorMessage(err) }),
-                timeout: 10000
-            });
-            return;
-        }
-        await handleConnectClick();
-    }, [handleConnectClick]);
     return (
         <Container>
             {desktopState === DesktopConnectionState.NotConnected && (
-                <NotConnectedState
+                <InvalidState
                     title={t("popup.vaults.no-connection.title")}
                     description={t("popup.vaults.no-connection.description")}
                     icon="offline"
                     action={(
                         <Button
                             icon="link"
-                            onClick={handleConnectClick}
+                            onClick={props.onConnectClick}
                             text={t("popup.vaults.no-connection.action-text")}
                         />
                     )}
@@ -75,7 +50,7 @@ export function VaultsPage() {
                 <Spinner size={40} />
             )}
             {desktopState === DesktopConnectionState.Error && (
-                <NoVaultsState
+                <InvalidState
                     title={t("popup.connection.check-error.title")}
                     description={t("popup.connection.check-error.description")}
                     icon="error"
@@ -83,7 +58,7 @@ export function VaultsPage() {
                     action={(
                         <Button
                             icon="link"
-                            onClick={handleReconnectClick}
+                            onClick={props.onReconnectClick}
                             text={t("popup.vaults.no-connection.action-text")}
                         />
                     )}
@@ -97,7 +72,7 @@ function VaultsPageList() {
     const sources = useVaultSources();
     if (sources.length === 0) {
         return (
-            <NoVaultsState
+            <InvalidState
                 title={t("popup.vaults.empty.title")}
                 description={t("popup.vaults.empty.description")}
                 icon="folder-open"

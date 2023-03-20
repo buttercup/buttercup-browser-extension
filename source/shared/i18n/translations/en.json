@@ -35,6 +35,10 @@
             "reauth-error": "Failed re-authenticating: {{message}}"
         },
         "entries": {
+            "all-locked": {
+                "description": "All vaults are currently locked.",
+                "title": "No Unlocked Vaults"
+            },
             "search": {
                 "placeholder": "Search..."
             }

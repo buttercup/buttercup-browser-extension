@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
-import { Classes, Divider, Icon, Tab, Tabs } from "@blueprintjs/core";
+import { Classes, Divider, Icon, Intent, Tab, Tabs } from "@blueprintjs/core";
 import { VaultsPage, VaultsPageControls } from "../pages/VaultsPage.js";
 import { EntriesPage, EntriesPageControls } from "../pages/EntriesPage.js";
+import { getToaster } from "../../../shared/services/notifications.js";
+import { localisedErrorMessage } from "../../../shared/library/error.js";
+import { t } from "../../../shared/i18n/trans.js";
 import { PopupPage } from "../../types.js";
+import { clearDesktopConnectionAuth, initiateDesktopConnectionRequest } from "../../queries/desktop.js";
+import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 
 interface NavigatorProps {
     activeTab: PopupPage;
@@ -50,6 +55,33 @@ const Container = styled.div`
 
 export function Navigator(props: NavigatorProps) {
     const [entriesSearch, setEntriesSearch] = useState<string>("");
+    const handleConnectClick = useCallback(async () => {
+        try {
+            await initiateDesktopConnectionRequest();
+            await createNewTab(getExtensionURL("full.html#/connect"));
+        } catch (err) {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("popup.connection.open-error", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+        }
+    }, []);
+    const handleReconnectClick = useCallback(async () => {
+        try {
+            await clearDesktopConnectionAuth();
+        } catch (err) {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("popup.connection.reauth-error", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+            return;
+        }
+        await handleConnectClick();
+    }, [handleConnectClick]);
     return (
         <Container>
             <Tabs
@@ -61,7 +93,11 @@ export function Navigator(props: NavigatorProps) {
                     panel={(
                         <>
                             <Divider />
-                            <EntriesPage searchTerm={entriesSearch} />
+                            <EntriesPage
+                                onConnectClick={handleConnectClick}
+                                onReconnectClick={handleReconnectClick}
+                                searchTerm={entriesSearch}
+                            />
                         </>
                     )}
                 >
@@ -72,7 +108,10 @@ export function Navigator(props: NavigatorProps) {
                     panel={(
                         <>
                             <Divider />
-                            <VaultsPage />
+                            <VaultsPage
+                                onConnectClick={handleConnectClick}
+                                onReconnectClick={handleReconnectClick}
+                            />
                         </>
                     )}
                 >
@@ -102,19 +141,6 @@ export function Navigator(props: NavigatorProps) {
                     <VaultsPageControls />
                 )}
             </Tabs>
-            {/* <BarContents> */}
-                {/* <Tabs
-                    onChange={(newTab: PopupPage) => props.onChangeTab(newTab)}
-                    selectedTabId={props.activeTab}
-                >
-                    <Tab id={PopupPage.Entries}>Entries</Tab>
-                    <Tab id={PopupPage.Vaults}>
-                        <VaultsPage />
-                    </Tab>
-                    <Tab id={PopupPage.OTPs}>OTPs</Tab>
-                </Tabs> */}
-            {/* </BarContents> */}
-            {/* <Divider /> */}
         </Container>
     );
 }
