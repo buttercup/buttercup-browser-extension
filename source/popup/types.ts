@@ -1,3 +1,10 @@
+export enum DesktopConnectionState {
+    Connected = "connected",
+    Error = "error",
+    NotConnected = "notConnected",
+    Pending = "pending"
+}
+
 export enum PopupPage {
     Entries = "entries",
     OTPs = "otps",

@@ -6,12 +6,12 @@ import { t } from "../../shared/i18n/trans.js";
 import { localisedErrorMessage } from "../../shared/library/error.js";
 import { getToaster } from "../../shared/services/notifications.js";
 import { getDesktopConnectionAvailable, getVaultSources, searchEntriesByTerm } from "../queries/desktop.js";
-import { VaultSourceDescription } from "../types.js";
+import { DesktopConnectionState, VaultSourceDescription } from "../types.js";
 
 const SEARCH_DEBOUNCE = 600;
 const SOURCES_UPDATE_DELAY = 3500;
 
-export function useDesktopConnectionAvailable(): boolean {
+export function useDesktopConnectionState(): DesktopConnectionState {
     const checkConnection = useCallback(async () => {
         const isAvailable = await getDesktopConnectionAvailable();
         return isAvailable;
@@ -20,17 +20,27 @@ export function useDesktopConnectionAvailable(): boolean {
     useEffect(() => {
         if (!error) return;
         console.error(error);
-        getToaster().show({
-            intent: Intent.DANGER,
-            message: t("error.desktop.connection-check-failed", { message: localisedErrorMessage(error) }),
-            timeout: 10000
-        });
+        const message = t("error.desktop.connection-check-failed", { message: localisedErrorMessage(error) });
+        getToaster().show(
+            {
+                intent: Intent.DANGER,
+                message,
+                timeout: 10000
+            },
+            btoa(message)
+        );
     }, [error]);
-    return value === null ? false : value;
+    if (error) {
+        return DesktopConnectionState.Error;
+    } else if (value === true) {
+        return DesktopConnectionState.Connected;
+    } else if (value === false) {
+        return DesktopConnectionState.NotConnected;
+    }
+    return DesktopConnectionState.Pending;
 }
 
 export function useSearchedEntries(term: string): Array<SearchResult> {
-    // const [results, setResults] = useState<Array<SearchResult>>([]);
     const [currentTerm, setCurrentTerm] = useState<string>("");
     const performSearch = useCallback(async () => {
         if (/^\s*$/.test(currentTerm)) return [];

@@ -5,9 +5,10 @@ import {
     getVaultSources,
     hasConnection,
     initiateConnection,
-    searchEntriesByTerm
+    searchEntriesByTerm,
+    testAuth
 } from "./desktop/connection.js";
-import { setLocalValue } from "./storage.js";
+import { removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 
@@ -20,13 +21,22 @@ async function handleMessage(
         case BackgroundMessageType.AuthenticateDesktopConnection: {
             const token = await authenticateBrowserAccess(msg.code);
             await setLocalValue(LocalStorageItem.DesktopToken, token);
+            sendResponse({});
             break;
         }
         case BackgroundMessageType.CheckDesktopConnection: {
             const available = await hasConnection();
+            if (available) {
+                await testAuth();
+            }
             sendResponse({
                 available
             });
+            break;
+        }
+        case BackgroundMessageType.ClearDesktopAuthentication: {
+            await removeLocalValue(LocalStorageItem.DesktopToken);
+            sendResponse({});
             break;
         }
         case BackgroundMessageType.GetDesktopVaultSources: {

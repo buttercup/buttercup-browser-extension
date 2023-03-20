@@ -42,6 +42,10 @@ export async function initialise() {
     }
 }
 
+export async function removeLocalValue(key: LocalStorageItem): Promise<void> {
+    await getLocalStorage().removeKey(key);
+}
+
 export async function setLocalValue(key: LocalStorageItem, value: string): Promise<void> {
     return getLocalStorage().setValue(key, value);
 }

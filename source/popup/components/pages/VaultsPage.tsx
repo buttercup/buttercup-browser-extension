@@ -1,13 +1,14 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { Button, ButtonGroup, Intent, NonIdealState } from "@blueprintjs/core";
+import { Button, ButtonGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { t } from "../../../shared/i18n/trans.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
-import { useDesktopConnectionAvailable, useVaultSources } from "../../hooks/desktop.js";
-import { initiateDesktopConnectionRequest } from "../../queries/desktop.js";
+import { useDesktopConnectionState, useVaultSources } from "../../hooks/desktop.js";
+import { clearDesktopConnectionAuth, initiateDesktopConnectionRequest } from "../../queries/desktop.js";
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 import { getToaster } from "../../../shared/services/notifications.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
+import { DesktopConnectionState } from "../../types.js";
 
 const Container = styled.div`
     display: flex;
@@ -23,8 +24,7 @@ const NoVaultsState = styled(NonIdealState)`
 `;
 
 export function VaultsPage() {
-    const desktopConnected = useDesktopConnectionAvailable();
-    const sources = useVaultSources();
+    const desktopState = useDesktopConnectionState();
     const handleConnectClick = useCallback(async () => {
         try {
             await initiateDesktopConnectionRequest();
@@ -33,17 +33,28 @@ export function VaultsPage() {
             console.error(err);
             getToaster().show({
                 intent: Intent.DANGER,
-                message: t("popup.vault.connect.open-error", { message: localisedErrorMessage(err) }),
+                message: t("popup.connection.open-error", { message: localisedErrorMessage(err) }),
                 timeout: 10000
             });
         }
     }, []);
-    // const handleAddVaultClick = useCallback(() => {
-    //     // openAddVaultPage();
-    // }, []);
+    const handleReconnectClick = useCallback(async () => {
+        try {
+            await clearDesktopConnectionAuth();
+        } catch (err) {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("popup.connection.reauth-error", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+            return;
+        }
+        await handleConnectClick();
+    }, [handleConnectClick]);
     return (
         <Container>
-            {desktopConnected === false && (
+            {desktopState === DesktopConnectionState.NotConnected && (
                 <NotConnectedState
                     title={t("popup.vaults.no-connection.title")}
                     description={t("popup.vaults.no-connection.description")}
@@ -57,26 +68,46 @@ export function VaultsPage() {
                     )}
                 />
             )}
-            {desktopConnected === true && sources.length === 0 && (
-                <NoVaultsState
-                    title={t("popup.vaults.empty.title")}
-                    description={t("popup.vaults.empty.description")}
-                    icon="folder-open"
-                    // action={(
-                    //     <Button
-                    //         icon="plus"
-                    //         onClick={handleAddVaultClick}
-                    //         text={t("popup.vaults.empty.action-text")}
-                    //     />
-                    // )}
-                />
+            {desktopState === DesktopConnectionState.Connected && (
+                <VaultsPageList />
             )}
-            {desktopConnected === true && sources.length > 0 && (
-                <VaultItemList
-                    vaults={sources}
+            {desktopState === DesktopConnectionState.Pending && (
+                <Spinner size={40} />
+            )}
+            {desktopState === DesktopConnectionState.Error && (
+                <NoVaultsState
+                    title={t("popup.connection.check-error.title")}
+                    description={t("popup.connection.check-error.description")}
+                    icon="error"
+                    intent={Intent.DANGER}
+                    action={(
+                        <Button
+                            icon="link"
+                            onClick={handleReconnectClick}
+                            text={t("popup.vaults.no-connection.action-text")}
+                        />
+                    )}
                 />
             )}
         </Container>
+    );
+}
+
+function VaultsPageList() {
+    const sources = useVaultSources();
+    if (sources.length === 0) {
+        return (
+            <NoVaultsState
+                title={t("popup.vaults.empty.title")}
+                description={t("popup.vaults.empty.description")}
+                icon="folder-open"
+            />
+        );
+    }
+    return (
+        <VaultItemList
+            vaults={sources}
+        />
     );
 }
 

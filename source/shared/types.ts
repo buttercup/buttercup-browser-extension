@@ -19,6 +19,7 @@ export interface BackgroundMessage {
 export enum BackgroundMessageType {
     AuthenticateDesktopConnection = "authenticateDesktopConnection",
     CheckDesktopConnection = "checkDesktopConnection",
+    ClearDesktopAuthentication = "clearDesktopAuthentication",
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetDesktopVaultSources = "getDesktopVaultSources",
     SearchEntriesByTerm = "searchEntriesByTerm"

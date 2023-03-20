@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { Button, InputGroup } from "@blueprintjs/core";
 import { t } from "../../../shared/i18n/trans.js";
-import { useDesktopConnectionAvailable, useSearchedEntries } from "../../hooks/desktop.js";
+import { useDesktopConnectionState, useSearchedEntries } from "../../hooks/desktop.js";
 import { EntryItemList } from "../entries/EntryItemList.js";
+import { DesktopConnectionState } from "../../types.js";
 
 interface EntriesPageProps {
     searchTerm: string;
@@ -34,18 +35,18 @@ export function EntriesPage(props: EntriesPageProps) {
 }
 
 export function EntriesPageControls(props: EntriesPageControlsProps) {
-    const isConnected = useDesktopConnectionAvailable();
+    const desktopState = useDesktopConnectionState();
     return (
         <>
             <Input
-                disabled={!isConnected}
+                disabled={desktopState !== DesktopConnectionState.Connected}
                 onChange={evt => props.onSearchTermChange(evt.target.value)}
                 placeholder={t("popup.entries.search.placeholder")}
                 round
                 value={props.searchTerm}
             />
             <Button
-                disabled={!isConnected}
+                disabled={desktopState !== DesktopConnectionState.Connected}
                 icon="search"
                 minimal
             />

@@ -70,3 +70,32 @@ export async function searchEntriesByTerm(term: string): Promise<Array<SearchRes
     };
     return results;
 }
+
+export async function testAuth(): Promise<void> {
+    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
+    if (!authToken) {
+        throw new Layerr(
+            {
+                info: {
+                    i18n: "error.code.desktop-connection-not-authorised"
+                }
+            },
+            "Desktop connection not authorised"
+        );
+    }
+    try {
+        await sendDesktopRequest(
+            "POST",
+            "/v1/auth/test",
+            {
+                client: "browser",
+                purpose: "vaults-access",
+                rev: 1
+            },
+            authToken
+        );
+    } catch (err) {
+        console.error(err);
+        throw new Layerr(err, "Desktop connection failed");
+    }
+}

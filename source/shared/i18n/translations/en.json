@@ -26,15 +26,20 @@
         }
     },
     "popup": {
+        "connection": {
+            "check-error": {
+                "description": "Unable to establish a connection to the desktop application. Check that it's open or consider re-authenticating.",
+                "title": "Connection Failed"
+            },
+            "open-error": "Failed starting connection: {{message}}",
+            "reauth-error": "Failed re-authenticating: {{message}}"
+        },
         "entries": {
             "search": {
                 "placeholder": "Search..."
             }
         },
         "vault": {
-            "connect": {
-                "open-error": "Failed starting connection: {{message}}"
-            },
             "lock": "Lock vault",
             "remove": "Remove vault",
             "remove-dialog": {

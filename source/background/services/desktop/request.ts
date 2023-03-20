@@ -43,7 +43,7 @@ export async function sendDesktopRequest(
                     statusText: resp.statusText
                 }
             },
-            `Desktop request failed: ${resp.statusText}`
+            `Desktop request failed: ${resp.status} ${resp.statusText}`
         );
     }
     if (/application\/json/.test(resp.headers.get("Content-Type"))) {
