@@ -36,7 +36,7 @@ function buildNewPopup(inputRect: ElementRect) {
         {
             style: {
                 ...CLEAR_STYLES,
-                backdropFilter: "blur(10px)",
+                background: "#fff",
                 borderRadius: "6px",
                 overflow: "hidden",
                 border: `2px solid ${BRAND_COLOUR_DARK}`,

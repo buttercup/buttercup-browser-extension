@@ -8,6 +8,7 @@ import { Navigator } from "./navigation/Navigator.js";
 import { APP_STATE } from "../state/app.js";
 import { ThemeProvider } from "../../shared/components/ThemeProvider.js";
 import { PopupPage } from "../types.js";
+import { useBodyClass } from "../hooks/document.js";
 
 const ROUTER = createHashRouter([
     {
@@ -46,6 +47,7 @@ function FullApp() {
 
 function InPageApp() {
     const [tab, setTab] = useSingleState(APP_STATE, "tab");
+    useBodyClass("in-page");
     return (
         <Navigator
             activeTab={tab}
