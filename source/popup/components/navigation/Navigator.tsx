@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { Fragment, useCallback, useState } from "react";
 import styled from "styled-components";
 import { Classes, Divider, Icon, Intent, Tab, Tabs } from "@blueprintjs/core";
 import { VaultsPage, VaultsPageControls } from "../pages/VaultsPage.js";
@@ -6,13 +6,14 @@ import { EntriesPage, EntriesPageControls } from "../pages/EntriesPage.js";
 import { getToaster } from "../../../shared/services/notifications.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { t } from "../../../shared/i18n/trans.js";
-import { PopupPage } from "../../types.js";
 import { clearDesktopConnectionAuth, initiateDesktopConnectionRequest } from "../../queries/desktop.js";
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
+import { PopupPage } from "../../types.js";
 
 interface NavigatorProps {
     activeTab: PopupPage;
     onChangeTab: (tab: PopupPage) => void;
+    tabs: Array<PopupPage>;
 }
 
 const Container = styled.div`
@@ -41,10 +42,6 @@ const Container = styled.div`
         margin-top: 8px;
         overflow-x: hidden;
         overflow-y: scroll;
-        // display: flex;
-        // flex-direction: column;
-        // justify-content: space-between;
-        // align-items: stretch;
     }
 
     .${Classes.TAB_LIST} {
@@ -88,48 +85,64 @@ export function Navigator(props: NavigatorProps) {
                 onChange={(newTab: PopupPage) => props.onChangeTab(newTab)}
                 selectedTabId={props.activeTab}
             >
-                <Tab
-                    id={PopupPage.Entries}
-                    panel={(
-                        <>
-                            <Divider />
-                            <EntriesPage
-                                onConnectClick={handleConnectClick}
-                                onReconnectClick={handleReconnectClick}
-                                searchTerm={entriesSearch}
-                            />
-                        </>
-                    )}
-                >
-                    <Icon icon="label" />
-                </Tab>
-                <Tab
-                    id={PopupPage.Vaults}
-                    panel={(
-                        <>
-                            <Divider />
-                            <VaultsPage
-                                onConnectClick={handleConnectClick}
-                                onReconnectClick={handleReconnectClick}
-                            />
-                        </>
-                    )}
-                >
-                    <Icon icon="projects" />
-                </Tab>
-                <Tab id={PopupPage.OTPs}>
-                    <Icon icon="array-timestamp" />
-                </Tab>
-                <Tab
-                    id={PopupPage.Settings}
-                    panel={(
-                        <>
-                            <div>Test</div>
-                        </>
-                    )}
-                >
-                    <Icon icon="cog" />
-                </Tab>
+                {props.tabs.map((tabType: PopupPage, ind: number) => (
+                    (tabType === PopupPage.Entries && (
+                        <Tab
+                            key={`tab-${ind}-${tabType}`}
+                            id={PopupPage.Entries}
+                            panel={(
+                                <>
+                                    <Divider />
+                                    <EntriesPage
+                                        onConnectClick={handleConnectClick}
+                                        onReconnectClick={handleReconnectClick}
+                                        searchTerm={entriesSearch}
+                                    />
+                                </>
+                            )}
+                        >
+                            <Icon icon="label" />
+                        </Tab>
+                    )) ||
+                    (tabType === PopupPage.Vaults && (
+                        <Tab
+                            key={`tab-${ind}-${tabType}`}
+                            id={PopupPage.Vaults}
+                            panel={(
+                                <>
+                                    <Divider />
+                                    <VaultsPage
+                                        onConnectClick={handleConnectClick}
+                                        onReconnectClick={handleReconnectClick}
+                                    />
+                                </>
+                            )}
+                        >
+                            <Icon icon="projects" />
+                        </Tab>
+                    )) ||
+                    (tabType === PopupPage.OTPs && (
+                        <Tab
+                            key={`tab-${ind}-${tabType}`}
+                            id={PopupPage.OTPs}
+                        >
+                            <Icon icon="array-timestamp" />
+                        </Tab>
+                    )) ||
+                    (tabType === PopupPage.Settings && (
+                        <Tab
+                            key={`tab-${ind}-${tabType}`}
+                            id={PopupPage.Settings}
+                            panel={(
+                                <>
+                                    <div>Test</div>
+                                </>
+                            )}
+                        >
+                            <Icon icon="cog" />
+                        </Tab>
+                    ))
+                ))}
                 <Tabs.Expander />
                 {props.activeTab === PopupPage.Entries && (
                     <EntriesPageControls
