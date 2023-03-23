@@ -6,6 +6,7 @@ import {
     hasConnection,
     initiateConnection,
     searchEntriesByTerm,
+    searchEntriesByURL,
     testAuth
 } from "./desktop/connection.js";
 import { removeLocalValue, setLocalValue } from "./storage.js";
@@ -53,6 +54,13 @@ async function handleMessage(
         }
         case BackgroundMessageType.SearchEntriesByTerm: {
             const searchResults = await searchEntriesByTerm(msg.searchTerm);
+            sendResponse({
+                searchResults
+            });
+            break;
+        }
+        case BackgroundMessageType.SearchEntriesByURL: {
+            const searchResults = await searchEntriesByURL(msg.url);
             sendResponse({
                 searchResults
             });

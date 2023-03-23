@@ -5,7 +5,12 @@ import { useAsync, useAsyncWithTimer } from "../../shared/hooks/async.js";
 import { t } from "../../shared/i18n/trans.js";
 import { localisedErrorMessage } from "../../shared/library/error.js";
 import { getToaster } from "../../shared/services/notifications.js";
-import { getDesktopConnectionAvailable, getVaultSources, searchEntriesByTerm } from "../queries/desktop.js";
+import {
+    getDesktopConnectionAvailable,
+    getVaultSources,
+    searchEntriesByTerm,
+    searchEntriesByURL
+} from "../queries/desktop.js";
 import { DesktopConnectionState, VaultSourceDescription } from "../types.js";
 
 const SEARCH_DEBOUNCE = 600;
@@ -38,6 +43,25 @@ export function useDesktopConnectionState(): DesktopConnectionState {
         return DesktopConnectionState.NotConnected;
     }
     return DesktopConnectionState.Pending;
+}
+
+export function useEntriesForURL(url: string): Array<SearchResult> {
+    const performSearch = useCallback(async () => {
+        if (!url) return [];
+        const results = await searchEntriesByURL(url);
+        return results;
+    }, [url]);
+    const { value, error } = useAsync(performSearch, [performSearch]);
+    useEffect(() => {
+        if (!error) return;
+        console.error(error);
+        getToaster().show({
+            intent: Intent.DANGER,
+            message: t("error.desktop.search-failed", { message: localisedErrorMessage(error) }),
+            timeout: 10000
+        });
+    }, [error]);
+    return value === null ? [] : value;
 }
 
 export function useSearchedEntries(term: string): Array<SearchResult> {

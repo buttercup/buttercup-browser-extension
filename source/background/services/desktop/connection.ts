@@ -45,6 +45,32 @@ export async function initiateConnection(): Promise<void> {
     });
 }
 
+export async function searchEntriesByURL(url: string): Promise<Array<SearchResult>> {
+    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
+    if (!authToken) {
+        throw new Layerr(
+            {
+                info: {
+                    i18n: "error.code.desktop-connection-not-authorised"
+                }
+            },
+            "Desktop connection not authorised"
+        );
+    }
+    const { results } = (await sendDesktopRequest(
+        "GET",
+        "/v1/entries",
+        {
+            type: "url",
+            url
+        },
+        authToken
+    )) as {
+        results: Array<SearchResult>;
+    };
+    return results;
+}
+
 export async function searchEntriesByTerm(term: string): Promise<Array<SearchResult>> {
     const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
     if (!authToken) {

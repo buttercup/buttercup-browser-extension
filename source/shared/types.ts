@@ -14,6 +14,7 @@ export interface BackgroundMessage {
     code?: string;
     searchTerm?: string;
     type: BackgroundMessageType;
+    url?: string;
 }
 
 export enum BackgroundMessageType {
@@ -22,7 +23,8 @@ export enum BackgroundMessageType {
     ClearDesktopAuthentication = "clearDesktopAuthentication",
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetDesktopVaultSources = "getDesktopVaultSources",
-    SearchEntriesByTerm = "searchEntriesByTerm"
+    SearchEntriesByTerm = "searchEntriesByTerm",
+    SearchEntriesByURL = "searchEntriesByURL"
 }
 
 export interface BackgroundResponse {

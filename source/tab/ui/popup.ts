@@ -1,6 +1,7 @@
 import { el, mount, setStyle, unmount } from "redom";
 import { getExtensionURL } from "../../shared/library/extension.js";
 import { BRAND_COLOUR_DARK } from "../../shared/symbols.js";
+import { getCurrentURL } from "../library/page.js";
 import { onBodyResize } from "../library/resize.js";
 import { ElementRect } from "../types.js";
 
@@ -22,7 +23,8 @@ const POPUP_WIDTH = 320;
 let __popup: LastPopup | null = null;
 
 function buildNewPopup(inputRect: ElementRect) {
-    const popupURL = getExtensionURL("popup.html#/dialog");
+    const currentURL = getCurrentURL();
+    const popupURL = getExtensionURL(`popup.html#/dialog?page=${encodeURIComponent(currentURL)}`);
     const frame = el("iframe", {
         style: {
             width: "100%",

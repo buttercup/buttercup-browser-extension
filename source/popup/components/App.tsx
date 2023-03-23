@@ -1,7 +1,8 @@
 import React from "react";
 import {
     createHashRouter,
-    RouterProvider
+    RouterProvider,
+    useLoaderData
 } from "react-router-dom";
 import { useSingleState } from "react-obstate";
 import { Navigator } from "./navigation/Navigator.js";
@@ -9,6 +10,7 @@ import { APP_STATE } from "../state/app.js";
 import { ThemeProvider } from "../../shared/components/ThemeProvider.js";
 import { PopupPage } from "../types.js";
 import { useBodyClass } from "../hooks/document.js";
+import { LaunchContextProvider } from "./contexts/LaunchContext.js";
 
 const ROUTER = createHashRouter([
     {
@@ -17,7 +19,12 @@ const ROUTER = createHashRouter([
     },
     {
         path: "/dialog",
-        element: <InPageApp />
+        element: <InPageApp />,
+        loader: ({ request }) => {
+            const url = new URL(request.url);
+            const pageURL = url.searchParams.get("page");
+            return { url: pageURL };
+        }
     }
 ]);
 
@@ -32,29 +39,34 @@ export function App() {
 function FullApp() {
     const [tab, setTab] = useSingleState(APP_STATE, "tab");
     return (
-        <Navigator
-            activeTab={tab}
-            onChangeTab={setTab}
-            tabs={[
-                PopupPage.Entries,
-                PopupPage.Vaults,
-                PopupPage.OTPs,
-                PopupPage.Settings
-            ]}
-        />
+        <LaunchContextProvider source="popup">
+            <Navigator
+                activeTab={tab}
+                onChangeTab={setTab}
+                tabs={[
+                    PopupPage.Entries,
+                    PopupPage.Vaults,
+                    PopupPage.OTPs,
+                    PopupPage.Settings
+                ]}
+            />
+        </LaunchContextProvider>
     );
 }
 
 function InPageApp() {
     const [tab, setTab] = useSingleState(APP_STATE, "tab");
     useBodyClass("in-page");
+    const { url = null } = useLoaderData() as { url: string; };
     return (
-        <Navigator
-            activeTab={tab}
-            onChangeTab={setTab}
-            tabs={[
-                PopupPage.Entries
-            ]}
-        />
+        <LaunchContextProvider source="page" url={url}>
+            <Navigator
+                activeTab={tab}
+                onChangeTab={setTab}
+                tabs={[
+                    PopupPage.Entries
+                ]}
+            />
+        </LaunchContextProvider>
     );
 }

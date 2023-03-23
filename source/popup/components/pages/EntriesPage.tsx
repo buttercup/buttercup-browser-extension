@@ -1,11 +1,12 @@
-import React, { useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Button, InputGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { t } from "../../../shared/i18n/trans.js";
-import { useDesktopConnectionState, useSearchedEntries, useVaultSources } from "../../hooks/desktop.js";
+import { useDesktopConnectionState, useEntriesForURL, useSearchedEntries, useVaultSources } from "../../hooks/desktop.js";
 import { EntryItemList } from "../entries/EntryItemList.js";
 import { DesktopConnectionState } from "../../types.js";
-import { VaultSourceStatus } from "buttercup";
+import { SearchResult, VaultSourceStatus } from "buttercup";
+import { LaunchContext } from "../contexts/LaunchContext.js";
 
 interface EntriesPageProps {
     onConnectClick: () => Promise<void>;
@@ -83,7 +84,9 @@ function EntriesPageList(props: EntriesPageProps) {
         ),
         [sources]
     );
-    const entries = useSearchedEntries(props.searchTerm);
+    const searchedEntries = useSearchedEntries(props.searchTerm);
+    const { source: popupSource, url } = useContext(LaunchContext);
+    const urlEntries = useEntriesForURL(url);
     if (unlockedCount === 0) {
         return (
             <InvalidState
@@ -94,7 +97,7 @@ function EntriesPageList(props: EntriesPageProps) {
         );
     }
     return (
-        <EntryItemList entries={entries} />
+        <EntryItemList entries={searchedEntries.length > 0 ? searchedEntries : urlEntries} />
     );
 }
 

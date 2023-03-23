@@ -51,3 +51,14 @@ export async function searchEntriesByTerm(term: string): Promise<Array<SearchRes
     }
     return resp.searchResults;
 }
+
+export async function searchEntriesByURL(url: string): Promise<Array<SearchResult>> {
+    const resp = await sendBackgroundMessage({
+        type: BackgroundMessageType.SearchEntriesByURL,
+        url
+    });
+    if (resp.error) {
+        throw new Layerr(resp.error, "Failed fetching URL results from desktop application");
+    }
+    return resp.searchResults;
+}
