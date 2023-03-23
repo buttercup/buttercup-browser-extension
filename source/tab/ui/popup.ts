@@ -53,12 +53,23 @@ function buildNewPopup(inputRect: ElementRect) {
     );
     mount(document.body, container);
     const removeBodyResizeListener = onBodyResize(() => updatePopupPosition(__popup.inputRect));
+    document.body.addEventListener("click", closePopup, false);
     __popup = {
-        cleanup: removeBodyResizeListener,
+        cleanup: () => {
+            removeBodyResizeListener();
+            document.body.removeEventListener("click", closePopup, false);
+        },
         inputRect,
         popup: container
     };
     updatePopupPosition(inputRect);
+}
+
+function closePopup() {
+    if (!__popup) return;
+    __popup.cleanup();
+    unmount(document.body, __popup.popup);
+    __popup = null;
 }
 
 export function togglePopup(inputRect: ElementRect) {
@@ -66,9 +77,7 @@ export function togglePopup(inputRect: ElementRect) {
         buildNewPopup(inputRect);
     } else {
         // Tear down
-        __popup.cleanup();
-        unmount(document.body, __popup.popup);
-        __popup = null;
+        closePopup();
     }
 }
 
