@@ -1,19 +1,27 @@
-import { TabEvent, TabEventType } from "../types.js";
+import { FORM } from "../state/form.js";
+import { FrameEvent, FrameEventType, TabEvent, TabEventType } from "../types.js";
+import { fillFormDetails } from "./form.js";
 
-// let __bc: BroadcastChannel;
+let __framesChannel: BroadcastChannel;
 
-// export function listenForTabEvents(callback: (event: TabEvent) => void) {
-//     if (!__bc) {
-//         __bc = new BroadcastChannel("tab");
-//     }
-//     __bc.addEventListener("message", (event: MessageEvent<TabEvent>) => {
-//         callback(event.data);
-//     });
-// }
+export function broadcastFrameMessage(event: FrameEvent): void {
+    __framesChannel.postMessage(event);
+}
 
-// export function sendTabEvent(event: TabEvent, destination: Window): void {
+export async function initialise() {
+    __framesChannel = new BroadcastChannel("frames:all");
+    __framesChannel.addEventListener("message", handleBroadcastMessage);
+}
 
-// }
+function handleBroadcastMessage(event: MessageEvent<FrameEvent>) {
+    const { type } = event.data;
+    if (type === FrameEventType.FillForm) {
+        const { formID } = event.data;
+        if (formID && formID === FORM.currentFormID && FORM.currentLoginTarget) {
+            fillFormDetails(event.data);
+        }
+    }
+}
 
 export function listenForTabEvents(callback: (event: TabEvent) => void) {
     window.addEventListener("message", (event: MessageEvent<any>) => {

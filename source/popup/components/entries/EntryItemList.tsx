@@ -13,6 +13,7 @@ import { EntryItem } from "./EntryItem.js";
 
 interface EntryItemListProps {
     entries: Array<SearchResult>;
+    onEntryClick: (entry: SearchResult) => void;
 }
 
 const ButtonRow = styled.div`
@@ -122,6 +123,7 @@ export function EntryItemList(props: EntryItemListProps) {
                     <Fragment key={entry.id}>
                         <EntryItem
                             entry={entry}
+                            onClick={() => props.onEntryClick(entry)}
                             // isDetailsVisible={false}
                             // onRemoveClick={() => handleVaultRemoveClick(vault)}
                             // onUnlockClick={() => handleVaultUnlockClick(vault)}

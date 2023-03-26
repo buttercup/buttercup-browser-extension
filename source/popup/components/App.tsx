@@ -23,7 +23,8 @@ const ROUTER = createHashRouter([
         loader: ({ request }) => {
             const url = new URL(request.url);
             const pageURL = url.searchParams.get("page");
-            return { url: pageURL };
+            const formID = url.searchParams.get("form");
+            return { formID, url: pageURL };
         }
     }
 ]);
@@ -57,9 +58,9 @@ function FullApp() {
 function InPageApp() {
     const [tab, setTab] = useSingleState(APP_STATE, "tab");
     useBodyClass("in-page");
-    const { url = null } = useLoaderData() as { url: string; };
+    const { formID = "", url = null } = useLoaderData() as { formID?: string; url: string; };
     return (
-        <LaunchContextProvider source="page" url={url}>
+        <LaunchContextProvider source="page" formID={formID || null} url={url}>
             <Navigator
                 activeTab={tab}
                 onChangeTab={setTab}

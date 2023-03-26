@@ -14,7 +14,6 @@ export async function sendBackgroundMessage(
         }, timeout);
         browser.runtime.sendMessage(msg, (resp) => {
             clearTimeout(timer);
-            console.log("RESP", resp);
             if (resp.error) {
                 reject(stringToError(resp.error));
                 return;

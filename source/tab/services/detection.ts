@@ -1,4 +1,4 @@
-import { getLoginTarget, getLoginTargets } from "@buttercup/locust";
+import { LoginTarget, getLoginTargets } from "@buttercup/locust";
 import { getSharedTracker } from "./LoginTracker.js";
 import { attachLaunchButton } from "../ui/launch.js";
 
@@ -26,7 +26,9 @@ function onIdentifiedTarget(callback) {
     };
 }
 
-export function waitAndAttachLaunchButtons(onInputActivate: (input: HTMLInputElement) => void) {
+export function waitAndAttachLaunchButtons(
+    onInputActivate: (input: HTMLInputElement, loginTarget: LoginTarget) => void
+) {
     const tracker = getSharedTracker();
     tracker.on("credentialsChanged", (connection) => {
         // transferLoginCredentials({
@@ -43,10 +45,10 @@ export function waitAndAttachLaunchButtons(onInputActivate: (input: HTMLInputEle
         tracker.registerConnection(loginTarget);
         const { usernameField, passwordField } = loginTarget;
         if (passwordField) {
-            attachLaunchButton(passwordField, onInputActivate);
+            attachLaunchButton(passwordField, (el) => onInputActivate(el, loginTarget));
         }
         if (usernameField) {
-            attachLaunchButton(usernameField, onInputActivate);
+            attachLaunchButton(usernameField, (el) => onInputActivate(el, loginTarget));
         }
         watchLogin(
             loginTarget,

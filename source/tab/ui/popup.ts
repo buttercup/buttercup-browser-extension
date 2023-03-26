@@ -3,6 +3,7 @@ import { getExtensionURL } from "../../shared/library/extension.js";
 import { BRAND_COLOUR_DARK } from "../../shared/symbols.js";
 import { getCurrentURL } from "../library/page.js";
 import { onBodyResize } from "../library/resize.js";
+import { FORM } from "../state/form.js";
 import { ElementRect } from "../types.js";
 
 interface LastPopup {
@@ -24,7 +25,8 @@ let __popup: LastPopup | null = null;
 
 function buildNewPopup(inputRect: ElementRect) {
     const currentURL = getCurrentURL();
-    const popupURL = getExtensionURL(`popup.html#/dialog?page=${encodeURIComponent(currentURL)}`);
+    const formID = FORM.targetFormID || "";
+    const popupURL = getExtensionURL(`popup.html#/dialog?page=${encodeURIComponent(currentURL)}&form=${formID}`);
     const frame = el("iframe", {
         style: {
             width: "100%",
@@ -65,11 +67,12 @@ function buildNewPopup(inputRect: ElementRect) {
     updatePopupPosition(inputRect);
 }
 
-function closePopup() {
+export function closePopup() {
     if (!__popup) return;
     __popup.cleanup();
     unmount(document.body, __popup.popup);
     __popup = null;
+    FORM.targetFormID = null;
 }
 
 export function togglePopup(inputRect: ElementRect) {

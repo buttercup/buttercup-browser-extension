@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Button, InputGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { SearchResult, VaultSourceStatus } from "buttercup";
 import { t } from "../../../shared/i18n/trans.js";
 import { useDesktopConnectionState, useEntriesForURL, useSearchedEntries, useVaultSources } from "../../hooks/desktop.js";
 import { EntryItemList } from "../entries/EntryItemList.js";
-import { DesktopConnectionState } from "../../types.js";
-import { SearchResult, VaultSourceStatus } from "buttercup";
 import { LaunchContext } from "../contexts/LaunchContext.js";
+import { sendEntryResultToTabForInput } from "../../services/tab.js";
+import { DesktopConnectionState } from "../../types.js";
 
 interface EntriesPageProps {
     onConnectClick: () => Promise<void>;
@@ -85,8 +86,13 @@ function EntriesPageList(props: EntriesPageProps) {
         [sources]
     );
     const searchedEntries = useSearchedEntries(props.searchTerm);
-    const { source: popupSource, url } = useContext(LaunchContext);
+    const { formID, source: popupSource, url } = useContext(LaunchContext);
     const urlEntries = useEntriesForURL(url);
+    const handleEntryClick = useCallback((entry: SearchResult) => {
+        if (popupSource === "page") {
+            sendEntryResultToTabForInput(formID, entry);
+        }
+    }, [popupSource]);
     if (unlockedCount === 0) {
         return (
             <InvalidState
@@ -97,7 +103,10 @@ function EntriesPageList(props: EntriesPageProps) {
         );
     }
     return (
-        <EntryItemList entries={searchedEntries.length > 0 ? searchedEntries : urlEntries} />
+        <EntryItemList
+            entries={searchedEntries.length > 0 ? searchedEntries : urlEntries}
+            onEntryClick={handleEntryClick}
+        />
     );
 }
 

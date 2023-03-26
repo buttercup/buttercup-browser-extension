@@ -13,6 +13,7 @@ import { extractDomain } from "../../../shared/library/domain.js";
 
 interface EntryItemProps {
     entry: SearchResult;
+    onClick: () => void;
     // isDetailsVisible: boolean;
     // onRemoveClick: () => void;
     // onUnlockClick: () => void;
@@ -48,20 +49,11 @@ const EntryIcon = styled(SiteIcon)`
 const Title = styled(Text)`
     margin-bottom: 0.3rem;
 `;
-const VaultIcon = styled.img`
-    width: calc(100% - 6px);
-    height: calc(100% - 6px);
-    margin: 3px;
-    overflow: hidden;
-`;
 const EntryIconBackground = styled.div`
     width: 2.5rem;
     height: 2.5rem;
     flex: 0 0 auto;
     background-color: ${p => p.theme.backgroundColor};
-    // display: flex;
-    // justify-content: stretch;
-    // align-items: stretch;
     border-radius: 3px;
     border: 1px solid ${p => p.theme.listItemHover};
 `;
@@ -75,7 +67,8 @@ const EntryRow = styled.div`
 
 export function EntryItem(props: EntryItemProps) {
     const {
-        entry
+        entry,
+        onClick
         // isDetailsVisible,
         // onRemoveClick,
         // onUnlockClick,
@@ -88,6 +81,9 @@ export function EntryItem(props: EntryItemProps) {
         ];
         return url ? extractDomain(url) : null;
     }, [entry]);
+    const handleEntryClick = useCallback(() => {
+        onClick();
+    }, [onClick]);
     // const vaultImage = VAULT_TYPES[vault.type].image;
     // const handleVaultClick = useCallback(() => {
     //     // @todo
@@ -103,10 +99,9 @@ export function EntryItem(props: EntryItemProps) {
     //     onRemoveClick();
     // }, [vault, onRemoveClick]);
     return (
-        <Container isActive={false}>
+        <Container isActive={false} onClick={handleEntryClick}>
             <EntryRow>
                 <EntryIconBackground>
-                    {/* <VaultIcon src={vaultImage} /> */}
                     <EntryIcon
                         domain={entryDomain}
                     />

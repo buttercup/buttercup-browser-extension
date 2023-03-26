@@ -1,20 +1,15 @@
 export * from "../shared/types.js";
 
-export interface ElementRect {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+export interface FrameEvent {
+    formID?: string;
+    inputDetails?: {
+        otp?: string;
+        password?: string;
+        username?: string;
+    };
+    type: FrameEventType;
 }
 
-export interface TabEvent {
-    inputPosition?: ElementRect;
-    source?: MessageEventSource;
-    sourceURL?: string;
-    type: TabEventType;
-}
-
-export enum TabEventType {
-    GetFrameID = "getFrameID",
-    OpenPopupDialog = "openPopupDialog"
+export enum FrameEventType {
+    FillForm = "fillForm"
 }

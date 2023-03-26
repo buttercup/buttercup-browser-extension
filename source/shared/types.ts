@@ -37,6 +37,32 @@ export interface BackgroundResponse {
 type ChildElement = ReactChild | ReactChildren | false | null;
 export type ChildElements = ChildElement | Array<ChildElement>;
 
+export interface ElementRect {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+export interface TabEvent {
+    formID?: string;
+    inputDetails?: {
+        otp?: string;
+        password?: string;
+        username?: string;
+    };
+    inputPosition?: ElementRect;
+    source?: MessageEventSource;
+    sourceURL?: string;
+    type: TabEventType;
+}
+
+export enum TabEventType {
+    GetFrameID = "getFrameID",
+    InputDetails = "inputDetails",
+    OpenPopupDialog = "openPopupDialog"
+}
+
 export interface VaultSourceDescription {
     id: VaultSourceID;
     name: string;
