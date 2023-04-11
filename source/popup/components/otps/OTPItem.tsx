@@ -2,12 +2,12 @@ import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 import cn from "classnames";
 import { Classes, Text } from "@blueprintjs/core";
-import { EntryURLType, getEntryURLs, SearchResult } from "buttercup";
 import { SiteIcon } from "@buttercup/ui";
 import { extractDomain } from "../../../shared/library/domain.js";
+import { PreparedOTP } from "../../hooks/otp.js";
 
-interface EntryItemProps {
-    entry: SearchResult;
+interface OTPItemProps {
+    otp: PreparedOTP;
     onClick: () => void;
     // isDetailsVisible: boolean;
     // onRemoveClick: () => void;
@@ -44,7 +44,7 @@ const EntryIcon = styled(SiteIcon)`
 const Title = styled(Text)`
     margin-bottom: 0.3rem;
 `;
-const EntryIconBackground = styled.div`
+const OTPIconBackground = styled.div`
     width: 2.5rem;
     height: 2.5rem;
     flex: 0 0 auto;
@@ -52,7 +52,7 @@ const EntryIconBackground = styled.div`
     border-radius: 3px;
     border: 1px solid ${p => p.theme.listItemHover};
 `;
-const EntryRow = styled.div`
+const OTPRow = styled.div`
     flex: 1;
     width: 100%;
     display: flex;
@@ -60,23 +60,17 @@ const EntryRow = styled.div`
     align-items: center;
 `;
 
-export function EntryItem(props: EntryItemProps) {
+export function OTPItem(props: OTPItemProps) {
     const {
-        entry,
+        otp,
         onClick
         // isDetailsVisible,
         // onRemoveClick,
         // onUnlockClick,
         // vault
     } = props;
-    const entryDomain = useMemo(() => {
-        const [url] = [
-            ...getEntryURLs(entry.properties, EntryURLType.Icon),
-            ...getEntryURLs(entry.properties, EntryURLType.Any)
-        ];
-        return url ? extractDomain(url) : null;
-    }, [entry]);
-    const handleEntryClick = useCallback(() => {
+    const entryDomain = useMemo(() => otp.loginURL ? extractDomain(otp.loginURL) : null, [otp]);
+    const handleOTPClick = useCallback(() => {
         onClick();
     }, [onClick]);
     // const vaultImage = VAULT_TYPES[vault.type].image;
@@ -94,19 +88,20 @@ export function EntryItem(props: EntryItemProps) {
     //     onRemoveClick();
     // }, [vault, onRemoveClick]);
     return (
-        <Container isActive={false} onClick={handleEntryClick}>
-            <EntryRow>
-                <EntryIconBackground>
+        <Container isActive={false} onClick={handleOTPClick}>
+            <OTPRow>
+                <OTPIconBackground>
                     <EntryIcon
                         domain={entryDomain}
                     />
-                </EntryIconBackground>
+                </OTPIconBackground>
                 <DetailRow onClick={() => {}}>
-                    <Title title={entry.properties.title}>
-                        <Text ellipsize>{entry.properties.title}</Text>
+                    <Title title={otp.otpTitle ?? ""}>
+                        <Text ellipsize>{otp.otpTitle ?? "?"}</Text>
                     </Title>
                     <CenteredText ellipsize className={cn(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
                         {/* <VaultStateIndicator state={vault.state} />&nbsp; */}
+                        {otp.entryTitle}
                         {/* {t(`vault-state.${vault.state}`)} */}
                         Test
                     </CenteredText>
@@ -143,7 +138,7 @@ export function EntryItem(props: EntryItemProps) {
                         />
                     </Tooltip2>
                 </ButtonGroup> */}
-            </EntryRow>
+            </OTPRow>
         </Container>
     );
 }

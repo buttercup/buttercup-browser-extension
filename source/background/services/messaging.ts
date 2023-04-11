@@ -2,6 +2,7 @@ import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
 import {
     authenticateBrowserAccess,
+    getOTPs,
     getVaultSources,
     hasConnection,
     initiateConnection,
@@ -44,6 +45,13 @@ async function handleMessage(
             const sources = await getVaultSources();
             sendResponse({
                 vaultSources: sources
+            });
+            break;
+        }
+        case BackgroundMessageType.GetOTPs: {
+            const otps = await getOTPs();
+            sendResponse({
+                otps
             });
             break;
         }

@@ -1,7 +1,7 @@
 import { SearchResult } from "buttercup";
 import { Layerr } from "layerr";
 import { sendBackgroundMessage } from "../services/messaging.js";
-import { BackgroundMessageType, VaultSourceDescription } from "../types.js";
+import { BackgroundMessageType, OTP, VaultSourceDescription } from "../types.js";
 
 export async function clearDesktopConnectionAuth(): Promise<void> {
     const resp = await sendBackgroundMessage({
@@ -20,6 +20,16 @@ export async function getDesktopConnectionAvailable(): Promise<boolean> {
         throw new Layerr(resp.error, "Failed checking desktop connection availability");
     }
     return resp.available;
+}
+
+export async function getOTPs(): Promise<Array<OTP>> {
+    const resp = await sendBackgroundMessage({
+        type: BackgroundMessageType.GetOTPs
+    });
+    if (resp.error) {
+        throw new Layerr(resp.error, "Failed fetching OTPs from desktop application");
+    }
+    return resp.otps;
 }
 
 export async function getVaultSources(): Promise<Array<VaultSourceDescription>> {

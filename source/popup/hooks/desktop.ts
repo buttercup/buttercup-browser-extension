@@ -7,12 +7,14 @@ import { localisedErrorMessage } from "../../shared/library/error.js";
 import { getToaster } from "../../shared/services/notifications.js";
 import {
     getDesktopConnectionAvailable,
+    getOTPs,
     getVaultSources,
     searchEntriesByTerm,
     searchEntriesByURL
 } from "../queries/desktop.js";
-import { DesktopConnectionState, VaultSourceDescription } from "../types.js";
+import { DesktopConnectionState, OTP, VaultSourceDescription } from "../types.js";
 
+const OTPS_UPDATE_DELAY = 7500;
 const SEARCH_DEBOUNCE = 600;
 const SOURCES_UPDATE_DELAY = 3500;
 
@@ -62,6 +64,43 @@ export function useEntriesForURL(url: string): Array<SearchResult> {
         });
     }, [error]);
     return value === null ? [] : value;
+}
+
+export function useOTPs(): Array<OTP> {
+    const getItems = useCallback(getOTPs, []);
+    const { value: rawOTPs, error } = useAsyncWithTimer(getItems, OTPS_UPDATE_DELAY, [getItems]);
+    const [otps, setOTPs] = useState<Array<OTP>>([]);
+    useEffect(() => {
+        if (!error) return;
+        console.error(error);
+        getToaster().show({
+            intent: Intent.DANGER,
+            message: t("error.desktop.otps-fetch-failed", { message: localisedErrorMessage(error) }),
+            timeout: 10000
+        });
+    }, [error]);
+    useEffect(() => {
+        if ((error || !rawOTPs) && otps.length > 0) {
+            setOTPs([]);
+            return;
+        }
+        if (
+            Array.isArray(rawOTPs) &&
+            (rawOTPs.length !== otps.length ||
+                rawOTPs.some(
+                    (raw) =>
+                        !otps.find(
+                            (otp) =>
+                                raw.entryID === otp.entryID &&
+                                raw.otpURL === otp.otpURL &&
+                                raw.sourceID === otp.sourceID
+                        )
+                ))
+        ) {
+            setOTPs(rawOTPs);
+        }
+    }, [rawOTPs, otps, error]);
+    return otps;
 }
 
 export function useSearchedEntries(term: string): Array<SearchResult> {

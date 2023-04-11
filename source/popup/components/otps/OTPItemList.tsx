@@ -1,12 +1,16 @@
-import React, { Fragment} from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { SearchResult } from "buttercup";
-import { Divider} from "@blueprintjs/core";
-import { EntryItem } from "./EntryItem.js";
+import { Divider } from "@blueprintjs/core";
+import { OTPItem } from "./OTPItem.js";
+import { PreparedOTP } from "../../hooks/otp.js";
+import { OTP } from "../../types.js";
 
-interface EntryItemListProps {
-    entries: Array<SearchResult>;
-    onEntryClick: (entry: SearchResult) => void;
+interface OTPItemListProps {
+    // entries: Array<SearchResult>;
+    // onEntryClick: (entry: SearchResult) => void;
+    onOTPClick: (otp: OTP) => void;
+    otps: Array<PreparedOTP>;
 }
 
 const ButtonRow = styled.div`
@@ -29,7 +33,11 @@ const ScrollList = styled.div`
     align-items: stretch;
 `;
 
-export function EntryItemList(props: EntryItemListProps) {
+export function OTPItemList(props: OTPItemListProps) {
+    const {
+        onOTPClick,
+        otps
+    } = props;
     // const [unlockVault, setUnlockVault] = useState<VaultSourceDescription>(null);
     // const [removeVault, setRemoveVault] = useState<VaultSourceDescription>(null);
     // const [vaultPassword, setVaultPassword] = useState<string>("");
@@ -112,11 +120,11 @@ export function EntryItemList(props: EntryItemListProps) {
     return (
         <>
             <ScrollList>
-                {props.entries.map((entry) => (
-                    <Fragment key={entry.id}>
-                        <EntryItem
-                            entry={entry}
-                            onClick={() => props.onEntryClick(entry)}
+                {otps.map((otp) => (
+                    <Fragment key={`${otp.entryID}:${otp.otpURL}`}>
+                        <OTPItem
+                            otp={otp}
+                            onClick={() => onOTPClick(otp)}
                             // isDetailsVisible={false}
                             // onRemoveClick={() => handleVaultRemoveClick(vault)}
                             // onUnlockClick={() => handleVaultUnlockClick(vault)}

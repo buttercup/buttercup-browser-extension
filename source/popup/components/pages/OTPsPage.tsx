@@ -3,19 +3,20 @@ import styled from "styled-components";
 import { Button, InputGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { SearchResult, VaultSourceStatus } from "buttercup";
 import { t } from "../../../shared/i18n/trans.js";
-import { useDesktopConnectionState, useEntriesForURL, useSearchedEntries, useVaultSources } from "../../hooks/desktop.js";
-import { EntryItemList } from "../entries/EntryItemList.js";
+import { useDesktopConnectionState, useEntriesForURL, useOTPs, useSearchedEntries, useVaultSources } from "../../hooks/desktop.js";
+import { OTPItemList } from "../otps/OTPItemList.js";
 import { LaunchContext } from "../contexts/LaunchContext.js";
 import { sendEntryResultToTabForInput } from "../../services/tab.js";
 import { DesktopConnectionState } from "../../types.js";
+import { usePreparedOTPs } from "../../hooks/otp.js";
 
-interface EntriesPageProps {
+interface OTPsPageProps {
     onConnectClick: () => Promise<void>;
     onReconnectClick: () => Promise<void>;
     searchTerm: string;
 }
 
-interface EntriesPageControlsProps {
+interface OTPsPageControlsProps {
     onSearchTermChange: (term: string) => void;
     searchTerm: string;
 }
@@ -33,7 +34,7 @@ const InvalidState = styled(NonIdealState)`
     margin-top: 28px;
 `;
 
-export function EntriesPage(props: EntriesPageProps) {
+export function OTPsPage(props: OTPsPageProps) {
     const desktopState = useDesktopConnectionState();
     return (
         <Container>
@@ -52,7 +53,7 @@ export function EntriesPage(props: EntriesPageProps) {
                 />
             )}
             {desktopState === DesktopConnectionState.Connected && (
-                <EntriesPageList {...props} />
+                <OTPsPageList {...props} />
             )}
             {desktopState === DesktopConnectionState.Pending && (
                 <Spinner size={40} />
@@ -76,7 +77,7 @@ export function EntriesPage(props: EntriesPageProps) {
     );
 }
 
-function EntriesPageList(props: EntriesPageProps) {
+function OTPsPageList(props: OTPsPageProps) {
     const sources = useVaultSources();
     const unlockedCount = useMemo(
         () => sources.reduce(
@@ -85,14 +86,16 @@ function EntriesPageList(props: EntriesPageProps) {
         ),
         [sources]
     );
-    const searchedEntries = useSearchedEntries(props.searchTerm);
-    const { formID, source: popupSource, url } = useContext(LaunchContext);
-    const urlEntries = useEntriesForURL(url);
-    const handleEntryClick = useCallback((entry: SearchResult) => {
-        if (popupSource === "page") {
-            sendEntryResultToTabForInput(formID, entry);
-        }
-    }, [popupSource]);
+    const otps = useOTPs();
+    const preparedOTPs = usePreparedOTPs(otps);
+    // const searchedEntries = useSearchedEntries(props.searchTerm);
+    // const { formID, source: popupSource, url } = useContext(LaunchContext);
+    // const urlEntries = useEntriesForURL(url);
+    // const handleEntryClick = useCallback((entry: SearchResult) => {
+    //     if (popupSource === "page") {
+    //         sendEntryResultToTabForInput(formID, entry);
+    //     }
+    // }, [popupSource]);
     if (unlockedCount === 0) {
         return (
             <InvalidState
@@ -103,18 +106,20 @@ function EntriesPageList(props: EntriesPageProps) {
         );
     }
     return (
-        <EntryItemList
-            entries={searchedEntries.length > 0 ? searchedEntries : urlEntries}
-            onEntryClick={handleEntryClick}
+        <OTPItemList
+            onOTPClick={() => {}}
+            otps={preparedOTPs}
+            // entries={searchedEntries.length > 0 ? searchedEntries : urlEntries}
+            // onEntryClick={handleEntryClick}
         />
     );
 }
 
-export function EntriesPageControls(props: EntriesPageControlsProps) {
-    const desktopState = useDesktopConnectionState();
+export function OTPsPageControls(props: OTPsPageControlsProps) {
+    // const desktopState = useDesktopConnectionState();
     return (
         <>
-            <Input
+            {/* <Input
                 disabled={desktopState !== DesktopConnectionState.Connected}
                 onChange={evt => props.onSearchTermChange(evt.target.value)}
                 placeholder={t("popup.entries.search.placeholder")}
@@ -125,7 +130,7 @@ export function EntriesPageControls(props: EntriesPageControlsProps) {
                 disabled={desktopState !== DesktopConnectionState.Connected}
                 icon="search"
                 minimal
-            />
+            /> */}
         </>
     );
 }

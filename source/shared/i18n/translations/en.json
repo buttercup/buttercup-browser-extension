@@ -10,6 +10,7 @@
         },
         "desktop": {
             "connection-check-failed": "Failed checking desktop connection: {{message}}",
+            "otps-fetch-failed": "Failed fetching OTPs: {{message}}",
             "search-failed": "Failed searching for entries: {{message}}",
             "sources-fetch-failed": "Failed fetching vaults: {{message}}"
         },
@@ -26,6 +27,10 @@
         }
     },
     "popup": {
+        "all-locked": {
+            "description": "All vaults are currently locked.",
+            "title": "No Unlocked Vaults"
+        },
         "connection": {
             "check-error": {
                 "description": "Unable to establish a connection to the desktop application. Check that it's open or consider re-authenticating.",
@@ -35,10 +40,7 @@
             "reauth-error": "Failed re-authenticating: {{message}}"
         },
         "entries": {
-            "all-locked": {
-                "description": "All vaults are currently locked.",
-                "title": "No Unlocked Vaults"
-            },
+            
             "search": {
                 "placeholder": "Search..."
             }

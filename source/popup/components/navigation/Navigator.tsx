@@ -9,6 +9,7 @@ import { t } from "../../../shared/i18n/trans.js";
 import { clearDesktopConnectionAuth, initiateDesktopConnectionRequest } from "../../queries/desktop.js";
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 import { PopupPage } from "../../types.js";
+import { OTPsPage } from "../pages/OTPsPage.js";
 
 interface NavigatorProps {
     activeTab: PopupPage;
@@ -125,6 +126,16 @@ export function Navigator(props: NavigatorProps) {
                         <Tab
                             key={`tab-${ind}-${tabType}`}
                             id={PopupPage.OTPs}
+                            panel={(
+                                <>
+                                    <Divider />
+                                    <OTPsPage
+                                        onConnectClick={handleConnectClick}
+                                        onReconnectClick={handleReconnectClick}
+                                        searchTerm={entriesSearch}
+                                    />
+                                </>
+                            )}
                         >
                             <Icon icon="array-timestamp" />
                         </Tab>

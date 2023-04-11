@@ -1,4 +1,4 @@
-import { SearchResult, VaultFormatID, VaultSourceID, VaultSourceStatus } from "buttercup";
+import { EntryID, SearchResult, VaultFormatID, VaultSourceID, VaultSourceStatus } from "buttercup";
 import { ReactChild, ReactChildren } from "react";
 
 export interface AddVaultPayload {
@@ -23,6 +23,7 @@ export enum BackgroundMessageType {
     ClearDesktopAuthentication = "clearDesktopAuthentication",
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetDesktopVaultSources = "getDesktopVaultSources",
+    GetOTPs = "getOTPs",
     SearchEntriesByTerm = "searchEntriesByTerm",
     SearchEntriesByURL = "searchEntriesByURL"
 }
@@ -30,6 +31,7 @@ export enum BackgroundMessageType {
 export interface BackgroundResponse {
     available?: boolean;
     error?: Error;
+    otps?: Array<OTP>;
     searchResults?: Array<SearchResult>;
     vaultSources?: Array<VaultSourceDescription>;
 }
@@ -42,6 +44,16 @@ export interface ElementRect {
     y: number;
     width: number;
     height: number;
+}
+
+export interface OTP {
+    entryID: EntryID;
+    entryProperty: string;
+    entryTitle: string;
+    loginURL: string | null;
+    otpTitle?: string;
+    otpURL: string;
+    sourceID: VaultSourceID;
 }
 
 export interface TabEvent {
