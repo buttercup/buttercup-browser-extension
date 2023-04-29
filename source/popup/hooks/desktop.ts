@@ -66,9 +66,13 @@ export function useEntriesForURL(url: string): Array<SearchResult> {
     return value === null ? [] : value;
 }
 
-export function useOTPs(): Array<OTP> {
+/**
+ * Use all available OTP items
+ * @returns A tuple: First the list of OTPs, second a loading state
+ */
+export function useOTPs(): [Array<OTP>, boolean] {
     const getItems = useCallback(getOTPs, []);
-    const { value: rawOTPs, error } = useAsyncWithTimer(getItems, OTPS_UPDATE_DELAY, [getItems]);
+    const { value: rawOTPs, loading, error } = useAsyncWithTimer(getItems, OTPS_UPDATE_DELAY, [getItems]);
     const [otps, setOTPs] = useState<Array<OTP>>([]);
     useEffect(() => {
         if (!error) return;
@@ -100,7 +104,7 @@ export function useOTPs(): Array<OTP> {
             setOTPs(rawOTPs);
         }
     }, [rawOTPs, otps, error]);
-    return otps;
+    return [otps, loading];
 }
 
 export function useSearchedEntries(term: string): Array<SearchResult> {

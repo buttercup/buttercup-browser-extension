@@ -87,13 +87,18 @@ function OTPsPageList(props: OTPsPageProps) {
         ),
         [sources]
     );
-    const otps = useOTPs();
+    const [otps, loadingOTPs] = useOTPs();
     const preparedOTPs = usePreparedOTPs(otps);
     const handleOTPClick = useCallback((otp: OTP) => {
         if (popupSource === "page") {
             sendOTPToTabForInput(formID, otp);
         }
     }, [popupSource]);
+    if (loadingOTPs || (unlockedCount === 0 && otps.length > 0)) {
+        return (
+            <Spinner size={40} />
+        );
+    }
     if (unlockedCount === 0) {
         return (
             <InvalidState
@@ -112,21 +117,8 @@ function OTPsPageList(props: OTPsPageProps) {
 }
 
 export function OTPsPageControls(props: OTPsPageControlsProps) {
-    // const desktopState = useDesktopConnectionState();
     return (
         <>
-            {/* <Input
-                disabled={desktopState !== DesktopConnectionState.Connected}
-                onChange={evt => props.onSearchTermChange(evt.target.value)}
-                placeholder={t("popup.entries.search.placeholder")}
-                round
-                value={props.searchTerm}
-            />
-            <Button
-                disabled={desktopState !== DesktopConnectionState.Connected}
-                icon="search"
-                minimal
-            /> */}
         </>
     );
 }
