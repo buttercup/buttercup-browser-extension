@@ -6,23 +6,28 @@ export function useAsync<T extends any>(
     deps: DependencyList = []
 ): {
     error: Error | null;
+    loading: boolean;
     value: T | null;
 } {
     const mounted = useRef(false);
     const [value, setValue] = useState<T>(null);
     const [error, setError] = useState<Error>(null);
+    const [loading, setLoading] = useState<boolean | null>(null);
     const execute = useCallback(async () => {
         if (!mounted.current) return;
         setValue(null);
         setError(null);
+        setLoading((isLoading) => (isLoading === null ? true : isLoading));
         return fn()
             .then((result: T) => {
                 if (!mounted.current) return;
                 setValue(result);
+                setLoading(false);
             })
             .catch((err) => {
                 if (!mounted.current) return;
                 setError(err);
+                setLoading(false);
             });
     }, [fn]);
     useEffect(() => {
@@ -35,7 +40,11 @@ export function useAsync<T extends any>(
         if (!mounted.current) return;
         execute();
     }, [execute, ...deps]);
-    return { error, value };
+    return {
+        error,
+        loading: typeof loading === "boolean" ? loading : false,
+        value
+    };
 }
 
 export function useAsyncWithTimer<T extends any>(
@@ -44,13 +53,14 @@ export function useAsyncWithTimer<T extends any>(
     deps: DependencyList = []
 ): {
     error: Error | null;
+    loading: boolean;
     value: T | null;
 } {
     const mounted = useRef(false);
     const allTimers = useRef([]);
     const [time, setTime] = useState<number>(Date.now());
     const [timer, setTimer] = useState<ReturnType<typeof setInterval>>(null);
-    const { error, value } = useAsync(fn, [...deps, time]);
+    const { error, loading, value } = useAsync(fn, [...deps, time]);
     const [lastValue, setLastValue] = useState(value);
     useEffect(() => {
         mounted.current = true;
@@ -85,6 +95,7 @@ export function useAsyncWithTimer<T extends any>(
     }, [value]);
     return {
         error,
+        loading,
         value: lastValue
     };
 }
