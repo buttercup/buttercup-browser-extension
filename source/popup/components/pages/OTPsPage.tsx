@@ -1,14 +1,14 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import styled from "styled-components";
 import { Button, InputGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
-import { SearchResult, VaultSourceStatus } from "buttercup";
+import { VaultSourceStatus } from "buttercup";
 import { t } from "../../../shared/i18n/trans.js";
-import { useDesktopConnectionState, useEntriesForURL, useOTPs, useSearchedEntries, useVaultSources } from "../../hooks/desktop.js";
+import { useDesktopConnectionState, useOTPs, useVaultSources } from "../../hooks/desktop.js";
 import { OTPItemList } from "../otps/OTPItemList.js";
 import { LaunchContext } from "../contexts/LaunchContext.js";
-import { sendEntryResultToTabForInput } from "../../services/tab.js";
-import { DesktopConnectionState } from "../../types.js";
+import { sendOTPToTabForInput } from "../../services/tab.js";
 import { usePreparedOTPs } from "../../hooks/otp.js";
+import { DesktopConnectionState, OTP } from "../../types.js";
 
 interface OTPsPageProps {
     onConnectClick: () => Promise<void>;
@@ -78,6 +78,7 @@ export function OTPsPage(props: OTPsPageProps) {
 }
 
 function OTPsPageList(props: OTPsPageProps) {
+    const { formID, source: popupSource } = useContext(LaunchContext);
     const sources = useVaultSources();
     const unlockedCount = useMemo(
         () => sources.reduce(
@@ -88,14 +89,11 @@ function OTPsPageList(props: OTPsPageProps) {
     );
     const otps = useOTPs();
     const preparedOTPs = usePreparedOTPs(otps);
-    // const searchedEntries = useSearchedEntries(props.searchTerm);
-    // const { formID, source: popupSource, url } = useContext(LaunchContext);
-    // const urlEntries = useEntriesForURL(url);
-    // const handleEntryClick = useCallback((entry: SearchResult) => {
-    //     if (popupSource === "page") {
-    //         sendEntryResultToTabForInput(formID, entry);
-    //     }
-    // }, [popupSource]);
+    const handleOTPClick = useCallback((otp: OTP) => {
+        if (popupSource === "page") {
+            sendOTPToTabForInput(formID, otp);
+        }
+    }, [popupSource]);
     if (unlockedCount === 0) {
         return (
             <InvalidState
@@ -107,10 +105,8 @@ function OTPsPageList(props: OTPsPageProps) {
     }
     return (
         <OTPItemList
-            onOTPClick={() => {}}
+            onOTPClick={handleOTPClick}
             otps={preparedOTPs}
-            // entries={searchedEntries.length > 0 ? searchedEntries : urlEntries}
-            // onEntryClick={handleEntryClick}
         />
     );
 }

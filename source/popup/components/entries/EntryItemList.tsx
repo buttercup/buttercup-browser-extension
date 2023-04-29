@@ -21,8 +21,6 @@ const ButtonRow = styled.div`
 `;
 const ScrollList = styled.div`
     max-height: 100%;
-    // overflow-x: hidden;
-    // overflow-y: scroll;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
