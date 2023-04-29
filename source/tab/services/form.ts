@@ -6,7 +6,7 @@ import { closePopup, togglePopup } from "../ui/popup.js";
 import { waitAndAttachLaunchButtons } from "./detection.js";
 import { broadcastFrameMessage, listenForTabEvents, sendTabEvent } from "./messaging.js";
 import { findIframeForWindow } from "../library/frames.js";
-import { FrameEvent, FrameEventType, TabEventType } from "../types.js";
+import { FrameEvent, FrameEventType, InputType, TabEventType } from "../types.js";
 
 export function fillFormDetails(frameEvent: FrameEvent) {
     const { currentLoginTarget: loginTarget } = FORM;
@@ -17,7 +17,9 @@ export function fillFormDetails(frameEvent: FrameEvent) {
     if (inputDetails.password) {
         loginTarget.fillPassword(inputDetails.password);
     }
-    // @todo handle OTP
+    if (inputDetails.otp) {
+        loginTarget.fillOTP(inputDetails.otp);
+    }
     FORM.currentFormID = null;
     FORM.currentLoginTarget = null;
     closePopup();
@@ -25,18 +27,19 @@ export function fillFormDetails(frameEvent: FrameEvent) {
 
 export async function initialise() {
     // Watch for forms
-    waitAndAttachLaunchButtons((input, loginTarget) => {
+    waitAndAttachLaunchButtons((input, loginTarget, inputType) => {
         FORM.currentFormID = ulid();
         FORM.currentLoginTarget = loginTarget;
         if (FRAME.isTop) {
             FORM.targetFormID = FORM.currentFormID;
-            togglePopup(getElementRectInDocument(input));
+            togglePopup(getElementRectInDocument(input), inputType);
         } else {
             sendTabEvent(
                 {
                     type: TabEventType.OpenPopupDialog,
                     formID: FORM.currentFormID,
-                    inputPosition: getElementRectInDocument(input)
+                    inputPosition: getElementRectInDocument(input),
+                    inputType
                 },
                 window.parent
             );
@@ -51,6 +54,7 @@ export async function initialise() {
                 fillFormDetails({
                     formID: tabEvent.formID,
                     inputDetails: tabEvent.inputDetails,
+                    inputType: tabEvent.inputType,
                     type: FrameEventType.FillForm
                 });
             } else if (!FORM.currentFormID || FORM.currentFormID !== tabEvent.formID) {
@@ -58,6 +62,7 @@ export async function initialise() {
                 broadcastFrameMessage({
                     formID: tabEvent.formID,
                     inputDetails: tabEvent.inputDetails,
+                    inputType: tabEvent.inputType,
                     type: FrameEventType.FillForm
                 });
             } else {
@@ -74,7 +79,7 @@ export async function initialise() {
             // Show if top, or pass on to the next frame above
             if (FRAME.isTop) {
                 FORM.targetFormID = tabEvent.formID;
-                togglePopup(newPosition);
+                togglePopup(newPosition, tabEvent.inputType);
             } else {
                 sendTabEvent(
                     {

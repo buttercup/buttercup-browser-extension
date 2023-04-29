@@ -46,6 +46,11 @@ export interface ElementRect {
     height: number;
 }
 
+export enum InputType {
+    OTP = "otp",
+    UserPassword = "user-password"
+}
+
 export interface OTP {
     entryID: EntryID;
     entryProperty: string;
@@ -56,6 +61,13 @@ export interface OTP {
     sourceID: VaultSourceID;
 }
 
+export enum PopupPage {
+    Entries = "entries",
+    OTPs = "otps",
+    Settings = "settings",
+    Vaults = "vaults"
+}
+
 export interface TabEvent {
     formID?: string;
     inputDetails?: {
@@ -64,6 +76,7 @@ export interface TabEvent {
         username?: string;
     };
     inputPosition?: ElementRect;
+    inputType?: InputType;
     source?: MessageEventSource;
     sourceURL?: string;
     type: TabEventType;

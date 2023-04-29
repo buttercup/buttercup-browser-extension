@@ -1,3 +1,5 @@
+import { InputType } from "../shared/types.js";
+
 export * from "../shared/types.js";
 
 export interface FrameEvent {
@@ -7,6 +9,7 @@ export interface FrameEvent {
         password?: string;
         username?: string;
     };
+    inputType?: InputType;
     type: FrameEventType;
 }
 

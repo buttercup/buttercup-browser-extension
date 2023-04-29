@@ -4,7 +4,7 @@ import { BRAND_COLOUR_DARK } from "../../shared/symbols.js";
 import { getCurrentURL } from "../library/page.js";
 import { onBodyResize } from "../library/resize.js";
 import { FORM } from "../state/form.js";
-import { ElementRect } from "../types.js";
+import { ElementRect, InputType, PopupPage } from "../types.js";
 
 interface LastPopup {
     cleanup: () => void;
@@ -23,10 +23,13 @@ const POPUP_WIDTH = 320;
 
 let __popup: LastPopup | null = null;
 
-function buildNewPopup(inputRect: ElementRect) {
+function buildNewPopup(inputRect: ElementRect, forInputType: InputType) {
     const currentURL = getCurrentURL();
     const formID = FORM.targetFormID || "";
-    const popupURL = getExtensionURL(`popup.html#/dialog?page=${encodeURIComponent(currentURL)}&form=${formID}`);
+    const initialPage = forInputType === InputType.OTP ? PopupPage.OTPs : PopupPage.Entries;
+    const popupURL = getExtensionURL(
+        `popup.html#/dialog?page=${encodeURIComponent(currentURL)}&form=${formID}&initial=${initialPage}`
+    );
     const frame = el("iframe", {
         style: {
             width: "100%",
@@ -75,9 +78,9 @@ export function closePopup() {
     FORM.targetFormID = null;
 }
 
-export function togglePopup(inputRect: ElementRect) {
+export function togglePopup(inputRect: ElementRect, forInputType: InputType) {
     if (__popup === null) {
-        buildNewPopup(inputRect);
+        buildNewPopup(inputRect, forInputType);
     } else {
         // Tear down
         closePopup();
