@@ -1,4 +1,5 @@
-import { LoginTarget } from "@buttercup/locust";
+import { LoginTarget, LoginTargetFeature } from "@buttercup/locust";
+import { onNavigate } from "on-navigate";
 import { getSharedTracker } from "./LoginTracker.js";
 import { transferLoginCredentials } from "./messaging.js";
 
@@ -45,9 +46,9 @@ function watchLogin(
     onSubmit: () => void
 ) {
     target.on("valueChanged", (info) => {
-        if (info.type === "username") {
+        if (info.type === LoginTargetFeature.Username) {
             usernameUpdate(info.value);
-        } else if (info.type === "password") {
+        } else if (info.type === LoginTargetFeature.Password) {
             passwordUpdate(info.value);
         }
     });
@@ -55,5 +56,8 @@ function watchLogin(
         if (info.source === "form") {
             onSubmit();
         }
+    });
+    onNavigate(() => {
+        onSubmit();
     });
 }
