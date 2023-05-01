@@ -70,6 +70,7 @@
     "copy-webpack-plugin": "^10.2.1",
     "css-loader": "^6.5.1",
     "eventemitter3": "^4.0.0",
+    "expiry-map": "^2.0.0",
     "file-loader": "^6.0.0",
     "gle": "^1.0.3",
     "husky": "^4.2.5",

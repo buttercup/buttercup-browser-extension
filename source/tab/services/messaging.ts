@@ -1,6 +1,14 @@
+import { getExtensionAPI } from "../../shared/extension.js";
 import { FORM } from "../state/form.js";
-import { FrameEvent, FrameEventType, TabEvent, TabEventType } from "../types.js";
 import { fillFormDetails } from "./form.js";
+import {
+    BackgroundMessageType,
+    FrameEvent,
+    FrameEventType,
+    TabEvent,
+    TabEventType,
+    UsedCredentials
+} from "../types.js";
 
 let __framesChannel: BroadcastChannel;
 
@@ -44,4 +52,9 @@ export function sendTabEvent(event: TabEvent, destination: MessageEventSource): 
     } else {
         destination.postMessage(payload);
     }
+}
+
+export function transferLoginCredentials(details: UsedCredentials) {
+    const browser = getExtensionAPI();
+    browser.runtime.sendMessage({ type: BackgroundMessageType.SaveUsedCredentials, credentials: details });
 }

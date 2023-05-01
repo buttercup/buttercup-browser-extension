@@ -12,6 +12,7 @@ export interface AddVaultPayload {
 
 export interface BackgroundMessage {
     code?: string;
+    credentials?: UsedCredentials;
     searchTerm?: string;
     type: BackgroundMessageType;
     url?: string;
@@ -24,6 +25,7 @@ export enum BackgroundMessageType {
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetDesktopVaultSources = "getDesktopVaultSources",
     GetOTPs = "getOTPs",
+    SaveUsedCredentials = "saveUsedCredentials",
     SearchEntriesByTerm = "searchEntriesByTerm",
     SearchEntriesByURL = "searchEntriesByURL"
 }
@@ -86,6 +88,16 @@ export enum TabEventType {
     GetFrameID = "getFrameID",
     InputDetails = "inputDetails",
     OpenPopupDialog = "openPopupDialog"
+}
+
+export interface UsedCredentials {
+    username: string;
+    password: string;
+    id: string;
+    url: string;
+    title: string;
+    timestamp: number;
+    fromEntry: boolean;
 }
 
 export interface VaultSourceDescription {

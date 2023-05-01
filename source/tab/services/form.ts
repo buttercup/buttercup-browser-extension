@@ -3,10 +3,10 @@ import { getElementRectInDocument, recalculateRectForIframe } from "../library/p
 import { FORM } from "../state/form.js";
 import { FRAME } from "../state/frame.js";
 import { closePopup, togglePopup } from "../ui/popup.js";
-import { waitAndAttachLaunchButtons } from "./detection.js";
+import { waitAndAttachLaunchButtons } from "./formDetection.js";
 import { broadcastFrameMessage, listenForTabEvents, sendTabEvent } from "./messaging.js";
 import { findIframeForWindow } from "../library/frames.js";
-import { FrameEvent, FrameEventType, InputType, TabEventType } from "../types.js";
+import { FrameEvent, FrameEventType, TabEventType } from "../types.js";
 
 export function fillFormDetails(frameEvent: FrameEvent) {
     const { currentLoginTarget: loginTarget } = FORM;

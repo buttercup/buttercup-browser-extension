@@ -13,6 +13,7 @@ import {
 import { removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
+import { updateUsedCredentials } from "./loginMemory.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -57,6 +58,12 @@ async function handleMessage(
         }
         case BackgroundMessageType.InitiateDesktopConnection: {
             await initiateConnection();
+            sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.SaveUsedCredentials: {
+            const { credentials } = msg;
+            updateUsedCredentials(credentials, sender.tab.id);
             sendResponse({});
             break;
         }
