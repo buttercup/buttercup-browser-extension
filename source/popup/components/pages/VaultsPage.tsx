@@ -4,10 +4,6 @@ import { Button, ButtonGroup, Intent, NonIdealState, Spinner } from "@blueprintj
 import { t } from "../../../shared/i18n/trans.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
 import { useDesktopConnectionState, useVaultSources } from "../../hooks/desktop.js";
-import { clearDesktopConnectionAuth, initiateDesktopConnectionRequest } from "../../queries/desktop.js";
-import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
-import { getToaster } from "../../../shared/services/notifications.js";
-import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { DesktopConnectionState } from "../../types.js";
 
 interface VaultsPageProps {

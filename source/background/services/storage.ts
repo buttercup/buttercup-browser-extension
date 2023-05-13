@@ -1,9 +1,9 @@
 import { log } from "./log.js";
 import { BrowserStorageInterface, getNonSyncStorage, getSyncStorage } from "./storage/BrowserStorageInterface.js";
-import { LocalStorageItem } from "../types.js";
+import { LocalStorageItem, SyncStorageItem } from "../types.js";
 
 const VALID_LOCAL_KEYS = [LocalStorageItem.DesktopToken];
-const VALID_SYNC_KEYS = [];
+const VALID_SYNC_KEYS = [SyncStorageItem.Configuration];
 
 function getLocalStorage(): BrowserStorageInterface {
     return new BrowserStorageInterface(getNonSyncStorage());
@@ -11,6 +11,10 @@ function getLocalStorage(): BrowserStorageInterface {
 
 export async function getLocalValue(key: LocalStorageItem): Promise<string | null> {
     return getLocalStorage().getValue(key) ?? null;
+}
+
+export async function getSyncValue(key: SyncStorageItem): Promise<string | null> {
+    return getSynchronisedStorage().getValue(key) ?? null;
 }
 
 function getSynchronisedStorage(): BrowserStorageInterface {
@@ -46,6 +50,14 @@ export async function removeLocalValue(key: LocalStorageItem): Promise<void> {
     await getLocalStorage().removeKey(key);
 }
 
+export async function removeSyncValue(key: SyncStorageItem): Promise<void> {
+    await getSynchronisedStorage().removeKey(key);
+}
+
 export async function setLocalValue(key: LocalStorageItem, value: string): Promise<void> {
     return getLocalStorage().setValue(key, value);
+}
+
+export async function setSyncValue(key: SyncStorageItem, value: string): Promise<void> {
+    return getSynchronisedStorage().setValue(key, value);
 }

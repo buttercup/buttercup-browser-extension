@@ -2,6 +2,7 @@ import { EventEmitter } from "eventemitter3";
 import { log } from "./log.js";
 import { initialise as initialiseMessaging } from "./messaging.js";
 import { initialise as initialiseStorage } from "./storage.js";
+import { initialise as initialiseConfig } from "./config.js";
 import { initialise as initialiseI18n } from "../../shared/i18n/trans.js";
 import { getLanguage } from "../../shared/library/i18n.js";
 
@@ -20,6 +21,7 @@ export async function initialise(): Promise<void> {
     log("initialising");
     initialiseMessaging();
     await initialiseStorage();
+    await initialiseConfig();
     await initialiseI18n(getLanguage());
     log("initialisation complete");
     __initialisation = Initialisation.Complete;

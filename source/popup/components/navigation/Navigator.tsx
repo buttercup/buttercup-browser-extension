@@ -10,6 +10,7 @@ import { clearDesktopConnectionAuth, initiateDesktopConnectionRequest } from "..
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 import { PopupPage } from "../../types.js";
 import { OTPsPage } from "../pages/OTPsPage.js";
+import { SettingsPage } from "../pages/SettingsPage.js";
 
 interface NavigatorProps {
     activeTab: PopupPage;
@@ -146,7 +147,8 @@ export function Navigator(props: NavigatorProps) {
                             id={PopupPage.Settings}
                             panel={(
                                 <>
-                                    <div>Test</div>
+                                    <Divider />
+                                    <SettingsPage />
                                 </>
                             )}
                         >

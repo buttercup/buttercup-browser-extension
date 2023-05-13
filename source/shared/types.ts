@@ -12,6 +12,8 @@ export interface AddVaultPayload {
 
 export interface BackgroundMessage {
     code?: string;
+    configKey?: keyof Configuration;
+    configValue?: any;
     credentials?: UsedCredentials;
     searchTerm?: string;
     type: BackgroundMessageType;
@@ -23,15 +25,18 @@ export enum BackgroundMessageType {
     CheckDesktopConnection = "checkDesktopConnection",
     ClearDesktopAuthentication = "clearDesktopAuthentication",
     InitiateDesktopConnection = "initiateDesktopConnection",
+    GetConfiguration = "getConfiguration",
     GetDesktopVaultSources = "getDesktopVaultSources",
     GetOTPs = "getOTPs",
     SaveUsedCredentials = "saveUsedCredentials",
     SearchEntriesByTerm = "searchEntriesByTerm",
-    SearchEntriesByURL = "searchEntriesByURL"
+    SearchEntriesByURL = "searchEntriesByURL",
+    SetConfigurationValue = "setConfigurationValue"
 }
 
 export interface BackgroundResponse {
     available?: boolean;
+    config?: Configuration;
     error?: Error;
     otps?: Array<OTP>;
     searchResults?: Array<SearchResult>;
@@ -40,6 +45,13 @@ export interface BackgroundResponse {
 
 type ChildElement = ReactChild | ReactChildren | false | null;
 export type ChildElements = ChildElement | Array<ChildElement>;
+
+export interface Configuration {
+    entryIcons: boolean;
+    saveNewLogins: boolean;
+    theme: "light" | "dark";
+    useSystemTheme: boolean;
+}
 
 export interface ElementRect {
     x: number;

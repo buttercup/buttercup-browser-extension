@@ -14,6 +14,7 @@ import { removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { updateUsedCredentials } from "./loginMemory.js";
+import { getConfig, updateConfigValue } from "./config.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -40,6 +41,13 @@ async function handleMessage(
         case BackgroundMessageType.ClearDesktopAuthentication: {
             await removeLocalValue(LocalStorageItem.DesktopToken);
             sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.GetConfiguration: {
+            const config = getConfig();
+            sendResponse({
+                config
+            });
             break;
         }
         case BackgroundMessageType.GetDesktopVaultSources: {
@@ -79,6 +87,11 @@ async function handleMessage(
             sendResponse({
                 searchResults
             });
+            break;
+        }
+        case BackgroundMessageType.SetConfigurationValue: {
+            await updateConfigValue(msg.configKey, msg.configValue);
+            sendResponse({});
             break;
         }
         default:

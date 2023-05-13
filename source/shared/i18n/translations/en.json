@@ -3,6 +3,19 @@
     "attributions-page": {
         "title": "Attributions"
     },
+    "config": {
+        "section": {
+            "logins": "New Logins",
+            "privacy": "Privacy",
+            "theme": "Theme"
+        },
+        "setting": {
+            "entryIcons": "Fetch dynamic entry icons (anonymous)",
+            "saveNewLogins": "Prompt for saving new logins",
+            "theme": "Theme",
+            "useSystemTheme": "Use System Theme"
+        }
+    },
     "error": {
         "code": {
             "desktop-connection-not-authorised": "Desktop connection has not been authorised",
@@ -86,6 +99,10 @@
                 "title": "Not Connected"
             }
         }
+    },
+    "theme": {
+        "dark": "Dark",
+        "light": "Light"
     },
     "vault-state": {
         "locked": "Locked",
