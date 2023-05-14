@@ -10,6 +10,7 @@ import { APP_STATE } from "../state/app.js";
 import { ThemeProvider } from "../../shared/components/ThemeProvider.js";
 import { useBodyClass } from "../hooks/document.js";
 import { LaunchContextProvider } from "./contexts/LaunchContext.js";
+import { useBodyThemeClass, useTheme } from "../../shared/hooks/theme.js";
 import { PopupPage } from "../types.js";
 
 const ROUTER = createHashRouter([
@@ -31,8 +32,10 @@ const ROUTER = createHashRouter([
 ]);
 
 export function App() {
+    const theme = useTheme();
+    useBodyThemeClass(theme);
     return (
-        <ThemeProvider darkMode={false}>
+        <ThemeProvider darkMode={theme === "dark"}>
             <RouterProvider router={ROUTER} />
         </ThemeProvider>
     );

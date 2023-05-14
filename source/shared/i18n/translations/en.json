@@ -5,7 +5,7 @@
     },
     "config": {
         "section": {
-            "logins": "New Logins",
+            "logins": "Logins",
             "privacy": "Privacy",
             "theme": "Theme"
         },

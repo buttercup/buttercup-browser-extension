@@ -4,7 +4,7 @@ import { Callout, Classes, Switch } from "@blueprintjs/core";
 import cn from "classnames";
 import { t } from "../../../shared/i18n/trans.js";
 import { BUILD_DATE, VERSION } from "../../../shared/library/version.js";
-import { useConfig } from "../../hooks/config.js";
+import { useConfig } from "../../../shared/hooks/config.js";
 import { ErrorMessage } from "../ErrorMessage.js";
 
 interface SettingsPageProps {}
@@ -71,7 +71,7 @@ export function SettingsPage(props: SettingsPageProps) {
                             onChange={evt => setValue("theme", evt.currentTarget.checked ? "dark" : "light")}
                         />
                     </SettingSection>
-                    <SettingSection title={t("config.setting.logins")}>
+                    <SettingSection title={t("config.section.logins")}>
                         <Switch
                             checked={config.saveNewLogins}
                             label={t("config.setting.saveNewLogins")}

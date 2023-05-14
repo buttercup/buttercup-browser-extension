@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
-import { useAsync } from "../../shared/hooks/async.js";
-import { getConfig } from "../queries/config.js";
-import { setConfigValue as setNewBackgroundValue } from "../queries/config.js";
-import { Configuration } from "../types.js";
+import { useAsync } from "./async.js";
+import { getConfig } from "../../popup/queries/config.js";
+import { setConfigValue as setNewBackgroundValue } from "../../popup/queries/config.js";
+import { Configuration } from "../../popup/types.js";
 
 export function useConfig(): [
     Configuration | null,
