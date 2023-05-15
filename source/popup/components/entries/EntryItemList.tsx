@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { SearchResult } from "buttercup";
 import { Divider} from "@blueprintjs/core";
 import { EntryItem } from "./EntryItem.js";
+import { useConfig } from "../../../shared/hooks/config.js";
 
 interface EntryItemListProps {
     entries: Array<SearchResult>;
@@ -28,85 +29,7 @@ const ScrollList = styled.div`
 `;
 
 export function EntryItemList(props: EntryItemListProps) {
-    // const [unlockVault, setUnlockVault] = useState<VaultSourceDescription>(null);
-    // const [removeVault, setRemoveVault] = useState<VaultSourceDescription>(null);
-    // const [vaultPassword, setVaultPassword] = useState<string>("");
-    // const [workAlert, setWorkAlert] = useState<{ title: string; description: string; }>(null);
-    // const handleDialogClose = useCallback(() => {
-    //     setVaultPassword("");
-    //     setUnlockVault(null);
-    //     setRemoveVault(null);
-    // }, []);
-    // const handleVaultUnlockClick = useCallback((vault: VaultSourceDescription) => {
-    //     setUnlockVault(vault);
-    // }, []);
-    // const handleVaultUnlock = useCallback(() => {
-    //     if (vaultPassword.trim().length <= 0) {
-    //         getToaster().show({
-    //             intent: Intent.WARNING,
-    //             message: t("popup.vault.unlocking.invalid-password"),
-    //             timeout: 5000
-    //         });
-    //         return;
-    //     }
-    //     setWorkAlert({
-    //         title: t("popup.vault.unlocking.title"),
-    //         description: t("popup.vault.unlocking.description")
-    //     });
-    //     unlockSource(unlockVault.id)
-    //         .then(() => {
-    //             getToaster().show({
-    //                 intent: Intent.SUCCESS,
-    //                 message: t("popup.vault.unlocking.success", { vault: unlockVault.name }),
-    //                 timeout: 4000
-    //             });
-    //             handleDialogClose();
-    //             setWorkAlert(null);
-    //         })
-    //         .catch(err => {
-    //             console.error(err);
-    //             setWorkAlert(null);
-    //             getToaster().show({
-    //                 intent: Intent.DANGER,
-    //                 message: t("popup.vault.unlocking.error", { message: localisedErrorMessage(err) }),
-    //                 timeout: 10000
-    //             });
-    //         });
-    // }, [handleDialogClose, unlockVault, vaultPassword]);
-    // const handleVaultRemoveClick = useCallback((vault: VaultSourceDescription) => {
-    //     setRemoveVault(vault);
-    // }, []);
-    // const handleVaultRemove = useCallback(() => {
-    //     setWorkAlert({
-    //         title: t("popup.vault.removing.title"),
-    //         description: t("popup.vault.removing.description")
-    //     });
-    //     const vaultName = removeVault.name;
-    //     removeSource(removeVault.id)
-    //         .then(() => {
-    //             getToaster().show({
-    //                 intent: Intent.SUCCESS,
-    //                 message: t("popup.vault.removing.success", { vault: vaultName }),
-    //                 timeout: 4000
-    //             });
-    //             handleDialogClose();
-    //             setWorkAlert(null);
-    //         })
-    //         .catch(err => {
-    //             console.error(err);
-    //             setWorkAlert(null);
-    //             getToaster().show({
-    //                 intent: Intent.DANGER,
-    //                 message: t("popup.vault.removing.error", { message: err.message }),
-    //                 timeout: 10000
-    //             });
-    //         });
-    // }, [handleDialogClose, removeVault]);
-    // const handleUnlockKeyPress = useCallback((event: KeyboardEvent) => {
-    //     if (event.key === "Enter" && !event.ctrlKey && !event.shiftKey) {
-    //         handleVaultUnlock();
-    //     }
-    // }, [handleVaultUnlock]);
+    const [config] = useConfig();
     return (
         <>
             <ScrollList>
@@ -114,11 +37,8 @@ export function EntryItemList(props: EntryItemListProps) {
                     <Fragment key={entry.id}>
                         <EntryItem
                             entry={entry}
+                            fetchIcons={config.entryIcons}
                             onClick={() => props.onEntryClick(entry)}
-                            // isDetailsVisible={false}
-                            // onRemoveClick={() => handleVaultRemoveClick(vault)}
-                            // onUnlockClick={() => handleVaultUnlockClick(vault)}
-                            // vault={vault}
                         />
                         <Divider />
                     </Fragment>

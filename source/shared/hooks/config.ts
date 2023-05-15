@@ -11,7 +11,9 @@ export function useConfig(): [
     <T extends keyof Configuration>(setKey: T, value: Configuration[T]) => void
 ] {
     const [ts, setTs] = useGlobal("configFlagTs");
-    const { value, error } = useAsync(getConfig, [ts]);
+    const { value, error } = useAsync(getConfig, [ts], {
+        clearOnExec: false
+    });
     const [changeError, setChangeError] = useState<Error>(null);
     const setConfigValue = useCallback(<T extends keyof Configuration>(setKey: T, value: Configuration[T]) => {
         setChangeError(null);

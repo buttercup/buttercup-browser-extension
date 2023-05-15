@@ -8,11 +8,8 @@ import { extractDomain } from "../../../shared/library/domain.js";
 
 interface EntryItemProps {
     entry: SearchResult;
+    fetchIcons: boolean;
     onClick: () => void;
-    // isDetailsVisible: boolean;
-    // onRemoveClick: () => void;
-    // onUnlockClick: () => void;
-    // vault: VaultSourceDescription;
 }
 
 const CenteredText = styled(Text)`
@@ -63,42 +60,29 @@ const EntryRow = styled.div`
 export function EntryItem(props: EntryItemProps) {
     const {
         entry,
+        fetchIcons,
         onClick
-        // isDetailsVisible,
-        // onRemoveClick,
-        // onUnlockClick,
-        // vault
     } = props;
     const entryDomain = useMemo(() => {
+        if (!fetchIcons) {
+            return null;
+        }
         const [url] = [
             ...getEntryURLs(entry.properties, EntryURLType.Icon),
             ...getEntryURLs(entry.properties, EntryURLType.Any)
         ];
         return url ? extractDomain(url) : null;
-    }, [entry]);
+    }, [entry, fetchIcons]);
     const handleEntryClick = useCallback(() => {
         onClick();
     }, [onClick]);
-    // const vaultImage = VAULT_TYPES[vault.type].image;
-    // const handleVaultClick = useCallback(() => {
-    //     // @todo
-    // }, [vault]);
-    // const handleLockUnlockClick = useCallback(() => {
-    //     if (vault.state === VaultSourceStatus.Locked) {
-    //         onUnlockClick();
-    //     } else if (vault.state === VaultSourceStatus.Unlocked) {
-    //         // @todo
-    //     }
-    // }, [vault, onUnlockClick]);
-    // const handleRemoveClick = useCallback(() => {
-    //     onRemoveClick();
-    // }, [vault, onRemoveClick]);
     return (
         <Container isActive={false} onClick={handleEntryClick}>
             <EntryRow>
                 <EntryIconBackground>
                     <EntryIcon
                         domain={entryDomain}
+                        type={entry.entryType}
                     />
                 </EntryIconBackground>
                 <DetailRow onClick={() => {}}>

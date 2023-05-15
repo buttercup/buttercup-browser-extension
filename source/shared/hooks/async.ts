@@ -3,7 +3,8 @@ import type { DependencyList } from "react";
 
 export function useAsync<T extends any>(
     fn: () => Promise<T>,
-    deps: DependencyList = []
+    deps: DependencyList = [],
+    { clearOnExec = true }: { clearOnExec?: boolean } = {}
 ): {
     error: Error | null;
     loading: boolean;
@@ -15,7 +16,7 @@ export function useAsync<T extends any>(
     const [loading, setLoading] = useState<boolean | null>(null);
     const execute = useCallback(async () => {
         if (!mounted.current) return;
-        setValue(null);
+        if (clearOnExec) setValue(null);
         setError(null);
         setLoading((isLoading) => (isLoading === null ? true : isLoading));
         return fn()
