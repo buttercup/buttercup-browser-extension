@@ -1,12 +1,16 @@
 import { Layerr } from "layerr";
-import { SearchResult } from "buttercup";
+import { SearchResult, VaultSourceID } from "buttercup";
 import { getLocalValue } from "../storage.js";
 import { sendDesktopRequest } from "./request.js";
 import { LocalStorageItem, OTP, VaultSourceDescription } from "../../types.js";
 
 export async function authenticateBrowserAccess(code: string): Promise<string> {
-    const { token } = (await sendDesktopRequest("POST", "/v1/auth/response", {
-        code
+    const { token } = (await sendDesktopRequest({
+        method: "POST",
+        route: "/v1/auth/response",
+        payload: {
+            code
+        }
     })) as { token: string };
     if (!token) {
         throw new Layerr("No token received from browser authentication");
@@ -26,7 +30,11 @@ export async function getOTPs(): Promise<Array<OTP>> {
             "Desktop connection not authorised"
         );
     }
-    const { otps } = (await sendDesktopRequest("GET", "/v1/otps", null, authToken)) as {
+    const { otps } = (await sendDesktopRequest({
+        method: "GET",
+        route: "/v1/otps",
+        auth: authToken
+    })) as {
         otps: Array<OTP>;
     };
     return otps;
@@ -44,7 +52,11 @@ export async function getVaultSources(): Promise<Array<VaultSourceDescription>> 
             "Desktop connection not authorised"
         );
     }
-    const { sources } = (await sendDesktopRequest("GET", "/v1/vaults", null, authToken)) as {
+    const { sources } = (await sendDesktopRequest({
+        method: "GET",
+        route: "/v1/vaults",
+        auth: authToken
+    })) as {
         sources: Array<VaultSourceDescription>;
     };
     return sources;
@@ -56,10 +68,54 @@ export async function hasConnection(): Promise<boolean> {
 }
 
 export async function initiateConnection(): Promise<void> {
-    await sendDesktopRequest("POST", "/v1/auth/request", {
-        client: "browser",
-        purpose: "vaults-access",
-        rev: 1
+    await sendDesktopRequest({
+        method: "POST",
+        route: "/v1/auth/request",
+        payload: {
+            client: "browser",
+            purpose: "vaults-access",
+            rev: 1
+        }
+    });
+}
+
+export async function promptSourceLock(sourceID: VaultSourceID): Promise<boolean> {
+    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
+    if (!authToken) {
+        throw new Layerr(
+            {
+                info: {
+                    i18n: "error.code.desktop-connection-not-authorised"
+                }
+            },
+            "Desktop connection not authorised"
+        );
+    }
+    const status = await sendDesktopRequest({
+        method: "POST",
+        route: `/v1/vaults/${sourceID}/lock`,
+        auth: authToken,
+        output: "status"
+    });
+    return status === 200;
+}
+
+export async function promptSourceUnlock(sourceID: VaultSourceID): Promise<void> {
+    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
+    if (!authToken) {
+        throw new Layerr(
+            {
+                info: {
+                    i18n: "error.code.desktop-connection-not-authorised"
+                }
+            },
+            "Desktop connection not authorised"
+        );
+    }
+    await sendDesktopRequest({
+        method: "POST",
+        route: `/v1/vaults/${sourceID}/unlock`,
+        auth: authToken
     });
 }
 
@@ -75,15 +131,15 @@ export async function searchEntriesByURL(url: string): Promise<Array<SearchResul
             "Desktop connection not authorised"
         );
     }
-    const { results } = (await sendDesktopRequest(
-        "GET",
-        "/v1/entries",
-        {
+    const { results } = (await sendDesktopRequest({
+        method: "GET",
+        route: "/v1/entries",
+        payload: {
             type: "url",
             url
         },
-        authToken
-    )) as {
+        auth: authToken
+    })) as {
         results: Array<SearchResult>;
     };
     return results;
@@ -101,15 +157,15 @@ export async function searchEntriesByTerm(term: string): Promise<Array<SearchRes
             "Desktop connection not authorised"
         );
     }
-    const { results } = (await sendDesktopRequest(
-        "GET",
-        "/v1/entries",
-        {
+    const { results } = (await sendDesktopRequest({
+        method: "GET",
+        route: "/v1/entries",
+        payload: {
             type: "term",
             term
         },
-        authToken
-    )) as {
+        auth: authToken
+    })) as {
         results: Array<SearchResult>;
     };
     return results;
@@ -128,16 +184,16 @@ export async function testAuth(): Promise<void> {
         );
     }
     try {
-        await sendDesktopRequest(
-            "POST",
-            "/v1/auth/test",
-            {
+        await sendDesktopRequest({
+            method: "POST",
+            route: "/v1/auth/test",
+            payload: {
                 client: "browser",
                 purpose: "vaults-access",
                 rev: 1
             },
-            authToken
-        );
+            auth: authToken
+        });
     } catch (err) {
         console.error(err);
         throw new Layerr(err, "Desktop connection failed");

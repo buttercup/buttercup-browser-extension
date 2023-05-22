@@ -16,6 +16,7 @@ export interface BackgroundMessage {
     configValue?: any;
     credentials?: UsedCredentials;
     searchTerm?: string;
+    sourceID?: VaultSourceID;
     type: BackgroundMessageType;
     url?: string;
 }
@@ -28,6 +29,8 @@ export enum BackgroundMessageType {
     GetConfiguration = "getConfiguration",
     GetDesktopVaultSources = "getDesktopVaultSources",
     GetOTPs = "getOTPs",
+    PromptLockSource = "promptLockSource",
+    PromptUnlockSource = "promptUnlockSource",
     SaveUsedCredentials = "saveUsedCredentials",
     SearchEntriesByTerm = "searchEntriesByTerm",
     SearchEntriesByURL = "searchEntriesByURL",
@@ -38,6 +41,7 @@ export interface BackgroundResponse {
     available?: boolean;
     config?: Configuration;
     error?: Error;
+    locked?: boolean;
     otps?: Array<OTP>;
     searchResults?: Array<SearchResult>;
     vaultSources?: Array<VaultSourceDescription>;

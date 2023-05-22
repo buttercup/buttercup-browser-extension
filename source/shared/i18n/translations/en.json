@@ -53,13 +53,16 @@
             "reauth-error": "Failed re-authenticating: {{message}}"
         },
         "entries": {
-            
             "search": {
                 "placeholder": "Search..."
             }
         },
         "vault": {
             "lock": "Lock vault",
+            "locking": {
+                "error": "Failed locking vault: {{message}}",
+                "success": "Locked vault: {{vault}}"
+            },
             "remove": "Remove vault",
             "remove-dialog": {
                 "cancel-button": "Cancel",
@@ -82,7 +85,7 @@
             },
             "unlocking": {
                 "description": "Vault is being unlocked...",
-                "error": "Failed unlocking: {{message}}",
+                "error": "Failed unlocking vault: {{message}}",
                 "invalid-password": "Password is invalid",
                 "success": "Successfully unlocked: {{vault}}",
                 "title": "Unlocking"

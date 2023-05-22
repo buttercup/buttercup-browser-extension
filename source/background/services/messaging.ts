@@ -6,15 +6,17 @@ import {
     getVaultSources,
     hasConnection,
     initiateConnection,
+    promptSourceLock,
+    promptSourceUnlock,
     searchEntriesByTerm,
     searchEntriesByURL,
     testAuth
 } from "./desktop/connection.js";
 import { removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
-import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { updateUsedCredentials } from "./loginMemory.js";
 import { getConfig, updateConfigValue } from "./config.js";
+import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -66,6 +68,20 @@ async function handleMessage(
         }
         case BackgroundMessageType.InitiateDesktopConnection: {
             await initiateConnection();
+            sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.PromptLockSource: {
+            const { sourceID } = msg;
+            const locked = await promptSourceLock(sourceID);
+            sendResponse({
+                locked
+            });
+            break;
+        }
+        case BackgroundMessageType.PromptUnlockSource: {
+            const { sourceID } = msg;
+            await promptSourceUnlock(sourceID);
             sendResponse({});
             break;
         }

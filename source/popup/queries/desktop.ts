@@ -1,7 +1,7 @@
-import { SearchResult } from "buttercup";
+import { SearchResult, VaultSourceID } from "buttercup";
 import { Layerr } from "layerr";
 import { sendBackgroundMessage } from "../services/messaging.js";
-import { BackgroundMessageType, Configuration, OTP, VaultSourceDescription } from "../types.js";
+import { BackgroundMessageType, OTP, VaultSourceDescription } from "../types.js";
 
 export async function clearDesktopConnectionAuth(): Promise<void> {
     const resp = await sendBackgroundMessage({
@@ -48,6 +48,27 @@ export async function initiateDesktopConnectionRequest(): Promise<void> {
     });
     if (resp.error) {
         throw new Layerr(resp.error, "Failed initiating desktop connection");
+    }
+}
+
+export async function promptLockVault(sourceID: VaultSourceID): Promise<boolean> {
+    const resp = await sendBackgroundMessage({
+        sourceID,
+        type: BackgroundMessageType.PromptLockSource
+    });
+    if (resp.error) {
+        throw new Layerr(resp.error, "Failed locking vault");
+    }
+    return !!resp.locked;
+}
+
+export async function promptUnlockVault(sourceID: VaultSourceID): Promise<void> {
+    const resp = await sendBackgroundMessage({
+        sourceID,
+        type: BackgroundMessageType.PromptUnlockSource
+    });
+    if (resp.error) {
+        throw new Layerr(resp.error, "Failed prompting vault unlock");
     }
 }
 
