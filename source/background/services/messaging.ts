@@ -16,6 +16,7 @@ import { removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
 import { updateUsedCredentials } from "./loginMemory.js";
 import { getConfig, updateConfigValue } from "./config.js";
+import { getDisabledDomains } from "./disabledDomains.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 
 async function handleMessage(
@@ -56,6 +57,13 @@ async function handleMessage(
             const sources = await getVaultSources();
             sendResponse({
                 vaultSources: sources
+            });
+            break;
+        }
+        case BackgroundMessageType.GetDisabledDomains: {
+            const domains = await getDisabledDomains();
+            sendResponse({
+                domains
             });
             break;
         }

@@ -1,5 +1,5 @@
-import { Configuration, SyncStorageItem } from "../types.js";
 import { getSyncValue, setSyncValue } from "./storage.js";
+import { Configuration, SyncStorageItem } from "../types.js";
 
 const DEFAULTS: Configuration = {
     entryIcons: true,

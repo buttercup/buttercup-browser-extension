@@ -5,5 +5,6 @@ export enum LocalStorageItem {
 }
 
 export enum SyncStorageItem {
-    Configuration = "bcup:configuration"
+    Configuration = "bcup:configuration",
+    DisabledDomains = "bcup:disabledDomains"
 }
