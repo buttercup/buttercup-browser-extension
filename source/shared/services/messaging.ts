@@ -1,7 +1,7 @@
-import { getExtensionAPI } from "../../shared/extension.js";
-import { stringToError } from "../../shared/library/error.js";
-import { MESSAGE_DEFAULT_TIMEOUT } from "../../shared/symbols.js";
-import { BackgroundMessage, BackgroundResponse } from "../types.js";
+import { getExtensionAPI } from "../extension.js";
+import { stringToError } from "../library/error.js";
+import { MESSAGE_DEFAULT_TIMEOUT } from "../symbols.js";
+import { BackgroundMessage, BackgroundResponse } from "../../popup/types.js";
 
 export async function sendBackgroundMessage(
     msg: BackgroundMessage,

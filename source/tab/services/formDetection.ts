@@ -1,6 +1,6 @@
 import { LoginTarget, getLoginTargets } from "@buttercup/locust";
 import { attachLaunchButton } from "../ui/launch.js";
-import { watchCredentialsOnTarget } from "./credentialsWatcher.js";
+import { watchCredentialsOnTarget } from "./logins/watcher.js";
 import { InputType } from "../types.js";
 
 const TARGET_SEARCH_INTERVAL = 1000;

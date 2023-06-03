@@ -1,5 +1,5 @@
 import { Layerr } from "layerr";
-import { sendBackgroundMessage } from "../../popup/services/messaging.js";
+import { sendBackgroundMessage } from "../services/messaging.js";
 import { BackgroundMessageType, Configuration } from "../../popup/types.js";
 
 export async function getConfig(): Promise<Configuration> {

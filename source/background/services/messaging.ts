@@ -14,9 +14,10 @@ import {
 } from "./desktop/connection.js";
 import { removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
-import { updateUsedCredentials } from "./loginMemory.js";
+import { getAllCredentials, getCredentialsForID, updateUsedCredentials } from "./loginMemory.js";
 import { getConfig, updateConfigValue } from "./config.js";
 import { getDisabledDomains } from "./disabledDomains.js";
+import { log } from "./log.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 
 async function handleMessage(
@@ -26,6 +27,7 @@ async function handleMessage(
 ) {
     switch (msg.type) {
         case BackgroundMessageType.AuthenticateDesktopConnection: {
+            log("complete desktop authentication");
             const token = await authenticateBrowserAccess(msg.code);
             await setLocalValue(LocalStorageItem.DesktopToken, token);
             sendResponse({});
@@ -42,6 +44,7 @@ async function handleMessage(
             break;
         }
         case BackgroundMessageType.ClearDesktopAuthentication: {
+            log("clear desktop authentication");
             await removeLocalValue(LocalStorageItem.DesktopToken);
             sendResponse({});
             break;
@@ -74,13 +77,29 @@ async function handleMessage(
             });
             break;
         }
+        case BackgroundMessageType.GetSavedCredentials: {
+            const credentials = getAllCredentials();
+            sendResponse({
+                credentials
+            });
+            break;
+        }
+        case BackgroundMessageType.GetSavedCredentialsForID: {
+            const credentials = getCredentialsForID(msg.credentialsID);
+            sendResponse({
+                credentials: [credentials]
+            });
+            break;
+        }
         case BackgroundMessageType.InitiateDesktopConnection: {
+            log("start desktop authentication");
             await initiateConnection();
             sendResponse({});
             break;
         }
         case BackgroundMessageType.PromptLockSource: {
             const { sourceID } = msg;
+            log(`request lock source: ${sourceID}`);
             const locked = await promptSourceLock(sourceID);
             sendResponse({
                 locked
@@ -89,6 +108,7 @@ async function handleMessage(
         }
         case BackgroundMessageType.PromptUnlockSource: {
             const { sourceID } = msg;
+            log(`request unlock source: ${sourceID}`);
             await promptSourceUnlock(sourceID);
             sendResponse({});
             break;

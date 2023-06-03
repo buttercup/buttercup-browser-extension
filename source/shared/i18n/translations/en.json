@@ -29,15 +29,13 @@
         },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"
     },
-    "full": {
-        "connect": {
-            "auth-error": "Failed authenticating: {{message}}",
-            "auth-success": "Successfully connected",
-            "code-plc": "Code...",
-            "description": "Connect the Buttercup extension to the Buttercup Desktop application so you can use your vaults and entries to easily access your web-based accounts.",
-            "instruction": "The desktop application should have appeared. If it hasn't, please close this page and try again. You must have opened the desktop application before trying. Wait for an authorisation code to appear in the desktop application, and then enter it here:",
-            "title": "Connect desktop application"
-        }
+    "connect-page": {
+        "auth-error": "Failed authenticating: {{message}}",
+        "auth-success": "Successfully connected",
+        "code-plc": "Code...",
+        "description": "Connect the Buttercup extension to the Buttercup Desktop application so you can use your vaults and entries to easily access your web-based accounts.",
+        "instruction": "The desktop application should have appeared. If it hasn't, please close this page and try again. You must have opened the desktop application before trying. Wait for an authorisation code to appear in the desktop application, and then enter it here:",
+        "title": "Connect desktop application"
     },
     "popup": {
         "all-locked": {
@@ -102,6 +100,13 @@
                 "title": "Not Connected"
             }
         }
+    },
+    "save-credentials-page": {
+        "description": "Save detected login details to a connected vault. Make sure to first unlock the vault you wish to save to in the desktop application.",
+        "detected-logins": {
+            "heading": "Detected Logins"
+        },
+        "title": "Save Logins"
     },
     "theme": {
         "dark": "Dark",

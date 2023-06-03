@@ -11,15 +11,21 @@ const LOGIN_MAX_AGE = 15 * 60 * 1000; // 15 min
 
 let __loginMemory: ExpiryMap<string, LoginMemoryItem> | null = null;
 
+export function getAllCredentials(): Array<UsedCredentials> {
+    const memory = getLoginMemory();
+    return [...memory.values()].map((item) => item.credentials);
+}
+
+export function getCredentialsForID(id: string): UsedCredentials | null {
+    const memory = getLoginMemory();
+    return memory.has(id) ? memory.get(id).credentials : null;
+}
+
 function getLoginMemory(): ExpiryMap<string, LoginMemoryItem> {
     if (!__loginMemory) {
         __loginMemory = new ExpiryMap(LOGIN_MAX_AGE);
     }
     return __loginMemory;
-}
-
-export function getUsedCredentials(): Array<UsedCredentials> {
-    return [...getLoginMemory().values()].map((item) => item.credentials);
 }
 
 export function stopPromptForTab(tabID: number): void {

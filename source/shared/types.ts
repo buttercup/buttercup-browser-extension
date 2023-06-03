@@ -15,6 +15,7 @@ export interface BackgroundMessage {
     configKey?: keyof Configuration;
     configValue?: any;
     credentials?: UsedCredentials;
+    credentialsID?: string;
     searchTerm?: string;
     sourceID?: VaultSourceID;
     type: BackgroundMessageType;
@@ -28,7 +29,10 @@ export enum BackgroundMessageType {
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetConfiguration = "getConfiguration",
     GetDesktopVaultSources = "getDesktopVaultSources",
+    GetDisabledDomains = "getDisabledDomains",
     GetOTPs = "getOTPs",
+    GetSavedCredentials = "getCredentials",
+    GetSavedCredentialsForID = "getCredentialsForID",
     PromptLockSource = "promptLockSource",
     PromptUnlockSource = "promptUnlockSource",
     SaveUsedCredentials = "saveUsedCredentials",
@@ -40,6 +44,8 @@ export enum BackgroundMessageType {
 export interface BackgroundResponse {
     available?: boolean;
     config?: Configuration;
+    credentials?: Array<UsedCredentials>;
+    domains?: Array<string>;
     error?: Error;
     locked?: boolean;
     otps?: Array<OTP>;
@@ -107,13 +113,13 @@ export enum TabEventType {
 }
 
 export interface UsedCredentials {
-    username: string;
-    password: string;
-    id: string;
-    url: string;
-    title: string;
-    timestamp: number;
     fromEntry: boolean;
+    id: string;
+    password: string;
+    timestamp: number;
+    title: string;
+    url: string;
+    username: string;
 }
 
 export interface VaultSourceDescription {

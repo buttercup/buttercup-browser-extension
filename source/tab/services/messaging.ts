@@ -1,4 +1,3 @@
-import { getExtensionAPI } from "../../shared/extension.js";
 import { FORM } from "../state/form.js";
 import { fillFormDetails } from "./form.js";
 import {
@@ -52,9 +51,4 @@ export function sendTabEvent(event: TabEvent, destination: MessageEventSource): 
     } else {
         destination.postMessage(payload);
     }
-}
-
-export function transferLoginCredentials(details: UsedCredentials) {
-    const browser = getExtensionAPI();
-    browser.runtime.sendMessage({ type: BackgroundMessageType.SaveUsedCredentials, credentials: details });
 }

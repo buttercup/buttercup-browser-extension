@@ -35,7 +35,7 @@ export function CodeInput(props: CodeInputProps) {
                     large
                     onChange={evt => props.onChange(evt.target.value)}
                     onKeyDown={handleKeyPress}
-                    placeholder={t("full.connect.code-plc")}
+                    placeholder={t("connect-page.code-plc")}
                     type="password"
                     value={props.value}
                 />

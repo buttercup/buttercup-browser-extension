@@ -1,6 +1,6 @@
 import { SearchResult, VaultSourceID } from "buttercup";
 import { Layerr } from "layerr";
-import { sendBackgroundMessage } from "../services/messaging.js";
+import { sendBackgroundMessage } from "../../shared/services/messaging.js";
 import { BackgroundMessageType, OTP, VaultSourceDescription } from "../types.js";
 
 export async function clearDesktopConnectionAuth(): Promise<void> {
