@@ -1,16 +1,20 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
-import { useCapturedCredentials } from "../../../hooks/credentials.js";
 import { Card, Elevation } from "@blueprintjs/core";
+import { SiteIcon } from "@buttercup/ui";
+import { EntryType } from "buttercup";
+import { useCapturedCredentials } from "../../../hooks/credentials.js";
+import { extractDomain } from "../../../../shared/library/domain.js";
 import { UsedCredentials } from "../../../types.js";
 
 interface CredentialsSelectorProps {
-    onSelect: (itemID: string) => void;
+    onSelect: (id: string) => void;
     selected: string | null;
 }
 
 const Credential = styled.h5`
     margin: 0;
+    ${p => p.monospace ? "font-family: monospace;" : ""}
 
     &:not(:last-child) {
         margin-bottom: 4px;
@@ -20,12 +24,20 @@ const CredentialsCard = styled(Card)`
     min-width: 280px;
     padding: 10px;
 
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
     &:not(:last-child) {
         margin-right: 8px;
     }
 `;
 const CredentialsHeading = styled.h4`
     margin: 0 0 5px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
 `;
 const HorizontalScroller = styled.div`
     width: 100%;
@@ -37,6 +49,16 @@ const HorizontalScroller = styled.div`
     align-items: stretch;
     padding: 12px;
 `;
+const CredentialsIcon = styled(SiteIcon)`
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
+
+    > img {
+        width: 100%;
+        height: 100%;
+    }
+`;
 const URL = styled.span`
     font-size: 12px;
 `;
@@ -47,17 +69,28 @@ export function CredentialsSelector(props: CredentialsSelectorProps) {
     const handleItemClick = useCallback((credential: UsedCredentials) => {
         onSelect(credential.id);
     }, [onSelect]);
+    const credentialDomains = useMemo(
+        () => credentials.map(cred => extractDomain(cred.url)),
+        [credentials]
+    );
     return (
         <HorizontalScroller>
-            {credentials.map(cred => (
+            {credentials.map((cred, ind) => (
                 <CredentialsCard
-                    interactive={selected !== cred.id}
-                    elevation={selected === cred.id ? Elevation.ZERO : Elevation.THREE}
+                    key={cred.id}
+                    interactive={cred.id !== selected}
+                    elevation={cred.id === selected ? Elevation.ZERO : Elevation.THREE}
                     onClick={() => handleItemClick(cred)}
                 >
-                    <CredentialsHeading>{cred.title}</CredentialsHeading>
-                    <Credential>{cred.username}</Credential>
-                    <Credential><code>*********</code></Credential>
+                    <CredentialsHeading>
+                        <CredentialsIcon
+                            domain={credentialDomains[ind]}
+                            type={EntryType.Website}
+                        />
+                        <span>{cred.title}</span>
+                    </CredentialsHeading>
+                    <Credential monospace>{cred.username}</Credential>
+                    <Credential monospace><code>*********</code></Credential>
                     <URL>{cred.url}</URL>
                 </CredentialsCard>
             ))}

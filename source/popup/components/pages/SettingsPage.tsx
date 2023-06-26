@@ -47,7 +47,7 @@ export function SettingsPage(props: SettingsPageProps) {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Buttercup</td>
+                                    <td>Version</td>
                                     <td>{VERSION}</td>
                                 </tr>
                                 <tr>

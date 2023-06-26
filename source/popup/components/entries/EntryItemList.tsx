@@ -30,6 +30,7 @@ const ScrollList = styled.div`
 
 export function EntryItemList(props: EntryItemListProps) {
     const [config] = useConfig();
+    if (!config) return null;
     return (
         <>
             <ScrollList>

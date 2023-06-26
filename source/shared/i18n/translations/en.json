@@ -102,6 +102,9 @@
         }
     },
     "save-credentials-page": {
+        "credentials-saver": {
+            "heading": "Save Login"
+        },
         "description": "Save detected login details to a connected vault. Make sure to first unlock the vault you wish to save to in the desktop application.",
         "detected-logins": {
             "heading": "Detected Logins"
