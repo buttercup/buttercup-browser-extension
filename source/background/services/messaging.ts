@@ -4,6 +4,7 @@ import {
     authenticateBrowserAccess,
     getOTPs,
     getVaultSources,
+    getVaultsTree,
     hasConnection,
     initiateConnection,
     promptSourceLock,
@@ -11,7 +12,7 @@ import {
     searchEntriesByTerm,
     searchEntriesByURL,
     testAuth
-} from "./desktop/connection.js";
+} from "./desktop/actions.js";
 import { removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
 import { getAllCredentials, getCredentialsForID, updateUsedCredentials } from "./loginMemory.js";
@@ -60,6 +61,13 @@ async function handleMessage(
             const sources = await getVaultSources();
             sendResponse({
                 vaultSources: sources
+            });
+            break;
+        }
+        case BackgroundMessageType.GetDesktopVaultsTree: {
+            const tree = await getVaultsTree();
+            sendResponse({
+                vaultsTree: tree
             });
             break;
         }

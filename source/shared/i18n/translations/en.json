@@ -16,6 +16,14 @@
             "useSystemTheme": "Use System Theme"
         }
     },
+    "connect-page": {
+        "auth-error": "Failed authenticating: {{message}}",
+        "auth-success": "Successfully connected",
+        "code-plc": "Code...",
+        "description": "Connect the Buttercup extension to the Buttercup Desktop application so you can use your vaults and entries to easily access your web-based accounts.",
+        "instruction": "The desktop application should have appeared. If it hasn't, please close this page and try again. You must have opened the desktop application before trying. Wait for an authorisation code to appear in the desktop application, and then enter it here:",
+        "title": "Connect desktop application"
+    },
     "error": {
         "code": {
             "desktop-connection-not-authorised": "Desktop connection has not been authorised",
@@ -29,13 +37,8 @@
         },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"
     },
-    "connect-page": {
-        "auth-error": "Failed authenticating: {{message}}",
-        "auth-success": "Successfully connected",
-        "code-plc": "Code...",
-        "description": "Connect the Buttercup extension to the Buttercup Desktop application so you can use your vaults and entries to easily access your web-based accounts.",
-        "instruction": "The desktop application should have appeared. If it hasn't, please close this page and try again. You must have opened the desktop application before trying. Wait for an authorisation code to appear in the desktop application, and then enter it here:",
-        "title": "Connect desktop application"
+    "form": {
+        "required": "(required)"
     },
     "popup": {
         "all-locked": {
@@ -103,7 +106,34 @@
     },
     "save-credentials-page": {
         "credentials-saver": {
-            "heading": "Save Login"
+            "create-new": {
+                "heading": "New Entry Details",
+                "label": {
+                    "password": "Password",
+                    "title": "Title",
+                    "url": "URL",
+                    "username": "Username"
+                },
+                "loader": {
+                    "description": "Fetching vaults and their contents...",
+                    "title": "Vaults"
+                },
+                "password": {
+                    "hide": "Hide password",
+                    "show": "Show password"
+                },
+                "placeholder": {
+                    "title": "New entry title",
+                    "url": "New entry URL",
+                    "username": "New entry username"
+                },
+                "save": "Save New Entry",
+                "tab": "Create New Entry"
+            },
+            "heading": "Save Login",
+            "update-existing": {
+                "tab": "Update Existing Entry"
+            }
         },
         "description": "Save detected login details to a connected vault. Make sure to first unlock the vault you wish to save to in the desktop application.",
         "detected-logins": {

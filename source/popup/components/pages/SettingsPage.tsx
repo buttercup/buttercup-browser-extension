@@ -5,7 +5,7 @@ import cn from "classnames";
 import { t } from "../../../shared/i18n/trans.js";
 import { BUILD_DATE, VERSION } from "../../../shared/library/version.js";
 import { useConfig } from "../../../shared/hooks/config.js";
-import { ErrorMessage } from "../ErrorMessage.js";
+import { ErrorMessage } from "../../../shared/components/ErrorMessage.js";
 
 interface SettingsPageProps {}
 

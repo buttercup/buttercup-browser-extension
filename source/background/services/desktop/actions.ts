@@ -2,7 +2,7 @@ import { Layerr } from "layerr";
 import { SearchResult, VaultSourceID } from "buttercup";
 import { getLocalValue } from "../storage.js";
 import { sendDesktopRequest } from "./request.js";
-import { LocalStorageItem, OTP, VaultSourceDescription } from "../../types.js";
+import { LocalStorageItem, OTP, VaultSourceDescription, VaultsTree } from "../../types.js";
 
 export async function authenticateBrowserAccess(code: string): Promise<string> {
     const { token } = (await sendDesktopRequest({
@@ -60,6 +60,28 @@ export async function getVaultSources(): Promise<Array<VaultSourceDescription>> 
         sources: Array<VaultSourceDescription>;
     };
     return sources;
+}
+
+export async function getVaultsTree(): Promise<VaultsTree> {
+    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
+    if (!authToken) {
+        throw new Layerr(
+            {
+                info: {
+                    i18n: "error.code.desktop-connection-not-authorised"
+                }
+            },
+            "Desktop connection not authorised"
+        );
+    }
+    const { tree } = (await sendDesktopRequest({
+        method: "GET",
+        route: "/v1/vaults-tree",
+        auth: authToken
+    })) as {
+        tree: VaultsTree;
+    };
+    return tree;
 }
 
 export async function hasConnection(): Promise<boolean> {

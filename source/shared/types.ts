@@ -1,4 +1,4 @@
-import { EntryID, SearchResult, VaultFormatID, VaultSourceID, VaultSourceStatus } from "buttercup";
+import { EntryID, SearchResult, VaultFacade, VaultFormatID, VaultSourceID, VaultSourceStatus } from "buttercup";
 import { ReactChild, ReactChildren } from "react";
 
 export interface AddVaultPayload {
@@ -29,6 +29,7 @@ export enum BackgroundMessageType {
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetConfiguration = "getConfiguration",
     GetDesktopVaultSources = "getDesktopVaultSources",
+    GetDesktopVaultsTree = "getDesktopVaultsTree",
     GetDisabledDomains = "getDisabledDomains",
     GetOTPs = "getOTPs",
     GetSavedCredentials = "getCredentials",
@@ -51,6 +52,7 @@ export interface BackgroundResponse {
     otps?: Array<OTP>;
     searchResults?: Array<SearchResult>;
     vaultSources?: Array<VaultSourceDescription>;
+    vaultsTree?: VaultsTree;
 }
 
 type ChildElement = ReactChild | ReactChildren | false | null;
@@ -129,6 +131,10 @@ export interface VaultSourceDescription {
     type: VaultType;
     order: number;
     format?: VaultFormatID;
+}
+
+export interface VaultsTree {
+    [key: string]: VaultFacade;
 }
 
 export enum VaultType {
