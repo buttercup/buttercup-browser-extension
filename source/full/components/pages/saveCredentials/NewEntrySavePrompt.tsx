@@ -1,12 +1,15 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { Button, Classes, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
+import { Button, Classes, Colors, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import { Tooltip2 as Tooltip } from "@blueprintjs/popover2";
 import styled from "styled-components";
+import { GroupID, VaultSourceID } from "buttercup";
 import { t } from "../../../../shared/i18n/trans.js";
 import { UsedCredentials } from "../../../types.js";
 
 interface NewEntrySavePromptProps {
     credentials: UsedCredentials;
+    onSaveClick: (credentials: UsedCredentials) => void;
+    saving: boolean;
 }
 
 const Form = styled.div`
@@ -27,13 +30,22 @@ const Form = styled.div`
     }
 `;
 
+const ValidityHelper = styled.span`
+    color: ${Colors.RED2};
+`;
+
+function isValidInput(input: string): boolean {
+    return input.trim().length > 0;
+}
+
 export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
-    const { credentials } = props;
+    const { credentials, onSaveClick, saving } = props;
     const [title, setTitle] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [url, setURL] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [invalidInput, setInvalidInput] = useState<string | null>(null);
     useEffect(() => {
         setShowPassword(false);
         setTitle(credentials.title);
@@ -41,11 +53,39 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
         setPassword(credentials.password);
         setURL(credentials.url);
     }, [credentials]);
+    const handleSaveClick = useCallback(() => {
+        if (isValidInput(title)) {
+            setInvalidInput("title")
+            return;
+        } else if (isValidInput(username)) {
+            setInvalidInput("username")
+            return;
+        } else if (isValidInput(password)) {
+            setInvalidInput("password")
+            return;
+        } else if (isValidInput(url)) {
+            setInvalidInput("url")
+            return;
+        }
+        onSaveClick({
+            ...credentials,
+            title,
+            username,
+            password,
+            url
+        });
+    }, [credentials, onSaveClick, password, title, url, username]);
     return (
         <Fragment>
             <h4>{t("save-credentials-page.credentials-saver.create-new.heading")}</h4>
             <Form>
                 <FormGroup
+                    disabled={saving}
+                    helperText={invalidInput === "title" && (
+                        <ValidityHelper>
+                            {t("form.invalid.required-non-empty")}
+                        </ValidityHelper>
+                    )}
                     inline
                     label={t("save-credentials-page.credentials-saver.create-new.label.title")}
                     labelFor="entry-title"
@@ -59,6 +99,12 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
                     />
                 </FormGroup>
                 <FormGroup
+                    disabled={saving}
+                    helperText={invalidInput === "username" && (
+                        <ValidityHelper>
+                            {t("form.invalid.required-non-empty")}
+                        </ValidityHelper>
+                    )}
                     inline
                     label={t("save-credentials-page.credentials-saver.create-new.label.username")}
                     labelFor="entry-username"
@@ -72,6 +118,12 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
                     />
                 </FormGroup>
                 <FormGroup
+                    disabled={saving}
+                    helperText={invalidInput === "password" && (
+                        <ValidityHelper>
+                            {t("form.invalid.required-non-empty")}
+                        </ValidityHelper>
+                    )}
                     inline
                     label={t("save-credentials-page.credentials-saver.create-new.label.password")}
                     labelFor="entry-password"
@@ -97,6 +149,12 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
                     />
                 </FormGroup>
                 <FormGroup
+                    disabled={saving}
+                    helperText={invalidInput === "url" && (
+                        <ValidityHelper>
+                            {t("form.invalid.required-non-empty")}
+                        </ValidityHelper>
+                    )}
                     inline
                     label={t("save-credentials-page.credentials-saver.create-new.label.url")}
                     labelFor="entry-url"
@@ -112,6 +170,7 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
                 </FormGroup>
             </Form>
             <Button
+                loading={saving}
                 intent={Intent.SUCCESS}
                 text={t("save-credentials-page.credentials-saver.create-new.save")}
             />

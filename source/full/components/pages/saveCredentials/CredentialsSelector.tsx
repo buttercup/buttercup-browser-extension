@@ -1,13 +1,15 @@
-import React, { useCallback, useMemo } from "react";
+import React, { Fragment, useCallback, useMemo } from "react";
 import styled from "styled-components";
 import { Card, Elevation } from "@blueprintjs/core";
 import { SiteIcon } from "@buttercup/ui";
 import { EntryType } from "buttercup";
 import { useCapturedCredentials } from "../../../hooks/credentials.js";
 import { extractDomain } from "../../../../shared/library/domain.js";
+import { ErrorMessage } from "../../../../shared/components/ErrorMessage.js";
 import { UsedCredentials } from "../../../types.js";
 
 interface CredentialsSelectorProps {
+    disabled?: boolean;
     onSelect: (id: string) => void;
     selected: string | null;
 }
@@ -64,36 +66,44 @@ const URL = styled.span`
 `;
 
 export function CredentialsSelector(props: CredentialsSelectorProps) {
-    const { onSelect, selected } = props;
+    const { disabled: parentDisabled = false, onSelect, selected } = props;
     const [credentials, loading, error] = useCapturedCredentials();
+    const disabled = parentDisabled || loading;
     const handleItemClick = useCallback((credential: UsedCredentials) => {
+        if (disabled) return;
         onSelect(credential.id);
-    }, [onSelect]);
+    }, [disabled, onSelect]);
     const credentialDomains = useMemo(
         () => credentials.map(cred => extractDomain(cred.url)),
         [credentials]
     );
     return (
-        <HorizontalScroller>
-            {credentials.map((cred, ind) => (
-                <CredentialsCard
-                    key={cred.id}
-                    interactive={cred.id !== selected}
-                    elevation={cred.id === selected ? Elevation.ZERO : Elevation.THREE}
-                    onClick={() => handleItemClick(cred)}
-                >
-                    <CredentialsHeading>
-                        <CredentialsIcon
-                            domain={credentialDomains[ind]}
-                            type={EntryType.Website}
-                        />
-                        <span>{cred.title}</span>
-                    </CredentialsHeading>
-                    <Credential monospace>{cred.username}</Credential>
-                    <Credential monospace><code>*********</code></Credential>
-                    <URL>{cred.url}</URL>
-                </CredentialsCard>
-            ))}
-        </HorizontalScroller>
+        <Fragment>
+            {error && (
+                <ErrorMessage message={error.message} scroll={false} />
+            )}
+            <HorizontalScroller>
+                {credentials.map((cred, ind) => (
+                    <CredentialsCard
+                        disabled={disabled}
+                        key={cred.id}
+                        interactive={cred.id !== selected}
+                        elevation={cred.id === selected ? Elevation.ZERO : Elevation.THREE}
+                        onClick={() => handleItemClick(cred)}
+                    >
+                        <CredentialsHeading>
+                            <CredentialsIcon
+                                domain={credentialDomains[ind]}
+                                type={EntryType.Website}
+                            />
+                            <span>{cred.title}</span>
+                        </CredentialsHeading>
+                        <Credential monospace>{cred.username}</Credential>
+                        <Credential monospace><code>*********</code></Credential>
+                        <URL>{cred.url}</URL>
+                    </CredentialsCard>
+                ))}
+            </HorizontalScroller>
+        </Fragment>
     );
 }

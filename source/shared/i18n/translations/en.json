@@ -38,6 +38,9 @@
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"
     },
     "form": {
+        "invalid": {
+            "required-non-empty": "Invalid: value is required (cannot be empty)"
+        },
         "required": "(required)"
     },
     "popup": {

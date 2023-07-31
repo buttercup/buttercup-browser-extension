@@ -1,15 +1,17 @@
 import React, { Fragment, useCallback, useMemo, useState } from "react";
 import { Tree, TreeNodeInfo } from "@blueprintjs/core";
-import { VaultFacade } from "buttercup";
+import { VaultFacade, VaultSourceID } from "buttercup";
 import { t } from "../../../../shared/i18n/trans.js";
 import { useAllVaultsContents } from "../../../hooks/vaultContents.js";
 import { BusyLoader } from "../../../../shared/components/loading/BusyLoader.js";
 import { ErrorMessage } from "../../../../shared/components/ErrorMessage.js";
-import { VaultsTree } from "../../../types.js";
 import { NewEntrySavePrompt } from "./NewEntrySavePrompt.js";
 import { useCapturedCredentials } from "../../../hooks/credentials.js";
+import { SavedCredentials, UsedCredentials, VaultsTree } from "../../../types.js";
 
 interface CredentialsSaverProps {
+    onSaveNewClick: (credentials: SavedCredentials) => void;
+    saving: boolean;
     selected: string;
 }
 
@@ -18,6 +20,7 @@ interface NodeInfo {
 }
 
 function buildGroupNodes(
+    sourceID: VaultSourceID,
     vault: VaultFacade,
     parentGroupID: string | null,
     expanded: Array<string>,
@@ -26,11 +29,11 @@ function buildGroupNodes(
     return vault.groups.reduce((output: Array<TreeNodeInfo<NodeInfo>>, group) => {
         const groupParent = group.parentID === "0" ? null : group.parentID;
         if (groupParent !== parentGroupID) return output;
-        const id = `group:${vault.id}:${group.id}`;
+        const id = `group:${sourceID}:${group.id}`;
         return [
             ...output,
             {
-                childNodes: buildGroupNodes(vault, group.id, expanded, selected),
+                childNodes: buildGroupNodes(sourceID, vault, group.id, expanded, selected),
                 hasCaret: countGroupChildren(vault, group.id) > 0,
                 icon: expanded.includes(id) ? "folder-open" : "folder-close",
                 id,
@@ -51,7 +54,7 @@ function buildVaultRootNodes(
     selected: Array<string>
 ): Array<TreeNodeInfo<NodeInfo>> {
     return Object.keys(vaultTree).map(sourceID => ({
-        childNodes: buildGroupNodes(vaultTree[sourceID], null, expanded, selected),
+        childNodes: buildGroupNodes(sourceID, vaultTree[sourceID], null, expanded, selected),
         icon: "box",
         id: `source:${sourceID}`,
         isExpanded: expanded.includes(`source:${sourceID}`),
@@ -73,7 +76,7 @@ function countGroupChildren(
 }
 
 export function CredentialsSaver(props: CredentialsSaverProps) {
-    const { selected: selectedCredentialsID } = props;
+    const { onSaveNewClick, saving, selected: selectedCredentialsID } = props;
     const {
         error: contentsError,
         loading: contentsLoading,
@@ -95,6 +98,14 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
     const handleNodeClick = useCallback((node: TreeNodeInfo<NodeInfo>) => {
         setSelectedNodes([node.nodeData.id]);
     }, []);
+    const handleSaveClick = useCallback((credentials: UsedCredentials) => {
+        const [, sourceID, groupID] = selectedGroupURI.split(":");
+        onSaveNewClick({
+            ...credentials,
+            groupID,
+            sourceID
+        });
+    }, [onSaveNewClick, selectedGroupURI]);
     return (
         <div>
             {contentsError && (
@@ -123,7 +134,11 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
                         ])}
                     />
                     {selectedGroupURI && (
-                        <NewEntrySavePrompt credentials={selectedUsedCredentials} />
+                        <NewEntrySavePrompt
+                            credentials={selectedUsedCredentials}
+                            onSaveClick={handleSaveClick}
+                            saving={saving}
+                        />
                     )}
                 </Fragment>
             )}

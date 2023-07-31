@@ -1,4 +1,12 @@
-import { EntryID, SearchResult, VaultFacade, VaultFormatID, VaultSourceID, VaultSourceStatus } from "buttercup";
+import {
+    EntryID,
+    GroupID,
+    SearchResult,
+    VaultFacade,
+    VaultFormatID,
+    VaultSourceID,
+    VaultSourceStatus
+} from "buttercup";
 import { ReactChild, ReactChildren } from "react";
 
 export interface AddVaultPayload {
@@ -92,6 +100,12 @@ export enum PopupPage {
     OTPs = "otps",
     Settings = "settings",
     Vaults = "vaults"
+}
+
+export interface SavedCredentials extends UsedCredentials {
+    entryID?: EntryID;
+    groupID: GroupID;
+    sourceID: VaultSourceID;
 }
 
 export interface TabEvent {
