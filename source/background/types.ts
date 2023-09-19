@@ -1,7 +1,10 @@
 export * from "../shared/types.js";
 
 export enum LocalStorageItem {
-    DesktopToken = "bcup:desktop:token"
+    APIClientID = "bcup:api:clientID",
+    APIPrivateKey = "bcup:api:privateKey",
+    APIPublicKey = "bcup:api:publicKey",
+    APIServerPublicKey = "bcup:api:serverPublicKey"
 }
 
 export enum SyncStorageItem {

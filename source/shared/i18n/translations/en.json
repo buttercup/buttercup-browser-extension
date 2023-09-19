@@ -4,13 +4,25 @@
         "title": "Attributions"
     },
     "config": {
+        "info": {
+            "build-date": "Build Date",
+            "title": "Info",
+            "version": "Version"
+        },
+        "reset-dialog": {
+            "cancel-button": "Cancel",
+            "confirm-button": "Reset",
+            "message": "Are you sure you wish to reset the application? This clears all cached data, settings and keys."
+        },
         "section": {
+            "advanced": "Advanced Settings",
             "logins": "Logins",
             "privacy": "Privacy",
             "theme": "Theme"
         },
         "setting": {
             "entryIcons": "Fetch dynamic entry icons (anonymous)",
+            "reset": "Reset Application Data & Settings",
             "saveNewLogins": "Prompt for saving new logins",
             "theme": "Theme",
             "useSystemTheme": "Use System Theme"
@@ -35,7 +47,8 @@
             "search-failed": "Failed searching for entries: {{message}}",
             "sources-fetch-failed": "Failed fetching vaults: {{message}}"
         },
-        "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:"
+        "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:",
+        "reset": "Failed resetting application settings: {{message}}"
     },
     "form": {
         "invalid": {

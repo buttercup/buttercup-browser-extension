@@ -44,6 +44,7 @@ export enum BackgroundMessageType {
     GetSavedCredentialsForID = "getCredentialsForID",
     PromptLockSource = "promptLockSource",
     PromptUnlockSource = "promptUnlockSource",
+    ResetSettings = "resetSettings",
     SaveUsedCredentials = "saveUsedCredentials",
     SearchEntriesByTerm = "searchEntriesByTerm",
     SearchEntriesByURL = "searchEntriesByURL",

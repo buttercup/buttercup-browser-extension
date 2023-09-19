@@ -2,8 +2,22 @@ import { log } from "./log.js";
 import { BrowserStorageInterface, getNonSyncStorage, getSyncStorage } from "./storage/BrowserStorageInterface.js";
 import { LocalStorageItem, SyncStorageItem } from "../types.js";
 
-const VALID_LOCAL_KEYS = [LocalStorageItem.DesktopToken];
+const VALID_LOCAL_KEYS = [
+    LocalStorageItem.APIClientID,
+    LocalStorageItem.APIPrivateKey,
+    LocalStorageItem.APIPublicKey,
+    LocalStorageItem.APIServerPublicKey
+];
 const VALID_SYNC_KEYS = [SyncStorageItem.Configuration];
+
+export async function clearLocalStorage(): Promise<void> {
+    const localStorage = getLocalStorage();
+    const keys = await localStorage.getAllKeys();
+    for (const key of keys) {
+        log(`clearing local storage key: ${key}`);
+        await localStorage.removeKey(key);
+    }
+}
 
 function getLocalStorage(): BrowserStorageInterface {
     return new BrowserStorageInterface(getNonSyncStorage());

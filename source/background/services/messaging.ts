@@ -13,7 +13,7 @@ import {
     searchEntriesByURL,
     testAuth
 } from "./desktop/actions.js";
-import { removeLocalValue, setLocalValue } from "./storage.js";
+import { clearLocalStorage, removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
 import { getAllCredentials, getCredentialsForID, updateUsedCredentials } from "./loginMemory.js";
 import { getConfig, updateConfigValue } from "./config.js";
@@ -29,8 +29,8 @@ async function handleMessage(
     switch (msg.type) {
         case BackgroundMessageType.AuthenticateDesktopConnection: {
             log("complete desktop authentication");
-            const token = await authenticateBrowserAccess(msg.code);
-            await setLocalValue(LocalStorageItem.DesktopToken, token);
+            const publicKey = await authenticateBrowserAccess(msg.code);
+            await setLocalValue(LocalStorageItem.APIServerPublicKey, publicKey);
             sendResponse({});
             break;
         }
@@ -46,7 +46,8 @@ async function handleMessage(
         }
         case BackgroundMessageType.ClearDesktopAuthentication: {
             log("clear desktop authentication");
-            await removeLocalValue(LocalStorageItem.DesktopToken);
+            await removeLocalValue(LocalStorageItem.APIClientID);
+            await removeLocalValue(LocalStorageItem.APIServerPublicKey);
             sendResponse({});
             break;
         }
@@ -118,6 +119,12 @@ async function handleMessage(
             const { sourceID } = msg;
             log(`request unlock source: ${sourceID}`);
             await promptSourceUnlock(sourceID);
+            sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.ResetSettings: {
+            log(`reset settings`);
+            await clearLocalStorage();
             sendResponse({});
             break;
         }

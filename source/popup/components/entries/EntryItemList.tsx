@@ -1,4 +1,4 @@
-import React, { Fragment} from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { SearchResult } from "buttercup";
 import { Divider} from "@blueprintjs/core";

@@ -1,13 +1,14 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useCallback, useState } from "react";
 import styled from "styled-components";
-import { Callout, Classes, Switch } from "@blueprintjs/core";
+import { Alert, Button, Callout, Classes, Intent, Switch } from "@blueprintjs/core";
 import cn from "classnames";
 import { t } from "../../../shared/i18n/trans.js";
 import { BUILD_DATE, VERSION } from "../../../shared/library/version.js";
 import { useConfig } from "../../../shared/hooks/config.js";
 import { ErrorMessage } from "../../../shared/components/ErrorMessage.js";
-
-interface SettingsPageProps {}
+import { resetApplicationSettings } from "../../services/reset.js";
+import { getToaster } from "../../../shared/services/notifications.js";
+import { localisedErrorMessage } from "../../../shared/library/error.js";
 
 const Container = styled.div`
     display: flex;
@@ -28,8 +29,20 @@ const SettingSection = styled(Callout)`
     padding: 9px;
 `;
 
-export function SettingsPage(props: SettingsPageProps) {
+export function SettingsPage() {
     const [config, configError, setValue] = useConfig();
+    const [showConfirmReset, setShowConfirmReset] = useState<boolean>(false);
+    const handleReset = useCallback(() => {
+        setShowConfirmReset(false);
+        resetApplicationSettings().catch(err => {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("error.reset", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+        });
+    }, []);
     return (
         <Container>
             {configError && (
@@ -41,17 +54,17 @@ export function SettingsPage(props: SettingsPageProps) {
                         <InfoTable className={cn(Classes.HTML_TABLE, Classes.COMPACT)}>
                             <thead>
                                 <tr>
-                                    <th>Info</th>
+                                    <th>{t("config.info.title")}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Version</td>
+                                    <td>{t("config.info.version")}</td>
                                     <td>{VERSION}</td>
                                 </tr>
                                 <tr>
-                                    <td>Built</td>
+                                    <td>{t("config.info.build-date")}</td>
                                     <td>{BUILD_DATE}</td>
                                 </tr>
                             </tbody>
@@ -85,6 +98,24 @@ export function SettingsPage(props: SettingsPageProps) {
                             onChange={evt => setValue("entryIcons", evt.currentTarget.checked)}
                         />
                     </SettingSection>
+                    <SettingSection title={t("config.section.advanced")}>
+                        <Button
+                            intent={Intent.DANGER}
+                            onClick={() => setShowConfirmReset(true)}
+                            text={t("config.setting.reset")}
+                        />
+                    </SettingSection>
+                    <Alert
+                        cancelButtonText={t("config.reset-dialog.cancel-button")}
+                        confirmButtonText={t("config.reset-dialog.confirm-button")}
+                        icon="clean"
+                        intent={Intent.DANGER}
+                        isOpen={showConfirmReset}
+                        onCancel={() => setShowConfirmReset(false)}
+                        onConfirm={handleReset}
+                    >
+                        <p>{t("config.reset-dialog.message")}</p>
+                    </Alert>
                 </Fragment>
             )}
         </Container>

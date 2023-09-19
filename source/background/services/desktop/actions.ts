@@ -2,38 +2,39 @@ import { Layerr } from "layerr";
 import { SearchResult, VaultSourceID } from "buttercup";
 import { getLocalValue } from "../storage.js";
 import { sendDesktopRequest } from "./request.js";
+import { generateAuthHeader } from "./header.js";
 import { LocalStorageItem, OTP, VaultSourceDescription, VaultsTree } from "../../types.js";
 
 export async function authenticateBrowserAccess(code: string): Promise<string> {
-    const { token } = (await sendDesktopRequest({
+    const localPublicKey = await getLocalValue(LocalStorageItem.APIPublicKey);
+    const clientID = await getLocalValue(LocalStorageItem.APIClientID);
+    if (!localPublicKey) {
+        throw new Error("No local public key available");
+    }
+    if (!clientID) {
+        throw new Error("No API client ID set");
+    }
+    const { publicKey } = (await sendDesktopRequest({
         method: "POST",
         route: "/v1/auth/response",
         payload: {
-            code
+            code,
+            id: clientID,
+            publicKey: localPublicKey
         }
-    })) as { token: string };
-    if (!token) {
-        throw new Layerr("No token received from browser authentication");
+    })) as { publicKey: string };
+    if (!publicKey) {
+        throw new Layerr("No server public key received from browser authentication");
     }
-    return token;
+    return publicKey;
 }
 
 export async function getOTPs(): Promise<Array<OTP>> {
-    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
-    if (!authToken) {
-        throw new Layerr(
-            {
-                info: {
-                    i18n: "error.code.desktop-connection-not-authorised"
-                }
-            },
-            "Desktop connection not authorised"
-        );
-    }
+    const authHeader = await generateAuthHeader();
     const { otps } = (await sendDesktopRequest({
         method: "GET",
         route: "/v1/otps",
-        auth: authToken
+        auth: authHeader
     })) as {
         otps: Array<OTP>;
     };
@@ -41,21 +42,11 @@ export async function getOTPs(): Promise<Array<OTP>> {
 }
 
 export async function getVaultSources(): Promise<Array<VaultSourceDescription>> {
-    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
-    if (!authToken) {
-        throw new Layerr(
-            {
-                info: {
-                    i18n: "error.code.desktop-connection-not-authorised"
-                }
-            },
-            "Desktop connection not authorised"
-        );
-    }
+    const authHeader = await generateAuthHeader();
     const { sources } = (await sendDesktopRequest({
         method: "GET",
         route: "/v1/vaults",
-        auth: authToken
+        auth: authHeader
     })) as {
         sources: Array<VaultSourceDescription>;
     };
@@ -63,21 +54,11 @@ export async function getVaultSources(): Promise<Array<VaultSourceDescription>> 
 }
 
 export async function getVaultsTree(): Promise<VaultsTree> {
-    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
-    if (!authToken) {
-        throw new Layerr(
-            {
-                info: {
-                    i18n: "error.code.desktop-connection-not-authorised"
-                }
-            },
-            "Desktop connection not authorised"
-        );
-    }
+    const authHeader = await generateAuthHeader();
     const { tree } = (await sendDesktopRequest({
         method: "GET",
         route: "/v1/vaults-tree",
-        auth: authToken
+        auth: authHeader
     })) as {
         tree: VaultsTree;
     };
@@ -85,8 +66,8 @@ export async function getVaultsTree(): Promise<VaultsTree> {
 }
 
 export async function hasConnection(): Promise<boolean> {
-    const token = await getLocalValue(LocalStorageItem.DesktopToken);
-    return !!token;
+    const serverPublicKey = await getLocalValue(LocalStorageItem.APIServerPublicKey);
+    return !!serverPublicKey;
 }
 
 export async function initiateConnection(): Promise<void> {
@@ -102,57 +83,27 @@ export async function initiateConnection(): Promise<void> {
 }
 
 export async function promptSourceLock(sourceID: VaultSourceID): Promise<boolean> {
-    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
-    if (!authToken) {
-        throw new Layerr(
-            {
-                info: {
-                    i18n: "error.code.desktop-connection-not-authorised"
-                }
-            },
-            "Desktop connection not authorised"
-        );
-    }
+    const authHeader = await generateAuthHeader();
     const status = await sendDesktopRequest({
         method: "POST",
         route: `/v1/vaults/${sourceID}/lock`,
-        auth: authToken,
+        auth: authHeader,
         output: "status"
     });
     return status === 200;
 }
 
 export async function promptSourceUnlock(sourceID: VaultSourceID): Promise<void> {
-    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
-    if (!authToken) {
-        throw new Layerr(
-            {
-                info: {
-                    i18n: "error.code.desktop-connection-not-authorised"
-                }
-            },
-            "Desktop connection not authorised"
-        );
-    }
+    const authHeader = await generateAuthHeader();
     await sendDesktopRequest({
         method: "POST",
         route: `/v1/vaults/${sourceID}/unlock`,
-        auth: authToken
+        auth: authHeader
     });
 }
 
 export async function searchEntriesByURL(url: string): Promise<Array<SearchResult>> {
-    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
-    if (!authToken) {
-        throw new Layerr(
-            {
-                info: {
-                    i18n: "error.code.desktop-connection-not-authorised"
-                }
-            },
-            "Desktop connection not authorised"
-        );
-    }
+    const authHeader = await generateAuthHeader();
     const { results } = (await sendDesktopRequest({
         method: "GET",
         route: "/v1/entries",
@@ -160,7 +111,7 @@ export async function searchEntriesByURL(url: string): Promise<Array<SearchResul
             type: "url",
             url
         },
-        auth: authToken
+        auth: authHeader
     })) as {
         results: Array<SearchResult>;
     };
@@ -168,17 +119,7 @@ export async function searchEntriesByURL(url: string): Promise<Array<SearchResul
 }
 
 export async function searchEntriesByTerm(term: string): Promise<Array<SearchResult>> {
-    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
-    if (!authToken) {
-        throw new Layerr(
-            {
-                info: {
-                    i18n: "error.code.desktop-connection-not-authorised"
-                }
-            },
-            "Desktop connection not authorised"
-        );
-    }
+    const authHeader = await generateAuthHeader();
     const { results } = (await sendDesktopRequest({
         method: "GET",
         route: "/v1/entries",
@@ -186,7 +127,7 @@ export async function searchEntriesByTerm(term: string): Promise<Array<SearchRes
             type: "term",
             term
         },
-        auth: authToken
+        auth: authHeader
     })) as {
         results: Array<SearchResult>;
     };
@@ -194,17 +135,7 @@ export async function searchEntriesByTerm(term: string): Promise<Array<SearchRes
 }
 
 export async function testAuth(): Promise<void> {
-    const authToken = await getLocalValue(LocalStorageItem.DesktopToken);
-    if (!authToken) {
-        throw new Layerr(
-            {
-                info: {
-                    i18n: "error.code.desktop-connection-not-authorised"
-                }
-            },
-            "Desktop connection not authorised"
-        );
-    }
+    const authHeader = await generateAuthHeader();
     try {
         await sendDesktopRequest({
             method: "POST",
@@ -214,7 +145,7 @@ export async function testAuth(): Promise<void> {
                 purpose: "vaults-access",
                 rev: 1
             },
-            auth: authToken
+            auth: authHeader
         });
     } catch (err) {
         console.error(err);

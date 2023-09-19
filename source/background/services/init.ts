@@ -3,6 +3,7 @@ import { log } from "./log.js";
 import { initialise as initialiseMessaging } from "./messaging.js";
 import { initialise as initialiseStorage } from "./storage.js";
 import { initialise as initialiseConfig } from "./config.js";
+import { generateKeys } from "./rsaKeys.js";
 import { initialise as initialiseI18n } from "../../shared/i18n/trans.js";
 import { getLanguage } from "../../shared/library/i18n.js";
 
@@ -23,6 +24,7 @@ export async function initialise(): Promise<void> {
     await initialiseStorage();
     await initialiseConfig();
     await initialiseI18n(getLanguage());
+    await generateKeys();
     log("initialisation complete");
     __initialisation = Initialisation.Complete;
     __initEE.emit("initialised");
