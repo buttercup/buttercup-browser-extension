@@ -20,6 +20,7 @@ import { getConfig, updateConfigValue } from "./config.js";
 import { getDisabledDomains } from "./disabledDomains.js";
 import { log } from "./log.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
+import { resetInitialisation } from "./init.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -125,6 +126,7 @@ async function handleMessage(
         case BackgroundMessageType.ResetSettings: {
             log(`reset settings`);
             await clearLocalStorage();
+            await resetInitialisation();
             sendResponse({});
             break;
         }

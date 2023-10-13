@@ -76,6 +76,7 @@
     "gle": "^1.0.3",
     "husky": "^4.2.5",
     "i18next": "^21.9.2",
+    "iocane": "^5.1.1",
     "layerr": "^2.0.0",
     "lint-staged": "^12.3.2",
     "mini-css-extract-plugin": "^2.6.1",

@@ -3,7 +3,7 @@ import { log } from "./log.js";
 import { initialise as initialiseMessaging } from "./messaging.js";
 import { initialise as initialiseStorage } from "./storage.js";
 import { initialise as initialiseConfig } from "./config.js";
-import { generateKeys } from "./rsaKeys.js";
+import { generateKeys } from "./cryptoKeys.js";
 import { initialise as initialiseI18n } from "../../shared/i18n/trans.js";
 import { getLanguage } from "../../shared/library/i18n.js";
 
@@ -28,6 +28,12 @@ export async function initialise(): Promise<void> {
     log("initialisation complete");
     __initialisation = Initialisation.Complete;
     __initEE.emit("initialised");
+}
+
+export async function resetInitialisation(): Promise<void> {
+    log("resetting initialisation");
+    __initialisation = Initialisation.Idle;
+    await initialise();
 }
 
 export async function waitForInitialisation(): Promise<void> {

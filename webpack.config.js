@@ -114,6 +114,7 @@ function getBaseConfig() {
             alias: {
                 // buttercup: "buttercup/web"
                 // gle: "gle/browser"
+                iocane: "iocane/web",
                 "react/jsx-runtime": "react/jsx-runtime.js",
                 "react/jsx-dev-runtime": "react/jsx-dev-runtime.js"
             },

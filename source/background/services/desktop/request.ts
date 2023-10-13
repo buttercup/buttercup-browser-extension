@@ -1,7 +1,7 @@
 import { Layerr } from "layerr";
 import joinURL from "url-join";
 import { DESKTOP_API_PORT } from "../../../shared/symbols.js";
-import { decryptPayload, encryptPayload } from "../rsaCrypto.js";
+import { decryptPayload, encryptPayload } from "../crypto.js";
 import { getLocalValue } from "../storage.js";
 import { LocalStorageItem } from "../../types.js";
 
@@ -57,9 +57,9 @@ export async function sendDesktopRequest<O extends OutputType>(
             requestConfig.headers["X-Content-Type"] = requestConfig.headers["Content-Type"];
             requestConfig.headers["Content-Type"] = "text/plain";
             // Encrypt
-            console.log("ENC");
             const privateKey = await getLocalValue(LocalStorageItem.APIPrivateKey);
             const publicKey = await getLocalValue(LocalStorageItem.APIServerPublicKey);
+            console.log("ENC", { privateKey, publicKey });
             requestConfig.body = await encryptPayload(requestConfig.body, privateKey, publicKey);
         }
     }

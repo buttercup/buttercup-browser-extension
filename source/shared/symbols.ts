@@ -1,5 +1,5 @@
-export const API_KEY_ALGO = "RSA-OAEP";
-export const API_KEY_HASH = "SHA-256";
+export const API_KEY_ALGO = "ECDH";
+export const API_KEY_CURVE = "P-256";
 
 export const BRAND_COLOUR = "#00B7AC";
 export const BRAND_COLOUR_DARK = "#179E94";
