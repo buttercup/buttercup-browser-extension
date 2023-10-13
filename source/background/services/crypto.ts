@@ -6,8 +6,8 @@ export async function decryptPayload(
     sourcePublicKey: string,
     targetPrivateKey: string
 ): Promise<string> {
-    const privateKey = await importECDHKey(targetPrivateKey, true);
-    const publicKey = await importECDHKey(sourcePublicKey, false);
+    const privateKey = await importECDHKey(targetPrivateKey);
+    const publicKey = await importECDHKey(sourcePublicKey);
     const secret = await deriveSecretKey(privateKey, publicKey);
     return createAdapter().decrypt(payload, secret) as Promise<string>;
 }
@@ -17,13 +17,9 @@ export async function encryptPayload(
     sourcePrivateKey: string,
     targetPublicKey: string
 ): Promise<string> {
-    console.log("PRV!?");
-    const privateKey = await importECDHKey(sourcePrivateKey, true);
-    console.log("PUB!?");
-    const publicKey = await importECDHKey(targetPublicKey, false);
-    console.log("SEC!!!");
+    const privateKey = await importECDHKey(sourcePrivateKey);
+    const publicKey = await importECDHKey(targetPublicKey);
     const secret = await deriveSecretKey(privateKey, publicKey);
-    console.log("ENC!!!!");
     return createAdapter()
         .setAlgorithm(EncryptionAlgorithm.GCM)
         .setDerivationRounds(100000)

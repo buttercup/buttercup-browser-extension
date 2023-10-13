@@ -59,7 +59,6 @@ export async function sendDesktopRequest<O extends OutputType>(
             // Encrypt
             const privateKey = await getLocalValue(LocalStorageItem.APIPrivateKey);
             const publicKey = await getLocalValue(LocalStorageItem.APIServerPublicKey);
-            console.log("ENC", { privateKey, publicKey });
             requestConfig.body = await encryptPayload(requestConfig.body, privateKey, publicKey);
         }
     }

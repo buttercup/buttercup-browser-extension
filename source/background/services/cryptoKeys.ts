@@ -1,13 +1,7 @@
 import { ulid } from "ulidx";
 import { log } from "./log.js";
 import { getLocalValue, setLocalValue } from "./storage.js";
-import {
-    arrayBufferToHex,
-    arrayBufferToString,
-    base64DecodeUnicode,
-    base64EncodeUnicode,
-    stringToArrayBuffer
-} from "../../shared/library/buffer.js";
+import { arrayBufferToHex } from "../../shared/library/buffer.js";
 import { API_KEY_ALGO, API_KEY_CURVE } from "../../shared/symbols.js";
 import { LocalStorageItem } from "../types.js";
 import { Layerr } from "layerr";
@@ -37,7 +31,6 @@ async function createKeys(): Promise<{
 export async function deriveSecretKey(privateKey: CryptoKey, publicKey: CryptoKey): Promise<string> {
     let cryptoKey: CryptoKey;
     try {
-        console.log("1a");
         cryptoKey = await window.crypto.subtle.deriveKey(
             {
                 name: API_KEY_ALGO,
@@ -51,7 +44,6 @@ export async function deriveSecretKey(privateKey: CryptoKey, publicKey: CryptoKe
             true,
             ["encrypt", "decrypt"]
         );
-        console.log("1b");
     } catch (err) {
         throw new Layerr(err, "Failed deriving secret key");
     }
@@ -60,16 +52,8 @@ export async function deriveSecretKey(privateKey: CryptoKey, publicKey: CryptoKe
 }
 
 async function exportECDHKey(key: CryptoKey): Promise<string> {
-    try {
-        if (key.type === "private") {
-            const exported = await window.crypto.subtle.exportKey("jwk", key);
-            return base64EncodeUnicode(exported.d);
-        }
-        const exported = await window.crypto.subtle.exportKey("raw", key);
-        return base64EncodeUnicode(arrayBufferToString(exported));
-    } catch (err) {
-        throw new Layerr(err, `Failed exporting ECDH key (${key.type})`);
-    }
+    const exported = await window.crypto.subtle.exportKey("jwk", key);
+    return JSON.stringify(exported);
 }
 
 export async function generateKeys(): Promise<void> {
@@ -88,20 +72,17 @@ export async function generateKeys(): Promise<void> {
     await setLocalValue(LocalStorageItem.APIClientID, clientID);
 }
 
-export async function importECDHKey(key: string, isPrivate: boolean): Promise<CryptoKey> {
-    const buffer = stringToArrayBuffer(base64DecodeUnicode(key));
-    try {
-        return window.crypto.subtle.importKey(
-            "raw",
-            buffer,
-            {
-                name: API_KEY_ALGO,
-                namedCurve: API_KEY_CURVE
-            },
-            true,
-            isPrivate ? ["deriveKey"] : []
-        );
-    } catch (err) {
-        throw new Layerr(err, "Failed importing ECDH key");
-    }
+export async function importECDHKey(key: string): Promise<CryptoKey> {
+    const jwk = JSON.parse(key) as JsonWebKey;
+    const usages: Array<KeyUsage> = jwk.key_ops && jwk.key_ops.includes("deriveKey") ? ["deriveKey"] : [];
+    return window.crypto.subtle.importKey(
+        "jwk",
+        jwk,
+        {
+            name: API_KEY_ALGO,
+            namedCurve: API_KEY_CURVE
+        },
+        true,
+        usages
+    );
 }
