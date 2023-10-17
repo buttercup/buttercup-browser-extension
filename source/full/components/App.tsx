@@ -8,19 +8,23 @@ import { ConnectPage } from "./pages/connect/index.jsx";
 import { AttributionsPage } from "./pages/AttributionsPage.jsx";
 import { SaveCredentialsPage } from "./pages/saveCredentials/index.js";
 import { useBodyThemeClass, useTheme } from "../../shared/hooks/theme.js";
+import { RouteError } from "../../shared/components/RouteError.js";
 
 const ROUTER = createHashRouter([
     {
         path: "/connect",
-        element: <ConnectPage />
+        element: <ConnectPage />,
+        errorElement: <RouteError />
     },
     {
         path: "/attributions",
-        element: <AttributionsPage />
+        element: <AttributionsPage />,
+        errorElement: <RouteError />
     },
     {
         path: "/save-credentials",
-        element: <SaveCredentialsPage />
+        element: <SaveCredentialsPage />,
+        errorElement: <RouteError />
     }
 ]);
 
