@@ -120,6 +120,16 @@
             }
         }
     },
+    "save-credentials-dialog": {
+        "close-button": "Close",
+        "description": "One or more logins have been recorded and are ready to be saved to your vault.",
+        "disable-button": "Disable",
+        "error-description": "We weren't able to get the details you wanted, sorry.",
+        "error-title": "Whoops...",
+        "last-login-heading": "Last login",
+        "title": "Save Login",
+        "view-button": "View"
+    },
     "save-credentials-page": {
         "credentials-saver": {
             "create-new": {

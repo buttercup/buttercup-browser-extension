@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DependencyList } from "react";
 
+export interface AsyncResult<T extends any> {
+    error: Error | null;
+    loading: boolean;
+    value: T | null;
+}
+
 export function useAsync<T extends any>(
     fn: () => Promise<T>,
     deps: DependencyList = [],
     { clearOnExec = true }: { clearOnExec?: boolean } = {}
-): {
-    error: Error | null;
-    loading: boolean;
-    value: T | null;
-} {
+): AsyncResult<T> {
     const mounted = useRef(false);
     const [value, setValue] = useState<T>(null);
     const [error, setError] = useState<Error>(null);
@@ -41,11 +43,15 @@ export function useAsync<T extends any>(
         if (!mounted.current) return;
         execute();
     }, [execute, ...deps]);
-    return {
-        error,
-        loading: typeof loading === "boolean" ? loading : false,
-        value
-    };
+    const output = useMemo(
+        () => ({
+            error,
+            loading: typeof loading === "boolean" ? loading : false,
+            value
+        }),
+        [error, loading, value]
+    );
+    return output;
 }
 
 export function useAsyncWithTimer<T extends any>(

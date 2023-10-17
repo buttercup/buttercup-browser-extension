@@ -1,13 +1,8 @@
 import { FORM } from "../state/form.js";
 import { fillFormDetails } from "./form.js";
-import {
-    BackgroundMessageType,
-    FrameEvent,
-    FrameEventType,
-    TabEvent,
-    TabEventType,
-    UsedCredentials
-} from "../types.js";
+import { closeDialog } from "../ui/saveDialog.js";
+import { getExtensionAPI } from "../../shared/extension.js";
+import { FrameEvent, FrameEventType, TabEvent, TabEventType } from "../types.js";
 
 let __framesChannel: BroadcastChannel;
 
@@ -17,16 +12,32 @@ export function broadcastFrameMessage(event: FrameEvent): void {
 
 export async function initialise() {
     __framesChannel = new BroadcastChannel("frames:all");
-    __framesChannel.addEventListener("message", handleBroadcastMessage);
+    __framesChannel.addEventListener("message", handleFramesBroadcast);
+    const browser = getExtensionAPI();
+    browser.runtime.onMessage.addListener(handleTabMessage);
 }
 
-function handleBroadcastMessage(event: MessageEvent<FrameEvent>) {
+function handleFramesBroadcast(event: MessageEvent<FrameEvent>) {
     const { type } = event.data;
     if (type === FrameEventType.FillForm) {
         const { formID } = event.data;
         if (formID && formID === FORM.currentFormID && FORM.currentLoginTarget) {
             fillFormDetails(event.data);
         }
+    }
+}
+
+function handleTabMessage(payload: unknown) {
+    if (
+        !payload ||
+        typeof payload !== "object" ||
+        Object.values(TabEventType).includes((payload as any).type) === false
+    ) {
+        return;
+    }
+    const event = payload as TabEvent;
+    if (event.type === TabEventType.CloseSaveDialog) {
+        closeDialog();
     }
 }
 

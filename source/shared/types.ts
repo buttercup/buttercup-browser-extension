@@ -124,6 +124,7 @@ export interface TabEvent {
 }
 
 export enum TabEventType {
+    CloseSaveDialog = "closeSaveDialog",
     GetFrameID = "getFrameID",
     InputDetails = "inputDetails",
     OpenPopupDialog = "openPopupDialog"

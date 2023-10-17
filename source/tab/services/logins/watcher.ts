@@ -6,6 +6,7 @@ import { getDisabledDomains } from "./disabled.js";
 import { currentDomainDisabled, getCurrentDomain } from "../../library/page.js";
 import { log } from "../log.js";
 import { getConfig } from "../../../shared/queries/config.js";
+import { openDialog } from "../../ui/saveDialog.js";
 
 async function checkForLoginSaveAbility(loginID: string) {
     const [disabledDomains, config, used] = await Promise.all([
@@ -19,27 +20,8 @@ async function checkForLoginSaveAbility(loginID: string) {
         return;
     }
     if (!config.saveNewLogins) return;
-    console.log("PROMPT SAVE", used);
-    // Promise
-    //     .all([
-    //         getLastLoginStatus(),
-    //         getConfig(),
-    //         getSourcesStats(),
-    //         getDisabledSavePromptDomains()
-    //     ])
-    //     .then(([loginAvailable, config, sourceStats, disabledDomains]) => {
-    //         if (currentDomainDisabled(disabledDomains)) return;
-    //         const unlockedCount = sourceStats.unlocked;
-    //         const canShowSaveDialog =
-    //             config.showSaveDialog === "always" || (config.showSaveDialog === "unlocked" && unlockedCount > 0);
-    //         if (loginAvailable && canShowSaveDialog) {
-    //             showSaveDialog();
-    //         }
-    //     })
-    //     .catch(err => {
-    //         console.error("An error occurred while communicating with the Buttercup extension");
-    //         console.error(err);
-    //     });
+    log("saved login available, show prompt");
+    openDialog(loginID);
 }
 
 export function initialise() {

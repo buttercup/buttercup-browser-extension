@@ -11,6 +11,7 @@ import { ThemeProvider } from "../../shared/components/ThemeProvider.js";
 import { useBodyClass } from "../hooks/document.js";
 import { LaunchContextProvider } from "./contexts/LaunchContext.js";
 import { useBodyThemeClass, useTheme } from "../../shared/hooks/theme.js";
+import { SaveDialogPage } from "./pages/SaveDialogPage.js";
 import { PopupPage } from "../types.js";
 
 const ROUTER = createHashRouter([
@@ -27,6 +28,15 @@ const ROUTER = createHashRouter([
             const formID = url.searchParams.get("form");
             const initialTab = url.searchParams.get("initial");
             return { formID, url: pageURL, initialTab };
+        }
+    },
+    {
+        path: "/save-dialog",
+        element: <SavePromptApp />,
+        loader: ({ request }) => {
+            const url = new URL(request.url);
+            const loginID = url.searchParams.get("login");
+            return { loginID };
         }
     }
 ]);
@@ -80,6 +90,18 @@ function InPageApp() {
                     PopupPage.OTPs
                 ]}
             />
+        </LaunchContextProvider>
+    );
+}
+
+function SavePromptApp() {
+    const { loginID = null } = useLoaderData() as {
+        loginID: string;
+    };
+    useBodyClass("in-page");
+    return (
+        <LaunchContextProvider source="page" loginID={loginID}>
+            <SaveDialogPage />
         </LaunchContextProvider>
     );
 }
