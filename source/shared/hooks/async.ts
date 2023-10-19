@@ -10,24 +10,41 @@ export interface AsyncResult<T extends any> {
 export function useAsync<T extends any>(
     fn: () => Promise<T>,
     deps: DependencyList = [],
-    { clearOnExec = true }: { clearOnExec?: boolean } = {}
+    {
+        clearOnExec = true,
+        updateInterval = null,
+        valuesDiffer = () => true
+    }: {
+        clearOnExec?: boolean;
+        updateInterval?: number | null;
+        valuesDiffer?: (existingValue: T, newValue: T) => boolean;
+    } = {}
 ): AsyncResult<T> {
     const mounted = useRef(false);
+    const executing = useRef(false);
     const [value, setValue] = useState<T>(null);
     const [error, setError] = useState<Error>(null);
     const [loading, setLoading] = useState<boolean | null>(null);
+    const [, setTimer] = useState<null | ReturnType<typeof setTimeout>>(null);
     const execute = useCallback(async () => {
         if (!mounted.current) return;
+        if (executing.current) return;
         if (clearOnExec) setValue(null);
+        executing.current = true;
         setError(null);
         setLoading((isLoading) => (isLoading === null ? true : isLoading));
-        return fn()
+        await fn()
             .then((result: T) => {
+                executing.current = false;
                 if (!mounted.current) return;
-                setValue(result);
+                setValue((existing) => {
+                    console.log("EXISTING DIFFER", valuesDiffer(existing, result));
+                    return valuesDiffer(existing, result) ? result : existing;
+                });
                 setLoading(false);
             })
             .catch((err) => {
+                executing.current = false;
                 if (!mounted.current) return;
                 setError(err);
                 setLoading(false);
@@ -39,6 +56,26 @@ export function useAsync<T extends any>(
             mounted.current = false;
         };
     }, []);
+    useEffect(() => {
+        if (updateInterval === null) return;
+        setTimer((existing) => {
+            clearTimeout(existing);
+            return null;
+        });
+        let newTimer: ReturnType<typeof setTimeout>;
+        const startNewTimer = () => {
+            newTimer = setTimeout(() => {
+                execute().then(() => {
+                    startNewTimer();
+                });
+            }, updateInterval);
+            setTimer(newTimer);
+        };
+        startNewTimer();
+        return () => {
+            clearTimeout(newTimer);
+        };
+    }, [execute, updateInterval]);
     useEffect(() => {
         if (!mounted.current) return;
         execute();

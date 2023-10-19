@@ -157,6 +157,10 @@
                 "tab": "Create New Entry"
             },
             "heading": "Save Login",
+            "no-vaults": {
+                "description": "No vaults are currently available. Either add a vault or unlock some.",
+                "title": "No Available Vaults"
+            },
             "update-existing": {
                 "tab": "Update Existing Entry"
             }

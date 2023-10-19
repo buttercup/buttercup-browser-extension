@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useMemo, useState } from "react";
-import { Tree, TreeNodeInfo } from "@blueprintjs/core";
+import { NonIdealState, Tree, TreeNodeInfo } from "@blueprintjs/core";
 import { VaultFacade, VaultSourceID } from "buttercup";
 import { t } from "../../../../shared/i18n/trans.js";
 import { useAllVaultsContents } from "../../../hooks/vaultContents.js";
@@ -96,8 +96,9 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
         [expandedNodes, selectedNodes, tree]
     );
     const handleNodeClick = useCallback((node: TreeNodeInfo<NodeInfo>) => {
+        if (saving) return;
         setSelectedNodes([node.nodeData.id]);
-    }, []);
+    }, [saving]);
     const handleSaveClick = useCallback((credentials: UsedCredentials) => {
         const [, sourceID, groupID] = selectedGroupURI.split(":");
         onSaveNewClick({
@@ -122,18 +123,26 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
             )}
             {tree && (
                 <Fragment>
-                    <Tree
-                        contents={contents}
-                        onNodeClick={handleNodeClick}
-                        onNodeCollapse={node => setExpandedNodes(
-                            current => current.filter(id => id !== node.nodeData.id)
-                        )}
-                        onNodeExpand={node => setExpandedNodes(current => [
-                            ...current,
-                            node.nodeData.id
-                        ])}
-                    />
-                    {selectedGroupURI && (
+                    {contents.length > 0 && (
+                        <Tree
+                            contents={contents}
+                            onNodeClick={handleNodeClick}
+                            onNodeCollapse={node => setExpandedNodes(
+                                current => current.filter(id => id !== node.nodeData.id)
+                            )}
+                            onNodeExpand={node => setExpandedNodes(current => [
+                                ...current,
+                                node.nodeData.id
+                            ])}
+                        />
+                    ) || (
+                        <NonIdealState
+                            icon="inbox"
+                            title={t("save-credentials-page.credentials-saver.no-vaults.title")}
+                            description={t("save-credentials-page.credentials-saver.no-vaults.description")}
+                        />
+                    )}
+                    {contents.length > 0 && selectedGroupURI && (
                         <NewEntrySavePrompt
                             credentials={selectedUsedCredentials}
                             onSaveClick={handleSaveClick}

@@ -19,7 +19,7 @@ export function SaveCredentialsPage() {
     const [saving, setSaving] = useState<boolean>(false);
     const handleSaveNew = useCallback((credentials: SavedCredentials) => {
         setSaving(true);
-
+        
     }, []);
     return (
         <Layout title={t("save-credentials-page.title")}>
