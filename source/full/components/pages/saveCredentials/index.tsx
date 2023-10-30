@@ -1,10 +1,14 @@
 import React, { Fragment, useCallback, useState } from "react";
-import { Tab, Tabs } from "@blueprintjs/core";
+import { Intent, Tab, Tabs } from "@blueprintjs/core";
 import { Layout } from "../../Layout.js";
 import { t } from "../../../../shared/i18n/trans.js";
 import { useTitle } from "../../../hooks/document.js";
 import { CredentialsSelector } from "./CredentialsSelector.js";
 import { CredentialsSaver } from "./CredentialsSaver.js";
+import { saveCredentialsToEntry } from "../../../services/credentials.js";
+import { getToaster } from "../../../../shared/services/notifications.js";
+import { localisedErrorMessage } from "../../../../shared/library/error.js";
+import { closeCurrentTab } from "../../../../shared/library/extension.js";
 import { SavedCredentials } from "../../../types.js";
 
 enum TabID {
@@ -19,7 +23,25 @@ export function SaveCredentialsPage() {
     const [saving, setSaving] = useState<boolean>(false);
     const handleSaveNew = useCallback((credentials: SavedCredentials) => {
         setSaving(true);
-        
+        saveCredentialsToEntry(credentials)
+            .then(entryID => {
+                getToaster().show({
+                    intent: Intent.SUCCESS,
+                    message: t("save-credentials-page.save-success", { title: credentials.title }),
+                    timeout: 4000
+                });
+                setTimeout(() => {
+                    closeCurrentTab();
+                }, 4000);
+            })
+            .catch(err => {
+                console.error(err);
+                getToaster().show({
+                    intent: Intent.DANGER,
+                    message: t("save-credentials-page.save-error", { message: localisedErrorMessage(err) }),
+                    timeout: 10000
+                });
+            })
     }, []);
     return (
         <Layout title={t("save-credentials-page.title")}>

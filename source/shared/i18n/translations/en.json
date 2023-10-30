@@ -169,6 +169,8 @@
         "detected-logins": {
             "heading": "Detected Logins"
         },
+        "save-error": "Failed saving entry: {{message}}",
+        "save-success": "Successfully saved entry: {{title}}",
         "title": "Save Logins"
     },
     "theme": {

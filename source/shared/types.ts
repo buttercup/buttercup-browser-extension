@@ -1,5 +1,6 @@
 import {
     EntryID,
+    EntryType,
     GroupID,
     SearchResult,
     VaultFacade,
@@ -24,6 +25,10 @@ export interface BackgroundMessage {
     configValue?: any;
     credentials?: UsedCredentials;
     credentialsID?: string;
+    entryID?: EntryID;
+    entryProperties?: Record<string, string>;
+    entryType?: EntryType;
+    groupID?: GroupID;
     searchTerm?: string;
     sourceID?: VaultSourceID;
     type: BackgroundMessageType;
@@ -45,6 +50,7 @@ export enum BackgroundMessageType {
     PromptLockSource = "promptLockSource",
     PromptUnlockSource = "promptUnlockSource",
     ResetSettings = "resetSettings",
+    SaveCredentialsToVault = "saveCredentialsToVault",
     SaveUsedCredentials = "saveUsedCredentials",
     SearchEntriesByTerm = "searchEntriesByTerm",
     SearchEntriesByURL = "searchEntriesByURL",
@@ -56,6 +62,7 @@ export interface BackgroundResponse {
     config?: Configuration;
     credentials?: Array<UsedCredentials>;
     domains?: Array<string>;
+    entryID?: EntryID | null;
     error?: Error;
     locked?: boolean;
     otps?: Array<OTP>;

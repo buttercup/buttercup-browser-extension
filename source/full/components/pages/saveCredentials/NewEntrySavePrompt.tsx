@@ -54,16 +54,16 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
         setURL(credentials.url);
     }, [credentials]);
     const handleSaveClick = useCallback(() => {
-        if (isValidInput(title)) {
+        if (!isValidInput(title)) {
             setInvalidInput("title")
             return;
-        } else if (isValidInput(username)) {
+        } else if (!isValidInput(username)) {
             setInvalidInput("username")
             return;
-        } else if (isValidInput(password)) {
+        } else if (!isValidInput(password)) {
             setInvalidInput("password")
             return;
-        } else if (isValidInput(url)) {
+        } else if (!isValidInput(url)) {
             setInvalidInput("url")
             return;
         }
@@ -172,6 +172,7 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
             <Button
                 loading={saving}
                 intent={Intent.SUCCESS}
+                onClick={handleSaveClick}
                 text={t("save-credentials-page.credentials-saver.create-new.save")}
             />
         </Fragment>

@@ -1,5 +1,5 @@
 import { Layerr } from "layerr";
-import { SearchResult, VaultSourceID } from "buttercup";
+import { EntryID, EntryType, GroupID, SearchResult, VaultSourceID } from "buttercup";
 import { getLocalValue } from "../storage.js";
 import { sendDesktopRequest } from "./request.js";
 import { generateAuthHeader } from "./header.js";
@@ -100,6 +100,44 @@ export async function promptSourceUnlock(sourceID: VaultSourceID): Promise<void>
         route: `/v1/vaults/${sourceID}/unlock`,
         auth: authHeader
     });
+}
+
+export async function saveExistingEntry(
+    sourceID: VaultSourceID,
+    groupID: GroupID,
+    entryID: EntryID,
+    properties: Record<string, string>
+): Promise<void> {
+    const authHeader = await generateAuthHeader();
+    await sendDesktopRequest({
+        method: "PATCH",
+        route: `/v1/vaults/${sourceID}/group/${groupID}/entry/${entryID}`,
+        auth: authHeader,
+        payload: {
+            properties
+        }
+    });
+}
+
+export async function saveNewEntry(
+    sourceID: VaultSourceID,
+    groupID: GroupID,
+    entryType: EntryType,
+    properties: Record<string, string>
+): Promise<EntryID> {
+    const authHeader = await generateAuthHeader();
+    const { entryID } = (await sendDesktopRequest({
+        method: "POST",
+        route: `/v1/vaults/${sourceID}/group/${groupID}/entry`,
+        auth: authHeader,
+        payload: {
+            properties,
+            type: entryType
+        }
+    })) as {
+        entryID: EntryID;
+    };
+    return entryID;
 }
 
 export async function searchEntriesByURL(url: string): Promise<Array<SearchResult>> {

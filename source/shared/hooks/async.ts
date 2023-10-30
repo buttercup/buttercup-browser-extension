@@ -38,7 +38,6 @@ export function useAsync<T extends any>(
                 executing.current = false;
                 if (!mounted.current) return;
                 setValue((existing) => {
-                    console.log("EXISTING DIFFER", valuesDiffer(existing, result));
                     return valuesDiffer(existing, result) ? result : existing;
                 });
                 setLoading(false);

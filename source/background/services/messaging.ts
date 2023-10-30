@@ -9,6 +9,8 @@ import {
     initiateConnection,
     promptSourceLock,
     promptSourceUnlock,
+    saveExistingEntry,
+    saveNewEntry,
     searchEntriesByTerm,
     searchEntriesByURL,
     testAuth
@@ -21,6 +23,7 @@ import { getDisabledDomains } from "./disabledDomains.js";
 import { log } from "./log.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { resetInitialisation } from "./init.js";
+import { EntryType } from "buttercup";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -128,6 +131,23 @@ async function handleMessage(
             await clearLocalStorage();
             await resetInitialisation();
             sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.SaveCredentialsToVault: {
+            const { sourceID, groupID, entryID = null, entryProperties, entryType = EntryType.Website } = msg;
+            if (entryID) {
+                log(`save credentials to existing entry: ${entryID} (source=${sourceID})`);
+                await saveExistingEntry(sourceID, groupID, entryID, entryProperties);
+                sendResponse({
+                    entryID: null
+                });
+            } else {
+                log(`save credentials to new entry (source=${sourceID})`);
+                const entryID = await saveNewEntry(sourceID, groupID, entryType, entryProperties);
+                sendResponse({
+                    entryID
+                });
+            }
             break;
         }
         case BackgroundMessageType.SaveUsedCredentials: {
