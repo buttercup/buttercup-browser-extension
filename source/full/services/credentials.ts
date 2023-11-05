@@ -20,6 +20,7 @@ export async function saveCredentialsToEntry(credentials: SavedCredentials): Pro
         entryID: credentials.entryID ?? null,
         entryProperties: {
             password: credentials.password,
+            title: credentials.title,
             url: credentials.url,
             username: credentials.username
         },

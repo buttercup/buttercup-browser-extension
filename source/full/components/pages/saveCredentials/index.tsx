@@ -61,10 +61,12 @@ export function SaveCredentialsPage() {
                         selectedTabId={selectedTabID}
                     >
                         <Tab
+                            disabled={saving}
                             id={TabID.SaveNew}
                             title={t("save-credentials-page.credentials-saver.create-new.tab")}
                             panel={
                                 <CredentialsSaver
+                                    mode="new"
                                     onSaveNewClick={handleSaveNew}
                                     saving={saving}
                                     selected={selectedID}
@@ -72,10 +74,17 @@ export function SaveCredentialsPage() {
                             }
                         />
                         <Tab
+                            disabled={saving}
                             id={TabID.UpdateExisting}
                             title={t("save-credentials-page.credentials-saver.update-existing.tab")}
-                            panel={<div>Test</div>}
-                            disabled
+                            panel={
+                                <CredentialsSaver
+                                    mode="existing"
+                                    onSaveNewClick={handleSaveNew}
+                                    saving={saving}
+                                    selected={selectedID}
+                                />
+                            }
                         />
                     </Tabs>
                 </Fragment>

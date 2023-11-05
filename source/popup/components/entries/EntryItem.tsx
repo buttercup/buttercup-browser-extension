@@ -2,9 +2,9 @@ import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 import cn from "classnames";
 import { Classes, Text } from "@blueprintjs/core";
-import { EntryURLType, getEntryURLs, SearchResult } from "buttercup";
+import { SearchResult } from "buttercup";
 import { SiteIcon } from "@buttercup/ui";
-import { extractDomain } from "../../../shared/library/domain.js";
+import { extractEntryDomain } from "../../../shared/library/domain.js";
 
 interface EntryItemProps {
     entry: SearchResult;
@@ -67,11 +67,7 @@ export function EntryItem(props: EntryItemProps) {
         if (!fetchIcons) {
             return null;
         }
-        const [url] = [
-            ...getEntryURLs(entry.properties, EntryURLType.Icon),
-            ...getEntryURLs(entry.properties, EntryURLType.Any)
-        ];
-        return url ? extractDomain(url) : null;
+        return extractEntryDomain(entry.properties);
     }, [entry, fetchIcons]);
     const handleEntryClick = useCallback(() => {
         onClick();
