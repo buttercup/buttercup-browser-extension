@@ -41,17 +41,6 @@ export function addLocalArchive(name, masterPassword, filename, key, shouldCreat
     });
 }
 
-export function addMyButtercupArchives(name, vaultID, accessToken, refreshToken, masterPassword) {
-    return makeArchiveAdditionRequest({
-        type: "mybuttercup",
-        name,
-        accessToken,
-        refreshToken,
-        masterPassword,
-        vaultID
-    });
-}
-
 export function addWebDAVArchive(name, masterPassword, filename, url, username, password, shouldCreate = false) {
     return makeArchiveAdditionRequest({
         type: "webdav",

@@ -1,5 +1,5 @@
 import { DropboxClient } from "@buttercup/dropbox-client";
-import { createClient as createGoogleDriveClient } from "@buttercup/googledrive-client";
+import { GoogleDriveClient } from "@buttercup/googledrive-client";
 import { getSharedAppEnv } from "../../shared/library/buttercup.js";
 import log from "../../shared/library/log.js";
 import { getState } from "../redux/index.js";
@@ -38,8 +38,8 @@ function getDropboxClient() {
             return;
         }
         __dropboxClient = new DropboxClient(authToken, {
-            compat: true,
-            compatCorsHack: false
+            // compat: true,
+            // compatCorsHack: false
         });
     }
     return __dropboxClient;
@@ -63,7 +63,7 @@ function getGoogleDriveClient() {
             log.error("Unable to create Google Drive client: No token found");
             return;
         }
-        __googleDriveClient = createGoogleDriveClient(accessToken);
+        __googleDriveClient = new GoogleDriveClient(accessToken);
     }
     return __googleDriveClient;
 }

@@ -13,7 +13,6 @@ import { showSaveDialog } from "./saveDialog.js";
 import { watchInputs } from "./generator.js";
 import { trackMouseMovement, trackScrolling } from "../shared/library/mouseEvents.js";
 import { trackKeydownEvent } from "../shared/library/keyboardEvents.js";
-import { watchForRegistrationPossibility } from "./myButtercup.js";
 import { currentDomainDisabled } from "./page.js";
 
 function checkForLoginSaveAbility() {
@@ -92,6 +91,3 @@ trackMouseMovement();
 trackScrolling();
 // Track keystrokes for user activity tracking
 trackKeydownEvent();
-
-// Setup My Buttercup integrations
-setTimeout(watchForRegistrationPossibility, 100);

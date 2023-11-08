@@ -1,8 +1,7 @@
 import { basename, dirname } from "path-posix";
 import { connect } from "react-redux";
 import stripTags from "striptags";
-import joinURL from "url-join";
-import { createClient as createGoogleDriveClient } from "@buttercup/googledrive-client";
+import { GoogleDriveClient } from "@buttercup/googledrive-client";
 import AddArchivePage from "../components/AddArchivePage.js";
 import {
     getLocalAuthKey,
@@ -26,13 +25,7 @@ import {
 } from "../actions/addArchive.js";
 import { connectWebDAV } from "../library/remote.js";
 import { notifyError, notifySuccess } from "../library/notify.js";
-import {
-    addDropboxArchive,
-    addGoogleDriveArchive,
-    addLocalArchive,
-    addMyButtercupArchives,
-    addWebDAVArchive
-} from "../library/archives.js";
+import { addDropboxArchive, addGoogleDriveArchive, addLocalArchive, addWebDAVArchive } from "../library/archives.js";
 import { setBusy, unsetBusy } from "../../shared/actions/app.js";
 import {
     setAuthID as setGoogleDriveAuthID,
@@ -46,15 +39,6 @@ import {
     getAccessToken as getGoogleDriveAccessToken,
     getRefreshToken as getGoogleDriveRefeshToken
 } from "../../shared/selectors/googleDrive";
-import { performAuthentication as performMyButtercupAuthentication } from "../library/myButtercup.js";
-import { setAuthID as setMyButtercupAuthID } from "../../shared/actions/myButtercup.js";
-import {
-    getAuthID as getMyButtercupAuthID,
-    getAccessToken as getMyButtercupAccessToken,
-    getName as getMyButtercupName,
-    getRefreshToken as getMyButtercupRefreshToken,
-    getVaultID as getMyButtercupVaultID
-} from "../../shared/selectors/myButtercup.js";
 import { closeCurrentTab } from "../../shared/library/extension.js";
 import {
     createNewClient as createLocalClient,
@@ -74,9 +58,6 @@ export default connect(
         localAuthStatus: getLocalAuthStatus(state),
         isConnected: isConnected(state),
         isConnecting: isConnecting(state),
-        myButtercupAuthID: getMyButtercupAuthID(state),
-        myButtercupAccessToken: getMyButtercupAccessToken(state),
-        myButtercupRefreshToken: getMyButtercupRefreshToken(state),
         selectedArchiveType: getSelectedArchiveType(state),
         selectedFilename: getSelectedFilename(state),
         selectedFilenameNeedsCreation: selectedFileNeedsCreation(state)
@@ -106,10 +87,6 @@ export default connect(
         onAuthenticateGoogleDrive: (googleDriveAuthID, useOpenPermissions = false) => dispatch => {
             dispatch(setGoogleDriveAuthID(googleDriveAuthID));
             authenticateGoogleDrive(useOpenPermissions);
-        },
-        onAuthenticateMyButtercup: myButtercupAuthID => dispatch => {
-            dispatch(setMyButtercupAuthID(myButtercupAuthID));
-            performMyButtercupAuthentication();
         },
         onChooseDropboxBasedArchive: (archiveName, masterPassword) => (dispatch, getState) => {
             const name = stripTags(archiveName);
@@ -158,7 +135,7 @@ export default connect(
                 .then(async () => {
                     let fileID;
                     if (shouldCreate) {
-                        const client = createGoogleDriveClient(googleDriveToken);
+                        const client = new GoogleDriveClient(googleDriveToken);
                         const containingDirectory = dirname(remoteFilename);
                         const putOptions = {
                             contents: "\n",
@@ -236,32 +213,6 @@ export default connect(
                     console.error(err);
                     notifyError(
                         "Failed selecting local vault",
-                        `An error occurred when adding the vault: ${err.message}`
-                    );
-                    dispatch(setAdding(false));
-                });
-        },
-        onChooseMyButtercupArchive: masterPassword => (dispatch, getState) => {
-            const state = getState();
-            const accessToken = getMyButtercupAccessToken(state);
-            const refreshToken = getMyButtercupRefreshToken(state);
-            const vaultID = getMyButtercupVaultID(state);
-            const name = getMyButtercupName(state);
-            dispatch(setAdding(true));
-            dispatch(setBusy("Adding vault"));
-            return addMyButtercupArchives(name, vaultID, accessToken, refreshToken, masterPassword)
-                .then(() => {
-                    dispatch(unsetBusy());
-                    notifySuccess("Successfully added vault", "My Buttercup vault successfully added.");
-                    setTimeout(() => {
-                        closeCurrentTab();
-                    }, ADD_ARCHIVE_WINDOW_CLOSE_DELAY);
-                })
-                .catch(err => {
-                    dispatch(unsetBusy());
-                    console.error(err);
-                    notifyError(
-                        "Failed selecting My Buttercup vault",
                         `An error occurred when adding the vault: ${err.message}`
                     );
                     dispatch(setAdding(false));

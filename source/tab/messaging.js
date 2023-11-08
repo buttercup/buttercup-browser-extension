@@ -1,10 +1,9 @@
 import postRobot from "post-robot";
-import { enterLoginDetails, submitLoginForm } from "./login.js";
+import { enterLoginDetails } from "./login.js";
 import { hideInputDialog } from "./inputDialog.js";
 import { hideSaveDialog } from "./saveDialog.js";
 import { openGeneratorForCurrentInput, setPasswordForCurrentInput } from "./generator.js";
 import { autoLogin } from "./autoLogin.js";
-import { attemptVaultIDMatch, checkForVaultContainer } from "./myButtercup.js";
 
 export function getConfig() {
     return new Promise(resolve => {
@@ -64,22 +63,6 @@ function handleMessage(request, sender, sendResponse) {
             const { username, password } = request;
             autoLogin(username, password);
             return false;
-        }
-        case "check-mybcup-vault": {
-            const { vaultID } = request;
-            attemptVaultIDMatch(vaultID);
-            if (!document.hidden) {
-                setTimeout(checkForVaultContainer, 500);
-            } else {
-                const onChange = () => {
-                    if (!document.hidden) {
-                        document.removeEventListener("visibilitychange", onChange, false);
-                        checkForVaultContainer();
-                    }
-                };
-                document.addEventListener("visibilitychange", onChange, false);
-            }
-            break;
         }
         case "enter-details": {
             const { signIn, entry } = request;

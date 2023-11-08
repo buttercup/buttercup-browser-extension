@@ -22,12 +22,5 @@ export const GOOGLE_DRIVE_SET_AUTH_ID = "googleDrive/setAuthenticationID";
 export const GOOGLE_DRIVE_SET_AUTH_CODE = "googleDrive/setAuthCode";
 export const GOOGLE_DRIVE_SET_REFRESH_TOKEN = "googleDrive/setRefreshToken";
 
-export const MYBUTTERCUP_CLEAR_STATE = "myButtercup/clear";
-export const MYBUTTERCUP_SET_ACCESS_TOKEN = "myButtercup/accessToken/set";
-export const MYBUTTERCUP_SET_AUTH_ID = "myButtercup/setAuthenticationID";
-export const MYBUTTERCUP_SET_NAME = "myButtercup/name/set";
-export const MYBUTTERCUP_SET_REFRESH_TOKEN = "myButtercup/refreshToken/set";
-export const MYBUTTERCUP_SET_VAULT_ID = "myButtercup/vaultID/set";
-
 export const SEARCH_SET_ENTRY_RESULTS = "searching/results/set";
 export const SEARCH_SET_SOURCES_COUNT = "searching/setSources";

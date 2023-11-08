@@ -3,7 +3,6 @@ import { getVaultManager } from "./buttercup.js";
 import { getState } from "../redux/index.js";
 import { getConfigKey } from "../../shared/selectors/app.js";
 import log from "../../shared/library/log.js";
-import { MYBUTTERCUP_CLIENT_ID, MYBUTTERCUP_CLIENT_SECRET } from "../../shared/library/myButtercup.js";
 import { createNewTab, getCurrentTab, getExtensionURL, sendTabMessage } from "../../shared/library/extension.js";
 import { updateContextMenu } from "./contextMenu.js";
 import { getSearch } from "./search.js";
@@ -18,8 +17,6 @@ export function addArchiveByRequest(payload) {
             return addWebDAVArchive(payload);
         case "localfile":
             return addLocalArchive(payload);
-        case "mybuttercup":
-            return addMyButtercupArchive(payload);
         default:
             return Promise.reject(new Error(`Unable to add archive: Unknown type: ${payload.type}`));
     }
@@ -116,38 +113,6 @@ export function addNewEntry(sourceID, groupID, title, username, password, url) {
             }
         })
         .then(() => saveSource(sourceID));
-}
-
-export function addMyButtercupArchive(payload) {
-    const { name, masterPassword, accessToken, refreshToken, vaultID, create } = payload;
-    log.info(`Attempting to connect My Buttercup vault: ${name}`);
-    const rawCredentials = Credentials.fromDatasource(
-        {
-            type: "mybuttercup",
-            accessToken,
-            refreshToken,
-            clientID: MYBUTTERCUP_CLIENT_ID,
-            clientSecret: MYBUTTERCUP_CLIENT_SECRET,
-            vaultID
-        },
-        masterPassword
-    );
-    return Promise.all([getVaultManager(), rawCredentials.toSecureString()]).then(
-        ([vaultManager, sourceCredentials]) => {
-            const source = new VaultSource(name, "mybuttercup", sourceCredentials, {
-                meta: {
-                    vaultID
-                }
-            });
-            return vaultManager.interruptAutoUpdate(() =>
-                vaultManager
-                    .addSource(source)
-                    .then(() => source.unlock(rawCredentials, { initialiseRemote: create }))
-                    .then(() => vaultManager.dehydrateSource(source))
-                    .then(() => signalMyButtercupTabConnections(vaultID))
-            );
-        }
-    );
 }
 
 export function addWebDAVArchive(payload) {
@@ -365,23 +330,6 @@ export async function sendCredentialsToTab(sourceID, entryID, signIn) {
             id: entryFacade.id,
             properties
         }
-    });
-}
-
-function signalMyButtercupTabConnections(vaultID) {
-    const tabsQuery = new Promise(resolve => {
-        chrome.tabs.query(
-            {
-                currentWindow: true,
-                url: ["http://localhost:8000/*", "https://my.buttercup.pw/*"]
-            },
-            resolve
-        );
-    });
-    return tabsQuery.then(tabs => {
-        tabs.forEach(tab => {
-            chrome.tabs.sendMessage(tab.id, { type: "check-mybcup-vault", vaultID });
-        });
     });
 }
 

@@ -8,21 +8,11 @@ import { clearAutoLogin } from "../../shared/actions/autoLogin.js";
 import { sendTabMessage } from "../../shared/library/extension.js";
 import { getEntry } from "./archives.js";
 import { setAuthToken as setDropboxAuthToken } from "../../shared/actions/dropbox.js";
-import {
-    getTokens as getMyButtercupTokens,
-    processNewVaultDetails as processMyButtercupVaultDetails
-} from "./myButtercup.js";
-import {
-    setAccessToken as setMyButtercupAccessToken,
-    setRefreshToken as setMyButtercupRefreshToken
-} from "../../shared/actions/myButtercup.js";
 
 const AUTOLOGIN_EXPIRY = ms("45s");
 const BUTTERCUP_DOMAIN_REXP = /^https:\/\/buttercup.pw\//;
 const DROPBOX_ACCESS_TOKEN_REXP = /access_token=([^&]+)/;
 const GOOGLE_DRIVE_AUTH_CODE_REXP = /\?googleauth&code=([^&#?]+)/;
-const MYBUTTERCUP_AUTH_CODE_REXP = /code=([^&]+)/;
-const MYBUTTERCUP_CALLBACK_URL_REXP = /^https?:\/\/(localhost:8000|my\.buttercup\.pw)\/oauth\/authorized\//;
 
 export function attachBrowserStateListeners() {
     chrome.tabs.onUpdated.addListener(handleTabUpdatedEvent);
@@ -65,27 +55,6 @@ function handleTabUpdatedEvent(tabID, changeInfo) {
                     `Failed automatically logging in with entry ${autoLogin.entryID} on source ${autoLogin.sourceID}: ${err.message}`
                 );
             });
-    } else if (MYBUTTERCUP_CALLBACK_URL_REXP.test(url)) {
-        const authCodeMatch = url.match(MYBUTTERCUP_AUTH_CODE_REXP);
-        if (authCodeMatch) {
-            const authCode = authCodeMatch[1];
-            log.info(`Retrieved MyButtercup auth code from tab: ${tabID}`);
-            chrome.tabs.remove(tabID);
-            log.info("Exchanging My Buttercup authorisation code for tokens");
-            getMyButtercupTokens(authCode)
-                .then(tokens => {
-                    log.info("Fetching My Buttercup vault details");
-                    return processMyButtercupVaultDetails(tokens.accessToken, tokens.refreshToken).then(() => tokens);
-                })
-                .then(tokens => {
-                    log.info("My Buttercup authorisation complete");
-                    dispatch(setMyButtercupAccessToken(tokens.accessToken));
-                    dispatch(setMyButtercupRefreshToken(tokens.refreshToken));
-                })
-                .catch(err => {
-                    log.error(`Failed exchanging MyButtercup authorisation code for tokens: ${err.message}`);
-                });
-        }
     }
     if (autoLogin.setTime && Date.now() - autoLogin.setTime >= AUTOLOGIN_EXPIRY) {
         log.info("Auto-login session expired: details cleared");
