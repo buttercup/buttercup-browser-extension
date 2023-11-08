@@ -86,9 +86,7 @@ export function EntryItem(props: EntryItemProps) {
                         <Text ellipsize>{entry.properties.title}</Text>
                     </Title>
                     <CenteredText ellipsize className={cn(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
-                        {/* <VaultStateIndicator state={vault.state} />&nbsp; */}
-                        {/* {t(`vault-state.${vault.state}`)} */}
-                        Test
+                        {entry.properties.username} {entry.properties.url && `@ ${entry.properties.url}` || ""}
                     </CenteredText>
                 </DetailRow>
                 {/* <ButtonGroup>
