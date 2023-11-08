@@ -1,5 +1,11 @@
 # Buttercup browser extension changelog
 
+## v2.26.0
+_2023-11-08_
+
+ * **Important version 3 update notice**
+ * Updates for core libraries and datasources
+
 ## v2.25.3
 _2023-01-31_
 
