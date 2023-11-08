@@ -9,7 +9,9 @@ import { watchStorage as watchStorageForConfig } from "./library/config.js";
 import { createArchiveManager, getQueue, registerAuthWatchers } from "./library/buttercup.js";
 import { migrateLocalStorageToChromeStorage } from "./library/storageMigration.js";
 import { cleanLogins, updateLoginsState } from "./library/loginMemory.js";
+import BrowserStorageInterface, { getSyncStorage } from "./library/BrowserStorageInterface.js";
 import store from "./redux/index.js";
+import { createNewTab, getExtensionURL } from "../shared/library/extension.js";
 
 log.info("Starting...");
 log.info(`Detected browser: ${getBrowser()}`);
@@ -29,6 +31,14 @@ migrateLocalStorageToChromeStorage(getQueue())
         setInterval(cleanLogins, 30000);
         setInterval(updateLoginsState, 5000);
         log.info(`Started successfully: v${__VERSION__}`);
+    })
+    .then(async () => {
+        const storage = new BrowserStorageInterface(getSyncStorage());
+        const hasShownUpdateNotice = !!(await storage.getValue("shownV3Update"));
+        if (!hasShownUpdateNotice) {
+            await storage.setValue("shownV3Update", `${Date.now()}`);
+            createNewTab(getExtensionURL("setup.html#/update"));
+        }
     })
     .catch(err => {
         log.error(err);

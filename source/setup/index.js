@@ -17,6 +17,7 @@ import DisabledLoginDomainsPage from "./components/DisabledLoginDomainsPage.js";
 import App from "../shared/containers/App.js";
 import { trackMouseMovement } from "../shared/library/mouseEvents.js";
 import { trackKeydownEvent } from "../shared/library/keyboardEvents.js";
+import UpdatePage from "./components/UpdatePage.js";
 
 import "react-select/dist/react-select.css";
 
@@ -33,6 +34,7 @@ ReactDOM.render(
                 <Route path="/save-new-credentials" component={SaveCredentialsPage} />
                 <Route path="/about" component={AboutPage} />
                 <Route path="/unlock" component={UnlockAllArchivesPage} />
+                <Route path="/update" component={UpdatePage} />
                 <Route path="/settings/disabled-login-domains" component={DisabledLoginDomainsPage} />
                 <LoadingModal />
             </App>

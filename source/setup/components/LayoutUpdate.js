@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Colors, Divider } from "@blueprintjs/core";
+import { Divider } from "@blueprintjs/core";
 import styled from "styled-components";
-import { UpdateNotice } from "../../shared/components/UpdateNotice";
 
 import BUTTERCUP_LOGO from "../../../resources/buttercup-128.png";
 
@@ -44,7 +43,7 @@ const ContentContainer = styled.div`
     padding: 1rem;
 `;
 
-const LayoutMain = ({ title, children }) => (
+const LayoutUpdate = ({ title, children }) => (
     <MainContent>
         <Wrapper>
             <Header>
@@ -54,12 +53,11 @@ const LayoutMain = ({ title, children }) => (
             <Divider />
             <ContentContainer>{children}</ContentContainer>
         </Wrapper>
-        <UpdateNotice />
     </MainContent>
 );
 
-LayoutMain.propTypes = {
+LayoutUpdate.propTypes = {
     title: PropTypes.string.isRequired
 };
 
-export default LayoutMain;
+export default LayoutUpdate;
