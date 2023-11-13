@@ -9,10 +9,6 @@ import { PreparedOTP } from "../../hooks/otp.js";
 interface OTPItemProps {
     otp: PreparedOTP;
     onClick: () => void;
-    // isDetailsVisible: boolean;
-    // onRemoveClick: () => void;
-    // onUnlockClick: () => void;
-    // vault: VaultSourceDescription;
 }
 
 const CenteredText = styled(Text)`
