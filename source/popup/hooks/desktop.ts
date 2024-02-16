@@ -8,6 +8,7 @@ import { getToaster } from "../../shared/services/notifications.js";
 import {
     getDesktopConnectionAvailable,
     getOTPs,
+    getRecentEntries,
     getVaultSources,
     searchEntriesByTerm,
     searchEntriesByURL
@@ -105,6 +106,21 @@ export function useOTPs(): [Array<OTP>, boolean] {
         }
     }, [rawOTPs, otps, error]);
     return [otps, loading];
+}
+
+export function useRecentEntries(): Array<SearchResult> {
+    const performSearch = useCallback(getRecentEntries, []);
+    const { value, error } = useAsync(performSearch, [performSearch]);
+    useEffect(() => {
+        if (!error) return;
+        console.error(error);
+        getToaster().show({
+            intent: Intent.DANGER,
+            message: t("error.desktop.search-failed", { message: localisedErrorMessage(error) }),
+            timeout: 10000
+        });
+    }, [error]);
+    return value === null ? [] : value;
 }
 
 export function useSearchedEntries(term: string): Array<SearchResult> {

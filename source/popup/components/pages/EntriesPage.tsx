@@ -1,12 +1,15 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import styled from "styled-components";
 import { Button, InputGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { SearchResult, VaultSourceStatus } from "buttercup";
 import { t } from "../../../shared/i18n/trans.js";
-import { useDesktopConnectionState, useEntriesForURL, useSearchedEntries, useVaultSources } from "../../hooks/desktop.js";
+import { useDesktopConnectionState, useEntriesForURL, useRecentEntries, useSearchedEntries, useVaultSources } from "../../hooks/desktop.js";
 import { EntryItemList } from "../entries/EntryItemList.js";
 import { LaunchContext } from "../contexts/LaunchContext.js";
 import { sendEntryResultToTabForInput } from "../../services/tab.js";
+import { trackEntryRecentUse } from "../../services/recents.js";
+import { getToaster } from "../../../shared/services/notifications.js";
+import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { DesktopConnectionState } from "../../types.js";
 
 interface EntriesPageProps {
@@ -88,10 +91,19 @@ function EntriesPageList(props: EntriesPageProps) {
     const searchedEntries = useSearchedEntries(props.searchTerm);
     const { formID, source: popupSource, url } = useContext(LaunchContext);
     const urlEntries = useEntriesForURL(url);
+    const recentEntries = useRecentEntries();
     const handleEntryClick = useCallback((entry: SearchResult) => {
         if (popupSource === "page") {
             sendEntryResultToTabForInput(formID, entry);
         }
+        trackEntryRecentUse(entry).catch(err => {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("popup.entries.click.recent-set-error", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+        });
     }, [popupSource]);
     if (unlockedCount === 0) {
         return (
@@ -102,9 +114,20 @@ function EntriesPageList(props: EntriesPageProps) {
             />
         );
     }
+    if (searchedEntries.length > 0) {
+        return (
+            <EntryItemList
+                entries={searchedEntries}
+                onEntryClick={handleEntryClick}
+            />
+        );
+    }
     return (
         <EntryItemList
-            entries={searchedEntries.length > 0 ? searchedEntries : urlEntries}
+            entries={{
+                "URL Entries": urlEntries,
+                "Recents": recentEntries
+            }}
             onEntryClick={handleEntryClick}
         />
     );

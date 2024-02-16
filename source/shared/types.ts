@@ -23,8 +23,10 @@ export interface BackgroundMessage {
     code?: string;
     configKey?: keyof Configuration;
     configValue?: any;
+    count?: number;
     credentials?: UsedCredentials;
     credentialsID?: string;
+    entry?: SearchResult;
     entryID?: EntryID;
     entryProperties?: Record<string, string>;
     entryType?: EntryType;
@@ -45,6 +47,7 @@ export enum BackgroundMessageType {
     GetDesktopVaultsTree = "getDesktopVaultsTree",
     GetDisabledDomains = "getDisabledDomains",
     GetOTPs = "getOTPs",
+    GetRecentEntries = "getRecentEntries",
     GetSavedCredentials = "getCredentials",
     GetSavedCredentialsForID = "getCredentialsForID",
     PromptLockSource = "promptLockSource",
@@ -54,7 +57,8 @@ export enum BackgroundMessageType {
     SaveUsedCredentials = "saveUsedCredentials",
     SearchEntriesByTerm = "searchEntriesByTerm",
     SearchEntriesByURL = "searchEntriesByURL",
-    SetConfigurationValue = "setConfigurationValue"
+    SetConfigurationValue = "setConfigurationValue",
+    TrackRecentEntry = "trackRecentEntry"
 }
 
 export interface BackgroundResponse {

@@ -32,6 +32,17 @@ export async function getOTPs(): Promise<Array<OTP>> {
     return resp.otps;
 }
 
+export async function getRecentEntries(): Promise<Array<SearchResult>> {
+    const resp = await sendBackgroundMessage({
+        count: 5,
+        type: BackgroundMessageType.GetRecentEntries
+    });
+    if (resp.error) {
+        throw new Layerr(resp.error, "Failed fetching recent entries from desktop application");
+    }
+    return resp.searchResults;
+}
+
 export async function getVaultSources(): Promise<Array<VaultSourceDescription>> {
     const resp = await sendBackgroundMessage({
         type: BackgroundMessageType.GetDesktopVaultSources

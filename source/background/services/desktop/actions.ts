@@ -29,6 +29,23 @@ export async function authenticateBrowserAccess(code: string): Promise<string> {
     return publicKey;
 }
 
+export async function getEntrySearchResults(
+    entries: Array<{ entryID: EntryID; sourceID: VaultSourceID }>
+): Promise<Array<SearchResult>> {
+    const authHeader = await generateAuthHeader();
+    const { results } = (await sendDesktopRequest({
+        method: "POST",
+        route: "/v1/entries/specific",
+        auth: authHeader,
+        payload: {
+            entries
+        }
+    })) as {
+        results: Array<SearchResult>;
+    };
+    return results;
+}
+
 export async function getOTPs(): Promise<Array<OTP>> {
     const authHeader = await generateAuthHeader();
     const { otps } = (await sendDesktopRequest({

@@ -2,6 +2,7 @@ import { Layerr } from "layerr";
 import { getExtensionAPI } from "../../shared/extension.js";
 import {
     authenticateBrowserAccess,
+    getEntrySearchResults,
     getOTPs,
     getVaultSources,
     getVaultsTree,
@@ -23,7 +24,8 @@ import { getDisabledDomains } from "./disabledDomains.js";
 import { log } from "./log.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { resetInitialisation } from "./init.js";
-import { EntryType } from "buttercup";
+import { EntryType, VaultSourceID, VaultSourceStatus } from "buttercup";
+import { getRecents, trackRecentUsage } from "./recents.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -87,6 +89,28 @@ async function handleMessage(
             const otps = await getOTPs();
             sendResponse({
                 otps
+            });
+            break;
+        }
+        case BackgroundMessageType.GetRecentEntries: {
+            const { count = 10 } = msg;
+            const sources = await getVaultSources();
+            const unlockedIDs: Array<VaultSourceID> = sources.reduce((output, source) => {
+                if (source.state === VaultSourceStatus.Unlocked) {
+                    return [...output, source.id];
+                }
+                return output;
+            }, []);
+            const recentItems = await getRecents(unlockedIDs);
+            recentItems.splice(count, Infinity);
+            const searchResults = await getEntrySearchResults(
+                recentItems.map((item) => ({
+                    entryID: item.entryID,
+                    sourceID: item.sourceID
+                }))
+            );
+            sendResponse({
+                searchResults
             });
             break;
         }
@@ -172,6 +196,15 @@ async function handleMessage(
         }
         case BackgroundMessageType.SetConfigurationValue: {
             await updateConfigValue(msg.configKey, msg.configValue);
+            sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.TrackRecentEntry: {
+            const { entry } = msg;
+            if (!entry.sourceID) {
+                throw new Error(`No source ID in entry result: ${entry.id}`);
+            }
+            await trackRecentUsage(entry.sourceID, entry.id);
             sendResponse({});
             break;
         }

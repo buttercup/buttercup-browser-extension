@@ -8,7 +8,7 @@ const VALID_LOCAL_KEYS = [
     LocalStorageItem.APIPublicKey,
     LocalStorageItem.APIServerPublicKey
 ];
-const VALID_SYNC_KEYS = [SyncStorageItem.Configuration];
+const VALID_SYNC_KEYS = [SyncStorageItem.Configuration, SyncStorageItem.DisabledDomains, SyncStorageItem.RecentItems];
 
 export async function clearLocalStorage(): Promise<void> {
     const localStorage = getLocalStorage();

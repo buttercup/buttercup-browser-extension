@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     createHashRouter,
     RouterProvider,
@@ -12,12 +12,13 @@ import { useBodyClass } from "../hooks/document.js";
 import { LaunchContextProvider } from "./contexts/LaunchContext.js";
 import { useBodyThemeClass, useTheme } from "../../shared/hooks/theme.js";
 import { SaveDialogPage } from "./pages/SaveDialogPage.js";
+import { useCurrentTabURL } from "../hooks/tab.js";
 import { PopupPage } from "../types.js";
 
 const ROUTER = createHashRouter([
     {
         path: "/",
-        element: <FullApp />
+        element: <ToolbarApp />
     },
     {
         path: "/dialog",
@@ -48,24 +49,6 @@ export function App() {
         <ThemeProvider darkMode={theme === "dark"}>
             <RouterProvider router={ROUTER} />
         </ThemeProvider>
-    );
-}
-
-function FullApp() {
-    const [tab, setTab] = useSingleState(APP_STATE, "tab");
-    return (
-        <LaunchContextProvider source="popup">
-            <Navigator
-                activeTab={tab}
-                onChangeTab={setTab}
-                tabs={[
-                    PopupPage.Entries,
-                    PopupPage.Vaults,
-                    PopupPage.OTPs,
-                    PopupPage.Settings
-                ]}
-            />
-        </LaunchContextProvider>
     );
 }
 
@@ -102,6 +85,32 @@ function SavePromptApp() {
     return (
         <LaunchContextProvider source="page" loginID={loginID}>
             <SaveDialogPage />
+        </LaunchContextProvider>
+    );
+}
+
+function ToolbarApp() {
+    const [tab, setTab] = useSingleState(APP_STATE, "tab");
+    const [loadingURL, url] = useCurrentTabURL();
+    const [hasLoadedURL, setHasLoadedURL] = useState<boolean>(false);
+    useEffect(() => {
+        if (!loadingURL) {
+            setHasLoadedURL(true);
+        }
+    }, [loadingURL]);
+    if (!hasLoadedURL) return null;
+    return (
+        <LaunchContextProvider source="popup" url={url}>
+            <Navigator
+                activeTab={tab}
+                onChangeTab={setTab}
+                tabs={[
+                    PopupPage.Entries,
+                    PopupPage.Vaults,
+                    PopupPage.OTPs,
+                    PopupPage.Settings
+                ]}
+            />
         </LaunchContextProvider>
     );
 }
