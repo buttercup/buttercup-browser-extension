@@ -50,6 +50,7 @@ export enum BackgroundMessageType {
     GetRecentEntries = "getRecentEntries",
     GetSavedCredentials = "getCredentials",
     GetSavedCredentialsForID = "getCredentialsForID",
+    OpenEntryPage = "openEntryPage",
     PromptLockSource = "promptLockSource",
     PromptUnlockSource = "promptUnlockSource",
     ResetSettings = "resetSettings",
@@ -69,6 +70,7 @@ export interface BackgroundResponse {
     entryID?: EntryID | null;
     error?: Error;
     locked?: boolean;
+    opened?: boolean;
     otps?: Array<OTP>;
     searchResults?: Array<SearchResult>;
     vaultSources?: Array<VaultSourceDescription>;

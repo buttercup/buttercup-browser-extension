@@ -11,6 +11,7 @@ import { trackEntryRecentUse } from "../../services/recents.js";
 import { getToaster } from "../../../shared/services/notifications.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { DesktopConnectionState } from "../../types.js";
+import { openPageForEntry } from "../../services/entry.js";
 
 interface EntriesPageProps {
     onConnectClick: () => Promise<void>;
@@ -95,6 +96,25 @@ function EntriesPageList(props: EntriesPageProps) {
     const handleEntryClick = useCallback((entry: SearchResult) => {
         if (popupSource === "page") {
             sendEntryResultToTabForInput(formID, entry);
+        } else if (popupSource === "popup") {
+            openPageForEntry(entry)
+                .then(opened => {
+                    if (!opened) {
+                        getToaster().show({
+                            intent: Intent.PRIMARY,
+                            message: t("popup.entries.click.no-url-available"),
+                            timeout: 3000
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    getToaster().show({
+                        intent: Intent.DANGER,
+                        message: t("popup.entries.click.open-error", { message: localisedErrorMessage(err) }),
+                        timeout: 10000
+                    });
+                });
         }
         trackEntryRecentUse(entry).catch(err => {
             console.error(err);

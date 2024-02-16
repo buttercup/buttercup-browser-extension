@@ -71,6 +71,8 @@
         },
         "entries": {
             "click": {
+                "no-url-available": "No URL available for this entry",
+                "open-error": "Could not open page for entry: {{message}}",
                 "recent-set-error": "Failed recording recent entry: {{message}}"
             },
             "search": {

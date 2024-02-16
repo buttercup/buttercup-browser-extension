@@ -24,8 +24,9 @@ import { getDisabledDomains } from "./disabledDomains.js";
 import { log } from "./log.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { resetInitialisation } from "./init.js";
-import { EntryType, VaultSourceID, VaultSourceStatus } from "buttercup";
+import { EntryType, EntryURLType, VaultSourceID, VaultSourceStatus, getEntryURLs } from "buttercup";
 import { getRecents, trackRecentUsage } from "./recents.js";
+import { openEntryPageInNewTab } from "./entry.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -132,6 +133,17 @@ async function handleMessage(
             log("start desktop authentication");
             await initiateConnection();
             sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.OpenEntryPage: {
+            const { entry } = msg;
+            const [url = null] = getEntryURLs(entry.properties, EntryURLType.Login);
+            if (!url) {
+                sendResponse({ opened: false });
+                return;
+            }
+            log(`open entry page by url: ${entry.id} (${url})`);
+            await openEntryPageInNewTab(entry, url);
             break;
         }
         case BackgroundMessageType.PromptLockSource: {
