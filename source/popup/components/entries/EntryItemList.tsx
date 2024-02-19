@@ -42,17 +42,21 @@ export function EntryItemList(props: EntryItemListProps) {
                 <>
                     {Object.keys(entries).map(sectionName => (
                         <Fragment key={sectionName}>
-                            <H4>{t(sectionName)}</H4>
-                            {entries[sectionName].map((entry: SearchResult) => (
-                                <Fragment key={entry.id}>
-                                    <EntryItem
-                                        entry={entry}
-                                        fetchIcons={config.entryIcons}
-                                        onClick={() => props.onEntryClick(entry)}
-                                    />
-                                    <Divider />
+                            {entries[sectionName].length > 0 && (
+                                <Fragment key={`en-${sectionName}`}>
+                                    <H4>{t(sectionName)}</H4>
+                                    {entries[sectionName].map((entry: SearchResult) => (
+                                        <Fragment key={entry.id}>
+                                            <EntryItem
+                                                entry={entry}
+                                                fetchIcons={config.entryIcons}
+                                                onClick={() => props.onEntryClick(entry)}
+                                            />
+                                            <Divider />
+                                        </Fragment>
+                                    ))}
                                 </Fragment>
-                            ))}
+                            )}
                         </Fragment>
                     ))}
                 </>

@@ -79,6 +79,10 @@
                 "placeholder": "Search..."
             }
         },
+        "no-otps": {
+            "description": "No OTP entries found in unlocked vaults.",
+            "title": "No OTP Entries"
+        },
         "vault": {
             "lock": "Lock vault",
             "locking": {

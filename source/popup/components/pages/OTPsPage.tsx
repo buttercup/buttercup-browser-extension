@@ -107,6 +107,14 @@ function OTPsPageList(props: OTPsPageProps) {
                 icon="folder-close"
             />
         );
+    } else if (preparedOTPs.length <= 0) {
+        return (
+            <InvalidState
+                title={t("popup.no-otps.title")}
+                description={t("popup.no-otps.description")}
+                icon="array-numeric"
+            />
+        );
     }
     return (
         <OTPItemList
