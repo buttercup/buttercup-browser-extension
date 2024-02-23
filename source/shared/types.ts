@@ -20,6 +20,7 @@ export interface AddVaultPayload {
 }
 
 export interface BackgroundMessage {
+    autoLogin?: boolean;
     code?: string;
     configKey?: keyof Configuration;
     configValue?: any;
@@ -42,6 +43,7 @@ export enum BackgroundMessageType {
     CheckDesktopConnection = "checkDesktopConnection",
     ClearDesktopAuthentication = "clearDesktopAuthentication",
     InitiateDesktopConnection = "initiateDesktopConnection",
+    GetAutoLoginForTab = "getTabAutoLogin",
     GetConfiguration = "getConfiguration",
     GetDesktopVaultSources = "getDesktopVaultSources",
     GetDesktopVaultsTree = "getDesktopVaultsTree",
@@ -64,6 +66,7 @@ export enum BackgroundMessageType {
 
 export interface BackgroundResponse {
     available?: boolean;
+    autoLogin?: SearchResult | null;
     config?: Configuration;
     credentials?: Array<UsedCredentials>;
     domains?: Array<string>;

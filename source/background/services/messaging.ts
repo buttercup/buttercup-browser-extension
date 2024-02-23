@@ -1,4 +1,5 @@
 import { Layerr } from "layerr";
+import { EntryType, EntryURLType, VaultSourceID, VaultSourceStatus, getEntryURLs } from "buttercup";
 import { getExtensionAPI } from "../../shared/extension.js";
 import {
     authenticateBrowserAccess,
@@ -22,11 +23,11 @@ import { getAllCredentials, getCredentialsForID, updateUsedCredentials } from ".
 import { getConfig, updateConfigValue } from "./config.js";
 import { getDisabledDomains } from "./disabledDomains.js";
 import { log } from "./log.js";
-import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 import { resetInitialisation } from "./init.js";
-import { EntryType, EntryURLType, VaultSourceID, VaultSourceStatus, getEntryURLs } from "buttercup";
 import { getRecents, trackRecentUsage } from "./recents.js";
 import { openEntryPageInNewTab } from "./entry.js";
+import { getAutoLoginForTab, registerAutoLogin } from "./autoLogin.js";
+import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -56,6 +57,16 @@ async function handleMessage(
             await removeLocalValue(LocalStorageItem.APIClientID);
             await removeLocalValue(LocalStorageItem.APIServerPublicKey);
             sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.GetAutoLoginForTab: {
+            const tabID = sender.tab?.id;
+            if (!tabID) {
+                sendResponse({ autoLogin: null });
+                break;
+            }
+            const entry = getAutoLoginForTab(tabID);
+            sendResponse({ autoLogin: entry });
             break;
         }
         case BackgroundMessageType.GetConfiguration: {
@@ -136,14 +147,18 @@ async function handleMessage(
             break;
         }
         case BackgroundMessageType.OpenEntryPage: {
-            const { entry } = msg;
+            const { autoLogin, entry } = msg;
             const [url = null] = getEntryURLs(entry.properties, EntryURLType.Login);
             if (!url) {
                 sendResponse({ opened: false });
                 return;
             }
             log(`open entry page by url: ${entry.id} (${url})`);
-            await openEntryPageInNewTab(entry, url);
+            const tabID = await openEntryPageInNewTab(entry, url);
+            if (autoLogin) {
+                registerAutoLogin(entry, tabID);
+            }
+            sendResponse({ opened: true });
             break;
         }
         case BackgroundMessageType.PromptLockSource: {

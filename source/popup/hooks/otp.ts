@@ -3,12 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { OTP } from "../types.js";
 import { useTimer } from "../../shared/hooks/timer.js";
 
-// interface ParsedOTP {
-//     instance: OTPAuth.TOTP;
-//     period: number;
-//     remaining: number;
-// }
-
 export interface PreparedOTP extends OTP {
     digits: string;
     period: number;
@@ -32,11 +26,6 @@ export function usePreparedOTPs(otps: Array<OTP>): Array<PreparedOTP> {
                 throw new Error(`OTP is invalid (no period): ${otp.otpURL}`);
             }
             newParsed[otp.otpURL] = otpInst;
-            // newParsed[otp.otpURL] = {
-            //     instance: otpInst,
-            //     period: otpInst.period,
-            //     remaining: getPeriodTimeLeft(otpInst.period)
-            // };
             changed = true;
         }
         for (const parsed in newParsed) {
@@ -47,18 +36,9 @@ export function usePreparedOTPs(otps: Array<OTP>): Array<PreparedOTP> {
                 changed = true;
             }
         }
-        // let timer: ReturnType<typeof setInterval>;
         if (changed) {
             setParsedOTPs(newParsed);
         }
-        // else {
-        //     timer = setInterval(() => {
-
-        //     }, 1000);
-        // }
-        // return () => {
-        //     clearInterval(timer);
-        // };
     }, [otps, parsedOTPs]);
     useTimer(
         () => {
@@ -71,10 +51,6 @@ export function usePreparedOTPs(otps: Array<OTP>): Array<PreparedOTP> {
                     {}
                 )
             );
-            // setPeriods(Object.keys(parsedOTPs).map(url => [
-            //     parsedOTPs[url].period,
-            //     getPeriodTimeLeft(parsedOTPs[url].period)
-            // ]));
         },
         1000,
         [parsedOTPs]
@@ -99,21 +75,4 @@ export function usePreparedOTPs(otps: Array<OTP>): Array<PreparedOTP> {
         [otps, parsedOTPs, periods]
     );
     return prepared;
-    // const prepared: Array<PreparedOTP> = useMemo(
-    //     () =>
-    //         otps.map((otp) => {
-    //             const otpInst = OTPAuth.URI.parse(otp.otpURL) as OTPAuth.TOTP;
-    //             if (!otpInst.period) {
-    //                 throw new Error(`OTP is invalid (no period): ${otp.otpURL}`);
-    //             }
-    //             return {
-    //                 ...otp,
-    //                 otpTitle: otpInst.label,
-    //                 digits: otpInst.generate(),
-    //                 period: otpInst.period
-    //             };
-    //         }),
-    //     [otps]
-    // );
-    // return prepared;
 }

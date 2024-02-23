@@ -8,6 +8,7 @@ import { t } from "../../../shared/i18n/trans.js";
 
 interface EntryItemListProps {
     entries: Array<SearchResult> | Record<string, Array<SearchResult>>;
+    onEntryAutoClick: (entry: SearchResult) => void;
     onEntryClick: (entry: SearchResult) => void;
 }
 
@@ -20,7 +21,7 @@ const ScrollList = styled.div`
 `;
 
 export function EntryItemList(props: EntryItemListProps) {
-    const { entries } = props;
+    const { entries, onEntryAutoClick, onEntryClick } = props;
     const [config] = useConfig();
     if (!config) return null;
     return (
@@ -32,7 +33,8 @@ export function EntryItemList(props: EntryItemListProps) {
                             <EntryItem
                                 entry={entry}
                                 fetchIcons={config.entryIcons}
-                                onClick={() => props.onEntryClick(entry)}
+                                onAutoClick={() => onEntryAutoClick(entry)}
+                                onClick={() => onEntryClick(entry)}
                             />
                             <Divider />
                         </Fragment>
@@ -50,7 +52,8 @@ export function EntryItemList(props: EntryItemListProps) {
                                             <EntryItem
                                                 entry={entry}
                                                 fetchIcons={config.entryIcons}
-                                                onClick={() => props.onEntryClick(entry)}
+                                                onAutoClick={() => onEntryAutoClick(entry)}
+                                                onClick={() => onEntryClick(entry)}
                                             />
                                             <Divider />
                                         </Fragment>

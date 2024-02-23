@@ -1,14 +1,18 @@
-import React, { useCallback, useMemo } from "react";
+import React, { MouseEvent, useCallback, useContext, useMemo } from "react";
 import styled from "styled-components";
 import cn from "classnames";
-import { Classes, Text } from "@blueprintjs/core";
-import { SearchResult } from "buttercup";
+import { Button, ButtonGroup, Classes, Text } from "@blueprintjs/core";
+import { SearchResult, VaultSourceStatus } from "buttercup";
 import { SiteIcon } from "@buttercup/ui";
+import { LaunchContext } from "../contexts/LaunchContext.js";
 import { extractEntryDomain } from "../../../shared/library/domain.js";
+import { Tooltip2 } from "@blueprintjs/popover2";
+import { t } from "../../../shared/i18n/trans.js";
 
 interface EntryItemProps {
     entry: SearchResult;
     fetchIcons: boolean;
+    onAutoClick: () => void;
     onClick: () => void;
 }
 
@@ -61,17 +65,32 @@ export function EntryItem(props: EntryItemProps) {
     const {
         entry,
         fetchIcons,
+        onAutoClick,
         onClick
     } = props;
+    const { source: popupSource } = useContext(LaunchContext);
     const entryDomain = useMemo(() => {
         if (!fetchIcons) {
             return null;
         }
         return extractEntryDomain(entry.properties);
     }, [entry, fetchIcons]);
-    const handleEntryClick = useCallback(() => {
-        onClick();
-    }, [onClick]);
+    const handleEntryClick = useCallback(
+        (evt: MouseEvent) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            onClick();
+        },
+        [onClick]
+    );
+    const handleEntryLoginClick = useCallback(
+        (evt: MouseEvent) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            onAutoClick();
+        },
+        [onAutoClick]
+    );
     return (
         <Container isActive={false} onClick={handleEntryClick}>
             <EntryRow>
@@ -81,7 +100,7 @@ export function EntryItem(props: EntryItemProps) {
                         type={entry.entryType}
                     />
                 </EntryIconBackground>
-                <DetailRow onClick={() => {}}>
+                <DetailRow>
                     <Title title={entry.properties.title}>
                         <Text ellipsize>{entry.properties.title}</Text>
                     </Title>
@@ -89,38 +108,19 @@ export function EntryItem(props: EntryItemProps) {
                         {entry.properties.username} {entry.properties.url && `@ ${entry.properties.url}` || ""}
                     </CenteredText>
                 </DetailRow>
-                {/* <ButtonGroup>
-                    <Tooltip2
-                        content={
-                            vault.state === VaultSourceStatus.Locked
-                                ? t("popup.vault.unlock")
-                                : vault.state === VaultSourceStatus.Unlocked
-                                    ? t("popup.vault.lock")
-                                    : t("popup.vault.state-pending")
-                        }
-                    >
-                        <Button
-                            icon={
-                                vault.state === VaultSourceStatus.Locked
-                                    ? "unlock"
-                                    : vault.state === VaultSourceStatus.Unlocked
-                                        ? "lock"
-                                        : "help"
-                            }
-                            loading={vault.state === VaultSourceStatus.Pending}
-                            minimal
-                            onClick={handleLockUnlockClick}
-                        />
-                    </Tooltip2>
-                    <Tooltip2 content={t("popup.vault.remove")}>
-                        <Button
-                            icon="remove"
-                            loading={vault.state === VaultSourceStatus.Pending}
-                            minimal
-                            onClick={handleRemoveClick}
-                        />
-                    </Tooltip2>
-                </ButtonGroup> */}
+                {popupSource === "popup" && (
+                    <ButtonGroup>
+                        <Tooltip2
+                            content={t("popup.entries.auto-login.tooltip")}
+                        >
+                            <Button
+                                icon="text-highlight"
+                                minimal
+                                onClick={handleEntryLoginClick}
+                            />
+                        </Tooltip2>
+                    </ButtonGroup>
+                )}
             </EntryRow>
         </Container>
     );

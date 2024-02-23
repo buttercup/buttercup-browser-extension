@@ -1,6 +1,7 @@
 import { LoginTarget, getLoginTargets } from "@buttercup/locust";
 import { attachLaunchButton } from "../ui/launch.js";
 import { watchCredentialsOnTarget } from "./logins/watcher.js";
+import { processTargetAutoLogin } from "./autoLogin.js";
 import { InputType } from "../types.js";
 
 const TARGET_SEARCH_INTERVAL = 1000;
@@ -42,5 +43,6 @@ export function waitAndAttachLaunchButtons(
             attachLaunchButton(usernameField, (el) => onInputActivate(el, loginTarget, InputType.UserPassword));
         }
         watchCredentialsOnTarget(loginTarget);
+        processTargetAutoLogin(loginTarget).catch(console.error);
     });
 }

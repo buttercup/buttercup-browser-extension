@@ -93,11 +93,11 @@ function EntriesPageList(props: EntriesPageProps) {
     const { formID, source: popupSource, url } = useContext(LaunchContext);
     const urlEntries = useEntriesForURL(url);
     const recentEntries = useRecentEntries();
-    const handleEntryClick = useCallback((entry: SearchResult) => {
+    const handleEntryClick = useCallback((entry: SearchResult, autoLogin: boolean) => {
         if (popupSource === "page") {
             sendEntryResultToTabForInput(formID, entry);
         } else if (popupSource === "popup") {
-            openPageForEntry(entry)
+            openPageForEntry(entry, autoLogin)
                 .then(opened => {
                     if (!opened) {
                         getToaster().show({
@@ -125,6 +125,12 @@ function EntriesPageList(props: EntriesPageProps) {
             });
         });
     }, [popupSource]);
+    const handleEntryAutoLoginClick = useCallback((entry: SearchResult) => {
+        handleEntryClick(entry, true);
+    }, [handleEntryClick]);
+    const handleEntryBodyClick = useCallback((entry: SearchResult) => {
+        handleEntryClick(entry, false);
+    }, [handleEntryClick]);
     if (unlockedCount === 0) {
         return (
             <InvalidState
@@ -138,7 +144,8 @@ function EntriesPageList(props: EntriesPageProps) {
         return (
             <EntryItemList
                 entries={searchedEntries}
-                onEntryClick={handleEntryClick}
+                onEntryAutoClick={handleEntryAutoLoginClick}
+                onEntryClick={handleEntryBodyClick}
             />
         );
     }
@@ -148,7 +155,8 @@ function EntriesPageList(props: EntriesPageProps) {
                 "URL Entries": urlEntries,
                 "Recents": recentEntries
             }}
-            onEntryClick={handleEntryClick}
+            onEntryAutoClick={handleEntryAutoLoginClick}
+            onEntryClick={handleEntryBodyClick}
         />
     );
 }

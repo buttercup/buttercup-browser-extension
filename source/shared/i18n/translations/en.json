@@ -70,6 +70,9 @@
             "reauth-error": "Failed re-authenticating: {{message}}"
         },
         "entries": {
+            "auto-login": {
+                "tooltip": "Open entry URL and automatically log in"
+            },
             "click": {
                 "no-url-available": "No URL available for this entry",
                 "open-error": "Could not open page for entry: {{message}}",
