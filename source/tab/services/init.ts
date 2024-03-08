@@ -5,5 +5,5 @@ import { initialise as initialiseCredentialsWatching } from "./logins/watcher.js
 export async function initialise() {
     await initialiseMessaging();
     await initialiseForms();
-    initialiseCredentialsWatching();
+    await initialiseCredentialsWatching();
 }

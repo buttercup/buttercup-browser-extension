@@ -8,7 +8,17 @@ export async function getCredentialsForID(id: string): Promise<UsedCredentials |
         type: BackgroundMessageType.GetSavedCredentialsForID
     });
     if (resp.error) {
-        throw new Layerr(resp.error, "Failed fetching used credentials");
+        throw new Layerr(resp.error, "Failed fetching saved credentials");
+    }
+    return resp.credentials[0] ?? null;
+}
+
+export async function getLastSavedCredentials(): Promise<UsedCredentials | null> {
+    const resp = await sendBackgroundMessage({
+        type: BackgroundMessageType.GetLastSavedCredentials
+    });
+    if (resp.error) {
+        throw new Layerr(resp.error, "Failed fetching last saved credentials");
     }
     return resp.credentials[0] ?? null;
 }

@@ -19,7 +19,13 @@ import {
 } from "./desktop/actions.js";
 import { clearLocalStorage, removeLocalValue, setLocalValue } from "./storage.js";
 import { errorToString } from "../../shared/library/error.js";
-import { getAllCredentials, getCredentialsForID, updateUsedCredentials } from "./loginMemory.js";
+import {
+    clearCredentials,
+    getAllCredentials,
+    getCredentialsForID,
+    getLastCredentials,
+    updateUsedCredentials
+} from "./loginMemory.js";
 import { getConfig, updateConfigValue } from "./config.js";
 import { getDisabledDomains } from "./disabledDomains.js";
 import { log } from "./log.js";
@@ -59,6 +65,13 @@ async function handleMessage(
             sendResponse({});
             break;
         }
+        case BackgroundMessageType.ClearSavedCredentials: {
+            const { credentialsID } = msg;
+            log(`clear saved credentials: ${credentialsID}`);
+            clearCredentials(credentialsID);
+            sendResponse({});
+            break;
+        }
         case BackgroundMessageType.GetAutoLoginForTab: {
             const tabID = sender.tab?.id;
             if (!tabID) {
@@ -94,6 +107,18 @@ async function handleMessage(
             const domains = await getDisabledDomains();
             sendResponse({
                 domains
+            });
+            break;
+        }
+        case BackgroundMessageType.GetLastSavedCredentials: {
+            const tabID = sender.tab?.id;
+            if (!tabID) {
+                sendResponse({ credentials: [null] });
+                break;
+            }
+            const credentials = getLastCredentials(tabID);
+            sendResponse({
+                credentials: [credentials]
             });
             break;
         }

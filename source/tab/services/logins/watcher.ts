@@ -1,18 +1,18 @@
 import { LoginTarget, LoginTargetFeature } from "@buttercup/locust";
 import { onNavigate } from "on-navigate";
 import { getSharedTracker } from "../LoginTracker.js";
-import { getCredentialsForID, transferLoginCredentials } from "./saving.js";
+import { getCredentialsForID, getLastSavedCredentials, transferLoginCredentials } from "./saving.js";
 import { getDisabledDomains } from "./disabled.js";
 import { currentDomainDisabled, getCurrentDomain } from "../../library/page.js";
 import { log } from "../log.js";
 import { getConfig } from "../../../shared/queries/config.js";
 import { openDialog } from "../../ui/saveDialog.js";
 
-async function checkForLoginSaveAbility(loginID: string) {
+async function checkForLoginSaveAbility(loginID?: string) {
     const [disabledDomains, config, used] = await Promise.all([
         getDisabledDomains(),
         getConfig(),
-        getCredentialsForID(loginID)
+        loginID ? getCredentialsForID(loginID) : getLastSavedCredentials()
     ]);
     if (!used) return;
     if (currentDomainDisabled(disabledDomains)) {
@@ -21,10 +21,10 @@ async function checkForLoginSaveAbility(loginID: string) {
     }
     if (!config.saveNewLogins) return;
     log("saved login available, show prompt");
-    openDialog(loginID);
+    openDialog(used.id);
 }
 
-export function initialise() {
+export async function initialise() {
     const tracker = getSharedTracker();
     tracker.on("credentialsChanged", (details) => {
         transferLoginCredentials({
@@ -37,6 +37,7 @@ export function initialise() {
             fromEntry: details.entry
         });
     });
+    await checkForLoginSaveAbility();
 }
 
 export function watchCredentialsOnTarget(loginTarget: LoginTarget): void {
