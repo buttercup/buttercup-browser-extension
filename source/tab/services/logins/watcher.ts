@@ -14,7 +14,7 @@ async function checkForLoginSaveAbility(loginID?: string) {
         getConfig(),
         loginID ? getCredentialsForID(loginID) : getLastSavedCredentials()
     ]);
-    if (!used) return;
+    if (!used || !used.promptSave) return;
     if (currentDomainDisabled(disabledDomains)) {
         log(`login available, but current domain disabled: ${getCurrentDomain()}`);
         return;
@@ -28,13 +28,14 @@ export async function initialise() {
     const tracker = getSharedTracker();
     tracker.on("credentialsChanged", (details) => {
         transferLoginCredentials({
-            username: details.username,
-            password: details.password,
+            fromEntry: details.entry,
             id: details.id,
-            url: tracker.url,
-            title: tracker.title,
+            password: details.password,
+            promptSave: true,
             timestamp: Date.now(),
-            fromEntry: details.entry
+            title: tracker.title,
+            url: tracker.url,
+            username: details.username
         });
     });
     await checkForLoginSaveAbility();

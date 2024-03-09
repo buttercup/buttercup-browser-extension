@@ -43,6 +43,7 @@ export enum BackgroundMessageType {
     CheckDesktopConnection = "checkDesktopConnection",
     ClearDesktopAuthentication = "clearDesktopAuthentication",
     ClearSavedCredentials = "clearSavedCredentials",
+    ClearSavedCredentialsPrompt = "clearSavedCredentialsPrompt",
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetAutoLoginForTab = "getTabAutoLogin",
     GetConfiguration = "getConfiguration",
@@ -152,6 +153,7 @@ export interface UsedCredentials {
     fromEntry: boolean;
     id: string;
     password: string;
+    promptSave: boolean;
     timestamp: number;
     title: string;
     url: string;

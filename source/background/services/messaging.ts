@@ -24,6 +24,7 @@ import {
     getAllCredentials,
     getCredentialsForID,
     getLastCredentials,
+    stopPromptForID,
     updateUsedCredentials
 } from "./loginMemory.js";
 import { getConfig, updateConfigValue } from "./config.js";
@@ -69,6 +70,13 @@ async function handleMessage(
             const { credentialsID } = msg;
             log(`clear saved credentials: ${credentialsID}`);
             clearCredentials(credentialsID);
+            sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.ClearSavedCredentialsPrompt: {
+            const { credentialsID } = msg;
+            log(`clear saved credentials prompt: ${credentialsID}`);
+            stopPromptForID(credentialsID);
             sendResponse({});
             break;
         }

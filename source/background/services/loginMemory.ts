@@ -3,7 +3,6 @@ import { UsedCredentials } from "../types.js";
 
 interface LoginMemoryItem {
     credentials: UsedCredentials;
-    promptSave: boolean;
     tabID: number;
 }
 
@@ -53,29 +52,34 @@ function getLoginMemory(): ExpiryMap<string, LoginMemoryItem> {
     return __loginMemory;
 }
 
-export function stopPromptForTab(tabID: number): void {
+export function stopPromptForID(id: string): void {
     const memory = getLoginMemory();
-    let existing: LoginMemoryItem;
-    for (const [, item] of memory.entries()) {
-        if (item.tabID === tabID) {
-            existing = item;
-            break;
-        }
-    }
-    if (existing) {
-        memory.set(existing.credentials.id, {
+    if (memory.has(id)) {
+        const existing = memory.get(id);
+        memory.set(id, {
             ...existing,
-            promptSave: false
+            credentials: {
+                ...existing.credentials,
+                promptSave: false
+            }
+        });
+    }
+    const last = memory.has("last") ? memory.get("last") : null;
+    if (last?.credentials.id === id) {
+        memory.set("last", {
+            ...last,
+            credentials: {
+                ...last.credentials,
+                promptSave: false
+            }
         });
     }
 }
 
 export function updateUsedCredentials(credentials: UsedCredentials, tabID: number): void {
     const memory = getLoginMemory();
-    const existing = memory.get(credentials.id);
     const payload: LoginMemoryItem = {
         credentials,
-        promptSave: existing ? existing.promptSave : true,
         tabID
     };
     memory.set(credentials.id, payload);

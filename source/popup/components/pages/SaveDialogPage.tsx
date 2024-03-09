@@ -7,6 +7,7 @@ import { LaunchContext } from "../contexts/LaunchContext.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { useLoginCredentials } from "../../hooks/credentials.js";
 import { getToaster } from "../../../shared/services/notifications.js";
+import { clearSavedLoginPrompt } from "../../queries/loginMemory.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { extractDomain } from "../../../shared/library/domain.js";
 import { sendTabsMessage } from "../../../shared/services/messaging.js";
@@ -106,6 +107,7 @@ export function SaveDialogPage() {
     }, [loginID]);
     const handleCloseClick = useCallback(async () => {
         try {
+            await clearSavedLoginPrompt(loginID);
             await sendTabsMessage({
                 type: TabEventType.CloseSaveDialog
             });
@@ -117,7 +119,7 @@ export function SaveDialogPage() {
                 timeout: 10000
             });
         }
-    }, []);
+    }, [loginID]);
     useEffect(() => {
         if (credentials.error && !errorShownRef.current) {
             errorShownRef.current = true;
