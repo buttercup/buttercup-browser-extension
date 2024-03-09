@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useState } from "react";
+import React, { Fragment, useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Alert, Button, Callout, Classes, Intent, Switch } from "@blueprintjs/core";
 import cn from "classnames";
@@ -9,6 +9,8 @@ import { ErrorMessage } from "../../../shared/components/ErrorMessage.js";
 import { resetApplicationSettings } from "../../services/reset.js";
 import { getToaster } from "../../../shared/services/notifications.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
+import { useAllLoginCredentials } from "../../hooks/credentials.js";
+import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 
 const Container = styled.div`
     display: flex;
@@ -32,6 +34,20 @@ const SettingSection = styled(Callout)`
 export function SettingsPage() {
     const [config, configError, setValue] = useConfig();
     const [showConfirmReset, setShowConfirmReset] = useState<boolean>(false);
+    const { value: allCredentials } = useAllLoginCredentials();
+    const hasSavedCredentials = useMemo(() => Array.isArray(allCredentials) && allCredentials.length > 0, [allCredentials]);
+    const handleReviewSavedCredentials = useCallback(async () => {
+        try {
+            await createNewTab(getExtensionURL("full.html#/save-credentials"));
+        } catch (err) {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("error.generic", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+        }
+    }, []);
     const handleReset = useCallback(() => {
         setShowConfirmReset(false);
         resetApplicationSettings().catch(err => {
@@ -90,6 +106,16 @@ export function SettingsPage() {
                             label={t("config.setting.saveNewLogins")}
                             onChange={evt => setValue("saveNewLogins", evt.currentTarget.checked)}
                         />
+                        {hasSavedCredentials && (
+                            <Fragment>
+                                <Button
+                                    intent={Intent.PRIMARY}
+                                    onClick={handleReviewSavedCredentials}
+                                >
+                                    {t("config.setting.reviewSavedLogins")}
+                                </Button>
+                            </Fragment>
+                        )}
                     </SettingSection>
                     <SettingSection title={t("config.section.privacy")}>
                         <Switch

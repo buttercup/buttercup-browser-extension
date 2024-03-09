@@ -23,6 +23,7 @@
         "setting": {
             "entryIcons": "Fetch dynamic entry icons (anonymous)",
             "reset": "Reset Application Data & Settings",
+            "reviewSavedLogins": "Review saved logins",
             "saveNewLogins": "Prompt for saving new logins",
             "theme": "Theme",
             "useSystemTheme": "Use System Theme"
@@ -48,6 +49,7 @@
             "sources-fetch-failed": "Failed fetching vaults: {{message}}"
         },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:",
+        "generic": "Requested action failed: {{message}}",
         "reset": "Failed resetting application settings: {{message}}"
     },
     "form": {
