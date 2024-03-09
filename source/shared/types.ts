@@ -170,7 +170,11 @@ export interface VaultSourceDescription {
 }
 
 export interface VaultsTree {
-    [key: string]: VaultFacade;
+    [key: string]: VaultsTreeItem;
+}
+
+export interface VaultsTreeItem extends VaultFacade {
+    name: string;
 }
 
 export enum VaultType {

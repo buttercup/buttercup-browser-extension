@@ -111,7 +111,7 @@ function buildVaultRootNodes(
         icon: "box",
         id: `source:${sourceID}`,
         isExpanded: expanded.includes(`source:${sourceID}`),
-        label: sourceID,
+        label: vaultTree[sourceID].name,
         nodeData: {
             id: `source:${sourceID}`,
             type: "group"

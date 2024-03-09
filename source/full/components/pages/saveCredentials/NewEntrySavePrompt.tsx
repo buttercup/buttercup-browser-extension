@@ -92,6 +92,7 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
                     labelInfo={t("form.required")}
                 >
                     <InputGroup
+                        disabled={saving}
                         id="entry-title"
                         onChange={evt => setTitle(evt.target.value)}
                         placeholder={t("save-credentials-page.credentials-saver.create-new.placeholder.title")}
@@ -111,6 +112,7 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
                     labelInfo={t("form.required")}
                 >
                     <InputGroup
+                        disabled={saving}
                         id="entry-username"
                         onChange={evt => setUsername(evt.target.value)}
                         placeholder={t("save-credentials-page.credentials-saver.create-new.placeholder.username")}
@@ -130,6 +132,7 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
                     labelInfo={t("form.required")}
                 >
                     <InputGroup
+                        disabled={saving}
                         id="entry-password"
                         onChange={evt => setPassword(evt.target.value)}
                         rightElement={
@@ -161,6 +164,7 @@ export function NewEntrySavePrompt(props: NewEntrySavePromptProps) {
                     labelInfo={t("form.required")}
                 >
                     <InputGroup
+                        disabled={saving}
                         fill
                         id="entry-url"
                         onChange={evt => setURL(evt.target.value)}

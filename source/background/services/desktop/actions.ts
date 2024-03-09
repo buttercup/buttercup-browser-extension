@@ -1,5 +1,5 @@
 import { Layerr } from "layerr";
-import { EntryID, EntryType, GroupID, SearchResult, VaultSourceID } from "buttercup";
+import { EntryID, EntryType, GroupID, SearchResult, VaultFacade, VaultSourceID } from "buttercup";
 import { getLocalValue } from "../storage.js";
 import { sendDesktopRequest } from "./request.js";
 import { generateAuthHeader } from "./header.js";
@@ -72,14 +72,23 @@ export async function getVaultSources(): Promise<Array<VaultSourceDescription>> 
 
 export async function getVaultsTree(): Promise<VaultsTree> {
     const authHeader = await generateAuthHeader();
-    const { tree } = (await sendDesktopRequest({
+    const { names, tree } = (await sendDesktopRequest({
         method: "GET",
         route: "/v1/vaults-tree",
         auth: authHeader
     })) as {
-        tree: VaultsTree;
+        names?: Record<VaultSourceID, string>;
+        tree: Record<VaultSourceID, VaultFacade>;
     };
-    return tree;
+    return Object.keys(tree).reduce((output, sourceID) => {
+        return {
+            ...output,
+            [sourceID]: {
+                ...tree[sourceID],
+                name: names[sourceID] ?? "Untitled vault"
+            }
+        };
+    }, {});
 }
 
 export async function hasConnection(): Promise<boolean> {
