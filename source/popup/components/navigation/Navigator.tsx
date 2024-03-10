@@ -8,9 +8,11 @@ import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { clearDesktopConnectionAuth, initiateDesktopConnectionRequest } from "../../queries/desktop.js";
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
-import { PopupPage } from "../../types.js";
 import { OTPsPage } from "../pages/OTPsPage.js";
 import { SettingsPage } from "../pages/SettingsPage.js";
+import { AboutPage } from "../pages/AboutPage.js";
+import { PopupPage } from "../../types.js";
+import BUTTERCUP_LOGO from "../../../../resources/buttercup-128.png";
 
 interface NavigatorProps {
     activeTab: PopupPage;
@@ -18,6 +20,10 @@ interface NavigatorProps {
     tabs: Array<PopupPage>;
 }
 
+const ButtercupIconImg = styled.img`
+    width: 20px;
+    height: 20px;
+`;
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -153,6 +159,20 @@ export function Navigator(props: NavigatorProps) {
                             )}
                         >
                             <Icon icon="cog" title={t("popup.tab.settings.title")} />
+                        </Tab>
+                    )) ||
+                    (tabType === PopupPage.About && (
+                        <Tab
+                            key={`tab-${ind}-${tabType}`}
+                            id={PopupPage.About}
+                            panel={(
+                                <>
+                                    <Divider />
+                                    <AboutPage />
+                                </>
+                            )}
+                        >
+                            <ButtercupIconImg src={BUTTERCUP_LOGO} alt={t("popup.tab.about.title")} />
                         </Tab>
                     ))
                 ))}

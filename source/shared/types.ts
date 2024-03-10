@@ -116,6 +116,7 @@ export interface OTP {
 }
 
 export enum PopupPage {
+    About = "about",
     Entries = "entries",
     OTPs = "otps",
     Settings = "settings",

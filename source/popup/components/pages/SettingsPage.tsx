@@ -1,9 +1,7 @@
 import React, { Fragment, useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Alert, Button, Callout, Classes, Intent, Switch } from "@blueprintjs/core";
-import cn from "classnames";
 import { t } from "../../../shared/i18n/trans.js";
-import { BUILD_DATE, VERSION } from "../../../shared/library/version.js";
 import { useConfig } from "../../../shared/hooks/config.js";
 import { ErrorMessage } from "../../../shared/components/ErrorMessage.js";
 import { resetApplicationSettings } from "../../services/reset.js";
@@ -21,9 +19,6 @@ const Container = styled.div`
     > .${Classes.CALLOUT}:not(:last-child) {
         margin-bottom: 8px;
     }
-`;
-const InfoTable = styled.table`
-    width: 100%;
 `;
 const SettingSection = styled(Callout)`
     margin: 0px 12px;
@@ -66,26 +61,6 @@ export function SettingsPage() {
             )}
             {config && (
                 <Fragment>
-                    <SettingSection>
-                        <InfoTable className={cn(Classes.HTML_TABLE, Classes.COMPACT)}>
-                            <thead>
-                                <tr>
-                                    <th>{t("config.info.title")}</th>
-                                    <th>&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{t("config.info.version")}</td>
-                                    <td>{VERSION}</td>
-                                </tr>
-                                <tr>
-                                    <td>{t("config.info.build-date")}</td>
-                                    <td>{BUILD_DATE}</td>
-                                </tr>
-                            </tbody>
-                        </InfoTable>
-                    </SettingSection>
                     <SettingSection title={t("config.section.theme")}>
                         <Switch
                             checked={config.useSystemTheme}

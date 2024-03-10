@@ -1,14 +1,17 @@
 {
     "_": "English (UK)",
-    "attributions-page": {
-        "title": "Attributions"
-    },
-    "config": {
+    "about": {
+        "attributions": "Attributions",
         "info": {
             "build-date": "Build Date",
             "title": "Info",
             "version": "Version"
-        },
+        }
+    },
+    "attributions-page": {
+        "title": "Attributions"
+    },
+    "config": {
         "reset-dialog": {
             "cancel-button": "Cancel",
             "confirm-button": "Reset",
@@ -90,6 +93,9 @@
             "title": "No OTP Entries"
         },
         "tab": {
+            "about": {
+                "title": "About"
+            },
             "entries": {
                 "title": "Entries"
             },

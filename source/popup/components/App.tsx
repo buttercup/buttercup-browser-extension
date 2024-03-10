@@ -105,6 +105,7 @@ function ToolbarApp() {
                 activeTab={tab}
                 onChangeTab={setTab}
                 tabs={[
+                    PopupPage.About,
                     PopupPage.Entries,
                     PopupPage.Vaults,
                     PopupPage.OTPs,
