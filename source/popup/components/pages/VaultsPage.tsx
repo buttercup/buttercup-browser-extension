@@ -92,10 +92,12 @@ export function VaultsPageControls() {
                 icon="add"
                 minimal
                 onClick={handleAddVaultClick}
+                title={t("popup.vaults.controls.add-vault")}
             />
             <Button
                 icon="lock"
                 minimal
+                title={t("popup.vaults.controls.lock-vaults")}
             />
         </ButtonGroup>
     );

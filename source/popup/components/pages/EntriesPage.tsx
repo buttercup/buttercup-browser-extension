@@ -176,6 +176,7 @@ export function EntriesPageControls(props: EntriesPageControlsProps) {
                 disabled={desktopState !== DesktopConnectionState.Connected}
                 icon="search"
                 minimal
+                title={t("popup.entries.search.button")}
             />
         </>
     );

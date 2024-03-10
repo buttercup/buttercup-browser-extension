@@ -81,12 +81,27 @@
                 "recent-set-error": "Failed recording recent entry: {{message}}"
             },
             "search": {
+                "button": "Search entries",
                 "placeholder": "Search..."
             }
         },
         "no-otps": {
             "description": "No OTP entries found in unlocked vaults.",
             "title": "No OTP Entries"
+        },
+        "tab": {
+            "entries": {
+                "title": "Entries"
+            },
+            "otps": {
+                "title": "One-Time Passwords (OTPs)"
+            },
+            "settings": {
+                "title": "Settings"
+            },
+            "vaults": {
+                "title": "Vaults"
+            }
         },
         "vault": {
             "lock": "Lock vault",
@@ -123,6 +138,10 @@
             }
         },
         "vaults": {
+            "controls": {
+                "add-vault": "Add vault",
+                "lock-vaults": "Lock all vaults"
+            },
             "empty": {
                 "description": "No vaults have been added to your desktop application, yet.",
                 "title": "No Vaults"

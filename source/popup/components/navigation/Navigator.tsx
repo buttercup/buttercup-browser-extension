@@ -103,7 +103,7 @@ export function Navigator(props: NavigatorProps) {
                                 </>
                             )}
                         >
-                            <Icon icon="label" />
+                            <Icon icon="label" title={t("popup.tab.entries.title")} />
                         </Tab>
                     )) ||
                     (tabType === PopupPage.Vaults && (
@@ -120,7 +120,7 @@ export function Navigator(props: NavigatorProps) {
                                 </>
                             )}
                         >
-                            <Icon icon="projects" />
+                            <Icon icon="projects" title={t("popup.tab.vaults.title")} />
                         </Tab>
                     )) ||
                     (tabType === PopupPage.OTPs && (
@@ -138,7 +138,7 @@ export function Navigator(props: NavigatorProps) {
                                 </>
                             )}
                         >
-                            <Icon icon="array-timestamp" />
+                            <Icon icon="array-timestamp" title={t("popup.tab.otps.title")} />
                         </Tab>
                     )) ||
                     (tabType === PopupPage.Settings && (
@@ -152,7 +152,7 @@ export function Navigator(props: NavigatorProps) {
                                 </>
                             )}
                         >
-                            <Icon icon="cog" />
+                            <Icon icon="cog" title={t("popup.tab.settings.title")} />
                         </Tab>
                     ))
                 ))}

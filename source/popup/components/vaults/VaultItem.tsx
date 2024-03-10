@@ -94,6 +94,7 @@ export function VaultItem(props: VaultItemProps) {
                 </DetailRow>
                 <ButtonGroup>
                     <Button
+                        disabled={vault.state === VaultSourceStatus.Pending}
                         icon={
                             vault.state === VaultSourceStatus.Locked
                                 ? "unlock"
@@ -104,6 +105,13 @@ export function VaultItem(props: VaultItemProps) {
                         loading={vault.state === VaultSourceStatus.Pending}
                         minimal
                         onClick={handleLockUnlockClick}
+                        title={
+                            vault.state === VaultSourceStatus.Locked
+                                ? t("popup.vault.unlock")
+                                : vault.state === VaultSourceStatus.Unlocked
+                                    ? t("popup.vault.lock")
+                                    : t("popup.vault.state-pending")
+                        }
                     />
                 </ButtonGroup>
             </VaultRow>
