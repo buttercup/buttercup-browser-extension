@@ -28,12 +28,13 @@ import {
     updateUsedCredentials
 } from "./loginMemory.js";
 import { getConfig, updateConfigValue } from "./config.js";
-import { getDisabledDomains } from "./disabledDomains.js";
+import { disableLoginsOnDomain, getDisabledDomains } from "./disabledDomains.js";
 import { log } from "./log.js";
 import { resetInitialisation } from "./init.js";
 import { getRecents, trackRecentUsage } from "./recents.js";
 import { openEntryPageInNewTab } from "./entry.js";
 import { getAutoLoginForTab, registerAutoLogin } from "./autoLogin.js";
+import { extractDomainFromCredentials } from "../library/domain.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
 
 async function handleMessage(
@@ -77,6 +78,22 @@ async function handleMessage(
             const { credentialsID } = msg;
             log(`clear saved credentials prompt: ${credentialsID}`);
             stopPromptForID(credentialsID);
+            sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.DisableSavePromptForCredentials: {
+            const { credentialsID } = msg;
+            log(`disable save prompt for credentials: ${credentialsID}`);
+            try {
+                const credentials = getCredentialsForID(credentialsID);
+                const domain = credentials ? extractDomainFromCredentials(credentials) : null;
+                if (domain) {
+                    log(`disable save prompt for domain: ${domain}`);
+                    await disableLoginsOnDomain(domain);
+                }
+            } catch (err) {
+                throw new Layerr(err, "Failed disabling save prompt for domain");
+            }
             sendResponse({});
             break;
         }

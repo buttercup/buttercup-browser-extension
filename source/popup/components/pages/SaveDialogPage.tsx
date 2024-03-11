@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { EntryType } from "buttercup";
 import { SiteIcon } from "@buttercup/ui";
@@ -13,6 +13,7 @@ import { extractDomain } from "../../../shared/library/domain.js";
 import { sendTabsMessage } from "../../../shared/services/messaging.js";
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 import { TabEventType } from "../../types.js";
+import { disableDomainForLogin } from "../../queries/disabledDomains.js";
 
 const Buttons = styled.div`
     width: 100%;
@@ -90,6 +91,7 @@ export function SaveDialogPage() {
     const { loginID } = useContext(LaunchContext);
     const credentials = useLoginCredentials(loginID);
     const errorShownRef = useRef<boolean>(false);
+    const [disableConfirm, setDisableConfirm] = useState<boolean>(false);
     const handleViewClick = useCallback(async () => {
         try {
             await createNewTab(getExtensionURL("full.html#/save-credentials"));
@@ -100,7 +102,7 @@ export function SaveDialogPage() {
             console.error(err);
             getToaster().show({
                 intent: Intent.DANGER,
-                message: t("connect-page.auth-error", { message: localisedErrorMessage(err) }),
+                message: t("error.generic", { message: localisedErrorMessage(err) }),
                 timeout: 10000
             });
         }
@@ -115,18 +117,37 @@ export function SaveDialogPage() {
             console.error(err);
             getToaster().show({
                 intent: Intent.DANGER,
-                message: t("connect-page.auth-error", { message: localisedErrorMessage(err) }),
+                message: t("error.generic", { message: localisedErrorMessage(err) }),
                 timeout: 10000
             });
         }
     }, [loginID]);
+    const handleDisableClick = useCallback(async () => {
+        if (!disableConfirm) {
+            setDisableConfirm(true);
+            return;
+        }
+        try {
+            await disableDomainForLogin(loginID);
+            await sendTabsMessage({
+                type: TabEventType.CloseSaveDialog
+            });
+        } catch (err) {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("error.generic", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+        }
+    }, [disableConfirm, loginID]);
     useEffect(() => {
         if (credentials.error && !errorShownRef.current) {
             errorShownRef.current = true;
             console.error(credentials.error);
             getToaster().show({
                 intent: Intent.DANGER,
-                message: t("connect-page.auth-error", { message: localisedErrorMessage(credentials.error) }),
+                message: t("save-credentials-dialog.credentials-fetch-error", { message: localisedErrorMessage(credentials.error) }),
                 timeout: 10000
             });
         }
@@ -177,8 +198,9 @@ export function SaveDialogPage() {
                 <Button
                     disabled={!credentials.value}
                     icon="disable"
-                    intent={Intent.WARNING}
-                    text={t("save-credentials-dialog.disable-button")}
+                    intent={disableConfirm ? Intent.DANGER : Intent.WARNING}
+                    onClick={handleDisableClick}
+                    text={disableConfirm ? t("save-credentials-dialog.disable-confirm-button") : t("save-credentials-dialog.disable-button")}
                 />
                 <Button
                     onClick={handleCloseClick}

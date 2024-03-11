@@ -44,6 +44,7 @@ export enum BackgroundMessageType {
     ClearDesktopAuthentication = "clearDesktopAuthentication",
     ClearSavedCredentials = "clearSavedCredentials",
     ClearSavedCredentialsPrompt = "clearSavedCredentialsPrompt",
+    DisableSavePromptForCredentials = "disableSavePromptForCredentials",
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetAutoLoginForTab = "getTabAutoLogin",
     GetConfiguration = "getConfiguration",

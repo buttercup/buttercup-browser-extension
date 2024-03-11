@@ -161,8 +161,10 @@
     },
     "save-credentials-dialog": {
         "close-button": "Close",
+        "credentials-fetch-error": "Failed fetching credentials: {{message}}",
         "description": "One or more logins have been recorded and are ready to be saved to your vault.",
         "disable-button": "Disable",
+        "disable-confirm-button": "Confirm Disable",
         "error-description": "We weren't able to get the details you wanted, sorry.",
         "error-title": "Whoops...",
         "last-login-heading": "Last login",
