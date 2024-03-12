@@ -28,7 +28,7 @@ import {
     updateUsedCredentials
 } from "./loginMemory.js";
 import { getConfig, updateConfigValue } from "./config.js";
-import { disableLoginsOnDomain, getDisabledDomains } from "./disabledDomains.js";
+import { disableLoginsOnDomain, getDisabledDomains, removeDisabledFlagForDomain } from "./disabledDomains.js";
 import { log } from "./log.js";
 import { resetInitialisation } from "./init.js";
 import { getRecents, trackRecentUsage } from "./recents.js";
@@ -78,6 +78,15 @@ async function handleMessage(
             const { credentialsID } = msg;
             log(`clear saved credentials prompt: ${credentialsID}`);
             stopPromptForID(credentialsID);
+            sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.DeleteDisabledDomains: {
+            const { domains } = msg;
+            log(`remove disabled domains: ${domains.join(", ")}`);
+            for (const domain of domains) {
+                await removeDisabledFlagForDomain(domain);
+            }
             sendResponse({});
             break;
         }

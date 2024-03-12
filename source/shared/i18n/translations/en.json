@@ -25,12 +25,17 @@
         },
         "setting": {
             "entryIcons": "Fetch dynamic entry icons (anonymous)",
+            "manageDisabledDomains": "Manage disabled domains",
             "reset": "Reset Application Data & Settings",
             "reviewSavedLogins": "Review saved logins",
             "saveNewLogins": "Prompt for saving new logins",
             "theme": "Theme",
             "useSystemTheme": "Use System Theme"
         }
+    },
+    "confirm-dialog": {
+        "cancel": "Cancel",
+        "confirm-default": "Confirm"
     },
     "connect-page": {
         "auth-error": "Failed authenticating: {{message}}",
@@ -39,6 +44,27 @@
         "description": "Connect the Buttercup extension to the Buttercup Desktop application so you can use your vaults and entries to easily access your web-based accounts.",
         "instruction": "The desktop application should have appeared. If it hasn't, please close this page and try again. You must have opened the desktop application before trying. Wait for an authorisation code to appear in the desktop application, and then enter it here:",
         "title": "Connect desktop application"
+    },
+    "disabled-domains-page": {
+        "delete-dialog": {
+            "confirm": "Delete domain",
+            "description": "Remove the disabled domain so that new logins will prompt to save credentials: <strong>{{domain}}</strong>",
+            "title": "Remove disabled domain"
+        },
+        "description": "Manage which domains should <i>not</i> display a save-credentials prompt after logging in.",
+        "disabled-domains": {
+            "heading": "Currently disabled domains"
+        },
+        "table": {
+            "action": {
+                "delete": "Remove disabled domain"
+            },
+            "action-heading": "Action",
+            "domain-heading": "Domain",
+            "empty-description": "Disabled domains will appear here after clicking 'Disable' on the save credentials dialog after logging into a website.",
+            "empty-title": "No disabled domains"
+        },
+        "title": "Disabled Domains"
     },
     "error": {
         "code": {

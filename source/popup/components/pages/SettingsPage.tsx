@@ -31,6 +31,18 @@ export function SettingsPage() {
     const [showConfirmReset, setShowConfirmReset] = useState<boolean>(false);
     const { value: allCredentials } = useAllLoginCredentials();
     const hasSavedCredentials = useMemo(() => Array.isArray(allCredentials) && allCredentials.length > 0, [allCredentials]);
+    const handleOpenDisabledDomains = useCallback(async () => {
+        try {
+            await createNewTab(getExtensionURL("full.html#/disabled-domains"));
+        } catch (err) {
+            console.error(err);
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("error.generic", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+        }
+    }, []);
     const handleReviewSavedCredentials = useCallback(async () => {
         try {
             await createNewTab(getExtensionURL("full.html#/save-credentials"));
@@ -81,6 +93,12 @@ export function SettingsPage() {
                             label={t("config.setting.saveNewLogins")}
                             onChange={evt => setValue("saveNewLogins", evt.currentTarget.checked)}
                         />
+                        <Button
+                            intent={Intent.NONE}
+                            onClick={handleOpenDisabledDomains}
+                        >
+                            {t("config.setting.manageDisabledDomains")}
+                        </Button>
                         {hasSavedCredentials && (
                             <Fragment>
                                 <Button

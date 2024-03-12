@@ -27,6 +27,7 @@ export interface BackgroundMessage {
     count?: number;
     credentials?: UsedCredentials;
     credentialsID?: string;
+    domains?: Array<string>;
     entry?: SearchResult;
     entryID?: EntryID;
     entryProperties?: Record<string, string>;
@@ -45,6 +46,7 @@ export enum BackgroundMessageType {
     ClearSavedCredentials = "clearSavedCredentials",
     ClearSavedCredentialsPrompt = "clearSavedCredentialsPrompt",
     DisableSavePromptForCredentials = "disableSavePromptForCredentials",
+    DeleteDisabledDomains = "deleteDisabledDomains",
     InitiateDesktopConnection = "initiateDesktopConnection",
     GetAutoLoginForTab = "getTabAutoLogin",
     GetConfiguration = "getConfiguration",

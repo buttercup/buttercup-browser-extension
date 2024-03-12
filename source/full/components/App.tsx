@@ -9,6 +9,7 @@ import { AttributionsPage } from "./pages/AttributionsPage.jsx";
 import { SaveCredentialsPage } from "./pages/saveCredentials/index.js";
 import { useBodyThemeClass, useTheme } from "../../shared/hooks/theme.js";
 import { RouteError } from "../../shared/components/RouteError.js";
+import { DisabledDomainsPage } from "./pages/DisabledDomainsPage.js";
 
 const ROUTER = createHashRouter([
     {
@@ -19,6 +20,11 @@ const ROUTER = createHashRouter([
     {
         path: "/attributions",
         element: <AttributionsPage />,
+        errorElement: <RouteError />
+    },
+    {
+        path: "/disabled-domains",
+        element: <DisabledDomainsPage />,
         errorElement: <RouteError />
     },
     {
