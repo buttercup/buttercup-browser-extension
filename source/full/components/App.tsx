@@ -10,6 +10,7 @@ import { SaveCredentialsPage } from "./pages/saveCredentials/index.js";
 import { useBodyThemeClass, useTheme } from "../../shared/hooks/theme.js";
 import { RouteError } from "../../shared/components/RouteError.js";
 import { DisabledDomainsPage } from "./pages/DisabledDomainsPage.js";
+import { NotificationsPage } from "./pages/NotificationsPage.js";
 
 const ROUTER = createHashRouter([
     {
@@ -26,6 +27,16 @@ const ROUTER = createHashRouter([
         path: "/disabled-domains",
         element: <DisabledDomainsPage />,
         errorElement: <RouteError />
+    },
+    {
+        path: "/notifications",
+        element: <NotificationsPage />,
+        errorElement: <RouteError />,
+        loader: ({ request }) => {
+            const url = new URL(request.url);
+            const notifications = url.searchParams.get("notifications");
+            return { notifications };
+        }
     },
     {
         path: "/save-credentials",

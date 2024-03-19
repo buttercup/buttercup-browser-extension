@@ -36,6 +36,7 @@ import { openEntryPageInNewTab } from "./entry.js";
 import { getAutoLoginForTab, registerAutoLogin } from "./autoLogin.js";
 import { extractDomainFromCredentials } from "../library/domain.js";
 import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
+import { markNotificationRead } from "./notifications.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -202,6 +203,13 @@ async function handleMessage(
         case BackgroundMessageType.InitiateDesktopConnection: {
             log("start desktop authentication");
             await initiateConnection();
+            sendResponse({});
+            break;
+        }
+        case BackgroundMessageType.MarkNotificationRead: {
+            const { notification } = msg;
+            log(`mark notification read: ${notification}`);
+            await markNotificationRead(notification);
             sendResponse({});
             break;
         }

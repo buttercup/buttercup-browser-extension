@@ -6,6 +6,7 @@ import { initialise as initialiseConfig } from "./config.js";
 import { generateKeys } from "./cryptoKeys.js";
 import { initialise as initialiseI18n } from "../../shared/i18n/trans.js";
 import { getLanguage } from "../../shared/library/i18n.js";
+import { showPendingNotifications } from "./notifications.js";
 
 enum Initialisation {
     Complete = "complete",
@@ -28,6 +29,7 @@ export async function initialise(): Promise<void> {
     log("initialisation complete");
     __initialisation = Initialisation.Complete;
     __initEE.emit("initialised");
+    await showPendingNotifications();
 }
 
 export async function resetInitialisation(): Promise<void> {

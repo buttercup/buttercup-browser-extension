@@ -87,6 +87,17 @@
         },
         "required": "(required)"
     },
+    "notifications": {
+        "page": {
+            "welcome-v3": {
+                "line-1": "You're now using the new version of the <strong>Buttercup browser addon</strong>. It uses the latest core libraries to manage your password vaults and integrate with web pages and login forms. Version 3 is more light-weight and accurate when compared to previous versions, and it supports far more login forms as well.",
+                "line-2": "It should be noted that <strong>version 3 requires the Buttercup desktop application</strong> be installed <i>and</i> running, at least in the background. This browser addon uses an encrypted connection with the desktop application to transfer vault credentials during login and saving. This addon cannot function without the desktop application.",
+                "line-3": "We hope that you enjoy using this new version!",
+                "title": "Welcome to V3"
+            }
+        },
+        "title": "Notifications"
+    },
     "popup": {
         "all-locked": {
             "description": "All vaults are currently locked.",

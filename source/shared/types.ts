@@ -33,6 +33,7 @@ export interface BackgroundMessage {
     entryProperties?: Record<string, string>;
     entryType?: EntryType;
     groupID?: GroupID;
+    notification?: string;
     searchTerm?: string;
     sourceID?: VaultSourceID;
     type: BackgroundMessageType;
@@ -58,6 +59,7 @@ export enum BackgroundMessageType {
     GetRecentEntries = "getRecentEntries",
     GetSavedCredentials = "getCredentials",
     GetSavedCredentialsForID = "getCredentialsForID",
+    MarkNotificationRead = "markNotificationRead",
     OpenEntryPage = "openEntryPage",
     PromptLockSource = "promptLockSource",
     PromptUnlockSource = "promptUnlockSource",

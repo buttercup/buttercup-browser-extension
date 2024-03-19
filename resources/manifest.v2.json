@@ -6,10 +6,10 @@
     "version": "0.0.0",
 
     "icons": {
-        "256": "buttercup-256.png",
-        "128": "buttercup-128.png",
-        "48": "buttercup-48.png",
-        "16": "buttercup-16.png"
+        "256": "manifest-res/buttercup-256.png",
+        "128": "manifest-res/buttercup-128.png",
+        "48": "manifest-res/buttercup-48.png",
+        "16": "manifest-res/buttercup-16.png"
     },
 
     "background": {
@@ -19,7 +19,7 @@
     },
 
     "browser_action": {
-        "default_icon": "buttercup-256.png",
+        "default_icon": "manifest-res/buttercup-256.png",
         "default_popup": "popup.html#/"
     },
 

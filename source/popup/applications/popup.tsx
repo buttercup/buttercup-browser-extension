@@ -1,9 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { App } from "./components/App.jsx";
-import { initialise } from "./services/init.js";
-import "../shared/styles/base.sass";
-import "./styles/base.sass";
+import { App } from "../components/App.js";
+import { initialise } from "../services/init.js";
 
 initialise()
     .then(() => {

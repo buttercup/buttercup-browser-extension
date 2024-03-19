@@ -1,8 +1,11 @@
-const fs = require("fs");
-const path = require("path");
+import { readFileSync, writeFileSync } from "fs";
+import { resolve } from "path";
+import { fileURLToPath } from "url";
 
-const packageInfo = JSON.parse(fs.readFileSync(
-    path.resolve(__dirname, "../package.json"),
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
+
+const packageInfo = JSON.parse(readFileSync(
+    resolve(__dirname, "../package.json"),
     "utf8"
 ));
 
@@ -15,7 +18,7 @@ export const BUILD_DATE = "${built}";
 export const VERSION = "${packageInfo.version}";
 `;
 
-fs.writeFileSync(
-    path.resolve(__dirname, "../source/shared/library/version.ts"),
+writeFileSync(
+    resolve(__dirname, "../source/shared/library/version.ts"),
     output
 );
