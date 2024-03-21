@@ -9,6 +9,12 @@ body
     margin: 0
     overflow: hidden
 
+    &.in-page
+        width: 100%
+
+        #root
+            min-height: unset !important
+
 h1
     font-size: 20px
     line-height: 20px
@@ -18,3 +24,5 @@ h1
     flex-direction: column
     min-height: 400px
     height: 100%
+
+@import ../../shared/styles/base

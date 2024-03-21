@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "target": "ES6",
+        "esModuleInterop": true,
+        "strict": false,
+        "jsx": "react-jsx",
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "types": ["chrome", "react", "react-dom"]
+    },
+    "include": [
+        "./source/**/*"
+    ],
+    "exclude":[
+        "dist",
+        "node_modules"
+    ]
+}

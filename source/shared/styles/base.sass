@@ -1,19 +1,26 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css"
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css"
+@import "~@blueprintjs/popover2/lib/css/blueprint-popover2.css"
+
 @import "fonts"
 
-html, body, textarea, select, input, button
+$bc-brand-colour: #00B7AC
+$bc-brand-colour-dark: #179E94
+
+html, body, textarea, select, input, button, div
     font-family: "OpenSans"
 
 body
     font-size: 14px
 
-.ml-auto
-    margin-left: auto !important
+    &.bp4-dark
+        background-color: #383E47 // Dark Grey 4
 
-.ml-0
-    margin-left: 0 !important
+.bp4-input:focus, .bp4-input.bp4-active
+    box-shadow: inset 0 0 0 1px $bc-brand-colour, 0 0 0 2px rgba(45, 114, 210, 0.3), inset 0 1px 1px rgba(17, 20, 24, 0.2)
 
-.bp3-tree-node-caret .bp3-icon
-    position: relative
-    top: 5px
+a
+    color: $bc-brand-colour-dark
+
+    &:hover
+        color: $bc-brand-colour

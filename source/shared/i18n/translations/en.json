@@ -1,0 +1,286 @@
+{
+    "_": "English (UK)",
+    "about": {
+        "attributions": "Attributions",
+        "info": {
+            "build-date": "Build Date",
+            "title": "Info",
+            "version": "Version"
+        }
+    },
+    "attributions-page": {
+        "title": "Attributions"
+    },
+    "config": {
+        "reset-dialog": {
+            "cancel-button": "Cancel",
+            "confirm-button": "Reset",
+            "message": "Are you sure you wish to reset the application? This clears all cached data, settings and keys."
+        },
+        "section": {
+            "advanced": "Advanced Settings",
+            "logins": "Logins",
+            "privacy": "Privacy",
+            "theme": "Theme"
+        },
+        "setting": {
+            "entryIcons": "Fetch dynamic entry icons (anonymous)",
+            "manageDisabledDomains": "Manage disabled domains",
+            "reset": "Reset Application Data & Settings",
+            "reviewSavedLogins": "Review saved logins",
+            "saveNewLogins": "Prompt for saving new logins",
+            "theme": "Theme",
+            "useSystemTheme": "Use System Theme"
+        }
+    },
+    "confirm-dialog": {
+        "cancel": "Cancel",
+        "confirm-default": "Confirm"
+    },
+    "connect-page": {
+        "auth-error": "Failed authenticating: {{message}}",
+        "auth-success": "Successfully connected",
+        "code-plc": "Code...",
+        "description": "Connect the Buttercup extension to the Buttercup Desktop application so you can use your vaults and entries to easily access your web-based accounts.",
+        "instruction": "The desktop application should have appeared. If it hasn't, please close this page and try again. You must have opened the desktop application before trying. Wait for an authorisation code to appear in the desktop application, and then enter it here:",
+        "title": "Connect desktop application"
+    },
+    "disabled-domains-page": {
+        "delete-dialog": {
+            "confirm": "Delete domain",
+            "description": "Remove the disabled domain so that new logins will prompt to save credentials: <strong>{{domain}}</strong>",
+            "title": "Remove disabled domain"
+        },
+        "description": "Manage which domains should <i>not</i> display a save-credentials prompt after logging in.",
+        "disabled-domains": {
+            "heading": "Currently disabled domains"
+        },
+        "table": {
+            "action": {
+                "delete": "Remove disabled domain"
+            },
+            "action-heading": "Action",
+            "domain-heading": "Domain",
+            "empty-description": "Disabled domains will appear here after clicking 'Disable' on the save credentials dialog after logging into a website.",
+            "empty-title": "No disabled domains"
+        },
+        "title": "Disabled Domains"
+    },
+    "error": {
+        "code": {
+            "desktop-connection-not-authorised": "Desktop connection has not been authorised",
+            "desktop-request-failed": "Desktop request failed"
+        },
+        "desktop": {
+            "connection-check-failed": "Failed checking desktop connection: {{message}}",
+            "otps-fetch-failed": "Failed fetching OTPs: {{message}}",
+            "search-failed": "Failed searching for entries: {{message}}",
+            "sources-fetch-failed": "Failed fetching vaults: {{message}}"
+        },
+        "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:",
+        "generic": "Requested action failed: {{message}}",
+        "reset": "Failed resetting application settings: {{message}}"
+    },
+    "form": {
+        "invalid": {
+            "required-non-empty": "Invalid: value is required (cannot be empty)"
+        },
+        "required": "(required)"
+    },
+    "notifications": {
+        "page": {
+            "welcome-v3": {
+                "line-1": "You're now using the new version of the <strong>Buttercup browser addon</strong>. It uses the latest core libraries to manage your password vaults and integrate with web pages and login forms. Version 3 is more light-weight and accurate when compared to previous versions, and it supports far more login forms as well.",
+                "line-2": "It should be noted that <strong>version 3 requires the Buttercup desktop application</strong> be installed <i>and</i> running, at least in the background. This browser addon uses an encrypted connection with the desktop application to transfer vault credentials during login and saving. This addon cannot function without the desktop application.",
+                "line-3": "We hope that you enjoy using this new version!",
+                "title": "Welcome to V3"
+            }
+        },
+        "title": "Notifications"
+    },
+    "popup": {
+        "all-locked": {
+            "description": "All vaults are currently locked.",
+            "title": "No Unlocked Vaults"
+        },
+        "connection": {
+            "check-error": {
+                "description": "Unable to establish a connection to the desktop application. Check that it's open or consider re-authenticating.",
+                "title": "Connection Failed"
+            },
+            "open-error": "Failed starting connection: {{message}}",
+            "reauth-error": "Failed re-authenticating: {{message}}"
+        },
+        "entries": {
+            "auto-login": {
+                "tooltip": "Open entry URL and automatically log in"
+            },
+            "click": {
+                "no-url-available": "No URL available for this entry",
+                "open-error": "Could not open page for entry: {{message}}",
+                "recent-set-error": "Failed recording recent entry: {{message}}"
+            },
+            "search": {
+                "button": "Search entries",
+                "placeholder": "Search..."
+            }
+        },
+        "no-otps": {
+            "description": "No OTP entries found in unlocked vaults.",
+            "title": "No OTP Entries"
+        },
+        "tab": {
+            "about": {
+                "title": "About"
+            },
+            "entries": {
+                "title": "Entries"
+            },
+            "otps": {
+                "title": "One-Time Passwords (OTPs)"
+            },
+            "settings": {
+                "title": "Settings"
+            },
+            "vaults": {
+                "title": "Vaults"
+            }
+        },
+        "vault": {
+            "lock": "Lock vault",
+            "locking": {
+                "error": "Failed locking vault: {{message}}",
+                "success": "Locked vault: {{vault}}"
+            },
+            "remove": "Remove vault",
+            "remove-dialog": {
+                "cancel-button": "Cancel",
+                "confirm-button": "Remove",
+                "message": "Are you sure that you want to remove the vault \"{{vault}}\"?"
+            },
+            "removing": {
+                "description": "Vault is being removed...",
+                "error": "Failed removing: {{message}}",
+                "success": "Successfully removed: {{vault}}",
+                "title": "Removing"
+            },
+            "state-pending": "Vault state is pending",
+            "unlock": "Unlock vault",
+            "unlock-dialog": {
+                "cancel-button": "Cancel",
+                "password-label": "Vault Password",
+                "title": "Unlock {{title}}",
+                "unlock-button": "Unlock"
+            },
+            "unlocking": {
+                "description": "Vault is being unlocked...",
+                "error": "Failed unlocking vault: {{message}}",
+                "invalid-password": "Password is invalid",
+                "success": "Successfully unlocked: {{vault}}",
+                "title": "Unlocking"
+            }
+        },
+        "vaults": {
+            "controls": {
+                "add-vault": "Add vault",
+                "lock-vaults": "Lock all vaults"
+            },
+            "empty": {
+                "description": "No vaults have been added to your desktop application, yet.",
+                "title": "No Vaults"
+            },
+            "no-connection": {
+                "action-text": "Connect",
+                "description": "You haven't connected to the desktop application, yet.",
+                "title": "Not Connected"
+            }
+        }
+    },
+    "save-credentials-dialog": {
+        "close-button": "Close",
+        "credentials-fetch-error": "Failed fetching credentials: {{message}}",
+        "description": "One or more logins have been recorded and are ready to be saved to your vault.",
+        "disable-button": "Disable",
+        "disable-confirm-button": "Confirm Disable",
+        "error-description": "We weren't able to get the details you wanted, sorry.",
+        "error-title": "Whoops...",
+        "last-login-heading": "Last login",
+        "title": "Save Login",
+        "view-button": "View"
+    },
+    "save-credentials-page": {
+        "credentials-saver": {
+            "create-new": {
+                "heading": "New Entry Details",
+                "label": {
+                    "password": "Password",
+                    "title": "Title",
+                    "url": "URL",
+                    "username": "Username"
+                },
+                "loader": {
+                    "description": "Fetching vaults and their contents...",
+                    "title": "Vaults"
+                },
+                "password": {
+                    "hide": "Hide password",
+                    "show": "Show password"
+                },
+                "placeholder": {
+                    "title": "New entry title",
+                    "url": "New entry URL",
+                    "username": "New entry username"
+                },
+                "save": "Save New Entry",
+                "tab": "Create New Entry"
+            },
+            "heading": "Save Login",
+            "no-vaults": {
+                "description": "No vaults are currently available. Either add a vault or unlock some.",
+                "title": "No Available Vaults"
+            },
+            "update-existing": {
+                "tab": "Update Existing Entry"
+            }
+        },
+        "description": "Save detected login details to a connected vault. Make sure to first unlock the vault you wish to save to in the desktop application.",
+        "detected-logins": {
+            "heading": "Detected Logins"
+        },
+        "save-error": "Failed saving entry: {{message}}",
+        "save-success": "Successfully saved entry: {{title}}",
+        "title": "Save Logins"
+    },
+    "theme": {
+        "dark": "Dark",
+        "light": "Light"
+    },
+    "vault-state": {
+        "locked": "Locked",
+        "pending": "Pending",
+        "unlocked": "Unlocked"
+    },
+    "vault-type": {
+        "dropbox": {
+            "add-error": "Failed adding Dropbox vault",
+            "configure-btn": "Authenticate",
+            "description": "Host your vault within your Dropbox cloud storage account, so that you can access it from any device you own. You must have an account with Dropbox to be able to use this vault type.",
+            "title": "Dropbox"
+        },
+        "googledrive": {
+            "configure-btn": "Authenticate",
+            "description": "Host your vault within your Google Drive cloud storage, so that you can access it from any device you own. You must have a Google account to be able to use this vault type.",
+            "title": "Google Drive"
+        },
+        "localfile": {
+            "configure-btn": "Connect",
+            "description": "Use the Buttercup desktop application to supply access to local files on your computer. Requires the desktop application to be installed and running.",
+            "title": "Local File"
+        },
+        "webdav": {
+            "configure-btn": "Configure",
+            "description": "Use the DAV protocol that certain services provide to store your vault. Self-hosted cloud storage providers such as Nextcloud and ownCloud support this protocol, allowing you to access your vault from any device you own.",
+            "title": "WebDAV"
+        }
+    }
+}
