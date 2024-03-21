@@ -176,7 +176,7 @@ export default [
                     },
                     {
                         from: path.join(ICONS_PATH, "/*"),
-                        to: path.join(DIST, "icons"),
+                        to: path.join(DIST, "scripts/icons"),
                         context: ICONS_PATH
                     }
                 ]
@@ -192,64 +192,6 @@ export default [
             publicPath: "/"
         }
     }),
-    // merge(getBaseConfig(), {
-    //     devtool: false,
-
-    //     entry: {
-    //         full: path.resolve(__dirname, "./source/full/index.pug")
-    //     },
-
-    //     output: {
-    //         chunkLoadingGlobal: "__bcupjsonp",
-    //         filename: "[name].js",
-    //         path: DIST,
-    //         publicPath: "/"
-    //     },
-
-    //     plugins: [
-    //         new PugPlugin({
-    //             css: {
-    //                 filename: "full/[name].css",
-    //                 chunkFilename: "full/[name].[contenthash:8].css"
-    //             },
-    //             filename: "[name].html",
-    //             js: {
-    //                 filename: "full/[name].js",
-    //                 chunkFilename: "full/[name].[contenthash:8].js"
-    //             },
-    //             pretty: false
-    //         })
-    //     ]
-    // }),
-    // merge(getBaseConfig(), {
-    //     devtool: false,
-
-    //     entry: {
-    //         popup: path.resolve(__dirname, "./source/popup/index.pug")
-    //     },
-
-    //     output: {
-    //         chunkLoadingGlobal: "__bcupjsonp",
-    //         filename: "[name].js",
-    //         path: DIST,
-    //         publicPath: "/"
-    //     },
-
-    //     plugins: [
-    //         new PugPlugin({
-    //             css: {
-    //                 filename: "popup/[name].css",
-    //                 chunkFilename: "popup/[name].[contenthash:8].css"
-    //             },
-    //             filename: "[name].html",
-    //             js: {
-    //                 filename: "popup/[name].js",
-    //                 chunkFilename: "popup/[name].[contenthash:8].js"
-    //             },
-    //             pretty: false
-    //         })
-    //     ]
-    // })
     merge(getBaseConfig(), {
         devtool: false,
 
