@@ -14,7 +14,7 @@ async function checkForLoginSaveAbility(loginID?: string) {
         getConfig(),
         loginID ? getCredentialsForID(loginID) : getLastSavedCredentials()
     ]);
-    if (!used || !used.promptSave) return;
+    if (!used || !used.promptSave || used.fromEntry) return;
     if (currentDomainDisabled(disabledDomains)) {
         log(`login available, but current domain disabled: ${getCurrentDomain()}`);
         return;
@@ -46,12 +46,14 @@ export function watchCredentialsOnTarget(loginTarget: LoginTarget): void {
     tracker.registerConnection(loginTarget);
     watchLogin(
         loginTarget,
-        (username) => {
+        (username, source) => {
             const connection = tracker.getConnection(loginTarget);
+            connection.entry = source === "fill";
             connection.username = username;
         },
-        (password) => {
+        (password, source) => {
             const connection = tracker.getConnection(loginTarget);
+            connection.entry = source === "fill";
             connection.password = password;
         },
         () => {
@@ -65,15 +67,15 @@ export function watchCredentialsOnTarget(loginTarget: LoginTarget): void {
 
 function watchLogin(
     target: LoginTarget,
-    usernameUpdate: (value: string) => void,
-    passwordUpdate: (value: string) => void,
+    usernameUpdate: (value: string, source: "keypress" | "fill") => void,
+    passwordUpdate: (value: string, source: "keypress" | "fill") => void,
     onSubmit: () => void
 ) {
     target.on("valueChanged", (info) => {
         if (info.type === LoginTargetFeature.Username) {
-            usernameUpdate(info.value);
+            usernameUpdate(info.value, info.source);
         } else if (info.type === LoginTargetFeature.Password) {
-            passwordUpdate(info.value);
+            passwordUpdate(info.value, info.source);
         }
     });
     target.on("formSubmitted", (info) => {
