@@ -1,5 +1,42 @@
 # Buttercup browser extension changelog
 
+## v2.26.0
+_2023-11-08_
+
+ * **Important version 3 update notice**
+ * Updates for core libraries and datasources
+
+## v2.25.3
+_2023-01-31_
+
+ * **Bugfix**:
+   * Google Drive would fail when tokens expire (new response format)
+
+## v2.25.2
+_2022-09-03_
+
+ * **Bugfix**:
+   * Fixed Dropbox connectivity issues
+   * Fixed Google Drive re-authentication loop, short auth time
+
+## v2.25.1
+_2022-08-16_
+
+ * **Bugfix**:
+   * Format B saving new properties would fail
+   * Format B conversion would omit history
+
+## v2.25.0
+_2022-06-02_
+
+ * Buttercup upgrade: v6
+   * Improved Dropbox/Google Drive integrations
+   * Improved vault stability and performance
+   * Improved support for Vault Format B
+ * Removed My Buttercup integration
+ * Vault editor page redesign
+ * Updated vault UI
+
 ## v2.24.3
 _2021-05-24_
 
