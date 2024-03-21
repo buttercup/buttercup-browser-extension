@@ -15,6 +15,7 @@ import manifestV3 from "./resources/manifest.v3.json" assert { type: "json" };
 
 const { BannerPlugin } = webpack;
 const { BROWSER } = process.env;
+const V3_BROWSERS = ["chrome", "edge"];
 const require = createRequire(import.meta.url);
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DIST = path.resolve(__dirname, "dist");
@@ -157,7 +158,7 @@ export default [
                     compiler.hooks.afterEmit.tap("AfterEmitPlugin", (compilation) => {
                         buildManifest(
                             Object.keys(compilation.getStats().compilation.assets),
-                            BROWSER === "chrome" ? manifestV3 : manifestV2
+                            V3_BROWSERS.includes(BROWSER) ? manifestV3 : manifestV2
                         );
                     });
                 }
