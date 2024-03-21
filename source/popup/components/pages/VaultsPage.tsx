@@ -1,11 +1,15 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { Button, ButtonGroup, NonIdealState } from "@blueprintjs/core";
-import { useVaultSources } from "../../../shared/hooks/vaultAppliance.js";
+import { Button, ButtonGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { t } from "../../../shared/i18n/trans.js";
-import { openAddVaultPage } from "../../../shared/library/page.js";
 import { VaultItemList } from "../vaults/VaultItemList.js";
-import { getVaultsAppliance } from "../../services/vaultsAppliance.js";
+import { useDesktopConnectionState, useVaultSources } from "../../hooks/desktop.js";
+import { DesktopConnectionState } from "../../types.js";
+
+interface VaultsPageProps {
+    onConnectClick: () => Promise<void>;
+    onReconnectClick: () => Promise<void>;
+}
 
 const Container = styled.div`
     display: flex;
@@ -13,43 +17,74 @@ const Container = styled.div`
     justify-content: flex-start;
     align-items: stretch;
 `;
-const NoVaultsState = styled(NonIdealState)`
+const InvalidState = styled(NonIdealState)`
     margin-top: 28px;
 `;
 
-export function VaultsPage() {
-    const sources = useVaultSources(getVaultsAppliance());
-    const handleAddVaultClick = useCallback(() => {
-        openAddVaultPage();
-    }, []);
+export function VaultsPage(props: VaultsPageProps) {
+    const desktopState = useDesktopConnectionState();
     return (
         <Container>
-            {sources.length === 0 && (
-                <NoVaultsState
-                    title={t("popup.vaults.empty.title")}
-                    description={t("popup.vaults.empty.description")}
-                    icon="folder-open"
+            {desktopState === DesktopConnectionState.NotConnected && (
+                <InvalidState
+                    title={t("popup.vaults.no-connection.title")}
+                    description={t("popup.vaults.no-connection.description")}
+                    icon="offline"
                     action={(
                         <Button
-                            icon="plus"
-                            onClick={handleAddVaultClick}
-                            text={t("popup.vaults.empty.action-text")}
+                            icon="link"
+                            onClick={props.onConnectClick}
+                            text={t("popup.vaults.no-connection.action-text")}
                         />
                     )}
                 />
             )}
-            {sources.length > 0 && (
-                <VaultItemList
-                    vaults={sources}
+            {desktopState === DesktopConnectionState.Connected && (
+                <VaultsPageList />
+            )}
+            {desktopState === DesktopConnectionState.Pending && (
+                <Spinner size={40} />
+            )}
+            {desktopState === DesktopConnectionState.Error && (
+                <InvalidState
+                    title={t("popup.connection.check-error.title")}
+                    description={t("popup.connection.check-error.description")}
+                    icon="error"
+                    intent={Intent.DANGER}
+                    action={(
+                        <Button
+                            icon="link"
+                            onClick={props.onReconnectClick}
+                            text={t("popup.vaults.no-connection.action-text")}
+                        />
+                    )}
                 />
             )}
         </Container>
     );
 }
 
+function VaultsPageList() {
+    const sources = useVaultSources();
+    if (sources.length === 0) {
+        return (
+            <InvalidState
+                title={t("popup.vaults.empty.title")}
+                description={t("popup.vaults.empty.description")}
+                icon="folder-open"
+            />
+        );
+    }
+    return (
+        <VaultItemList
+            vaults={sources}
+        />
+    );
+}
+
 export function VaultsPageControls() {
     const handleAddVaultClick = useCallback(() => {
-        openAddVaultPage();
+        // openAddVaultPage();
     }, []);
     return (
         <ButtonGroup>
@@ -57,10 +92,12 @@ export function VaultsPageControls() {
                 icon="add"
                 minimal
                 onClick={handleAddVaultClick}
+                title={t("popup.vaults.controls.add-vault")}
             />
             <Button
                 icon="lock"
                 minimal
+                title={t("popup.vaults.controls.lock-vaults")}
             />
         </ButtonGroup>
     );

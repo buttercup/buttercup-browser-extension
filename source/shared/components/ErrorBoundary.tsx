@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component {
 
     render() {
         if (!this.state.error) {
-            return this.props.children;
+            return this.props.children || null;
         }
         return (
             <ErrorCallout intent={Intent.DANGER} icon="heart-broken" title="Error">

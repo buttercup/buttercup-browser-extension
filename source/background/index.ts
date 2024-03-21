@@ -1,4 +1,4 @@
-import { createOffscreen, initialise } from "./services/init.js";
+import { initialise } from "./services/init.js";
 import { log } from "./services/log.js";
 
 // chrome.runtime.onInstalled.addListener(() => {

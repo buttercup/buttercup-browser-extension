@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import styled from "styled-components";
 import cn from "classnames";
 import { Button, ButtonGroup, Classes, Text } from "@blueprintjs/core";
-import { Tooltip2 } from "@blueprintjs/popover2";
 import { VaultSourceStatus } from "buttercup";
 import { VAULT_TYPES } from "../../../shared/library/vaultTypes.js";
 import { t } from "../../../shared/i18n/trans.js";
@@ -10,8 +9,7 @@ import { VaultSourceDescription } from "../../types.js";
 import { VaultStateIndicator } from "./VaultStateIndicator.js";
 
 interface VaultItemProps {
-    isDetailsVisible: boolean;
-    onRemoveClick: () => void;
+    onLockClick: () => void;
     onUnlockClick: () => void;
     vault: VaultSourceDescription;
 }
@@ -64,8 +62,7 @@ const VaultRow = styled.div`
 
 export function VaultItem(props: VaultItemProps) {
     const {
-        isDetailsVisible,
-        onRemoveClick,
+        onLockClick,
         onUnlockClick,
         vault
     } = props;
@@ -77,19 +74,16 @@ export function VaultItem(props: VaultItemProps) {
         if (vault.state === VaultSourceStatus.Locked) {
             onUnlockClick();
         } else if (vault.state === VaultSourceStatus.Unlocked) {
-            // @todo
+            onLockClick();
         }
     }, [vault, onUnlockClick]);
-    const handleRemoveClick = useCallback(() => {
-        onRemoveClick();
-    }, [vault, onRemoveClick]);
     return (
-        <Container isActive={isDetailsVisible}>
+        <Container>
             <VaultRow>
                 <VaultImageBackground>
                     <VaultIcon src={vaultImage} />
                 </VaultImageBackground>
-                <DetailRow onClick={() => handleVaultClick()}>
+                <DetailRow onClick={handleVaultClick}>
                     <Title title={vault.name}>
                         <Text ellipsize>{vault.name}</Text>
                     </Title>
@@ -99,36 +93,26 @@ export function VaultItem(props: VaultItemProps) {
                     </CenteredText>
                 </DetailRow>
                 <ButtonGroup>
-                    <Tooltip2
-                        content={
+                    <Button
+                        disabled={vault.state === VaultSourceStatus.Pending}
+                        icon={
+                            vault.state === VaultSourceStatus.Locked
+                                ? "unlock"
+                                : vault.state === VaultSourceStatus.Unlocked
+                                    ? "lock"
+                                    : "help"
+                        }
+                        loading={vault.state === VaultSourceStatus.Pending}
+                        minimal
+                        onClick={handleLockUnlockClick}
+                        title={
                             vault.state === VaultSourceStatus.Locked
                                 ? t("popup.vault.unlock")
                                 : vault.state === VaultSourceStatus.Unlocked
                                     ? t("popup.vault.lock")
                                     : t("popup.vault.state-pending")
                         }
-                    >
-                        <Button
-                            icon={
-                                vault.state === VaultSourceStatus.Locked
-                                    ? "unlock"
-                                    : vault.state === VaultSourceStatus.Unlocked
-                                        ? "lock"
-                                        : "help"
-                            }
-                            loading={vault.state === VaultSourceStatus.Pending}
-                            minimal
-                            onClick={handleLockUnlockClick}
-                        />
-                    </Tooltip2>
-                    <Tooltip2 content={t("popup.vault.remove")}>
-                        <Button
-                            icon="remove"
-                            loading={vault.state === VaultSourceStatus.Pending}
-                            minimal
-                            onClick={handleRemoveClick}
-                        />
-                    </Tooltip2>
+                    />
                 </ButtonGroup>
             </VaultRow>
         </Container>

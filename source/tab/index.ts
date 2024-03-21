@@ -1,5 +1,10 @@
-import { waitAndAttachLaunchButtons } from "./services/detection.js";
+import { FRAME } from "./state/frame.js";
+import { initialise } from "./services/init.js";
+import { log } from "./services/log.js";
 
-const IS_TOP = window.parent === window;
+FRAME.isTop = window.parent === window;
 
-waitAndAttachLaunchButtons();
+initialise().catch((err) => {
+    console.error(err);
+    log(`initialisation failed: ${err.message}`);
+});

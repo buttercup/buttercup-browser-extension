@@ -6,7 +6,7 @@
         "target": "ES6",
         "esModuleInterop": true,
         "strict": false,
-        "jsx": "react",
+        "jsx": "react-jsx",
         "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true,
         "types": ["chrome", "react", "react-dom"]

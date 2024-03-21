@@ -1,19 +1,24 @@
-const fs = require("fs");
-const path = require("path");
-const { BannerPlugin } = require("webpack");
-const ResolveTypeScriptPlugin = require("resolve-typescript-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { merge } = require("webpack-merge");
-const PugPlugin = require("pug-plugin");
-const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
-const sass = require("sass");
+import { writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+import { createRequire } from "node:module";
+import webpack from "webpack";
+import ResolveTypeScriptPlugin from "resolve-typescript-plugin";
+import CopyWebpackPlugin from "copy-webpack-plugin";
+import { merge } from "webpack-merge";
+import PugPlugin from "pug-plugin";
+import sass from "sass";
 
-const { version } = require("./package.json");
-const manifestV2 = require("./resources/manifest.v2.json");
-const manifestV3 = require("./resources/manifest.v3.json");
+import packageInfo from "./package.json" assert { type: "json" };
+import manifestV2 from "./resources/manifest.v2.json" assert { type: "json" };
+import manifestV3 from "./resources/manifest.v3.json" assert { type: "json" };
 
+const { BannerPlugin } = webpack;
 const { BROWSER } = process.env;
+const require = createRequire(import.meta.url);
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DIST = path.resolve(__dirname, "dist");
+const ICONS_PATH = path.join(path.dirname(require.resolve("@buttercup/ui")), "icons");
 
 if (!BROWSER) {
     throw new Error("BROWSER must be specified");
@@ -21,7 +26,7 @@ if (!BROWSER) {
 
 function buildManifest(assetNames, manifest) {
     const newManifest = JSON.parse(JSON.stringify(manifest));
-    newManifest.version = version;
+    newManifest.version = packageInfo.version;
     assetNames.forEach((assetFilename) => {
         if (/^[^\/\\]+\.js$/.test(assetFilename)) {
             if (/\bbackground\b/.test(assetFilename) && assetFilename !== "background.js") {
@@ -32,7 +37,7 @@ function buildManifest(assetNames, manifest) {
             }
         }
     });
-    fs.writeFileSync(path.join(DIST, "./manifest.json"), JSON.stringify(newManifest, undefined, 2));
+    writeFileSync(path.join(DIST, "./manifest.json"), JSON.stringify(newManifest, undefined, 2));
 }
 
 function getBaseConfig() {
@@ -74,7 +79,6 @@ function getBaseConfig() {
                 {
                     test: /\.s[ac]ss$/,
                     use: [
-                        MiniCSSExtractPlugin.loader,
                         "css-loader",
                         {
                             loader: "sass-loader",
@@ -86,7 +90,7 @@ function getBaseConfig() {
                 },
                 {
                     test: /\.css$/,
-                    use: [MiniCSSExtractPlugin.loader, "css-loader"]
+                    use: ["css-loader"]
                 },
                 {
                     test: /\.(jpg|png|svg|eot|svg|ttf|woff|woff2)$/,
@@ -94,6 +98,10 @@ function getBaseConfig() {
                     generator: {
                         filename: "assets/[name][ext]"
                     }
+                },
+                {
+                    test: /\.pug$/,
+                    loader: PugPlugin.loader
                 }
             ]
         },
@@ -111,8 +119,9 @@ function getBaseConfig() {
 
         resolve: {
             alias: {
-                // buttercup: "buttercup/web"
-                // gle: "gle/browser"
+                iocane: "iocane/web",
+                "react/jsx-runtime": "react/jsx-runtime.js",
+                "react/jsx-dev-runtime": "react/jsx-dev-runtime.js"
             },
             // No .ts/.tsx included due to the typescript resolver plugin
             extensions: [".js", ".jsx"],
@@ -131,7 +140,7 @@ function getBaseConfig() {
     };
 }
 
-module.exports = [
+export default [
     merge(getBaseConfig(), {
         entry: {
             background: path.resolve(__dirname, "./source/background/index.ts")
@@ -157,50 +166,20 @@ module.exports = [
                 patterns: [
                     {
                         from: path.join(__dirname, "./resources", "buttercup-*.png"),
-                        to: DIST,
+                        to: path.join(DIST, "manifest-res"),
                         context: path.join(__dirname, "./resources")
                     },
                     {
                         from: path.join(__dirname, "./resources/offscreen.*"),
                         to: DIST,
                         context: path.join(__dirname, "./resources")
+                    },
+                    {
+                        from: path.join(ICONS_PATH, "/*"),
+                        to: path.join(DIST, "scripts/icons"),
+                        context: ICONS_PATH
                     }
                 ]
-            })
-        ]
-    }),
-    merge(getBaseConfig(), {
-        entry: {
-            full: path.resolve(__dirname, "./source/full/index.tsx"),
-            popup: path.resolve(__dirname, "./source/popup/index.tsx")
-        },
-
-        optimization: {
-            splitChunks: {
-                automaticNameDelimiter: "-",
-                chunks: "all",
-                maxSize: Infinity,
-                minSize: 30000,
-                cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name(module) {
-                            return "vendors";
-                        }
-                    }
-                }
-            }
-        },
-
-        output: {
-            chunkFilename: "[name].chunk.js",
-            publicPath: "/",
-            chunkLoadingGlobal: "__bcupjsonp"
-        },
-
-        plugins: [
-            new MiniCSSExtractPlugin({
-                filename: "[name].css"
             })
         ]
     }),
@@ -213,32 +192,34 @@ module.exports = [
             publicPath: "/"
         }
     }),
-    {
+    merge(getBaseConfig(), {
         devtool: false,
 
         entry: {
-            full: path.resolve(__dirname, "./resources/full.pug"),
-            popup: path.resolve(__dirname, "./resources/popup.pug")
-        },
-
-        module: {
-            rules: [
-                {
-                    test: /\.pug$/,
-                    loader: PugPlugin.loader
-                }
-            ]
+            full: path.resolve(__dirname, "./source/full/index.pug"),
+            popup: path.resolve(__dirname, "./source/popup/index.pug")
         },
 
         output: {
-            filename: "[name].html",
-            path: DIST
+            chunkLoadingGlobal: "__bcupjsonp",
+            filename: "[name].js",
+            path: DIST,
+            publicPath: "/"
         },
 
         plugins: [
             new PugPlugin({
+                css: {
+                    filename: "styles/[name].css",
+                    chunkFilename: "styles/[name].[contenthash:8].css"
+                },
+                filename: "[name].html",
+                js: {
+                    filename: "scripts/[name].js",
+                    chunkFilename: "scripts/[name].[contenthash:8].js"
+                },
                 pretty: false
             })
         ]
-    }
+    })
 ];
