@@ -23,7 +23,6 @@
     "release:firefox:source": "zip -r release/firefox/source.zip . --exclude=/.git* --exclude=/node_modules* --exclude=/.history* --exclude=/dist* --exclude=/release* --exclude=*.DS_Store*",
     "set-version": "node scripts/version.js",
     "test": "run-s test:format",
-    "test:ci": "run-s test release",
     "test:format": "prettier --check '{{source,test}/**/*.{ts,js},webpack.config.js}'"
   },
   "lint-staged": {
