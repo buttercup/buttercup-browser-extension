@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useMemo } from "react";
 import styled from "styled-components";
-import { Button, InputGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Button, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { VaultSourceStatus } from "buttercup";
 import { t } from "../../../shared/i18n/trans.js";
 import { useDesktopConnectionState, useOTPs, useVaultSources } from "../../hooks/desktop.js";
@@ -9,26 +9,23 @@ import { LaunchContext } from "../contexts/LaunchContext.js";
 import { sendOTPToTabForInput } from "../../services/tab.js";
 import { usePreparedOTPs } from "../../hooks/otp.js";
 import { DesktopConnectionState, OTP } from "../../types.js";
+import { getToaster } from "../../../shared/services/notifications.js";
+import { createNewTab } from "../../../shared/library/extension.js";
+import { formatURL } from "../../../shared/library/url.js";
+import { localisedErrorMessage } from "../../../shared/library/error.js";
 
 interface OTPsPageProps {
     onConnectClick: () => Promise<void>;
     onReconnectClick: () => Promise<void>;
-    searchTerm: string;
 }
 
-interface OTPsPageControlsProps {
-    onSearchTermChange: (term: string) => void;
-    searchTerm: string;
-}
+interface OTPsPageControlsProps {}
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-`;
-const Input = styled(InputGroup)`
-    margin-right: 2px !important;
 `;
 const InvalidState = styled(NonIdealState)`
     margin-top: 28px;
@@ -92,6 +89,24 @@ function OTPsPageList(props: OTPsPageProps) {
     const handleOTPClick = useCallback((otp: OTP) => {
         if (popupSource === "page") {
             sendOTPToTabForInput(formID, otp);
+        } else if (popupSource === "popup") {
+            if (!otp.loginURL) {
+                getToaster().show({
+                    intent: Intent.PRIMARY,
+                    message: t("popup.otps.click.no-url-available"),
+                    timeout: 3000
+                });
+                return;
+            }
+            createNewTab(formatURL(otp.loginURL))
+                .catch(err => {
+                    console.error(err);
+                    getToaster().show({
+                        intent: Intent.DANGER,
+                        message: t("popup.otps.click.open-error", { message: localisedErrorMessage(err) }),
+                        timeout: 10000
+                    });
+                });
         }
     }, [popupSource]);
     if (loadingOTPs || (unlockedCount === 0 && otps.length > 0)) {

@@ -129,6 +129,12 @@
             "description": "No OTP entries found in unlocked vaults.",
             "title": "No OTP Entries"
         },
+        "otps": {
+            "click": {
+                "no-url-available": "No URL available for this OTP",
+                "open-error": "Could not open page for OTP: {{message}}"
+            }
+        },
         "tab": {
             "about": {
                 "title": "About"

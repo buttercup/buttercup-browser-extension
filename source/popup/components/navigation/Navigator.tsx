@@ -139,7 +139,6 @@ export function Navigator(props: NavigatorProps) {
                                     <OTPsPage
                                         onConnectClick={handleConnectClick}
                                         onReconnectClick={handleReconnectClick}
-                                        searchTerm={entriesSearch}
                                     />
                                 </>
                             )}
