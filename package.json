@@ -14,6 +14,7 @@
     "clean": "rimraf dist/* release/*",
     "dev": "npm run clean && npm run set-version && webpack --mode development -w --progress --config webpack.config.js",
     "dev:chrome": "BROWSER=chrome npm run dev",
+    "dev:edge": "BROWSER=edge npm run dev",
     "dev:firefox": "concurrently -k \"BROWSER=firefox npm run dev\" \"cd dist && web-ext run\" --restart-tries 20 --restart-after 5000",
     "format": "prettier --write '{{source,test}/**/*.{ts,js},webpack.config.js}'",
     "release": "run-s clean release:chrome release:firefox release:edge",
