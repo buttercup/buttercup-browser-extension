@@ -171,11 +171,6 @@ export default [
                         context: path.join(__dirname, "./resources")
                     },
                     {
-                        from: path.join(__dirname, "./resources/offscreen.*"),
-                        to: DIST,
-                        context: path.join(__dirname, "./resources")
-                    },
-                    {
                         from: path.join(ICONS_PATH, "/*"),
                         to: path.join(DIST, "scripts/icons"),
                         context: ICONS_PATH
