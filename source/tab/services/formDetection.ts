@@ -33,6 +33,7 @@ export function waitAndAttachLaunchButtons(
 ) {
     onIdentifiedTarget((loginTarget: LoginTarget) => {
         const { otpField, usernameField, passwordField } = loginTarget;
+        console.log("FOUND TARGET", loginTarget);
         if (otpField) {
             attachLaunchButton(otpField, (el) => onInputActivate(el, loginTarget, InputType.OTP));
         }
