@@ -33,7 +33,6 @@
 
     "permissions": [
         "clipboardWrite",
-        "contextMenus",
         "storage",
         "tabs",
         "unlimitedStorage"

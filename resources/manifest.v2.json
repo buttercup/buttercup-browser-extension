@@ -34,7 +34,6 @@
 
     "permissions": [
         "clipboardWrite",
-        "contextMenus",
         "http://*/*",
         "https://*/*",
         "storage",
