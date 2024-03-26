@@ -13,7 +13,7 @@ import packageInfo from "./package.json" assert { type: "json" };
 import manifestV2 from "./resources/manifest.v2.json" assert { type: "json" };
 import manifestV3 from "./resources/manifest.v3.json" assert { type: "json" };
 
-const { BannerPlugin } = webpack;
+const { BannerPlugin, DefinePlugin } = webpack;
 const { BROWSER } = process.env;
 const V3_BROWSERS = ["chrome", "edge"];
 const require = createRequire(import.meta.url);
@@ -117,6 +117,12 @@ function getBaseConfig() {
             maxEntrypointSize: 768000,
             maxAssetSize: 768000
         },
+
+        plugins: [
+            new DefinePlugin({
+                BROWSER: JSON.stringify(BROWSER)
+            })
+        ],
 
         resolve: {
             alias: {

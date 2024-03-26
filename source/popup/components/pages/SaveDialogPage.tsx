@@ -10,10 +10,9 @@ import { getToaster } from "../../../shared/services/notifications.js";
 import { clearSavedLoginPrompt } from "../../queries/loginMemory.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { extractDomain } from "../../../shared/library/domain.js";
-import { sendTabsMessage } from "../../../shared/services/messaging.js";
-import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
-import { TabEventType } from "../../types.js";
+import { BackgroundMessageType } from "../../types.js";
 import { disableDomainForLogin } from "../../queries/disabledDomains.js";
+import { sendBackgroundMessage } from "../../../shared/services/messaging.js";
 
 const Buttons = styled.div`
     width: 100%;
@@ -94,9 +93,9 @@ export function SaveDialogPage() {
     const [disableConfirm, setDisableConfirm] = useState<boolean>(false);
     const handleViewClick = useCallback(async () => {
         try {
-            await createNewTab(getExtensionURL("full.html#/save-credentials"));
-            await sendTabsMessage({
-                type: TabEventType.CloseSaveDialog
+            // Open save page and close dialog
+            await sendBackgroundMessage({
+                type: BackgroundMessageType.OpenSaveCredentialsPage
             });
         } catch (err) {
             console.error(err);
@@ -109,10 +108,8 @@ export function SaveDialogPage() {
     }, [loginID]);
     const handleCloseClick = useCallback(async () => {
         try {
+            // Clear prompt and close dialog
             await clearSavedLoginPrompt(loginID);
-            await sendTabsMessage({
-                type: TabEventType.CloseSaveDialog
-            });
         } catch (err) {
             console.error(err);
             getToaster().show({
@@ -128,10 +125,8 @@ export function SaveDialogPage() {
             return;
         }
         try {
+            // Disable domain and close dialog
             await disableDomainForLogin(loginID);
-            await sendTabsMessage({
-                type: TabEventType.CloseSaveDialog
-            });
         } catch (err) {
             console.error(err);
             getToaster().show({

@@ -125,6 +125,10 @@
                 "placeholder": "Search..."
             }
         },
+        "no-entries": {
+            "description": "No available entries - recent items and results for the current tab will appear here.",
+            "title": "No Entries"
+        },
         "no-otps": {
             "description": "No OTP entries found in unlocked vaults.",
             "title": "No OTP Entries"

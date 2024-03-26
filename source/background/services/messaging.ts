@@ -35,8 +35,16 @@ import { getRecents, trackRecentUsage } from "./recents.js";
 import { openEntryPageInNewTab } from "./entry.js";
 import { getAutoLoginForTab, registerAutoLogin } from "./autoLogin.js";
 import { extractDomainFromCredentials } from "../library/domain.js";
-import { BackgroundMessage, BackgroundMessageType, BackgroundResponse, LocalStorageItem } from "../types.js";
+import {
+    BackgroundMessage,
+    BackgroundMessageType,
+    BackgroundResponse,
+    LocalStorageItem,
+    TabEventType
+} from "../types.js";
 import { markNotificationRead } from "./notifications.js";
+import { createNewTab, getExtensionURL } from "../../shared/library/extension.js";
+import { sendTabsMessage } from "./tabs.js";
 
 async function handleMessage(
     msg: BackgroundMessage,
@@ -79,6 +87,9 @@ async function handleMessage(
             const { credentialsID } = msg;
             log(`clear saved credentials prompt: ${credentialsID}`);
             stopPromptForID(credentialsID);
+            await sendTabsMessage({
+                type: TabEventType.CloseSaveDialog
+            });
             sendResponse({});
             break;
         }
@@ -104,6 +115,9 @@ async function handleMessage(
             } catch (err) {
                 throw new Layerr(err, "Failed disabling save prompt for domain");
             }
+            await sendTabsMessage({
+                type: TabEventType.CloseSaveDialog
+            });
             sendResponse({});
             break;
         }
@@ -203,6 +217,7 @@ async function handleMessage(
         case BackgroundMessageType.InitiateDesktopConnection: {
             log("start desktop authentication");
             await initiateConnection();
+            await createNewTab(getExtensionURL("full.html#/connect"));
             sendResponse({});
             break;
         }
@@ -226,6 +241,14 @@ async function handleMessage(
                 registerAutoLogin(entry, tabID);
             }
             sendResponse({ opened: true });
+            break;
+        }
+        case BackgroundMessageType.OpenSaveCredentialsPage: {
+            await createNewTab(getExtensionURL("full.html#/save-credentials"));
+            await sendTabsMessage({
+                type: TabEventType.CloseSaveDialog
+            });
+            sendResponse({});
             break;
         }
         case BackgroundMessageType.PromptLockSource: {

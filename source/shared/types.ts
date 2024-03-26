@@ -61,6 +61,7 @@ export enum BackgroundMessageType {
     GetSavedCredentialsForID = "getCredentialsForID",
     MarkNotificationRead = "markNotificationRead",
     OpenEntryPage = "openEntryPage",
+    OpenSaveCredentialsPage = "openSaveCredentials",
     PromptLockSource = "promptLockSource",
     PromptUnlockSource = "promptUnlockSource",
     ResetSettings = "resetSettings",

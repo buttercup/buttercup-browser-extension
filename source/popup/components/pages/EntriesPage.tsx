@@ -149,6 +149,15 @@ function EntriesPageList(props: EntriesPageProps) {
             />
         );
     }
+    if (urlEntries.length <= 0 && recentEntries.length <= 0) {
+        return (
+            <InvalidState
+                title={t("popup.no-entries.title")}
+                description={t("popup.no-entries.description")}
+                icon="clean"
+            />
+        );
+    }
     return (
         <EntryItemList
             entries={{

@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { Classes, Divider, Icon, Intent, Tab, Tabs } from "@blueprintjs/core";
 import { VaultsPage, VaultsPageControls } from "../pages/VaultsPage.js";
@@ -7,7 +7,6 @@ import { getToaster } from "../../../shared/services/notifications.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { t } from "../../../shared/i18n/trans.js";
 import { clearDesktopConnectionAuth, initiateDesktopConnectionRequest } from "../../queries/desktop.js";
-import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
 import { OTPsPage } from "../pages/OTPsPage.js";
 import { SettingsPage } from "../pages/SettingsPage.js";
 import { AboutPage } from "../pages/AboutPage.js";
@@ -63,7 +62,6 @@ export function Navigator(props: NavigatorProps) {
     const handleConnectClick = useCallback(async () => {
         try {
             await initiateDesktopConnectionRequest();
-            await createNewTab(getExtensionURL("full.html#/connect"));
         } catch (err) {
             console.error(err);
             getToaster().show({
