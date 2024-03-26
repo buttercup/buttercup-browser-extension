@@ -1,5 +1,13 @@
 # Buttercup browser extension changelog
 
+## v3.0.0
+_2024-03-26_
+
+ * **Major rewrite**
+   * Requires desktop application for vault access
+   * Nested iframe traversal
+   * OTP support
+
 ## v2.26.0
 _2023-11-08_
 
