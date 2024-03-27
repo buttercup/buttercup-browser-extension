@@ -36,6 +36,7 @@ export interface BackgroundMessage {
     notification?: string;
     searchTerm?: string;
     sourceID?: VaultSourceID;
+    text?: string;
     type: BackgroundMessageType;
     url?: string;
 }

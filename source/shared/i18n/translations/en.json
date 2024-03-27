@@ -122,6 +122,9 @@
                 "recent-set-error": "Failed recording recent entry: {{message}}"
             },
             "info": {
+                "copy-error": "Failed copying value: {{message}}",
+                "copy-success": "Copied value to clipboard: {{property}}",
+                "copy-tooltip": "Copy to clipoard",
                 "tooltip": "Show entry properties"
             },
             "otp": {

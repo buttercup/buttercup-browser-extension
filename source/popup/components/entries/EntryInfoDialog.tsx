@@ -1,8 +1,12 @@
-import React, { useMemo } from "react";
-import { Button, Classes, Dialog, DialogBody } from "@blueprintjs/core";
+import React, { useCallback, useMemo } from "react";
+import { Button, Classes, Dialog, DialogBody, InputGroup, Intent } from "@blueprintjs/core";
 import { SearchResult } from "buttercup";
 import cn from "classnames";
 import styled from "styled-components";
+import { t } from "../../../shared/i18n/trans.js";
+import { copyTextToClipboard } from "../../services/clipboard.js";
+import { getToaster } from "../../../shared/services/notifications.js";
+import { localisedErrorMessage } from "../../../shared/library/error.js";
 
 interface EntryInfoDialogProps {
     entry: SearchResult | null;
@@ -30,13 +34,26 @@ const InfoTable = styled.table`
     table-layout: fixed;
     width: 100%;
 `;
-const ValueInput = styled.input`
-    width: 100%;
-`;
 
 export function EntryInfoDialog(props: EntryInfoDialogProps) {
     const { entry, onClose } = props;
     const properties = useMemo(() => entry ? orderProperties(entry.properties) : [], [entry]);
+    const handleCopyClick = useCallback(async (property: string, value: string) => {
+        try {
+            await copyTextToClipboard(value);
+            getToaster().show({
+                intent: Intent.SUCCESS,
+                message: t("popup.entries.info.copy-success", { property }),
+                timeout: 4000
+            });
+        } catch (err) {
+            getToaster().show({
+                intent: Intent.DANGER,
+                message: t("popup.entries.info.copy-error", { message: localisedErrorMessage(err) }),
+                timeout: 10000
+            });
+        }
+    }, []);
     return (
         <InfoDialog
             icon="info-sign"
@@ -52,7 +69,19 @@ export function EntryInfoDialog(props: EntryInfoDialogProps) {
                             <tr key={property.key}>
                                 <td style={{ width: "100%" }}>
                                     {property.title}<br />
-                                    <ValueInput className={Classes.INPUT} type={property.sensitive ? "password" : "text"} value={property.value} readOnly />
+                                    <InputGroup
+                                        type={property.sensitive ? "password" : "text"}
+                                        value={property.value}
+                                        readOnly
+                                        rightElement={
+                                            <Button
+                                                icon="clipboard"
+                                                minimal
+                                                onClick={() => handleCopyClick(property.title, property.value)}
+                                                title={t("popup.entries.info.copy-tooltip")}
+                                            />
+                                        }
+                                    />
                                 </td>
                             </tr>
                         ))}
