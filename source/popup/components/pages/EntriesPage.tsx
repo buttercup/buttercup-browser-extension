@@ -145,18 +145,18 @@ function EntriesPageList(props: EntriesPageProps) {
                     description={t("popup.all-locked.description")}
                     icon="folder-close"
                 />
-            ) || (urlEntries.length <= 0 && recentEntries.length <= 0) && (
-                <InvalidState
-                    title={t("popup.no-entries.title")}
-                    description={t("popup.no-entries.description")}
-                    icon="clean"
-                />
             ) || searchedEntries.length > 0 && (
                 <EntryItemList
                     entries={searchedEntries}
                     onEntryAutoClick={handleEntryAutoLoginClick}
                     onEntryClick={handleEntryBodyClick}
                     onEntryInfoClick={handleEntryInfoClick}
+                />
+            ) || (urlEntries.length <= 0 && recentEntries.length <= 0) && (
+                <InvalidState
+                    title={t("popup.no-entries.title")}
+                    description={t("popup.no-entries.description")}
+                    icon="clean"
                 />
             ) || (
                 <EntryItemList
