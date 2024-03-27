@@ -102,8 +102,6 @@ export function OTPItem(props: OTPItemProps) {
                     </Title>
                     <CenteredText ellipsize className={cn(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
                         {otp.entryTitle}
-                        {/* {t(`vault-state.${vault.state}`)} */}
-                        {/* Test Test Test */}
                     </CenteredText>
                 </DetailRow>
                 <OTPCode>

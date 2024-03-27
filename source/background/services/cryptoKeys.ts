@@ -52,8 +52,12 @@ export async function deriveSecretKey(privateKey: CryptoKey, publicKey: CryptoKe
 }
 
 async function exportECDHKey(key: CryptoKey): Promise<string> {
-    const exported = await window.crypto.subtle.exportKey("jwk", key);
-    return JSON.stringify(exported);
+    try {
+        const exported = await window.crypto.subtle.exportKey("jwk", key);
+        return JSON.stringify(exported);
+    } catch (err) {
+        throw new Layerr(err, "Failed exporting ECDH key");
+    }
 }
 
 export async function generateKeys(): Promise<void> {
@@ -73,7 +77,12 @@ export async function generateKeys(): Promise<void> {
 }
 
 export async function importECDHKey(key: string): Promise<CryptoKey> {
-    const jwk = JSON.parse(key) as JsonWebKey;
+    let jwk: JsonWebKey;
+    try {
+        jwk = JSON.parse(key) as JsonWebKey;
+    } catch (err) {
+        throw new Layerr(err, "Failed importing ECDH key");
+    }
     const usages: Array<KeyUsage> = jwk.key_ops && jwk.key_ops.includes("deriveKey") ? ["deriveKey"] : [];
     return window.crypto.subtle.importKey(
         "jwk",

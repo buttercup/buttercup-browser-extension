@@ -120,6 +120,9 @@
                 "open-error": "Could not open page for entry: {{message}}",
                 "recent-set-error": "Failed recording recent entry: {{message}}"
             },
+            "info": {
+                "tooltip": "Show entry properties"
+            },
             "search": {
                 "button": "Search entries",
                 "placeholder": "Search..."

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import styled from "styled-components";
 import { Button, InputGroup, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import { SearchResult, VaultSourceStatus } from "buttercup";
@@ -12,6 +12,7 @@ import { getToaster } from "../../../shared/services/notifications.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { DesktopConnectionState } from "../../types.js";
 import { openPageForEntry } from "../../services/entry.js";
+import { EntryInfoDialog } from "../entries/EntryInfoDialog.js";
 
 interface EntriesPageProps {
     onConnectClick: () => Promise<void>;
@@ -91,6 +92,7 @@ function EntriesPageList(props: EntriesPageProps) {
     );
     const searchedEntries = useSearchedEntries(props.searchTerm);
     const { formID, source: popupSource, url } = useContext(LaunchContext);
+    const [selectedEntryInfo, setSelectedEntryInfo] = useState<SearchResult | null>(null);
     const urlEntries = useEntriesForURL(url);
     const recentEntries = useRecentEntries();
     const handleEntryClick = useCallback((entry: SearchResult, autoLogin: boolean) => {
@@ -131,42 +133,44 @@ function EntriesPageList(props: EntriesPageProps) {
     const handleEntryBodyClick = useCallback((entry: SearchResult) => {
         handleEntryClick(entry, false);
     }, [handleEntryClick]);
-    if (unlockedCount === 0) {
-        return (
-            <InvalidState
-                title={t("popup.all-locked.title")}
-                description={t("popup.all-locked.description")}
-                icon="folder-close"
-            />
-        );
-    }
-    if (searchedEntries.length > 0) {
-        return (
-            <EntryItemList
-                entries={searchedEntries}
-                onEntryAutoClick={handleEntryAutoLoginClick}
-                onEntryClick={handleEntryBodyClick}
-            />
-        );
-    }
-    if (urlEntries.length <= 0 && recentEntries.length <= 0) {
-        return (
-            <InvalidState
-                title={t("popup.no-entries.title")}
-                description={t("popup.no-entries.description")}
-                icon="clean"
-            />
-        );
-    }
+    const handleEntryInfoClick = useCallback((entry: SearchResult) => {
+        setSelectedEntryInfo(entry);
+    }, []);
+    // Render
     return (
-        <EntryItemList
-            entries={{
-                "URL Entries": urlEntries,
-                "Recents": recentEntries
-            }}
-            onEntryAutoClick={handleEntryAutoLoginClick}
-            onEntryClick={handleEntryBodyClick}
-        />
+        <>
+            {unlockedCount === 0 && (
+                <InvalidState
+                    title={t("popup.all-locked.title")}
+                    description={t("popup.all-locked.description")}
+                    icon="folder-close"
+                />
+            ) || (urlEntries.length <= 0 && recentEntries.length <= 0) && (
+                <InvalidState
+                    title={t("popup.no-entries.title")}
+                    description={t("popup.no-entries.description")}
+                    icon="clean"
+                />
+            ) || searchedEntries.length > 0 && (
+                <EntryItemList
+                    entries={searchedEntries}
+                    onEntryAutoClick={handleEntryAutoLoginClick}
+                    onEntryClick={handleEntryBodyClick}
+                    onEntryInfoClick={handleEntryInfoClick}
+                />
+            ) || (
+                <EntryItemList
+                    entries={{
+                        "URL Entries": urlEntries,
+                        "Recents": recentEntries
+                    }}
+                    onEntryAutoClick={handleEntryAutoLoginClick}
+                    onEntryClick={handleEntryBodyClick}
+                    onEntryInfoClick={handleEntryInfoClick}
+                />
+            )}
+            <EntryInfoDialog entry={selectedEntryInfo} onClose={() => setSelectedEntryInfo(null)} />
+        </>
     );
 }
 

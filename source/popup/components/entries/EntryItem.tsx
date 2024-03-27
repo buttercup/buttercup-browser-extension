@@ -14,6 +14,7 @@ interface EntryItemProps {
     fetchIcons: boolean;
     onAutoClick: () => void;
     onClick: () => void;
+    onInfoClick: () => void;
 }
 
 const CenteredText = styled(Text)`
@@ -66,7 +67,8 @@ export function EntryItem(props: EntryItemProps) {
         entry,
         fetchIcons,
         onAutoClick,
-        onClick
+        onClick,
+        onInfoClick
     } = props;
     const { source: popupSource } = useContext(LaunchContext);
     const entryDomain = useMemo(() => {
@@ -91,6 +93,11 @@ export function EntryItem(props: EntryItemProps) {
         },
         [onAutoClick]
     );
+    const handleEntryInfoClick = useCallback((evt: MouseEvent) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        onInfoClick();
+    }, [onInfoClick]);
     return (
         <Container isActive={false} onClick={handleEntryClick}>
             <EntryRow>
@@ -117,6 +124,15 @@ export function EntryItem(props: EntryItemProps) {
                                 icon="text-highlight"
                                 minimal
                                 onClick={handleEntryLoginClick}
+                            />
+                        </Tooltip2>
+                        <Tooltip2
+                            content={t("popup.entries.info.tooltip")}
+                        >
+                            <Button
+                                icon="info-sign"
+                                minimal
+                                onClick={handleEntryInfoClick}
                             />
                         </Tooltip2>
                     </ButtonGroup>
