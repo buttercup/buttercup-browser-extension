@@ -1,6 +1,6 @@
 {
   "name": "buttercup-browser-extension",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Buttercup browser extension",
   "exports": "./dist/background/index.js",
   "type": "module",
