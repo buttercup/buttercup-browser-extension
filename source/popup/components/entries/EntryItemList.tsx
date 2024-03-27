@@ -10,6 +10,7 @@ interface EntryItemListProps {
     entries: Array<SearchResult> | Record<string, Array<SearchResult>>;
     onEntryAutoClick: (entry: SearchResult) => void;
     onEntryClick: (entry: SearchResult) => void;
+    onEntryInfoClick: (entry: SearchResult) => void;
 }
 
 const ScrollList = styled.div`
@@ -21,7 +22,7 @@ const ScrollList = styled.div`
 `;
 
 export function EntryItemList(props: EntryItemListProps) {
-    const { entries, onEntryAutoClick, onEntryClick } = props;
+    const { entries, onEntryAutoClick, onEntryClick, onEntryInfoClick } = props;
     const [config] = useConfig();
     if (!config) return null;
     return (
@@ -35,6 +36,7 @@ export function EntryItemList(props: EntryItemListProps) {
                                 fetchIcons={config.entryIcons}
                                 onAutoClick={() => onEntryAutoClick(entry)}
                                 onClick={() => onEntryClick(entry)}
+                                onInfoClick={() => onEntryInfoClick(entry)}
                             />
                             <Divider />
                         </Fragment>
@@ -54,6 +56,7 @@ export function EntryItemList(props: EntryItemListProps) {
                                                 fetchIcons={config.entryIcons}
                                                 onAutoClick={() => onEntryAutoClick(entry)}
                                                 onClick={() => onEntryClick(entry)}
+                                                onInfoClick={() => onEntryInfoClick(entry)}
                                             />
                                             <Divider />
                                         </Fragment>

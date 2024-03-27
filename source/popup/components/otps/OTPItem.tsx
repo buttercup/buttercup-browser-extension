@@ -83,11 +83,19 @@ export function OTPItem(props: OTPItemProps) {
         onClick();
     }, [onClick]);
     const [codeFirst, codeSecond] = useMemo(() => {
+        if (otp.errored) return [otp.digits, ""];
         return otp.digits.length === 8
             ? [otp.digits.substring(0, 4), otp.digits.substring(4)]
             : [otp.digits.substring(0, 3), otp.digits.substring(3)]
     }, [otp.digits]);
-    const spinnerLeft = otp.remaining / otp.period;
+    const spinnerLeft = useMemo(() => {
+        if (otp.errored) return 1;
+        return otp.remaining / otp.period;
+    }, [otp]);
+    const spinnerIntent = useMemo(() => {
+        if (otp.errored) return Intent.DANGER;
+        return spinnerLeft < 0.15 ? Intent.DANGER : spinnerLeft < 0.35 ? Intent.WARNING : Intent.SUCCESS;
+    }, [otp.errored, spinnerLeft]);
     return (
         <Container isActive={false} onClick={handleOTPClick}>
             <OTPRow>
@@ -102,15 +110,13 @@ export function OTPItem(props: OTPItemProps) {
                     </Title>
                     <CenteredText ellipsize className={cn(Classes.TEXT_SMALL, Classes.TEXT_MUTED)}>
                         {otp.entryTitle}
-                        {/* {t(`vault-state.${vault.state}`)} */}
-                        {/* Test Test Test */}
                     </CenteredText>
                 </DetailRow>
                 <OTPCode>
                     <Spinner
                         size={19}
                         value={spinnerLeft}
-                        intent={spinnerLeft < 0.15 ? Intent.DANGER : spinnerLeft < 0.35 ? Intent.WARNING : Intent.SUCCESS}
+                        intent={spinnerIntent}
                     />
                     <OTPCodePart>{codeFirst}</OTPCodePart>
                     <OTPCodePart>{codeSecond}</OTPCodePart>

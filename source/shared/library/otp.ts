@@ -1,4 +1,5 @@
 import { SearchResult } from "buttercup";
+import { Layerr } from "layerr";
 import * as OTPAuth from "otpauth";
 
 function extractFirstOTPURI(entry: SearchResult): string | null {
@@ -14,8 +15,12 @@ function extractFirstOTPURI(entry: SearchResult): string | null {
 }
 
 export function otpURIToDigits(uri: string): string {
-    const otp = OTPAuth.URI.parse(uri);
-    return otp.generate();
+    try {
+        const otp = OTPAuth.URI.parse(uri);
+        return otp.generate();
+    } catch (err) {
+        throw new Layerr(err, "Failed generating OTP code for URI");
+    }
 }
 
 export function searchResultToOTP(entry: SearchResult): string | null {

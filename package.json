@@ -62,7 +62,7 @@
     "@blueprintjs/icons": "^4.16.0",
     "@blueprintjs/popover2": "^1.14.11",
     "@buttercup/channel-queue": "^1.4.0",
-    "@buttercup/locust": "^2.2.0",
+    "@buttercup/locust": "^2.2.1",
     "@buttercup/ui": "^6.2.2",
     "@types/chrome": "^0.0.251",
     "@types/ms": "^0.7.34",

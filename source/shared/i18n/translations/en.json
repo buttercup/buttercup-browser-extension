@@ -79,6 +79,7 @@
         },
         "fatal-boundary": "A fatal error has occurred - we're sorry this has happened. Please check out the details below in case they help diagnose the issue:",
         "generic": "Requested action failed: {{message}}",
+        "otp-generate": "Failed generating an OTP code for an OTP URI: {{message}}",
         "reset": "Failed resetting application settings: {{message}}"
     },
     "form": {
@@ -119,6 +120,16 @@
                 "no-url-available": "No URL available for this entry",
                 "open-error": "Could not open page for entry: {{message}}",
                 "recent-set-error": "Failed recording recent entry: {{message}}"
+            },
+            "info": {
+                "copy-error": "Failed copying value: {{message}}",
+                "copy-success": "Copied value to clipboard: {{property}}",
+                "copy-tooltip": "Copy to clipoard",
+                "tooltip": "Show entry properties"
+            },
+            "otp": {
+                "code-error": "ERROR",
+                "label-error": "Bad OTP Item"
             },
             "search": {
                 "button": "Search entries",
