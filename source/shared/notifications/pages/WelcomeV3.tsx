@@ -9,6 +9,7 @@ export function Page() {
             <p dangerouslySetInnerHTML={{ __html: t("notifications.page.welcome-v3.line-1") }} />
             <p dangerouslySetInnerHTML={{ __html: t("notifications.page.welcome-v3.line-2") }} />
             <p dangerouslySetInnerHTML={{ __html: t("notifications.page.welcome-v3.line-3") }} />
+            <p dangerouslySetInnerHTML={{ __html: t("notifications.page.welcome-v3.line-4") }} />
             <p>- The Buttercup Team</p>
         </Fragment>
     );
