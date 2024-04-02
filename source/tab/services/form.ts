@@ -27,7 +27,7 @@ export function fillFormDetails(frameEvent: FrameEvent) {
 
 export async function initialise() {
     // Watch for forms
-    waitAndAttachLaunchButtons((input, loginTarget, inputType) => {
+    await waitAndAttachLaunchButtons((input, loginTarget, inputType) => {
         FORM.currentFormID = ulid();
         FORM.currentLoginTarget = loginTarget;
         if (FRAME.isTop) {
