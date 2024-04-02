@@ -12,6 +12,11 @@
         "title": "Attributions"
     },
     "config": {
+        "default-hint": "(default)",
+        "input-button-type": {
+            "innericon": "Small interior icon",
+            "largebutton": "Large external button"
+        },
         "reset-dialog": {
             "cancel-button": "Cancel",
             "confirm-button": "Reset",
@@ -19,6 +24,7 @@
         },
         "section": {
             "advanced": "Advanced Settings",
+            "forms": "Forms",
             "logins": "Logins",
             "privacy": "Privacy",
             "theme": "Theme"

@@ -6,11 +6,16 @@ import { onBodyWidthResize } from "../library/resize.js";
 import { getExtensionURL } from "../../shared/library/extension.js";
 import BUTTON_BACKGROUND_IMAGE_RES from "../../../resources/content-button-background.png";
 import INPUT_BACKGROUND_IMAGE_RES from "../../../resources/buttercup-simple-150.png";
+import { InputButtonType } from "../types.js";
 
 const BUTTON_BACKGROUND_IMAGE = getExtensionURL(BUTTON_BACKGROUND_IMAGE_RES);
 const INPUT_BACKGROUND_IMAGE = getExtensionURL(INPUT_BACKGROUND_IMAGE_RES);
 
-export function attachLaunchButton(input: HTMLInputElement, onClick: (input: HTMLInputElement) => void) {
+export function attachLaunchButton(
+    input: HTMLInputElement,
+    buttonType: InputButtonType,
+    onClick: (input: HTMLInputElement) => void
+): void {
     if (input.dataset.bcup === "attached" || itemIsIgnored(input)) {
         return;
     }
@@ -24,8 +29,11 @@ export function attachLaunchButton(input: HTMLInputElement, onClick: (input: HTM
             setTimeout(tryToAttach, 250);
             return;
         }
-        renderButtonStyle(input, () => onClick(input), tryToAttach, bounds);
-        // renderInternalStyle(input, () => onClick(input), tryToAttach, bounds);
+        if (buttonType === InputButtonType.LargeButton) {
+            renderButtonStyle(input, () => onClick(input), tryToAttach, bounds);
+        } else if (buttonType === InputButtonType.InnerIcon) {
+            renderInternalStyle(input, () => onClick(input), tryToAttach, bounds);
+        }
     };
     tryToAttach();
 }
@@ -41,6 +49,7 @@ function renderInternalStyle(
     const imageSize = height * 0.6;
     const rightOffset = 8;
     const buttonArea = imageSize + rightOffset + 4;
+    const originalAutocomplete = input.getAttribute("autocomplete") ?? null;
     setStyle(input, {
         backgroundImage: `url(${INPUT_BACKGROUND_IMAGE})`,
         backgroundSize: `${imageSize}px`,
@@ -52,16 +61,21 @@ function renderInternalStyle(
         if (event.offsetX >= input.offsetWidth - buttonArea) {
             event.preventDefault();
             event.stopPropagation();
-            // toggleInputDialog(input, DIALOG_TYPE_ENTRY_PICKER);
             onClick();
         }
     };
     input.onmousemove = (event) => {
         if (event.offsetX >= input.offsetWidth - buttonArea) {
+            input.setAttribute("autocomplete", "off");
             setStyle(input, {
                 cursor: "pointer"
             });
         } else {
+            if (originalAutocomplete) {
+                input.setAttribute("autocomplete", originalAutocomplete);
+            } else {
+                input.removeAttribute("autocomplete");
+            }
             setStyle(input, {
                 cursor: "unset"
             });

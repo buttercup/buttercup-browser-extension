@@ -1,6 +1,6 @@
 {
   "name": "buttercup-browser-extension",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Buttercup browser extension",
   "exports": "./dist/background/index.js",
   "type": "module",
@@ -61,6 +61,7 @@
     "@blueprintjs/core": "^4.20.2",
     "@blueprintjs/icons": "^4.16.0",
     "@blueprintjs/popover2": "^1.14.11",
+    "@blueprintjs/select": "^4.9.24",
     "@buttercup/channel-queue": "^1.4.0",
     "@buttercup/locust": "^2.2.1",
     "@buttercup/ui": "^6.2.2",
