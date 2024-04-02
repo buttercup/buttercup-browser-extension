@@ -95,6 +95,7 @@ export type ChildElements = ChildElement | Array<ChildElement>;
 
 export interface Configuration {
     entryIcons: boolean;
+    inputButtonDefault: InputButtonType;
     saveNewLogins: boolean;
     theme: "light" | "dark";
     useSystemTheme: boolean;
@@ -105,6 +106,11 @@ export interface ElementRect {
     y: number;
     width: number;
     height: number;
+}
+
+export enum InputButtonType {
+    InnerIcon = "innericon",
+    LargeButton = "largebutton"
 }
 
 export enum InputType {

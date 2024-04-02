@@ -1,6 +1,7 @@
 import React, { Fragment, useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
-import { Alert, Button, Callout, Classes, Intent, Switch } from "@blueprintjs/core";
+import { Alert, Button, Callout, Classes, Intent, MenuItem, Switch } from "@blueprintjs/core";
+import { ItemRendererProps, Select } from "@blueprintjs/select";
 import { t } from "../../../shared/i18n/trans.js";
 import { useConfig } from "../../../shared/hooks/config.js";
 import { ErrorMessage } from "../../../shared/components/ErrorMessage.js";
@@ -9,6 +10,11 @@ import { getToaster } from "../../../shared/services/notifications.js";
 import { localisedErrorMessage } from "../../../shared/library/error.js";
 import { useAllLoginCredentials } from "../../hooks/credentials.js";
 import { createNewTab, getExtensionURL } from "../../../shared/library/extension.js";
+import { InputButtonType } from "../../types.js";
+
+interface InputButtonTypeItem {
+    name: string, type: InputButtonType;
+}
 
 const Container = styled.div`
     display: flex;
@@ -26,11 +32,37 @@ const SettingSection = styled(Callout)`
     padding: 9px;
 `;
 
+function renderInputButtonTypeItem(item: InputButtonTypeItem, props: ItemRendererProps) {
+    const { handleClick, handleFocus, modifiers } = props;
+    return (
+        <MenuItem
+            active={modifiers.active}
+            disabled={modifiers.disabled}
+            key={item.type}
+            label={item.type === InputButtonType.LargeButton ? t("config.default-hint") : ""}
+            onClick={handleClick}
+            onFocus={handleFocus}
+            roleStructure="listoption"
+            text={item.name}
+        />
+    );
+}
+
 export function SettingsPage() {
     const [config, configError, setValue] = useConfig();
     const [showConfirmReset, setShowConfirmReset] = useState<boolean>(false);
     const { value: allCredentials } = useAllLoginCredentials();
     const hasSavedCredentials = useMemo(() => Array.isArray(allCredentials) && allCredentials.length > 0, [allCredentials]);
+    const inputButtonItems: Array<InputButtonTypeItem> = useMemo(() => Object.values(InputButtonType).map(type => ({
+        name: t(`config.input-button-type.${type}`),
+        type
+    })), []);
+    const activeInputButtonItem = useMemo(
+        () => inputButtonItems.find(item => item.type === config?.inputButtonDefault),
+        [config, inputButtonItems]);
+    const handleInputButtonItemSelect = useCallback((item: InputButtonTypeItem) => {
+        setValue("inputButtonDefault", item.type);
+    }, [setValue]);
     const handleOpenDisabledDomains = useCallback(async () => {
         try {
             await createNewTab(getExtensionURL("full.html#/disabled-domains"));
@@ -109,6 +141,22 @@ export function SettingsPage() {
                                 </Button>
                             </Fragment>
                         )}
+                    </SettingSection>
+                    <SettingSection title={t("config.section.forms")}>
+                        <Select
+                            activeItem={activeInputButtonItem}
+                            fill
+                            filterable={false}
+                            items={inputButtonItems}
+                            onItemSelect={handleInputButtonItemSelect}
+                            itemRenderer={renderInputButtonTypeItem}
+                        >
+                            <Button
+                                text={t(`config.input-button-type.${config.inputButtonDefault}`)}
+                                rightIcon="double-caret-vertical"
+                                // placeholder="Select a film"
+                            />
+                        </Select>
                     </SettingSection>
                     <SettingSection title={t("config.section.privacy")}>
                         <Switch
