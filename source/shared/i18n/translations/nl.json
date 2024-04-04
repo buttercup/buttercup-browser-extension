@@ -1,0 +1,314 @@
+{
+    "_": "Nederlands (NL)",
+    "about": {
+        "attributions": "Toeschrijvingen",
+        "info": {
+            "build-date": "Build-datum",
+            "title": "Info",
+            "version": "Versie"
+        }
+    },
+    "attributions-page": {
+        "title": "Toeschrijvingen"
+    },
+    "config": {
+        "default-hint": "(standaard)",
+        "input-button-type": {
+            "innericon": "Klein icoon binnenin",
+            "largebutton": "Grote externe knop"
+        },
+        "reset-dialog": {
+            "cancel-button": "Annuleren",
+            "confirm-button": "Reset",
+            "message": "Weet je zeker dat je de toepassing wilt resetten? Dit wist alle gecachte gegevens, instellingen en sleutels."
+        },
+        "section": {
+            "advanced": "Geavanceerde instellingen",
+            "forms": "Formulieren",
+            "logins": "Logins",
+            "privacy": "Privacy",
+            "theme": "Thema"
+        },
+        "setting": {
+            "entryIcons": "Ophalen van website-iconen (anoniem)",
+            "manageDisabledDomains": "Beheer uitgezonderde domeinen",
+            "reset": "Reset toepassinggegevens en instellingen",
+            "reviewSavedLogins": "Beoordeel opgeslagen logins",
+            "saveNewLogins": "Prompt voor het opslaan van nieuwe logins",
+            "theme": "Thema",
+            "useSystemTheme": "Gebruik systeemthema"
+        }
+    },
+    "confirm-dialog": {
+        "cancel": "Annuleren",
+        "confirm-default": "Bevestigen"
+    },
+    "connect-page": {
+        "auth-error": "Authenticatie mislukt: {{message}}",
+        "auth-success": "Succesvol verbonden",
+        "code-plc": "Code...",
+        "description": "Verbind de Buttercup-extensie met de Buttercup-desktoptoepassing, zodat je jouw kluizen en gegevens kunt gebruiken om gemakkelijk toegang te krijgen tot je webgebaseerde accounts.",
+        "instruction": "De desktopapplicatie zou moeten zijn verschenen. Als dat niet het geval is, sluit dan deze pagina en probeer het opnieuw. Je moet de desktopapplicatie hebben geopend voordat je het probeert. Wacht tot er een autorisatiecode verschijnt in de desktopapplicatie en voer deze hier in:",
+        "title": "Verbind desktop-toepassing"
+    },
+    "disabled-domains-page": {
+        "delete-dialog": {
+            "confirm": "Uitzonderen domein",
+            "description": "Verwijder het uitgezonderde domein zodat nieuwe inlogpogingen worden gevraagd om referenties op te slaan: <strong>{{domain}}</strong>",
+            "title": "Uitgezonderd domein verwijderen"
+        },
+        "description": "Beheer welke domeinen <i>niet</i> een prompt moeten weergeven om referenties op te slaan na het inloggen.",
+        "disabled-domains": {
+            "heading": "Momenteel uitgezonderde domeinen"
+        },
+        "table": {
+            "action": {
+                "delete": "Verwijder uitgezonderd domein"
+            },
+            "action-heading": "Actie",
+            "domain-heading": "Domein",
+            "empty-description": "Uitgezonderde domeinen verschijnen hier nadat je op 'Uitzonderen domein' hebt geklikt in het dialoogvenster voor het opslaan van referenties nadat je hebt aangemeld op een website.",
+            "empty-title": "Geen uitgezonderde domeinen"
+        },
+        "title": "Uitgezonderde domeinen"
+    },
+    "error": {
+        "code": {
+            "desktop-connection-not-authorised": "Desktop verbinding is niet geautoriseerd",
+            "desktop-request-failed": "Desktop verzoek mislukt"
+        },
+        "desktop": {
+            "connection-check-failed": "Controleren desktop verbinding mislukt: {{message}}",
+            "otps-fetch-failed": "Ophalen OTPs mislukt: {{message}}",
+            "search-failed": "Zoeken naar items mislukt: {{message}}",
+            "sources-fetch-failed": "Ophalen kluizen mislukt: {{message}}"
+        },
+        "fatal-boundary": "Een fatale fout is opgetreden - het spijt ons dat dit is gebeurd. Controleer de onderstaande details om het probleem te diagnosticeren:",
+        "generic": "Gevraagde actie mislukt: {{message}}",
+        "otp-generate": "Genereren OTP code voor OTP URI mislukt: {{message}}",
+        "reset": "Resetten van toepassinginstellingen mislukt: {{message}}"
+    },
+    "form": {
+        "invalid": {
+            "required-non-empty": "Ongeldig: waarde is vereist (kan niet leeg zijn)"
+        },
+        "required": "(vereist)"
+    },
+    "notifications": {
+        "page": {
+            "welcome-v3": {
+                "line-1": "Je gebruikt nu de nieuwe versie van de <strong>Buttercup-browserextensie</strong>. Het maakt gebruik van de nieuwste kernbibliotheken om jouw wachtwoordkluizen te beheren en te integreren met webpagina's en inlogformulieren. Versie 3 is lichter en nauwkeuriger in vergelijking met eerdere versies, en ondersteunt ook veel meer inlogformulieren.",
+                "line-2": "Het moet worden opgemerkt dat <strong>versie 3 de Buttercup desktoptoepassing vereist</strong> om geïnstalleerd <i>en</i> actief te zijn, op zijn minst op de achtergrond. Deze browserextensie gebruikt een versleutelde verbinding met de desktoptoepassing om kluisreferenties over te dragen tijdens het inloggen en opslaan. Deze extensie kan niet functioneren zonder de desktoptoepassing.Opgemerkt moet worden dat <strong>versie 3 van de extensie vereist dat de Buttercup desktop-applicatie versie 2.26 of hoger</strong> geïnstalleerd is <i>en</i>, tenminste op de achtergrond. Deze browser-add-on gebruikt een gecodeerde verbinding met de desktopapplicatie om kluisreferenties over te dragen tijdens het inloggen en opslaan. Deze add-on kan niet functioneren zonder de desktopapplicatie.",
+                "line-3": "De nieuwste versie van de Buttercup-desktopapp moet worden gedownload van <a href='https://buttercup.pw/'>Buttercup.pw</a>",
+                "line-4": "Wij hopen dat je deze nieuwe versie met veel plezier zal gebruiken!",
+                "title": "Welkom bij V3"
+            }
+        },
+        "title": "Meldingen"
+    },
+    "popup": {
+        "all-locked": {
+            "description": "Alle kluizen zijn momenteel vergrendeld.",
+            "title": "Geen ontgrendelde kluizen"
+        },
+        "connection": {
+            "check-error": {
+                "description": "Kan geen verbinding maken met de desktop toepassing. Controleer of deze geopend is of overweeg opnieuw te authenticeren.",
+                "title": "Verbinding mislukt"
+            },
+            "open-error": "Opzetten verbinding mislukt: {{message}}",
+            "reauth-error": "Opnieuw authenticeren mislukt: {{message}}"
+        },
+        "entries": {
+            "auto-login": {
+                "tooltip": "Open item URL en log automatisch in"
+            },
+            "click": {
+                "no-url-available": "Geen URL beschikbaar voor dit item",
+                "open-error": "Kan pagina niet openen voor item: {{message}}",
+                "recent-set-error": "Onlangs gebruikte items niet geregistreerd: {{message}}"
+            },
+            "info": {
+                "copy-error": "Waarde kopieren mislukt: {{message}}",
+                "copy-success": "Waarde gekopieerd naar klembord: {{property}}",
+                "copy-tooltip": "Kopieer naar klembord",
+                "tooltip": "Toon item eigenschappen"
+            },
+            "otp": {
+                "code-error": "ERROR",
+                "label-error": "Ongeldig OTP-item"
+            },
+            "search": {
+                "button": "Zoek items",
+                "placeholder": "Zoeken..."
+            }
+        },
+        "no-entries": {
+            "description": "Geen beschikbare items - recente items en resultaten voor het huidige tabblad zullen hier verschijnen.",
+            "title": "Geen items"
+        },
+        "no-otps": {
+            "description": "Geen OTP-items gevonden in de ontgrendelde kluizen.",
+            "title": "Geen OTP-items"
+        },
+        "otps": {
+            "click": {
+                "no-url-available": "Geen URL beschikbaar voor dit OTP",
+                "open-error": "Kan pagina niet openen voor OTP: {{message}}"
+            }
+        },
+        "tab": {
+            "about": {
+                "title": "Over"
+            },
+            "entries": {
+                "title": "Items"
+            },
+            "otps": {
+                "title": "One-Time Passwords (OTPs)"
+            },
+            "settings": {
+                "title": "Instellingen"
+            },
+            "vaults": {
+                "title": "Kluizen"
+            }
+        },
+        "vault": {
+            "lock": "Vergrendel kluis",
+            "locking": {
+                "error": "Vergrendelen kluis mislukt: {{message}}",
+                "success": "Vergrendelde kluis: {{vault}}"
+            },
+            "remove": "Verwijder kluis",
+            "remove-dialog": {
+                "cancel-button": "Annuleren",
+                "confirm-button": "Verwijderen",
+                "message": "Weet je zeker dat je de kluis \"{{vault}}\" wilt verwijderen?"
+            },
+            "removing": {
+                "description": "Kluis wordt verwijderd...",
+                "error": "Verwijderen mislukt: {{message}}",
+                "success": "Succesvol verwijderd: {{vault}}",
+                "title": "Verwijderen"
+            },
+            "state-pending": "Kluis is bezig",
+            "unlock": "Ongrendel kluis",
+            "unlock-dialog": {
+                "cancel-button": "Annuleren",
+                "password-label": "Kluiswachtwoord",
+                "title": "Ontgrendel {{title}}",
+                "unlock-button": "Ontgrendelen"
+            },
+            "unlocking": {
+                "description": "Kluis wordt ontgrendeld...",
+                "error": "Kluis ontgrendelen mislukt: {{message}}",
+                "invalid-password": "Wachtwoord onjuist",
+                "success": "Succesvol ontgrendeld: {{vault}}",
+                "title": "Ontgrendelen"
+            }
+        },
+        "vaults": {
+            "controls": {
+                "add-vault": "Toevoegen kluis",
+                "lock-vaults": "Vergrendel alle kluizen"
+            },
+            "empty": {
+                "description": "Er zijn nog geen kluizen toegevoegd aan de desktop-toepassing.",
+                "title": "Geen kluizen"
+            },
+            "no-connection": {
+                "action-text": "Verbinden",
+                "description": "Er is nog geen verbinding met de desktop-toepassing.",
+                "title": "Niet verbonden"
+            }
+        }
+    },
+    "save-credentials-dialog": {
+        "close-button": "Sluiten",
+        "credentials-fetch-error": "Ophalen referenties mislukt: {{message}}",
+        "description": "Een of meer login zijn gedetecteerd en zijn klaar om te slaan in jouw kluis.",
+        "disable-button": "Uitzondering",
+        "disable-confirm-button": "Bevestig uitzondering",
+        "error-description": "We konden de details niet ophalen, sorry.",
+        "error-title": "Whoops...",
+        "last-login-heading": "Laatste login",
+        "title": "Bewaar login",
+        "view-button": "Bekijken"
+    },
+    "save-credentials-page": {
+        "credentials-saver": {
+            "create-new": {
+                "heading": "Nieuwe item details",
+                "label": {
+                    "password": "Wachtwoord",
+                    "title": "Titel",
+                    "url": "URL",
+                    "username": "Gebruikersnaam"
+                },
+                "loader": {
+                    "description": "Ophalen van kluizen en hun inhoud...",
+                    "title": "Kluizen"
+                },
+                "password": {
+                    "hide": "Verberg wachtwoord",
+                    "show": "Toon wachtwoord"
+                },
+                "placeholder": {
+                    "title": "Nieuw item naam",
+                    "url": "Nieuw item URL",
+                    "username": "Nieuw item gebruikersnaam"
+                },
+                "save": "Nieuw item opslaan",
+                "tab": "Nieuw item maken"
+            },
+            "heading": "Login opslaan",
+            "no-vaults": {
+                "description": "Momenteel zijn er geen kluizen beschikbaar. Voeg een nieuwe kluis toe of ontgrendel er een.",
+                "title": "Geen beschikbare kluizen"
+            },
+            "update-existing": {
+                "tab": "Update bestaand item"
+            }
+        },
+        "description": "Sla de gedetecteerde inloggegevens op in een verbonden kluis. Zorg ervoor dat je eerst de kluis ontgrendelt waarin je wilt opslaan in de desktoptoepassing.",
+        "detected-logins": {
+            "heading": "Gedetecteerde logins"
+        },
+        "save-error": "Opslaan item mislukt: {{message}}",
+        "save-success": "Item succesvol opgeslagen: {{title}}",
+        "title": "Logins opslaan"
+    },
+    "theme": {
+        "dark": "Donker",
+        "light": "Licht"
+    },
+    "vault-state": {
+        "locked": "Vergrendeld",
+        "pending": "Bezig",
+        "unlocked": "Ontgrendeld"
+    },
+    "vault-type": {
+        "dropbox": {
+            "add-error": "Kluis vanuit Dropbox toevoegen mislukt",
+            "configure-btn": "Authenticatie",
+            "description": "Host je kluis binnen jouw Dropbox-cloudopslagaccount, zodat je er vanaf elk apparaat dat je bezit toegang toe hebt. Je moet een account bij Dropbox hebben om dit kluis type te kunnen gebruiken.",
+            "title": "Dropbox"
+        },
+        "googledrive": {
+            "configure-btn": "Authenticatie",
+            "description": "Host je kluis binnen jouw Google Drive-cloudopslag, zodat je er vanaf elk apparaat dat je bezit toegang toe hebt. Je moet een Google-account hebben om dit kluis type te kunnen gebruiken.",
+            "title": "Google Drive"
+        },
+        "localfile": {
+            "configure-btn": "Verbind",
+            "description": "Gebruik de Buttercup desktopapplicatie om toegang te krijgen tot lokale bestanden op jouw computer. Vereist dat de desktopapplicatie is geïnstalleerd en actief is.",
+            "title": "Lokaal bestand"
+        },
+        "webdav": {
+            "configure-btn": "Configureer",
+            "description": "Gebruik het DAV-protocol dat door bepaalde services wordt geleverd om jouw kluis op te slaan. Zelf-gehoste cloudopslagproviders zoals Nextcloud en ownCloud ondersteunen dit protocol, waardoor je toegang hebt tot jouw kluis vanaf elk apparaat dat je bezit.",
+            "title": "WebDAV"
+        }
+    }
+}

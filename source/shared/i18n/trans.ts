@@ -1,10 +1,13 @@
 import i18next, { TOptions } from "i18next";
 
 import en from "./translations/en.json";
+import nl from "./translations/nl.json";
 
 export const DEFAULT_LANGUAGE = "en";
 export const TRANSLATIONS = {
-    en
+    en, // Keep as first item
+    // All others sorted alphabetically:
+    nl
 };
 
 export async function changeLanguage(lang: string) {
