@@ -32,18 +32,13 @@ export function attachLaunchButton(
         if (buttonType === InputButtonType.LargeButton) {
             renderButtonStyle(input, () => onClick(input), tryToAttach, bounds);
         } else if (buttonType === InputButtonType.InnerIcon) {
-            renderInternalStyle(input, () => onClick(input), tryToAttach, bounds);
+            renderInternalStyle(input, () => onClick(input), bounds);
         }
     };
     tryToAttach();
 }
 
-function renderInternalStyle(
-    input: HTMLInputElement,
-    onClick: () => void,
-    reattachCB: () => void,
-    inputBounds: DOMRect
-) {
+function renderInternalStyle(input: HTMLInputElement, onClick: () => void, inputBounds: DOMRect) {
     const bounds = inputBounds || input.getBoundingClientRect();
     const { height } = bounds;
     const imageSize = height * 0.6;
