@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const TITLE_SEPARATOR = "⋅";
 
-let __originalTitle: string = null;
+let __originalTitle: string | null = null;
 
 export function useTitle(title: string) {
     useEffect(() => {

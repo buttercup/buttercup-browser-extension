@@ -3,7 +3,8 @@ import { Layerr } from "layerr";
 import * as OTPAuth from "otpauth";
 
 function extractFirstOTPURI(entry: SearchResult): string | null {
-    let key: string, value: string;
+    let key: string | null = null,
+        value: string | null = null;
     for (const prop in entry.properties) {
         if (!/^otpauth:\/\//.test(entry.properties[prop])) continue;
         if (!key || prop.length < key.length) {

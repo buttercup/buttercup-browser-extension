@@ -48,7 +48,7 @@ export function useDesktopConnectionState(): DesktopConnectionState {
     return DesktopConnectionState.Pending;
 }
 
-export function useEntriesForURL(url: string): Array<SearchResult> {
+export function useEntriesForURL(url: string | null): Array<SearchResult> {
     const performSearch = useCallback(async () => {
         if (!url) return [];
         const results = await searchEntriesByURL(url);

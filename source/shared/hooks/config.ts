@@ -14,7 +14,7 @@ export function useConfig(): [
     const { value, error } = useAsync(getConfig, [ts], {
         clearOnExec: false
     });
-    const [changeError, setChangeError] = useState<Error>(null);
+    const [changeError, setChangeError] = useState<Error | null>(null);
     const setConfigValue = useCallback(<T extends keyof Configuration>(setKey: T, value: Configuration[T]) => {
         setChangeError(null);
         setNewBackgroundValue(setKey, value)

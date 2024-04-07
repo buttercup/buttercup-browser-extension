@@ -19,7 +19,7 @@ export async function getDesktopConnectionAvailable(): Promise<boolean> {
     if (resp.error) {
         throw new Layerr(resp.error, "Failed checking desktop connection availability");
     }
-    return resp.available;
+    return resp.available ?? false;
 }
 
 export async function getOTPs(): Promise<Array<OTP>> {
@@ -29,7 +29,7 @@ export async function getOTPs(): Promise<Array<OTP>> {
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching OTPs from desktop application");
     }
-    return resp.otps;
+    return resp.otps ?? [];
 }
 
 export async function getRecentEntries(): Promise<Array<SearchResult>> {
@@ -40,7 +40,7 @@ export async function getRecentEntries(): Promise<Array<SearchResult>> {
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching recent entries from desktop application");
     }
-    return resp.searchResults;
+    return resp.searchResults ?? [];
 }
 
 export async function getVaultSources(): Promise<Array<VaultSourceDescription>> {
@@ -50,7 +50,7 @@ export async function getVaultSources(): Promise<Array<VaultSourceDescription>> 
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching vaults from desktop application");
     }
-    return resp.vaultSources;
+    return resp.vaultSources ?? [];
 }
 
 export async function initiateDesktopConnectionRequest(): Promise<void> {
@@ -91,7 +91,7 @@ export async function searchEntriesByTerm(term: string): Promise<Array<SearchRes
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching search results from desktop application");
     }
-    return resp.searchResults;
+    return resp.searchResults ?? [];
 }
 
 export async function searchEntriesByURL(url: string): Promise<Array<SearchResult>> {
@@ -102,5 +102,5 @@ export async function searchEntriesByURL(url: string): Promise<Array<SearchResul
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching URL results from desktop application");
     }
-    return resp.searchResults;
+    return resp.searchResults ?? [];
 }

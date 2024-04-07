@@ -87,7 +87,7 @@ function OTPsPageList(props: OTPsPageProps) {
     const [otps, loadingOTPs] = useOTPs();
     const preparedOTPs = usePreparedOTPs(otps);
     const handleOTPClick = useCallback((otp: OTP) => {
-        if (popupSource === "page") {
+        if (popupSource === "page" && formID) {
             sendOTPToTabForInput(formID, otp);
         } else if (popupSource === "popup") {
             if (!otp.loginURL) {

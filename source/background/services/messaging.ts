@@ -21,6 +21,7 @@ import { clearLocalStorage, removeLocalValue, setLocalValue } from "./storage.js
 import { errorToString } from "../../shared/library/error.js";
 import {
     clearCredentials,
+    credentialsAlreadyStored,
     getAllCredentials,
     getCredentialsForID,
     getLastCredentials,
@@ -53,8 +54,12 @@ async function handleMessage(
 ) {
     switch (msg.type) {
         case BackgroundMessageType.AuthenticateDesktopConnection: {
+            const { code } = msg;
+            if (!code) {
+                throw new Error("No auth code provided");
+            }
             log("complete desktop authentication");
-            const publicKey = await authenticateBrowserAccess(msg.code);
+            const publicKey = await authenticateBrowserAccess(code);
             await setLocalValue(LocalStorageItem.APIServerPublicKey, publicKey);
             sendResponse({});
             break;
@@ -78,6 +83,9 @@ async function handleMessage(
         }
         case BackgroundMessageType.ClearSavedCredentials: {
             const { credentialsID } = msg;
+            if (!credentialsID) {
+                throw new Error("No credentials ID provided");
+            }
             log(`clear saved credentials: ${credentialsID}`);
             clearCredentials(credentialsID);
             sendResponse({});
@@ -85,6 +93,9 @@ async function handleMessage(
         }
         case BackgroundMessageType.ClearSavedCredentialsPrompt: {
             const { credentialsID } = msg;
+            if (!credentialsID) {
+                throw new Error("No credentials ID provided");
+            }
             log(`clear saved credentials prompt: ${credentialsID}`);
             stopPromptForID(credentialsID);
             await sendTabsMessage({
@@ -95,6 +106,9 @@ async function handleMessage(
         }
         case BackgroundMessageType.DeleteDisabledDomains: {
             const { domains } = msg;
+            if (!domains) {
+                throw new Error("No domains list provided");
+            }
             log(`remove disabled domains: ${domains.join(", ")}`);
             for (const domain of domains) {
                 await removeDisabledFlagForDomain(domain);
@@ -104,6 +118,9 @@ async function handleMessage(
         }
         case BackgroundMessageType.DisableSavePromptForCredentials: {
             const { credentialsID } = msg;
+            if (!credentialsID) {
+                throw new Error("No credentials ID provided");
+            }
             log(`disable save prompt for credentials: ${credentialsID}`);
             try {
                 const credentials = getCredentialsForID(credentialsID);
@@ -160,12 +177,16 @@ async function handleMessage(
             break;
         }
         case BackgroundMessageType.GetLastSavedCredentials: {
+            const { excludeSaved = false } = msg;
             const tabID = sender.tab?.id;
             if (!tabID) {
                 sendResponse({ credentials: [null] });
                 break;
             }
-            const credentials = getLastCredentials(tabID);
+            let credentials = getLastCredentials(tabID);
+            if (credentials && excludeSaved && (await credentialsAlreadyStored(credentials))) {
+                credentials = null;
+            }
             sendResponse({
                 credentials: [credentials]
             });
@@ -208,7 +229,14 @@ async function handleMessage(
             break;
         }
         case BackgroundMessageType.GetSavedCredentialsForID: {
-            const credentials = getCredentialsForID(msg.credentialsID);
+            const { credentialsID, excludeSaved = false } = msg;
+            if (!credentialsID) {
+                throw new Error("No credentials ID provided");
+            }
+            let credentials = getCredentialsForID(credentialsID);
+            if (credentials && excludeSaved && (await credentialsAlreadyStored(credentials))) {
+                credentials = null;
+            }
             sendResponse({
                 credentials: [credentials]
             });
@@ -223,6 +251,9 @@ async function handleMessage(
         }
         case BackgroundMessageType.MarkNotificationRead: {
             const { notification } = msg;
+            if (!notification) {
+                throw new Error("No notification provided");
+            }
             log(`mark notification read: ${notification}`);
             await markNotificationRead(notification);
             sendResponse({});
@@ -230,6 +261,9 @@ async function handleMessage(
         }
         case BackgroundMessageType.OpenEntryPage: {
             const { autoLogin, entry } = msg;
+            if (!entry) {
+                throw new Error("No entry provided");
+            }
             const [url = null] = getEntryURLs(entry.properties, EntryURLType.Login);
             if (!url) {
                 sendResponse({ opened: false });
@@ -253,6 +287,9 @@ async function handleMessage(
         }
         case BackgroundMessageType.PromptLockSource: {
             const { sourceID } = msg;
+            if (!sourceID) {
+                throw new Error("No source ID provided");
+            }
             log(`request lock source: ${sourceID}`);
             const locked = await promptSourceLock(sourceID);
             sendResponse({
@@ -262,6 +299,9 @@ async function handleMessage(
         }
         case BackgroundMessageType.PromptUnlockSource: {
             const { sourceID } = msg;
+            if (!sourceID) {
+                throw new Error("No source ID provided");
+            }
             log(`request unlock source: ${sourceID}`);
             await promptSourceUnlock(sourceID);
             sendResponse({});
@@ -276,6 +316,15 @@ async function handleMessage(
         }
         case BackgroundMessageType.SaveCredentialsToVault: {
             const { sourceID, groupID, entryID = null, entryProperties, entryType = EntryType.Website } = msg;
+            if (!sourceID) {
+                throw new Error("No source ID provided");
+            }
+            if (!groupID) {
+                throw new Error("No group ID provided");
+            }
+            if (!entryProperties) {
+                throw new Error("No entry properties provided");
+            }
             if (entryID) {
                 log(`save credentials to existing entry: ${entryID} (source=${sourceID})`);
                 await saveExistingEntry(sourceID, groupID, entryID, entryProperties);
@@ -293,31 +342,52 @@ async function handleMessage(
         }
         case BackgroundMessageType.SaveUsedCredentials: {
             const { credentials } = msg;
+            if (!credentials) {
+                throw new Error("No source ID provided");
+            }
+            if (!sender.tab?.id) {
+                throw new Error("No tab ID available for background message");
+            }
             updateUsedCredentials(credentials, sender.tab.id);
             sendResponse({});
             break;
         }
         case BackgroundMessageType.SearchEntriesByTerm: {
-            const searchResults = await searchEntriesByTerm(msg.searchTerm);
+            const { searchTerm } = msg;
+            if (!searchTerm) {
+                throw new Error("No search term provided");
+            }
+            const searchResults = await searchEntriesByTerm(searchTerm);
             sendResponse({
                 searchResults
             });
             break;
         }
         case BackgroundMessageType.SearchEntriesByURL: {
-            const searchResults = await searchEntriesByURL(msg.url);
+            const { url } = msg;
+            if (!url) {
+                throw new Error("No URL provided");
+            }
+            const searchResults = await searchEntriesByURL(url);
             sendResponse({
                 searchResults
             });
             break;
         }
         case BackgroundMessageType.SetConfigurationValue: {
-            await updateConfigValue(msg.configKey, msg.configValue);
+            const { configKey, configValue } = msg;
+            if (!configKey || typeof configValue === "undefined") {
+                throw new Error("Invalid configuration proivided provided");
+            }
+            await updateConfigValue(configKey, configValue);
             sendResponse({});
             break;
         }
         case BackgroundMessageType.TrackRecentEntry: {
             const { entry } = msg;
+            if (!entry) {
+                throw new Error("No entry provided");
+            }
             if (!entry.sourceID) {
                 throw new Error(`No source ID in entry result: ${entry.id}`);
             }

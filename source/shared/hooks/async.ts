@@ -17,13 +17,13 @@ export function useAsync<T extends any>(
     }: {
         clearOnExec?: boolean;
         updateInterval?: number | null;
-        valuesDiffer?: (existingValue: T, newValue: T) => boolean;
+        valuesDiffer?: (existingValue: T | null, newValue: T | null) => boolean;
     } = {}
 ): AsyncResult<T> {
     const mounted = useRef(false);
     const executing = useRef(false);
-    const [value, setValue] = useState<T>(null);
-    const [error, setError] = useState<Error>(null);
+    const [value, setValue] = useState<T | null>(null);
+    const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean | null>(null);
     const [, setTimer] = useState<null | ReturnType<typeof setTimeout>>(null);
     const execute = useCallback(async () => {
@@ -58,7 +58,7 @@ export function useAsync<T extends any>(
     useEffect(() => {
         if (updateInterval === null) return;
         setTimer((existing) => {
-            clearTimeout(existing);
+            clearTimeout(existing as any);
             return null;
         });
         let newTimer: ReturnType<typeof setTimeout>;
@@ -100,9 +100,9 @@ export function useAsyncWithTimer<T extends any>(
     value: T | null;
 } {
     const mounted = useRef(false);
-    const allTimers = useRef([]);
+    const allTimers = useRef<Array<ReturnType<typeof setInterval>>>([]);
     const [time, setTime] = useState<number>(Date.now());
-    const [timer, setTimer] = useState<ReturnType<typeof setInterval>>(null);
+    const [timer, setTimer] = useState<ReturnType<typeof setInterval> | null>(null);
     const { error, loading, value } = useAsync(fn, [...deps, time]);
     const [lastValue, setLastValue] = useState(value);
     useEffect(() => {
@@ -117,7 +117,7 @@ export function useAsyncWithTimer<T extends any>(
     useEffect(() => {
         if (time === 0) return;
         if (error) {
-            clearInterval(timer);
+            clearInterval(timer as any);
             setTime(0);
             setTimer(null);
             return;
@@ -127,7 +127,7 @@ export function useAsyncWithTimer<T extends any>(
                 if (!mounted.current) return;
                 setTime(Date.now());
             }, delay);
-            allTimers.current.push(thisTimer);
+            allTimers.current.push(thisTimer as any);
             setTimer(thisTimer);
         }
     }, [time, timer, error, delay]);

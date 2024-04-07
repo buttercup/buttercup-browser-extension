@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useMemo, useState } from "react";
-import { NonIdealState, Tree, TreeNodeInfo } from "@blueprintjs/core";
+import { ITreeNode, NonIdealState, Tree, TreeNodeInfo } from "@blueprintjs/core";
 import { EntryPropertyType, VaultFacade, VaultSourceID, fieldsToProperties } from "buttercup";
 import { SiteIcon } from "@buttercup/ui";
 import styled from "styled-components";
@@ -146,7 +146,7 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
     const [credentials, credentialsLoading, credentialsError] = useCapturedCredentials();
     const [selectedNodes, setSelectedNodes] = useState<Array<string>>([]);
     const [expandedNodes, setExpandedNodes] = useState<Array<string>>([]);
-    const selectedUsedCredentials = useMemo(() => credentials.find(cred => cred.id === selectedCredentialsID), [credentials, selectedCredentialsID]);
+    const selectedUsedCredentials = useMemo(() => credentials.find(cred => cred?.id === selectedCredentialsID), [credentials, selectedCredentialsID]);
     const selectedGroupURI = useMemo(() => {
         return selectedNodes.length === 1 && /^group:/.test(selectedNodes[0])
             ? selectedNodes[0]
@@ -168,20 +168,20 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
                 // Only select entries
                 setSelectedNodes([node.nodeData.id]);
             }
-        } else if (mode === "new") {
+        } else if (mode === "new" && node.nodeData) {
             // Groups only, select immediately
             setSelectedNodes([node.nodeData.id]);
         }
     }, [mode, saving]);
     const handleSaveClick = useCallback((credentials: UsedCredentials) => {
-        if (mode === "new") {
+        if (mode === "new" && selectedGroupURI) {
             const [, sourceID, groupID] = selectedGroupURI.split(":");
             onSaveNewClick({
                 ...credentials,
                 groupID,
                 sourceID
             });
-        } else if (mode === "existing") {
+        } else if (mode === "existing" && selectedEntryURI) {
             const [, sourceID, groupID, entryID] = selectedEntryURI.split(":");
             onSaveNewClick({
                 ...credentials,
@@ -212,12 +212,15 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
                             contents={contents}
                             onNodeClick={handleNodeClick}
                             onNodeCollapse={node => setExpandedNodes(
-                                current => current.filter(id => id !== node.nodeData.id)
+                                current => current.filter(id => id !== node.nodeData?.id)
                             )}
-                            onNodeExpand={node => setExpandedNodes(current => [
-                                ...current,
-                                node.nodeData.id
-                            ])}
+                            onNodeExpand={node => {
+                                if (!node.nodeData) return;
+                                setExpandedNodes(current => [
+                                    ...current,
+                                    (node.nodeData as NodeInfo).id
+                                ]);
+                            }}
                         />
                     ) || (
                         <NonIdealState
@@ -226,14 +229,14 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
                             description={t("save-credentials-page.credentials-saver.no-vaults.description")}
                         />
                     )}
-                    {mode === "new" && contents.length > 0 && selectedGroupURI && (
+                    {mode === "new" && contents.length > 0 && selectedGroupURI && selectedUsedCredentials && (
                         <NewEntrySavePrompt
                             credentials={selectedUsedCredentials}
                             onSaveClick={handleSaveClick}
                             saving={saving}
                         />
                     )}
-                    {mode === "existing" && contents.length > 0 && selectedEntryURI && (
+                    {mode === "existing" && contents.length > 0 && selectedEntryURI && selectedUsedCredentials && (
                         <NewEntrySavePrompt
                             credentials={selectedUsedCredentials}
                             onSaveClick={handleSaveClick}

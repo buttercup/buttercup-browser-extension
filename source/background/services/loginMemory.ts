@@ -1,4 +1,6 @@
 import ExpiryMap from "expiry-map";
+import { searchEntriesByTerm } from "./desktop/actions.js";
+import { domainsReferToSameParent, extractDomain } from "../../shared/library/domain.js";
 import { UsedCredentials } from "../types.js";
 
 interface LoginMemoryItem {
@@ -17,10 +19,31 @@ export function clearCredentials(id: string): void {
     }
     if (memory.has("last")) {
         const last = memory.get("last");
-        if (last.credentials.id === id) {
+        if (last?.credentials.id === id) {
             memory.delete("last");
         }
     }
+}
+
+export async function credentialsAlreadyStored(credentials: UsedCredentials): Promise<boolean> {
+    const results = await searchEntriesByTerm(credentials.username);
+    const usedDomain = extractDomain(credentials.url);
+    return results.some((result) => {
+        // Check username
+        if (credentials.username !== result.properties.username) return false;
+        // Skip if search result has no URLs
+        if (result.urls.length <= 0) return false;
+        // Check if any of the domains match this one
+        const resultDomains = result.urls.map((url) => extractDomain(url));
+        if (!resultDomains.some((resDomain) => domainsReferToSameParent(resDomain, usedDomain))) {
+            // No matches
+            return false;
+        }
+        // Check if props match
+        return (
+            result.properties.username === credentials.username && result.properties.password === credentials.password
+        );
+    });
 }
 
 export function getAllCredentials(): Array<UsedCredentials> {
@@ -35,7 +58,7 @@ export function getAllCredentials(): Array<UsedCredentials> {
 
 export function getCredentialsForID(id: string): UsedCredentials | null {
     const memory = getLoginMemory();
-    return memory.has(id) ? memory.get(id).credentials : null;
+    return memory.has(id) ? (memory.get(id) as LoginMemoryItem).credentials : null;
 }
 
 export function getLastCredentials(tabID: number): UsedCredentials | null {
@@ -55,7 +78,7 @@ function getLoginMemory(): ExpiryMap<string, LoginMemoryItem> {
 export function stopPromptForID(id: string): void {
     const memory = getLoginMemory();
     if (memory.has(id)) {
-        const existing = memory.get(id);
+        const existing = memory.get(id) as LoginMemoryItem;
         memory.set(id, {
             ...existing,
             credentials: {

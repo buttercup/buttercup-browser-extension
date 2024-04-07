@@ -128,6 +128,7 @@ function renderButtonStyle(input: HTMLInputElement, onClick: () => void, reattac
         // toggleInputDialog(input, DIALOG_TYPE_ENTRY_PICKER);
         onClick();
     };
+    // @ts-ignore
     mount(input.offsetParent, button);
     onElementDismount(button, () => {
         reattachCB();

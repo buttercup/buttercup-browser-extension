@@ -17,7 +17,7 @@ interface LoginTrackerEvents {
     credentialsChanged: (event: { id: string; username: string; password: string; entry: boolean }) => void;
 }
 
-let __sharedTracker = null;
+let __sharedTracker: LoginTracker | null = null;
 
 export class LoginTracker extends EventEmitter<LoginTrackerEvents> {
     protected _connections: Array<Connection> = [];
@@ -32,9 +32,11 @@ export class LoginTracker extends EventEmitter<LoginTrackerEvents> {
         return this._url;
     }
 
-    getConnection(loginTarget: LoginTarget) {
-        return this._connections.find(
-            (conn) => conn.loginTarget === loginTarget || conn.loginTarget.form === loginTarget.form
+    getConnection(loginTarget: LoginTarget): Connection | null {
+        return (
+            this._connections.find(
+                (conn) => conn.loginTarget === loginTarget || conn.loginTarget.form === loginTarget.form
+            ) || null
         );
     }
 

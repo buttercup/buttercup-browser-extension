@@ -96,7 +96,7 @@ function EntriesPageList(props: EntriesPageProps) {
     const urlEntries = useEntriesForURL(url);
     const recentEntries = useRecentEntries();
     const handleEntryClick = useCallback((entry: SearchResult, autoLogin: boolean) => {
-        if (popupSource === "page") {
+        if (popupSource === "page" && formID) {
             sendEntryResultToTabForInput(formID, entry);
         } else if (popupSource === "popup") {
             openPageForEntry(entry, autoLogin)

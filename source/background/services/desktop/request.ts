@@ -5,7 +5,7 @@ import { decryptPayload, encryptPayload } from "../crypto.js";
 import { getLocalValue } from "../storage.js";
 import { LocalStorageItem } from "../../types.js";
 
-type OutputType = "body" | "status";
+type OutputType = "body" | "status" | undefined;
 
 interface DesktopRequestConfig<O extends OutputType> {
     auth?: string | null;
@@ -45,12 +45,13 @@ export async function sendDesktopRequest<O extends OutputType>(
             url = newURL.toString();
         } else {
             requestConfig.body = JSON.stringify(payload);
-            Object.assign(requestConfig.headers, {
+            Object.assign(requestConfig.headers as HeadersInit, {
                 "Content-Type": "application/json"
             });
         }
     }
     if (auth !== null) {
+        requestConfig.headers = requestConfig.headers || {};
         // Request requires encryption, perform setup now
         requestConfig.headers["Authorization"] = auth;
         if (typeof requestConfig.body === "string") {
@@ -59,6 +60,12 @@ export async function sendDesktopRequest<O extends OutputType>(
             // Encrypt
             const privateKey = await getLocalValue(LocalStorageItem.APIPrivateKey);
             const publicKey = await getLocalValue(LocalStorageItem.APIServerPublicKey);
+            if (!privateKey) {
+                throw new Error("Authenticated request failed: No private key available");
+            }
+            if (!publicKey) {
+                throw new Error("Authenticated request failed: No public key available");
+            }
             requestConfig.body = await encryptPayload(requestConfig.body, privateKey, publicKey);
         }
     }
@@ -81,19 +88,25 @@ export async function sendDesktopRequest<O extends OutputType>(
     }
     // Handle encrypted response
     if (resp.headers.get("X-Bcup-API")) {
-        const components = resp.headers.get("X-Bcup-API").split(",");
+        const components = resp.headers.get("X-Bcup-API")?.split(",") ?? [];
         if (components.includes("enc")) {
             const content = await resp.text();
             const contentType = resp.headers.get("X-Content-Type") || resp.headers.get("Content-Type") || "text/plain";
             // Decrypt
             const privateKey = await getLocalValue(LocalStorageItem.APIPrivateKey);
             const publicKey = await getLocalValue(LocalStorageItem.APIServerPublicKey);
+            if (!privateKey) {
+                throw new Error("Decrypting response failed: No private key available");
+            }
+            if (!publicKey) {
+                throw new Error("Decrypting response failed: No public key available");
+            }
             const rawDecrypted = await decryptPayload(content, publicKey, privateKey);
             return /application\/json/.test(contentType) ? JSON.parse(rawDecrypted) : rawDecrypted;
         }
     }
     // Standard, unencrypted response
-    if (/application\/json/.test(resp.headers.get("Content-Type"))) {
+    if (/application\/json/.test(resp.headers.get("Content-Type") ?? "")) {
         return resp.json();
     }
     return resp.text();

@@ -12,5 +12,5 @@ export async function openPageForEntry(item: SearchResult, autoLogin: boolean): 
     if (resp.error) {
         throw new Layerr(resp.error, "Failed opening page");
     }
-    return resp.opened;
+    return resp.opened ?? false;
 }

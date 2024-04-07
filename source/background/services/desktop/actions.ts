@@ -85,7 +85,7 @@ export async function getVaultsTree(): Promise<VaultsTree> {
             ...output,
             [sourceID]: {
                 ...tree[sourceID],
-                name: names[sourceID] ?? "Untitled vault"
+                name: names?.[sourceID] ?? "Untitled vault"
             }
         };
     }, {});

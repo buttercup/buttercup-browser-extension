@@ -26,7 +26,10 @@ export class ErrorBoundary extends Component {
         return { error };
     }
 
-    state = {
+    state: {
+        error: null | Error;
+        errorStack: string | null;
+    } = {
         error: null,
         errorStack: null
     };

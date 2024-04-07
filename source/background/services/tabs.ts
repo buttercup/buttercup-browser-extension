@@ -9,10 +9,13 @@ export async function sendTabsMessage(payload: TabEvent, tabIDs: Array<number> |
               await browser.tabs.query({
                   status: "complete"
               })
-          ).map((tab) => tab.id);
+          ).reduce((output: Array<number>, tab) => {
+              if (!tab.id) return output;
+              return [...output, tab.id];
+          }, []);
     await Promise.all(
         targetTabIDs.map(async (tabID) => {
-            await browser.tabs.sendMessage(tabID, payload);
+            browser.tabs.sendMessage(tabID, payload);
         })
     );
 }
