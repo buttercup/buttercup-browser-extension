@@ -8,7 +8,7 @@ interface Globals {
 const __globals: Globals = {
     configFlagTs: null
 };
-let __ee: EventEmitter = null;
+let __ee: EventEmitter | null = null;
 
 export function useGlobal<K extends keyof Globals>(key: K): [Globals[K], (value: Globals[K]) => void] {
     useEffect(() => {
@@ -20,9 +20,11 @@ export function useGlobal<K extends keyof Globals>(key: K): [Globals[K], (value:
         setCurrentValue(__globals[key]);
     }, [key]);
     useEffect(() => {
+        if (!__ee) return;
         handleEventUpdate();
         __ee.on("update", handleEventUpdate);
         return () => {
+            if (!__ee) return;
             __ee.off("update", handleEventUpdate);
         };
     }, [handleEventUpdate]);
@@ -31,7 +33,9 @@ export function useGlobal<K extends keyof Globals>(key: K): [Globals[K], (value:
         (value: Globals[K]) => {
             __globals[key] = value;
             setCurrentValue(value);
-            __ee.emit("update");
+            if (__ee) {
+                __ee.emit("update");
+            }
         },
         [key]
     );

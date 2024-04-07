@@ -32,6 +32,7 @@ export interface BackgroundMessage {
     entryID?: EntryID;
     entryProperties?: Record<string, string>;
     entryType?: EntryType;
+    excludeSaved?: boolean;
     groupID?: GroupID;
     notification?: string;
     searchTerm?: string;

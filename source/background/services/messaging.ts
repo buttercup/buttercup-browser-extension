@@ -21,6 +21,7 @@ import { clearLocalStorage, removeLocalValue, setLocalValue } from "./storage.js
 import { errorToString } from "../../shared/library/error.js";
 import {
     clearCredentials,
+    credentialsAlreadyStored,
     getAllCredentials,
     getCredentialsForID,
     getLastCredentials,
@@ -176,12 +177,16 @@ async function handleMessage(
             break;
         }
         case BackgroundMessageType.GetLastSavedCredentials: {
+            const { excludeSaved = false } = msg;
             const tabID = sender.tab?.id;
             if (!tabID) {
                 sendResponse({ credentials: [null] });
                 break;
             }
-            const credentials = getLastCredentials(tabID);
+            let credentials = getLastCredentials(tabID);
+            if (credentials && excludeSaved && (await credentialsAlreadyStored(credentials))) {
+                credentials = null;
+            }
             sendResponse({
                 credentials: [credentials]
             });
@@ -224,10 +229,14 @@ async function handleMessage(
             break;
         }
         case BackgroundMessageType.GetSavedCredentialsForID: {
-            if (!msg.credentialsID) {
+            const { credentialsID, excludeSaved = false } = msg;
+            if (!credentialsID) {
                 throw new Error("No credentials ID provided");
             }
-            const credentials = getCredentialsForID(msg.credentialsID);
+            let credentials = getCredentialsForID(credentialsID);
+            if (credentials && excludeSaved && (await credentialsAlreadyStored(credentials))) {
+                credentials = null;
+            }
             sendResponse({
                 credentials: [credentials]
             });

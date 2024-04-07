@@ -12,7 +12,7 @@ async function checkForLoginSaveAbility(loginID?: string) {
     const [disabledDomains, config, used] = await Promise.all([
         getDisabledDomains(),
         getConfig(),
-        loginID ? getCredentialsForID(loginID) : getLastSavedCredentials()
+        loginID ? getCredentialsForID(loginID, true) : getLastSavedCredentials(true)
     ]);
     if (!used || !used.promptSave || used.fromEntry) return;
     if (currentDomainDisabled(disabledDomains)) {

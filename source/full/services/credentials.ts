@@ -13,21 +13,21 @@ export async function clearSavedCredentials(id: string): Promise<void> {
     }
 }
 
-export async function getCredentials(): Promise<Array<UsedCredentials>> {
+export async function getCredentials(): Promise<Array<UsedCredentials | null>> {
     const resp = await sendBackgroundMessage({
         type: BackgroundMessageType.GetSavedCredentials
     });
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching saved credentials");
     }
-    return resp.credentials;
+    return resp.credentials ?? [];
 }
 
 export async function saveCredentialsToEntry(credentials: SavedCredentials): Promise<void> {
     const { entryID = null } = await sendBackgroundMessage({
         sourceID: credentials.sourceID,
         groupID: credentials.groupID,
-        entryID: credentials.entryID ?? null,
+        entryID: credentials.entryID ?? undefined,
         entryProperties: {
             password: credentials.password,
             title: credentials.title,

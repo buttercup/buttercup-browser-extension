@@ -67,7 +67,8 @@ const URL = styled.span`
 
 export function CredentialsSelector(props: CredentialsSelectorProps) {
     const { disabled: parentDisabled = false, onSelect, selected } = props;
-    const [credentials, loading, error] = useCapturedCredentials();
+    const [credentialsInitial, loading, error] = useCapturedCredentials();
+    const credentials = useMemo(() => credentialsInitial.filter(cred => !!cred) as Array<UsedCredentials>, [credentialsInitial]);
     const disabled = parentDisabled || loading;
     const handleItemClick = useCallback((credential: UsedCredentials) => {
         if (disabled) return;

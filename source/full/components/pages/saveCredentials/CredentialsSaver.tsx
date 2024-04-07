@@ -146,7 +146,7 @@ export function CredentialsSaver(props: CredentialsSaverProps) {
     const [credentials, credentialsLoading, credentialsError] = useCapturedCredentials();
     const [selectedNodes, setSelectedNodes] = useState<Array<string>>([]);
     const [expandedNodes, setExpandedNodes] = useState<Array<string>>([]);
-    const selectedUsedCredentials = useMemo(() => credentials.find(cred => cred.id === selectedCredentialsID), [credentials, selectedCredentialsID]);
+    const selectedUsedCredentials = useMemo(() => credentials.find(cred => cred?.id === selectedCredentialsID), [credentials, selectedCredentialsID]);
     const selectedGroupURI = useMemo(() => {
         return selectedNodes.length === 1 && /^group:/.test(selectedNodes[0])
             ? selectedNodes[0]
