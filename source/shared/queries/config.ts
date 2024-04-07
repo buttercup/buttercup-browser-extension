@@ -9,6 +9,9 @@ export async function getConfig(): Promise<Configuration> {
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching application configuration");
     }
+    if (!resp.config) {
+        throw new Error("No config returned from background");
+    }
     return resp.config;
 }
 
@@ -23,6 +26,9 @@ export async function setConfigValue<T extends keyof Configuration>(
     });
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching application configuration");
+    }
+    if (!resp.config) {
+        throw new Error("No config returned from background");
     }
     return resp.config;
 }

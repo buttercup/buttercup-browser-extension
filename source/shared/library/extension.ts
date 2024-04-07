@@ -2,12 +2,12 @@ import { getExtensionAPI } from "../extension.js";
 
 const NOOP = () => {};
 
-export async function createNewTab(url: string): Promise<chrome.tabs.Tab> {
+export async function createNewTab(url: string): Promise<chrome.tabs.Tab | null> {
     const browser = getExtensionAPI();
     if (!browser.tabs) {
         // Handle non-background scripts
         browser.runtime.sendMessage({ type: "open-tab", url });
-        return;
+        return null;
     }
     return new Promise<chrome.tabs.Tab>((resolve) => chrome.tabs.create({ url }, resolve));
 }
@@ -15,6 +15,7 @@ export async function createNewTab(url: string): Promise<chrome.tabs.Tab> {
 export function closeCurrentTab() {
     const browser = getExtensionAPI();
     browser.tabs.getCurrent((tab) => {
+        if (!tab?.id) return;
         browser.tabs.remove(tab.id, NOOP);
     });
 }

@@ -15,7 +15,7 @@ function filterLoginTarget(_: LoginTargetFeature, element: HTMLElement): boolean
 }
 
 function onIdentifiedTarget(callback: (target: LoginTarget) => void) {
-    const locatedForms = [];
+    const locatedForms: Array<HTMLElement> = [];
     const findTargets = () => {
         getLoginTargets(document, filterLoginTarget)
             .filter((target) => locatedForms.includes(target.form) === false)

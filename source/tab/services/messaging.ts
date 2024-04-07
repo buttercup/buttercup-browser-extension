@@ -46,7 +46,7 @@ export function listenForTabEvents(callback: (event: TabEvent) => void) {
         if (event.data?.type && Object.values(TabEventType).includes(event.data?.type)) {
             callback({
                 ...(event.data as TabEvent),
-                source: event.source
+                source: event.source ?? undefined
             });
         }
     });

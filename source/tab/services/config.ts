@@ -9,5 +9,8 @@ export async function getConfig(): Promise<Configuration> {
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching configuration");
     }
+    if (!resp.config) {
+        throw new Error("No config returned from background");
+    }
     return resp.config;
 }

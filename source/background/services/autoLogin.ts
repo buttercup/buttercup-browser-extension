@@ -14,7 +14,7 @@ export function getAutoLoginForTab(tabID: number): SearchResult | null {
     const register = getRegister();
     const key = `tab-${tabID}`;
     if (register.has(key)) {
-        const item = register.get(key).entry;
+        const item = (register.get(key) as RegisteredItem).entry;
         register.delete(key);
         return item;
     }

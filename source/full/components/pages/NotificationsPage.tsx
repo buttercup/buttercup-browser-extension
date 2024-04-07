@@ -23,6 +23,7 @@ export function NotificationsPage() {
         ])]);
         setCurrentTab(newTabID);
         const key = Object.keys(NOTIFICATIONS).find(nKey => NOTIFICATIONS[nKey][0] === newTabID);
+        if (!key) return;
         updateReadNotifications(key).catch(err => {
             console.error(err);
             getToaster().show({
@@ -38,7 +39,7 @@ export function NotificationsPage() {
     }, [currentTab, handleTabChange, notifications]);
     return (
         <Layout title={t("notifications.title")}>
-            <Tabs onChange={handleTabChange} selectedTabId={currentTab}>
+            <Tabs onChange={handleTabChange} selectedTabId={currentTab ?? undefined}>
                 {notifications.map(([nameKey, Component]) => (
                     <Tab
                         key={nameKey}

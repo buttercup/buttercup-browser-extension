@@ -57,7 +57,7 @@ function buildNewPopup(inputRect: ElementRect, forInputType: InputType) {
         frame
     );
     mount(document.body, container);
-    const removeBodyResizeListener = onBodyResize(() => updatePopupPosition(__popup.inputRect));
+    const removeBodyResizeListener = onBodyResize(() => updatePopupPosition((__popup as LastPopup).inputRect));
     document.body.addEventListener("click", closePopup, false);
     __popup = {
         cleanup: () => {

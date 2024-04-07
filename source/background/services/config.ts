@@ -1,5 +1,6 @@
 import { getSyncValue, setSyncValue } from "./storage.js";
 import { Configuration, InputButtonType, SyncStorageItem } from "../types.js";
+import { naiveClone } from "../../shared/library/clone.js";
 
 const DEFAULTS: Configuration = {
     entryIcons: true,
@@ -9,7 +10,7 @@ const DEFAULTS: Configuration = {
     useSystemTheme: true
 };
 
-let __lastConfig: Configuration = null;
+let __lastConfig: Configuration | null = null;
 
 export function getConfig(): Configuration {
     if (!__lastConfig) {
@@ -24,7 +25,7 @@ export async function initialise() {
 
 export async function updateConfigValue<T extends keyof Configuration>(key: T, value: Configuration[T]): Promise<void> {
     const configRaw = await getSyncValue(SyncStorageItem.Configuration);
-    const config = JSON.parse(configRaw);
+    const config = configRaw ? JSON.parse(configRaw) : naiveClone(DEFAULTS);
     config[key] = value;
     __lastConfig = config;
     await setSyncValue(SyncStorageItem.Configuration, JSON.stringify(config));

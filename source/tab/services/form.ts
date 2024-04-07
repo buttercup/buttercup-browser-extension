@@ -11,6 +11,12 @@ import { FrameEvent, FrameEventType, TabEventType } from "../types.js";
 export function fillFormDetails(frameEvent: FrameEvent) {
     const { currentLoginTarget: loginTarget } = FORM;
     const { inputDetails } = frameEvent;
+    if (!inputDetails) {
+        throw new Error("No input details for form fill action");
+    }
+    if (!loginTarget) {
+        throw new Error("No login target found");
+    }
     if (inputDetails.username) {
         loginTarget.fillUsername(inputDetails.username);
     }
@@ -69,6 +75,18 @@ export async function initialise() {
                 throw new Error("Unexpected details input state");
             }
         } else if (tabEvent.type === TabEventType.OpenPopupDialog) {
+            if (!tabEvent.sourceURL) {
+                console.error("No source URL provided");
+                return;
+            }
+            if (!tabEvent.inputPosition) {
+                console.error("No input position provided");
+                return;
+            }
+            if (!tabEvent.inputType) {
+                console.error("No input type provided");
+                return;
+            }
             // Re-calculate based upon the iframe the message came from
             const frame = findIframeForWindow(tabEvent.sourceURL);
             if (!frame) {
@@ -78,7 +96,7 @@ export async function initialise() {
             const newPosition = recalculateRectForIframe(tabEvent.inputPosition, frame);
             // Show if top, or pass on to the next frame above
             if (FRAME.isTop) {
-                FORM.targetFormID = tabEvent.formID;
+                FORM.targetFormID = tabEvent.formID ?? null;
                 togglePopup(newPosition, tabEvent.inputType);
             } else {
                 sendTabEvent(

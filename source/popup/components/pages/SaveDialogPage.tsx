@@ -107,6 +107,7 @@ export function SaveDialogPage() {
         }
     }, [loginID]);
     const handleCloseClick = useCallback(async () => {
+        if (!loginID) return;
         try {
             // Clear prompt and close dialog
             await clearSavedLoginPrompt(loginID);
@@ -120,6 +121,7 @@ export function SaveDialogPage() {
         }
     }, [loginID]);
     const handleDisableClick = useCallback(async () => {
+        if (!loginID) return;
         if (!disableConfirm) {
             setDisableConfirm(true);
             return;

@@ -78,7 +78,7 @@ export interface BackgroundResponse {
     available?: boolean;
     autoLogin?: SearchResult | null;
     config?: Configuration;
-    credentials?: Array<UsedCredentials>;
+    credentials?: Array<UsedCredentials | null>;
     domains?: Array<string>;
     entryID?: EntryID | null;
     error?: Error;

@@ -48,16 +48,21 @@ export function watchCredentialsOnTarget(loginTarget: LoginTarget): void {
         loginTarget,
         (username, source) => {
             const connection = tracker.getConnection(loginTarget);
-            connection.entry = source === "fill";
-            connection.username = username;
+            if (connection) {
+                connection.entry = source === "fill";
+                connection.username = username;
+            }
         },
         (password, source) => {
             const connection = tracker.getConnection(loginTarget);
-            connection.entry = source === "fill";
-            connection.password = password;
+            if (connection) {
+                connection.entry = source === "fill";
+                connection.password = password;
+            }
         },
         () => {
             const connection = tracker.getConnection(loginTarget);
+            if (!connection) return;
             setTimeout(() => {
                 checkForLoginSaveAbility(connection.id);
             }, 300);

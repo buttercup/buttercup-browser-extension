@@ -17,7 +17,7 @@ export function clearCredentials(id: string): void {
     }
     if (memory.has("last")) {
         const last = memory.get("last");
-        if (last.credentials.id === id) {
+        if (last?.credentials.id === id) {
             memory.delete("last");
         }
     }
@@ -35,7 +35,7 @@ export function getAllCredentials(): Array<UsedCredentials> {
 
 export function getCredentialsForID(id: string): UsedCredentials | null {
     const memory = getLoginMemory();
-    return memory.has(id) ? memory.get(id).credentials : null;
+    return memory.has(id) ? (memory.get(id) as LoginMemoryItem).credentials : null;
 }
 
 export function getLastCredentials(tabID: number): UsedCredentials | null {
@@ -55,7 +55,7 @@ function getLoginMemory(): ExpiryMap<string, LoginMemoryItem> {
 export function stopPromptForID(id: string): void {
     const memory = getLoginMemory();
     if (memory.has(id)) {
-        const existing = memory.get(id);
+        const existing = memory.get(id) as LoginMemoryItem;
         memory.set(id, {
             ...existing,
             credentials: {

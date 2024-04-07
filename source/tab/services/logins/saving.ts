@@ -10,7 +10,7 @@ export async function getCredentialsForID(id: string): Promise<UsedCredentials |
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching saved credentials");
     }
-    return resp.credentials[0] ?? null;
+    return resp.credentials?.[0] ?? null;
 }
 
 export async function getLastSavedCredentials(): Promise<UsedCredentials | null> {
@@ -20,7 +20,7 @@ export async function getLastSavedCredentials(): Promise<UsedCredentials | null>
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching last saved credentials");
     }
-    return resp.credentials[0] ?? null;
+    return resp.credentials?.[0] ?? null;
 }
 
 export function transferLoginCredentials(details: UsedCredentials) {

@@ -9,5 +9,5 @@ export async function getDisabledDomains(): Promise<Array<string>> {
     if (resp.error) {
         throw new Layerr(resp.error, "Failed fetching disabled login domains");
     }
-    return resp.domains;
+    return resp.domains ?? [];
 }

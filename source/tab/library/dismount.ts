@@ -16,6 +16,9 @@ export function onElementDismount(el: HTMLElement, callback: () => void): void {
             callback();
         }
     });
+    if (!el.parentElement) {
+        throw new Error("No parent element found for target");
+    }
     mutObs.observe(el.parentElement, { childList: true });
     timer = setTimeout(() => {
         if (!el.parentElement) {
