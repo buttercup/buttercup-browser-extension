@@ -1,4 +1,4 @@
-import { LoginTarget, getLoginTargets } from "@buttercup/locust";
+import { LoginTarget, LoginTargetFeature, getLoginTargets } from "@buttercup/locust";
 import { attachLaunchButton } from "../ui/launch.js";
 import { watchCredentialsOnTarget } from "./logins/watcher.js";
 import { processTargetAutoLogin } from "./autoLogin.js";
@@ -7,10 +7,17 @@ import { getConfig } from "./config.js";
 
 const TARGET_SEARCH_INTERVAL = 1000;
 
+function filterLoginTarget(_: LoginTargetFeature, element: HTMLElement): boolean {
+    if (element.dataset.bcup === "attached") {
+        return false;
+    }
+    return true;
+}
+
 function onIdentifiedTarget(callback: (target: LoginTarget) => void) {
     const locatedForms = [];
     const findTargets = () => {
-        getLoginTargets()
+        getLoginTargets(document, filterLoginTarget)
             .filter((target) => locatedForms.includes(target.form) === false)
             .forEach((target) => {
                 locatedForms.push(target.form);
