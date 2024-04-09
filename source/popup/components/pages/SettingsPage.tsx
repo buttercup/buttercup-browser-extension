@@ -105,6 +105,21 @@ export function SettingsPage() {
             )}
             {config && (
                 <Fragment>
+                    <SettingSection title={t("config.section.application")}>
+                        {/* <Select
+                            activeItem={activeInputButtonItem}
+                            fill
+                            filterable={false}
+                            items={inputButtonItems}
+                            onItemSelect={handleInputButtonItemSelect}
+                            itemRenderer={renderInputButtonTypeItem}
+                        >
+                            <Button
+                                text={t(`config.input-button-type.${config.inputButtonDefault}`)}
+                                rightIcon="double-caret-vertical"
+                            />
+                        </Select> */}
+                    </SettingSection>
                     <SettingSection title={t("config.section.theme")}>
                         <Switch
                             checked={config.useSystemTheme}
@@ -154,7 +169,6 @@ export function SettingsPage() {
                             <Button
                                 text={t(`config.input-button-type.${config.inputButtonDefault}`)}
                                 rightIcon="double-caret-vertical"
-                                // placeholder="Select a film"
                             />
                         </Select>
                     </SettingSection>

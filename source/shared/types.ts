@@ -97,6 +97,7 @@ export type ChildElements = ChildElement | Array<ChildElement>;
 export interface Configuration {
     entryIcons: boolean;
     inputButtonDefault: InputButtonType;
+    language: string | null;
     saveNewLogins: boolean;
     theme: "light" | "dark";
     useSystemTheme: boolean;

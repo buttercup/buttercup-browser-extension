@@ -24,6 +24,7 @@
         },
         "section": {
             "advanced": "Advanced Settings",
+            "application": "Application",
             "forms": "Forms",
             "logins": "Logins",
             "privacy": "Privacy",

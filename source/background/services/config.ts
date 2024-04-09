@@ -5,6 +5,7 @@ import { naiveClone } from "../../shared/library/clone.js";
 const DEFAULTS: Configuration = {
     entryIcons: true,
     inputButtonDefault: InputButtonType.LargeButton,
+    language: null,
     saveNewLogins: true,
     theme: "light",
     useSystemTheme: true
