@@ -1,10 +1,19 @@
 # Buttercup browser extension changelog
 
+## v3.2.0
+_2024-04-09_
+
+ * Input button customisation (global)
+ * Dutch language (not yet selectable)
+ * **Bugfix**:
+   * Some fields not filled correctly (partial fix)
+   * Login save prompt shown for existing credentials
+
 ## v3.1.0
 _2024-03-27_
 
  * ([#467](https://github.com/buttercup/buttercup-browser-extension/issues/467)) Entry info popup
- * **Bugfixes**:
+ * **Bugfix**:
    * ([#469](https://github.com/buttercup/buttercup-browser-extension/issues/469)) Forms recognised as login forms when they should not be
    * ([#466](https://github.com/buttercup/buttercup-browser-extension/issues/466)) Bad OTP URIs crash application
    * Entry page search does nothing when first opening the extension
