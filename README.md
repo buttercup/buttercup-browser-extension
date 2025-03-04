@@ -15,6 +15,14 @@ Buttercup credentials manager extension for the browser.
 
 [![Buttercup](https://cdn.rawgit.com/buttercup-pw/buttercup-assets/6582a033/badge/buttercup-slim.svg)](https://buttercup.pw) ![Tests status](https://github.com/buttercup/buttercup-core/actions/workflows/test.yml/badge.svg) [![Chrome version](https://img.shields.io/chrome-web-store/v/heflipieckodmcppbnembejjmabajjjj)](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) [![Chrome users](https://img.shields.io/chrome-web-store/d/heflipieckodmcppbnembejjmabajjjj.svg?label=Chrome%20users)](https://chrome.google.com/webstore/detail/buttercup/heflipieckodmcppbnembejjmabajjjj?hl=en-GB) [![Firefox version](https://img.shields.io/amo/v/buttercup-pw)](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) [![Firefox users](https://img.shields.io/amo/users/buttercup-pw.svg?color=38c543&label=Firefox%20users)](https://addons.mozilla.org/en-US/firefox/addon/buttercup-pw/) [![Chat securely on Keybase](https://img.shields.io/badge/keybase-bcup-blueviolet)](https://keybase.io/team/bcup)
 
+---
+
+⚠️ **Project Closure** ⚠️
+
+The Buttercup project has come to an end, and these repositories are in transition to becoming public archives. No public-facing resources will be removed, wherever possible. Please do not create issues or PRs - they will unfortunately be ignored. Discussion can be found [here](https://github.com/buttercup/buttercup-desktop/discussions/1395), and explanation [here](https://gist.github.com/perry-mitchell/43ebfcec4d874b77a704be1d4f2262e6).
+
+---
+
 ## About
 This browser extension allows users to interface with password archives authored by the [Buttercup password manager](https://github.com/buttercup-pw/buttercup) (it _requires_ v2.26 and later of the desktop application to be installed to function).
 
